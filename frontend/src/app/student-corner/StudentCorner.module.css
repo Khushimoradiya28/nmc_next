@@ -1,0 +1,484 @@
+.heroSection {
+  min-height: 45vh;
+  height: 45vh;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.heroBgImage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.heroBgImg {
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.4));
+  z-index: 2;
+}
+
+.container {
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 3;
+}
+
+.heroContent {
+  padding-bottom: 60px;
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.2;
+  margin: 0;
+  font-style: italic;
+}
+
+.updatesSection,
+.placementSection,
+.portalsSection,
+.visionSection,
+.alumniSection {
+  padding: 6rem 0;
+  background: var(--white);
+}
+
+.updatesSection {
+  background: #f8fafc;
+}
+
+.sectionHeader {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3.5rem;
+}
+
+.sectionSubtitle {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--red-800);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.75rem;
+  display: block;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  line-height: 1.2;
+  color: var(--gray-900);
+  margin-bottom: 1rem;
+}
+
+.sectionTitle span {
+  background: var(--grad-red);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sectionDescription {
+  font-size: 1.05rem;
+  color: var(--gray-600);
+  line-height: 1.65;
+}
+
+/* Ticker Strip */
+.tickerBar {
+  display: flex;
+  align-items: center;
+  background: linear-gradient(135deg, #fef2f2 0%, #fff1f2 100%);
+  border: 1px solid #fecaca;
+  border-radius: 0.75rem;
+  padding: 0.65rem 1.25rem;
+  margin-bottom: 2.5rem;
+  overflow: hidden;
+  gap: 1rem;
+}
+
+.tickerBadge {
+  background: var(--grad-red);
+  color: var(--white);
+  font-size: 0.72rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  padding: 0.2rem 0.65rem;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.tickerTrack {
+  overflow: hidden;
+  position: relative;
+  flex: 1;
+}
+
+.tickerText {
+  white-space: nowrap;
+  font-size: 0.86rem;
+  color: var(--red-900);
+  font-weight: 700;
+  animation: tickerScroll 25s linear infinite;
+  display: inline-block;
+}
+
+@keyframes tickerScroll {
+  from { transform: translateX(100%); }
+  to { transform: translateX(-100%); }
+}
+
+/* Notices Grid */
+.noticesGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.noticeCard {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.02);
+  transition: all 0.3s ease;
+}
+
+.noticeCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--red-800);
+  box-shadow: 0 12px 30px rgba(138, 0, 0, 0.05);
+}
+
+.noticeHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.noticeDate {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--gray-400);
+}
+
+.categoryTag {
+  background: #f1f5f9;
+  color: var(--gray-600);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-full);
+}
+
+.noticeTitle {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  line-height: 1.4;
+  margin: 0 0 1.25rem 0;
+}
+
+.pdfBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--red-800);
+  font-size: 0.84rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.pdfBtn:hover {
+  color: var(--gold-600);
+}
+
+/* Placement Runway */
+.placementSection {
+  background: var(--white);
+}
+
+.runwayGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.75rem;
+}
+
+.runwayCard {
+  background: #f8fafc;
+  border: 1px solid var(--gray-200);
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.runwayCard:hover {
+  background: #fffbeb;
+  border-color: #fde68a;
+  transform: translateY(-4px);
+}
+
+.runwayNum {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: var(--red-800);
+  opacity: 0.2;
+  margin-bottom: 0.5rem;
+}
+
+.runwayCard h4 {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin: 0 0 0.5rem 0;
+}
+
+.runwayCard p {
+  font-size: 0.84rem;
+  color: var(--gray-600);
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Portals */
+.portalsSection {
+  background: #f8fafc;
+}
+
+.portalsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.portalCard {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.02);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.portalCard:hover {
+  transform: translateY(-4px);
+  border-color: var(--gold-400);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+}
+
+.portalCard h4 {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin: 0 0 0.4rem 0;
+}
+
+.portalCard p {
+  font-size: 0.84rem;
+  color: var(--gray-500);
+  line-height: 1.5;
+  margin: 0 0 1.25rem 0;
+  flex: 1;
+}
+
+.portalLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--red-800);
+  margin-top: auto;
+}
+
+.portalCard:hover .portalLink {
+  color: var(--gold-600);
+}
+
+/* Vision 2030 */
+.visionGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.visionText {
+  font-size: 1rem;
+  color: var(--gray-600);
+  line-height: 1.65;
+  margin-bottom: 2rem;
+}
+
+.milestonesList {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.milestone strong {
+  font-family: var(--font-heading);
+  font-size: 0.98rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+.milestone p {
+  font-size: 0.84rem;
+  color: var(--gray-500);
+  margin: 0;
+}
+
+.visionTerminal {
+  background: #0f172a;
+  border-radius: 1.5rem;
+  padding: 2.25rem 2rem;
+  color: var(--white);
+  box-shadow: 0 20px 40px rgba(15, 23, 42, 0.15);
+}
+
+.visionTerminal h4 {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #fcd34d;
+  margin: 0 0 0.75rem 0;
+}
+
+.visionTerminal p {
+  font-size: 0.9rem;
+  color: var(--gray-300);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.visionTerminal ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.visionTerminal li {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #34d399;
+}
+
+/* Alumni Section */
+.alumniSection {
+  background: #f8fafc;
+}
+
+.alumniGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.storyCard {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.02);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.storyCard p {
+  font-size: 0.9rem;
+  font-style: italic;
+  color: var(--gray-600);
+  line-height: 1.65;
+  margin-bottom: 1.5rem;
+}
+
+.storyAuthor {
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--gray-100);
+  padding-top: 0.85rem;
+}
+
+.storyAuthor strong {
+  font-family: var(--font-heading);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--gray-900);
+}
+
+.storyAuthor span {
+  font-size: 0.76rem;
+  color: var(--gray-500);
+  font-weight: 700;
+}
+
+@media(max-width: 1024px) {
+  .noticesGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .runwayGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .portalsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .visionGrid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  
+  .alumniGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media(max-width: 640px) {
+  .runwayGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .portalsGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .alumniGrid {
+    grid-template-columns: 1fr;
+  }
+}

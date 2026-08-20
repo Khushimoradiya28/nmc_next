@@ -1,0 +1,62 @@
+.backToTopBtn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--white, #ffffff);
+  border: none;
+  cursor: pointer;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(20px) scale(0.85);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.backToTopBtn.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.backToTopBtn:hover {
+  transform: translateY(-5px) scale(1.08);
+  box-shadow: 0 14px 40px rgba(138, 0, 0, 0.25);
+  background: var(--white, #ffffff);
+}
+
+.progressRingSvg {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transform: rotate(-90deg);
+  pointer-events: none;
+}
+
+.progressRingTrack {
+  stroke: rgba(138, 0, 0, 0.08);
+}
+
+.progressRingFill {
+  stroke: var(--brand-red, #8a0000);
+}
+
+.backToTopArrow {
+  position: relative;
+  z-index: 2;
+  color: var(--brand-red, #8a0000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+.backToTopBtn:hover .backToTopArrow {
+  transform: translateY(-2px);
+}

@@ -1,0 +1,176 @@
+.calendarSection {
+  background: #ffffff;
+  padding: 5rem 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+}
+
+.downloadRibbon {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--color-bg-alt, #FFF8E6);
+  border: 1px solid var(--color-gray-100, #e2e8f0);
+  padding: 1.5rem 2rem;
+  border-radius: 16px;
+  margin-bottom: 3.5rem;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.legend {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.88rem;
+  color: var(--color-gray-600, #475569);
+  font-weight: 600;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.exam {
+  background: #ef4444; /* Red = exam */
+}
+
+.event {
+  background: #f59e0b; /* Yellow = event */
+}
+
+.holiday {
+  background: #10b981; /* Green = holiday */
+}
+
+.downloadBtn {
+  background: var(--color-primary, #B00000);
+  color: #ffffff;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(176, 0, 0, 0.25);
+  border: none;
+}
+
+.downloadBtn:hover {
+  background: #ffffff;
+  color: var(--color-primary, #B00000);
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(176, 0, 0, 0.1);
+  border: 1px solid var(--color-primary, #B00000);
+}
+
+/* Grid Matrix */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.monthCard {
+  background: #ffffff;
+  border: 1px solid var(--color-gray-100, #e2e8f0);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+
+.monthHeader {
+  background: var(--color-primary, #B00000);
+  padding: 1.25rem;
+  text-align: center;
+}
+
+.monthHeader h3 {
+  font-family: var(--font-heading, serif);
+  font-size: 1.2rem;
+  color: #ffffff;
+  margin: 0;
+  font-weight: 700;
+}
+
+.monthBody {
+  padding: 1.5rem;
+  flex-grow: 1;
+}
+
+.eventList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eventItem {
+  font-size: 0.9rem;
+  color: var(--color-gray-600, #475569);
+  line-height: 1.4;
+  position: relative;
+  padding-left: 18px;
+}
+
+.eventItem::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.eventItem.exam::before {
+  background: #ef4444;
+}
+
+.eventItem.event::before {
+  background: #f59e0b;
+}
+
+.eventItem.holiday::before {
+  background: #10b981;
+}
+
+/* ── RESPONSIVE MEDIA BREAKPOINTS ── */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .downloadRibbon {
+    padding: 1.25rem;
+  }
+}

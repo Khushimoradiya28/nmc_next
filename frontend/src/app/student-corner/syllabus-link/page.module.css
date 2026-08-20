@@ -1,0 +1,169 @@
+/* Syllabus Link Page */
+.heroSection { position: relative; min-height: 50vh; height: 50vh; display: flex; align-items: flex-end; overflow: hidden; }
+.heroBgImage { position: absolute; inset: 0; z-index: 0; }
+.heroBgImg { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.82), rgba(0,0,0,0.4)); z-index: 1; }
+.heroContent { position: relative; z-index: 2; width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem 80px 2rem; }
+.heroTitle { font-family: var(--font-heading, 'Outfit', sans-serif); font-size: clamp(2.5rem,5vw,3.75rem); font-weight: 700; color: #fff; line-height: 1.15; margin: 0; }
+.heroTitle em { font-style: normal; }
+
+.container { width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem; }
+
+/* ============================================
+   Syllabus Section
+   ============================================ */
+.syllabusSection {
+  padding: 5rem 0;
+  background: var(--sky-50, #fffdf5);
+}
+
+.syllabusHeader {
+  margin-bottom: 3rem;
+}
+
+.syllabusLabel {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red-800, #8a0000);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.syllabusLabelLine {
+  width: 24px;
+  height: 2px;
+  background: var(--red-800, #8a0000);
+}
+
+.syllabusTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: var(--gray-900, #111827);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.syllabusTitle span {
+  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.syllabusDesc {
+  font-size: 0.95rem;
+  color: var(--gray-600, #4b5563);
+  line-height: 1.7;
+  max-width: 650px;
+}
+
+/* Syllabus Grid */
+.syllabusGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.syllabusCard {
+  background: var(--white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.syllabusCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(138, 0, 0, 0.06);
+  border-color: rgba(138, 0, 0, 0.15);
+}
+
+.syllabusCardIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+}
+
+.iconRed { background: var(--red-50, #fef2f2); color: var(--red-800, #8a0000); }
+.iconGold { background: var(--gold-100, #fef9c3); color: var(--gold-700, #b45309); }
+.iconGreen { background: #ecfdf5; color: #16a34a; }
+
+.syllabusCardName {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gray-900, #111827);
+  margin: 0 0 0.4rem 0;
+}
+
+.syllabusCardType {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--gray-500, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
+}
+
+.syllabusCardSemesters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
+}
+
+.semBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+  background: var(--gray-100, #f3f4f6);
+  color: var(--gray-700, #374151);
+  border: 1px solid var(--gray-200, #e5e7eb);
+}
+
+.syllabusCardLink {
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--red-800, #8a0000);
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.syllabusCardLink:hover {
+  gap: 0.75rem;
+  color: var(--gold-700, #b45309);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .syllabusGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .heroSection { min-height: 40vh; height: 40vh; }
+  .heroContent { padding-bottom: 50px; }
+  .syllabusSection { padding: 3.5rem 0; }
+  .syllabusGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .heroSection { min-height: 35vh; height: 35vh; }
+  .heroContent { padding: 0 1rem 40px 1rem; }
+  .syllabusCard { padding: 1.5rem; }
+}

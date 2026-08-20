@@ -1,0 +1,176 @@
+/* Term Schedule Page */
+.heroSection { position: relative; min-height: 50vh; height: 50vh; display: flex; align-items: flex-end; overflow: hidden; }
+.heroBgImage { position: absolute; inset: 0; z-index: 0; }
+.heroBgImg { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.82), rgba(0,0,0,0.4)); z-index: 1; }
+.heroContent { position: relative; z-index: 2; width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem 80px 2rem; }
+.heroTitle { font-family: var(--font-heading, 'Outfit', sans-serif); font-size: clamp(2.5rem,5vw,3.75rem); font-weight: 700; color: #fff; line-height: 1.15; margin: 0; }
+.heroTitle em { font-style: normal; }
+
+.container { width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem; }
+
+/* ============================================
+   Schedule Section
+   ============================================ */
+.scheduleSection {
+  padding: 5rem 0;
+  background: var(--sky-50, #fffdf5);
+}
+
+.scheduleHeader {
+  margin-bottom: 3rem;
+}
+
+.scheduleLabel {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red-800, #8a0000);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.scheduleLabelLine {
+  width: 24px;
+  height: 2px;
+  background: var(--red-800, #8a0000);
+}
+
+.scheduleTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: var(--gray-900, #111827);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.scheduleTitle span {
+  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.scheduleDesc {
+  font-size: 0.95rem;
+  color: var(--gray-600, #4b5563);
+  line-height: 1.7;
+  max-width: 650px;
+}
+
+/* Term Cards */
+.termGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.termCard {
+  background: var(--white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.termCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+}
+
+.termCardHeader {
+  padding: 1.5rem 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.termCardHeaderOdd {
+  background: linear-gradient(135deg, #7f0000, #b30000);
+  color: var(--white, #ffffff);
+}
+
+.termCardHeaderEven {
+  background: linear-gradient(135deg, #b45309, #d97706);
+  color: var(--white, #ffffff);
+}
+
+.termCardSem {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.1rem;
+  font-weight: 800;
+}
+
+.termCardPeriod {
+  font-size: 0.78rem;
+  font-weight: 700;
+  opacity: 0.85;
+}
+
+.termCardBody {
+  padding: 1.75rem 2rem;
+}
+
+.termEvent {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
+}
+
+.termEvent:last-child {
+  border-bottom: none;
+}
+
+.termEventDate {
+  min-width: 75px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--gray-500, #6b7280);
+  text-transform: uppercase;
+}
+
+.termEventName {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--gray-900, #111827);
+  flex: 1;
+}
+
+.termEventTag {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  background: var(--red-50, #fef2f2);
+  color: var(--red-800, #8a0000);
+  border: 1px solid var(--red-200, #fecaca);
+}
+
+.termEventTagGold {
+  background: var(--gold-100, #fef9c3);
+  color: var(--gold-700, #b45309);
+  border-color: var(--gold-200, #fde68a);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .heroSection { min-height: 40vh; height: 40vh; }
+  .heroContent { padding-bottom: 50px; }
+  .scheduleSection { padding: 3.5rem 0; }
+  .termGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .heroSection { min-height: 35vh; height: 35vh; }
+  .heroContent { padding: 0 1rem 40px 1rem; }
+  .termCardBody { padding: 1.25rem 1.5rem; }
+  .termEvent { flex-wrap: wrap; gap: 0.5rem; }
+}

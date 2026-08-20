@@ -1,0 +1,248 @@
+.facultyWrapper {
+  width: 100%;
+  padding: 80px 24px;
+  background-color: var(--color-background, #FFFFFF);
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+}
+
+/* HEADER STYLES */
+.headerArea {
+  text-align: center;
+  max-width: 720px;
+  margin: 0 auto 48px auto;
+}
+
+.subHeading {
+  color: var(--color-yellow);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.mainHeading {
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--color-red);
+  margin: 8px 0 16px 0;
+}
+
+.description {
+  font-size: 15px;
+  color: var(--color-gray-500, #6b7280);
+  line-height: 1.6;
+}
+
+/* TABS */
+.tabContainer {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 32px;
+  border-bottom: 1px solid var(--color-gray-200, #e5e7eb);
+  padding-bottom: 8px;
+}
+
+.tabBtn {
+  background: none;
+  border: none;
+  padding: 12px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--color-gray-400, #9ca3af);
+  cursor: pointer;
+  position: relative;
+  transition: color 0.3s ease;
+  text-transform: uppercase;
+}
+
+.tabBtn:hover {
+  color: var(--color-red);
+}
+
+.activeTab {
+  color: var(--color-red);
+}
+
+.activeTab::after {
+  content: '';
+  position: absolute;
+  bottom: -9px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: var(--color-yellow);
+  border-radius: 2px;
+}
+
+.cardsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.card {
+  position: relative;
+  height: 460px;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.12);
+}
+
+/* IMAGE FILTER TRANSITION */
+.imageBox {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.facultyImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: none !important; /* Forces original colors in all states */
+  transition: transform 0.5s cubic-bezier(0.25, 1, 0.35, 1) !important;
+}
+
+/* Slight zoom-in on hover/active for smooth feel */
+.activeCard .facultyImg,
+.card:hover .facultyImg {
+  transform: scale(1.05);
+}
+
+/* SOFT LIGHT GRADIENT OVERLAY */
+.cardOverlay {
+  position: absolute;
+  inset: 0;
+  /* Soft, lighter semi-transparent dark-blue gradient */
+  background: linear-gradient(
+    180deg, 
+    rgba(147, 0, 0, 0.45) 0%,   /* Very soft light overlay at top */
+    rgba(147, 0, 0, 0.78) 100%  /* Gentle gradient at bottom for text contrast */
+  ) !important;
+  
+  /* Glassmorphism blur to enhance photo background without feeling heavy/dark */
+  backdrop-filter: blur(6px) !important;
+  -webkit-backdrop-filter: blur(6px) !important;
+  
+  padding: 32px 26px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  color: #FFFFFF;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease, transform 0.35s ease;
+  transform: translateY(10px);
+}
+
+/* ACTIVE / HOVER STATE VISIBILITY */
+.activeCard .cardOverlay,
+.card:hover .cardOverlay {
+  opacity: 1 !important;
+  visibility: visible !important;
+  transform: translateY(0);
+}
+
+/* TEXT SHADOW FOR SHARP READABILITY ON LIGHTER BACKGROUND */
+.facultyName, 
+.quote {
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.quote {
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: #E2E8F0;
+  margin-bottom: 24px;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.badgeRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+/* SOFT GOLD BADGES */
+.badge {
+  background: rgba(244, 176, 0, 0.15) !important;
+  border: 1px solid rgba(244, 176, 0, 0.15);
+  color: #ffd24d !important; /* Lighter bright gold */
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11.5px;
+  font-weight: 600;
+  backdrop-filter: blur(4px);
+}
+
+.facultyName {
+  font-size: 24px;
+  font-weight: 800;
+  margin: 0 0 6px 0;
+  letter-spacing: 0.5px;
+  color: #FFFFFF;
+}
+
+.facultyRole {
+  font-size: 13.5px;
+  color: #E2E8F0;
+  font-weight: 500;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 992px) {
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .facultyWrapper {
+    padding: 60px 16px;
+  }
+
+  .cardsGrid {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 24px;
+    gap: 16px;
+    margin: 0 -16px;
+    padding-left: 16px;
+    padding-right: 16px;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .cardsGrid::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+  .card {
+    min-width: 85%;
+    max-width: 85%;
+    height: 420px;
+    scroll-snap-align: center;
+    flex-shrink: 0;
+  }
+
+  .mainHeading {
+    font-size: 28px;
+  }
+}

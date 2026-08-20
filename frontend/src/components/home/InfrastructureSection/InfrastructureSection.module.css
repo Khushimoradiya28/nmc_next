@@ -1,0 +1,95 @@
+/* FACILITIES */
+.facilitiesSection {
+  background: var(--white);
+  overflow: hidden;
+}
+
+.facilitiesSliderWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.facilitiesGrid {
+  display: flex;
+  overflow-x: auto;
+  gap: 24px;
+  flex: 1;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  padding: 10px 0;
+  scroll-behavior: auto !important;
+}
+
+.facilitiesGrid::-webkit-scrollbar {
+  display: none; /* WebKit (Safari/Chrome) */
+}
+
+.facilityCard {
+  flex: 0 0 calc(25% - 18px); /* Exactly 4 cards on desktop */
+  scroll-snap-align: start;
+  background: var(--white);
+  border-radius: var(--r-lg);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+  box-sizing: border-box;
+}
+
+.facilityCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+}
+
+.facilityImg {
+  height: 200px;
+  width: 100%;
+  object-fit: cover;
+}
+
+.facilityContent {
+  padding: 1.4rem;
+}
+
+.facilityTitle {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: .4rem;
+}
+
+@media (max-width: 1024px) {
+  .facilityCard {
+    flex: 0 0 calc(33.333% - 16px); /* 3 cards */
+  }
+}
+
+@media (max-width: 768px) {
+  .facilityCard {
+    flex: 0 0 calc(50% - 12px); /* 2 cards on tablet */
+  }
+}
+
+@media (max-width: 480px) {
+  .facilityCard {
+    flex: 0 0 100%; /* 1 card on mobile */
+  }
+}
+
+.sliderArrow {
+  background: var(--color-primary, #B00000) !important;
+  color: var(--white, #ffffff) !important;
+  border-color: var(--color-primary, #B00000) !important;
+  box-shadow: 0 4px 14px rgba(176, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.sliderArrow:hover {
+  background: var(--color-primary-dark, #800000) !important;
+  border-color: var(--color-primary-dark, #800000) !important;
+  color: var(--white, #ffffff) !important;
+  transform: scale(1.08) !important;
+}

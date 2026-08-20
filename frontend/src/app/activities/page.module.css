@@ -1,0 +1,145 @@
+.hubSection {
+  background: #ffffff;
+  padding: 5rem 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 5rem;
+}
+
+/* Nav Card Styling */
+.navCard {
+  border-radius: 16px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  min-height: 220px;
+  box-sizing: border-box;
+  position: relative;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  border: 1px solid var(--color-gray-100, #e2e8f0);
+}
+
+.cardIcon {
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.cardTitle {
+  font-family: var(--font-heading, serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-black, #111111);
+  margin: 0 0 10px 0;
+}
+
+.cardDesc {
+  font-size: 0.92rem;
+  color: var(--color-gray-600, #475569);
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+  flex-grow: 1;
+}
+
+.cardArrow {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-top: auto;
+  align-self: flex-start;
+  transition: transform 0.25s ease;
+}
+
+/* Hover scales */
+.navCard:hover {
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+}
+
+.navCard:hover .cardArrow {
+  transform: translateX(8px);
+}
+
+/* Recent Section */
+.recentHeaderRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 2.5rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading, serif);
+  font-size: var(--fs-h2, 2.2rem);
+  font-weight: 800;
+  color: var(--color-black, #111111);
+  margin: 0;
+}
+
+.sectionTitle span {
+  color: var(--color-primary, #B00000);
+}
+
+.recentGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+}
+
+.viewAllBtn {
+  background: var(--color-primary, #B00000);
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 28px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 15px rgba(176, 0, 0, 0.25);
+  display: inline-block;
+}
+
+.viewAllBtn:hover {
+  background: #ffffff;
+  color: var(--color-primary, #B00000);
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-primary, #B00000);
+}
+
+/* ── RESPONSIVE MEDIA BREAKPOINTS ── */
+@media (max-width: 1024px) {
+  .grid, .recentGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .recentHeaderRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid, .recentGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .navCard {
+    padding: 1.75rem;
+  }
+}

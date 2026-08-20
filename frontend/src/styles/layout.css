@@ -1,0 +1,152 @@
+/* ============================================
+   Layout System
+   ============================================ */
+
+/* ---- Page Wrapper ---- */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  width: 100%;
+}
+
+/* ---- Main Wrapper ---- */
+.main-wrapper {
+  flex: 1;
+  width: 100%;
+  padding-top: 72px;
+}
+
+.main-wrapper-no-nav {
+  flex: 1;
+  width: 100%;
+}
+
+/* ---- Content Wrapper ---- */
+.content-wrapper {
+  width: 100%;
+  max-width: var(--content-width);
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* ---- Container System ---- */
+.sectionContainer,
+.pageContainer,
+.container,
+[class*="gridWrapper" i],
+[class*="innerWrapper" i],
+[class*="facultyWrapper" i] {
+  width: 100% !important;
+  max-width: 1440px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 1740px) {
+  .sectionContainer,
+  .pageContainer,
+  .container,
+  [class*="container" i]:not([class*="sliderContainer" i]):not([class*="imageCardContainer" i]):not([class*="iconContainer" i]):not([class*="lightboxContent" i]):not([class*="mainImageContainer" i]):not([class*="secondaryImageContainer" i]),
+  [class*="gridWrapper" i],
+  [class*="innerWrapper" i],
+  [class*="facultyWrapper" i] {
+    max-width: calc(100vw - 300px) !important;
+  }
+}
+
+
+
+[class*="headerArea" i],
+[class*="headerBlock" i] {
+  width: 100% !important;
+  max-width: var(--container-max) !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* ---- Section Spacing Rhythm ---- */
+[class*="facultyWrapper"] {
+  padding-top: var(--section-padding-vertical) !important;
+  padding-bottom: var(--section-padding-vertical) !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+
+.section-wrapper-none {
+  width: 100%;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+/* Section Background Support */
+.section-bg-white {
+  background-color: var(--color-white);
+}
+
+.section-bg-light {
+  background-color: var(--color-gray-50);
+}
+
+.section-bg-dark {
+  background-color: var(--color-primary-dark);
+  color: var(--color-white);
+}
+
+.section-bg-primary {
+  background-color: var(--color-red);
+  color: var(--color-white);
+}
+
+.section-bg-secondary {
+  background-color: var(--color-yellow);
+  color: var(--color-white);
+}
+
+.section-bg-default {
+  background-color: var(--color-white);
+}
+
+/* ---- Max Content Width ---- */
+.max-content-sm {
+  max-width: 540px;
+}
+
+.max-content-md {
+  max-width: 720px;
+}
+
+.max-content-lg {
+  max-width: 960px;
+}
+
+.max-content-xl {
+  max-width: 1140px;
+}
+
+.max-content-full {
+  max-width: 100%;
+}
+
+/* ---- Universal Section Container Standard ---- */
+.sectionContainer {
+  width: 100% !important;
+  max-width: 1440px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  padding-left: 24px !important;
+  padding-right: 24px !important;
+  box-sizing: border-box !important;
+}
+
+@media (min-width: 1740px) {
+  .sectionContainer {
+    max-width: calc(100vw - 300px) !important;
+  }
+}
+

@@ -1,0 +1,196 @@
+.sectionContainer {
+  width: 100%;
+  padding: 80px 24px;
+  background-color: #FFFFFF;
+  box-sizing: border-box;
+}
+
+.gridWrapper {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  align-items: stretch;
+}
+
+.card {
+  position: relative;
+  background: #FFFFFF;
+  border-radius: 24px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(17, 17, 17, 0.04);
+  border: 1px solid rgba(17, 17, 17, 0.06);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 45px rgba(17, 17, 17, 0.09);
+  border-color: rgba(176, 0, 0, 0.15);
+}
+
+.topAccentBar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 5px;
+  transition: height 0.3s ease;
+}
+
+.card:hover .topAccentBar {
+  height: 8px;
+}
+
+.visionCard .topAccentBar { background: linear-gradient(90deg, var(--color-red), var(--color-yellow)); }
+.missionCard .topAccentBar { background: linear-gradient(90deg, var(--color-yellow), var(--color-red)); }
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.stepIndex { font-size: 13px; font-weight: 800; color: var(--color-yellow); }
+.stepCategory { font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: var(--color-yellow); text-transform: uppercase; }
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.iconContainer {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.visionIconContainer { background: rgba(176, 0, 0, 0.05); color: var(--color-red); }
+.missionIconContainer { background: rgba(244, 176, 0, 0.05); color: var(--color-yellow); }
+
+.card:hover .iconContainer { transform: scale(1.1) rotate(-3deg); }
+
+.cardTitle { font-size: 28px; font-weight: 900; color: var(--color-black); margin: 0; }
+
+.visionParagraph, .missionIntro {
+  font-size: 14.5px;
+  line-height: 1.7;
+  color: var(--color-gray-500);
+  margin: 0 0 16px 0;
+}
+
+.bulletList, .modalBulletList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 20px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bulletItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-gray-500);
+}
+
+.bulletIcon { color: var(--color-yellow); font-size: 10px; margin-top: 4px; flex-shrink: 0; }
+
+/* READ MORE BUTTONS */
+.readMoreBtn {
+  align-self: flex-start;
+  background: transparent;
+  border: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  margin-top: auto;
+  margin-bottom: 24px;
+  transition: gap 0.3s ease;
+  outline: none;
+}
+
+.visionBtn { color: var(--color-red); }
+.missionBtn { color: var(--color-red); }
+
+.readMoreBtn:hover { text-decoration: underline; }
+
+.cardFooter, .modalFooter {
+  border-top: 1px dashed #E2E8F0;
+  padding-top: 16px;
+  margin-top: auto;
+}
+
+.footerTag { font-size: 11px; font-weight: 800; letter-spacing: 1px; color: var(--color-red); }
+
+/* ================= MODAL STYLING ================= */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.65);
+  backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.modalContent {
+  position: relative;
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 650px;
+  border-radius: 20px;
+  padding: 36px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-height: 85vh;
+  overflow-y: auto;
+  animation: slideUp 0.3s ease;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #F1F5F9;
+  border: none;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  font-size: 22px;
+  color: #64748B;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.closeBtn:hover { background: #E2E8F0; color: var(--color-black); }
+
+.modalHeader { margin-bottom: 16px; }
+.modalTitle { font-size: 28px; font-weight: 900; color: var(--color-black); margin: 4px 0 0 0; }
+.modalBodyText { font-size: 15.5px; line-height: 1.8; color: var(--color-gray-500); }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+@media (max-width: 850px) {
+  .gridWrapper { grid-template-columns: 1fr; }
+}

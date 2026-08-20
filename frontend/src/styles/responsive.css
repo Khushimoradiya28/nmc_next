@@ -1,0 +1,133 @@
+/* ============================================
+   Responsive Breakpoints
+   Layout, Container, Grid, Spacing Behavior
+   ============================================ */
+
+@media (max-width: 1799px) {
+  :root {
+    --container-max: 1440px;
+    --container-padding: 32px;
+    --section-padding-vertical: 80px;
+  }
+}
+
+@media (max-width: 1599px) {
+  :root {
+    --container-max: 1440px;
+    --container-padding: 32px;
+    --section-padding-vertical: 80px;
+  }
+}
+
+@media (max-width: 1408px) {
+  :root {
+    --container-max: 1280px;
+    --container-padding: 32px;
+    --section-padding-vertical: 80px;
+    --section-gap-xl: 8rem;
+    --section-gap-lg: 6rem;
+  }
+}
+
+@media (max-width: 1216px) {
+  :root {
+    --container-max: 1100px;
+    --container-padding: 24px;
+    --section-padding-vertical: 72px;
+    --section-gap-xl: 7rem;
+    --section-gap-lg: 5.5rem;
+    --section-gap-md: 4rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --container-max: 960px;
+    --container-padding: 24px;
+    --section-padding-vertical: 64px;
+    --section-gap-xl: 6rem;
+    --section-gap-lg: 5rem;
+    --section-gap-md: 3.5rem;
+    --section-gap-sm: 2.5rem;
+    --navbar-height: 72px;
+  }
+
+  .main-wrapper {
+    padding-top: 72px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --container-max: 720px;
+    --container-padding: 20px;
+    --section-padding-vertical: 56px;
+    --section-gap-xl: 5rem;
+    --section-gap-lg: 4rem;
+    --section-gap-md: 3rem;
+    --section-gap-sm: 2rem;
+    --navbar-height: var(--navbar-height-mobile);
+    --card-padding: var(--space-5);
+  }
+
+  .main-wrapper {
+    padding-top: var(--navbar-height-mobile);
+  }
+
+  /* Grid collapse for simple grid utilities */
+  .grid-2,
+  .grid-3,
+  .grid-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 575px) {
+  :root {
+    --container-max: 540px;
+    --container-padding: 16px;
+    --section-padding-vertical: 48px;
+    --section-gap-lg: 3.5rem;
+    --section-gap-md: 2.5rem;
+    --section-gap-sm: 1.75rem;
+    --card-padding: var(--space-4);
+    --card-padding-lg: var(--space-6);
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --container-max: 100%;
+    --container-padding: 16px;
+    --section-padding-vertical: 40px;
+    --section-gap-lg: 3rem;
+    --section-gap-md: 2rem;
+    --section-gap-sm: 1.5rem;
+    --btn-height-lg: 48px;
+    --btn-height-xl: 52px;
+  }
+
+  .container-fluid {
+    padding-left: var(--space-4);
+    padding-right: var(--space-4);
+  }
+}
+
+@media (max-width: 420px) {
+  :root {
+    --container-max: 100%;
+    --container-padding: 12px;
+    --section-padding-vertical: 36px;
+  }
+}
+
+@media (max-width: 360px) {
+  :root {
+    --container-max: 100%;
+    --container-padding: 12px;
+    --section-padding-vertical: 32px;
+    --section-gap-md: 1.75rem;
+    --section-gap-sm: 1.25rem;
+    --card-padding: var(--space-3);
+  }
+}

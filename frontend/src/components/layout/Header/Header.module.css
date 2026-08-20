@@ -1,0 +1,325 @@
+.heroHeader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: transparent;
+  padding: 1rem 0;
+  transition: all 0.3s ease;
+}
+
+.scrolled {
+  position: fixed;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  padding: 0.6rem 0;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.heroHeaderContainer {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.heroLogoBox {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.3s ease;
+}
+
+.heroLogoBox:hover {
+  transform: scale(1.05);
+}
+
+.heroLogoImg {
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+}
+
+.heroNav {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.heroNavMenu {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  list-style: none;
+  flex-wrap: wrap;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+}
+
+.heroNavLink {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  padding: 0.5rem 0.75rem;
+  white-space: nowrap;
+  position: relative;
+  transition: all 0.25s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.activeLink {
+  color: var(--white, #ffffff);
+}
+
+.heroNavLink::after {
+  content: "";
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--gold-500, #f59e0b);
+  border-radius: 2px;
+  transition: width 0.25s ease;
+}
+
+.activeLink::after {
+  width: 60%;
+}
+
+.heroNavLink svg {
+  opacity: 0.7;
+}
+
+/* Dropdown styling */
+.heroNavDropdown {
+  position: relative;
+}
+
+.heroDropdownMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background-color: var(--white, #ffffff);
+  min-width: 240px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 0.5rem;
+  padding: 0.75rem 0;
+  list-style: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.heroNavDropdown:hover .heroDropdownMenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.heroNavDropdown:hover .heroNavLink {
+  color: var(--gold-500, #f59e0b);
+}
+
+.heroNavDropdown:hover .heroNavLink svg {
+  color: var(--gold-500, #f59e0b);
+}
+
+.heroDropdownMenu li a {
+  display: block;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-800, #334155);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.heroDropdownMenu li a:hover {
+  background-color: #fffbeb;
+  color: var(--red-800, #8a0000);
+  padding-left: 1.6rem;
+}
+
+/* Sub-dropdown styling */
+.heroSubDropdown {
+  position: relative;
+}
+
+.heroSubDropdownMenu {
+  position: absolute;
+  top: -10px;
+  left: 100%;
+  transform: translateX(10px);
+  background-color: var(--white, #ffffff);
+  min-width: 240px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+  border-radius: 0.5rem;
+  padding: 0.75rem 0;
+  list-style: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 1000;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.heroSubDropdown:hover .heroSubDropdownMenu {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(0);
+}
+
+.heroSubMenuToggle {
+  display: flex !important;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.heroSubDropdownMenu li a {
+  display: block;
+  padding: 0.65rem 1.25rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--gray-800, #334155);
+  text-decoration: none;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.heroSubDropdownMenu li a:hover {
+  background-color: #fffbeb;
+  color: var(--red-800, #8a0000);
+  padding-left: 1.6rem;
+}
+
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  padding: 0.45rem;
+  cursor: pointer;
+}
+
+.hamburger span {
+  width: 22px;
+  height: 2px;
+  background: var(--white, #ffffff);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 1024px) {
+  .heroLogoImg {
+    height: 55px;
+  }
+
+  .heroNavLink {
+    font-size: 0.7rem;
+    padding: 0.4rem 0.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroHeaderContainer {
+    padding: 0 1rem;
+  }
+
+  .heroNav {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 5rem;
+    z-index: 998;
+    transition: left 0.35s ease;
+    overflow-y: auto;
+  }
+
+  .active {
+    left: 0;
+  }
+
+  .heroNavMenu {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .heroNavLink {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+  }
+
+  .hamburger {
+    display: flex;
+    z-index: 1001;
+  }
+
+  .hamburgerActive span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+  }
+
+  .hamburgerActive span:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburgerActive span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
+  }
+
+  .heroDropdownMenu,
+  .heroSubDropdownMenu {
+    position: static;
+    transform: none;
+    opacity: 1;
+    visibility: visible;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+    text-align: center;
+    padding: 0;
+    min-width: unset;
+  }
+
+  .heroDropdownMenu li a,
+  .heroSubDropdownMenu li a {
+    color: rgba(255, 255, 255, 0.7);
+    padding: 0.5rem 1rem;
+  }
+
+  .heroDropdownMenu li a:hover,
+  .heroSubDropdownMenu li a:hover {
+    background-color: transparent;
+    color: var(--white, #ffffff);
+    padding-left: 1.25rem;
+  }
+}

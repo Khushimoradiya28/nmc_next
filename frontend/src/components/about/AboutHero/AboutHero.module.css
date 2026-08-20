@@ -1,0 +1,49 @@
+.aboutHeroSection {
+  min-height: 50vh;
+  height: 50vh;
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.heroBgImage {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.heroBgImg {
+  object-fit: cover;
+  object-position: center 20%;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4));
+  z-index: 2;
+}
+
+.container {
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  z-index: 3;
+}
+
+.heroContent {
+  padding-bottom: 80px;
+}
+
+.heroMainTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 3.75rem);
+  font-weight: 600;
+  color: var(--white);
+  line-height: 1.2;
+  margin: 0;
+  font-style: italic;
+}

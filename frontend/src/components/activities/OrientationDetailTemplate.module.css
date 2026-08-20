@@ -1,0 +1,145 @@
+.listSection {
+  padding: 5rem 0;
+  background: #ffffff;
+}
+
+.container {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  box-sizing: border-box;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  width: 100%;
+}
+
+/* Fallback Widget */
+.upcomingBanner {
+  background: #ffffff;
+  border: 1px solid var(--color-gray-100, #e2e8f0);
+  border-radius: 20px;
+  padding: 3.5rem;
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
+}
+
+.bannerBadge {
+  display: inline-block;
+  background: rgba(176, 0, 0, 0.06);
+  border: 1px solid rgba(176, 0, 0, 0.3);
+  color: var(--color-primary, #B00000);
+  padding: 6px 16px;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1.5rem;
+}
+
+.bannerTitle {
+  font-family: var(--font-heading, serif);
+  font-size: 1.8rem;
+  color: var(--color-black, #111111);
+  margin: 0 0 12px 0;
+  font-weight: 800;
+}
+
+.bannerDesc {
+  font-size: 1rem;
+  color: var(--color-gray-600, #475569);
+  max-width: 580px;
+  margin: 0 auto 2.5rem;
+  line-height: 1.6;
+}
+
+.countdownGrid {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  margin-bottom: 2.5rem;
+}
+
+.countdownItem {
+  background: #ffffff;
+  border: 1px solid var(--color-gray-100, #e2e8f0);
+  border-radius: 12px;
+  width: 80px;
+  height: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+.numVal {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--color-black, #111111);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.lblVal {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  color: var(--color-gray-600, #475569);
+  letter-spacing: 0.5px;
+}
+
+.registerBtn {
+  background: var(--color-primary, #B00000);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 32px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(176, 0, 0, 0.25);
+  transition: all 0.3s ease;
+}
+
+.registerBtn:hover {
+  background: #ffffff;
+  color: var(--color-primary, #B00000);
+  transform: scale(1.03);
+  box-shadow: 0 6px 20px rgba(176, 0, 0, 0.3);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .countdownGrid {
+    gap: 0.75rem;
+  }
+  .countdownItem {
+    width: 64px;
+    height: 64px;
+  }
+  .numVal {
+    font-size: 1.4rem;
+  }
+  .upcomingBanner {
+    padding: 2rem;
+  }
+}

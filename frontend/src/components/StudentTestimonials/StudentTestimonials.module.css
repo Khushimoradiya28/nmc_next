@@ -1,0 +1,205 @@
+.sectionWrapper {
+  background-color: #FAFAF7;
+  padding: 72px var(--container-padding);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.container {
+  max-width: var(--container-max);
+  width: 100%;
+}
+
+.headerBlock {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 3.5rem auto;
+}
+
+.badge {
+  display: inline-block;
+  background: rgba(176, 0, 0, 0.08);
+  color: var(--color-red);
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  padding: 0.35rem 0.85rem;
+  border-radius: 30px;
+  text-transform: uppercase;
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  color: var(--color-red);
+  line-height: 1.25;
+}
+
+/* Fallback/Placeholder View */
+.placeholderCard {
+  max-width: 680px;
+  margin: 0 auto;
+  background-color: #FFFFFF;
+  border-radius: 24px;
+  padding: 3.5rem 2.5rem;
+  border: 1px dashed rgba(23, 72, 115, 0.2);
+  box-shadow: 0 16px 36px rgba(23, 72, 115, 0.04);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.placeholderIcon {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.placeholderTitle {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-red);
+  margin-bottom: 0.75rem;
+}
+
+.placeholderText {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: #111827;
+  opacity: 0.8;
+  line-height: 1.65;
+}
+
+/* Active Spotlight Canvas (Asymmetric Layout) */
+.spotlightCanvas {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3.5rem;
+  align-items: center;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+@media (min-width: 1024px) {
+  .spotlightCanvas {
+    grid-template-columns: 4.2fr 5.4fr;
+    gap: 4%;
+  }
+}
+
+.visualColumn {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 320px;
+  aspect-ratio: 1 / 1.2;
+  border-radius: 32px 120px 32px 32px;
+  overflow: hidden;
+  border: 2px solid rgba(231, 152, 0, 0.4);
+  box-shadow: 0 24px 48px rgba(23, 72, 115, 0.1);
+  background-color: #FFFFFF;
+}
+
+.studentImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.floatingBadge {
+  position: absolute;
+  bottom: 1rem;
+  right: 1rem;
+  background: rgba(23, 72, 115, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #FFFFFF;
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.contentColumn {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.quoteMark {
+  position: absolute;
+  top: -30px;
+  left: -20px;
+  font-family: Georgia, serif;
+  font-size: 80px;
+  color: rgba(231, 152, 0, 0.2);
+  line-height: 1;
+  user-select: none;
+  z-index: 0;
+}
+
+.quoteText {
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 1.65;
+  color: #111827;
+  font-style: italic;
+  font-weight: 500;
+  position: relative;
+  z-index: 1;
+  margin-bottom: 2rem;
+}
+
+.bioBlock {
+  display: flex;
+  flex-direction: column;
+}
+
+.goldLine {
+  width: 48px;
+  height: 3px;
+  background-color: var(--color-yellow);
+  margin-bottom: 1rem;
+  border-radius: 2px;
+}
+
+.studentName {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-red);
+  margin-bottom: 0.25rem;
+}
+
+.studentDetails {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: #6B7280;
+}
+
+@media (max-width: 575px) {
+  .sectionWrapper {
+    padding: 60px 20px;
+  }
+  .placeholderCard {
+    padding: 2.5rem 1.5rem;
+  }
+  .quoteText {
+    font-size: 17px;
+  }
+}

@@ -1,0 +1,1262 @@
+/* =========== ADMISSION (DYNAMIC) COMMAND HUB =========== */
+.admissionDynamicSection {
+  background: #fffdfa;
+  position: relative;
+}
+
+.admLiveBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(135deg, #7f0000 0%, #a00000 100%);
+  border: 1px solid rgba(254, 202, 202, 0.3);
+  border-radius: 1.35rem;
+  padding: 1.25rem 1.75rem;
+  margin-bottom: 2.25rem;
+  color: var(--white);
+  flex-wrap: wrap;
+  gap: 1rem;
+  box-shadow: 0 10px 30px rgba(127, 0, 0, 0.18);
+}
+
+.admLiveStatus {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.admPulseDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #f59e0b;
+  box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+  animation: pulseTicker 1.5s infinite;
+  flex-shrink: 0;
+}
+
+.admLiveStatus strong {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 0.98rem;
+  font-weight: 900;
+  color: var(--white);
+}
+
+.admLiveStatus span {
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.admCountdownWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: rgba(0, 0, 0, 0.25);
+  padding: 0.45rem 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.admCountdownLabel {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #fde68a;
+}
+
+.admTimerBoxes {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.admTimerBox {
+  background: rgba(255, 255, 255, 0.15);
+  padding: 0.2rem 0.55rem;
+  border-radius: 6px;
+  text-align: center;
+  min-width: 38px;
+}
+
+.atimerNum {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 900;
+  color: #fde68a;
+  display: block;
+  line-height: 1;
+}
+
+.atimerTxt {
+  font-size: 0.55rem;
+  text-transform: uppercase;
+  font-weight: 800;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.atimerColon {
+  font-family: var(--font-heading);
+  font-size: 1rem;
+  font-weight: 900;
+  color: #fde68a;
+}
+
+.admBannerPerk {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.45rem 0.95rem;
+  border-radius: var(--r-full);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #fde68a;
+}
+
+/* Core 2-Column Admission Hub Grid */
+.admCoreGrid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.95fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.admIntakeCard,
+.admEstimatorCard {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.admEstimatorCard:hover {
+  box-shadow: 0 18px 45px rgba(138, 0, 0, 0.08);
+  border-color: rgba(138, 0, 0, 0.2);
+}
+
+.admCardHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.75rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.admCardIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.admBadge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--red-800);
+  display: block;
+}
+
+.admCardTitle {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin: 0;
+}
+
+.admSeatsList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.admSeatItem {
+  padding: 0.95rem 1.15rem;
+  background: #f8fafc;
+  border: 1px solid var(--gray-200);
+  border-radius: 1rem;
+  transition: all 0.25s ease;
+}
+
+.admSeatItem:hover {
+  border-color: #fde68a;
+  background: #fffbeb;
+  transform: translateY(-2px);
+}
+
+.aseatTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.45rem;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+.aseatNameWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  flex-wrap: wrap;
+}
+
+.aseatName {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--gray-900);
+}
+
+.aseatCount {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  font-weight: 700;
+}
+
+.aseatProgressTrack {
+  height: 8px;
+  border-radius: 4px;
+  background: var(--gray-200);
+  overflow: hidden;
+  margin-bottom: 0.45rem;
+}
+
+.aseatProgressFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aseatMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.74rem;
+  font-weight: 700;
+  color: var(--gray-500);
+}
+
+.admCapacitySummary {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  border: 1px solid #fde68a;
+  border-radius: 1rem;
+  margin-top: 1.5rem;
+}
+
+.acapIcon {
+  font-size: 1.4rem;
+}
+
+.acapText strong {
+  font-size: 0.86rem;
+  font-weight: 800;
+  color: var(--gold-800);
+  display: block;
+}
+
+.acapText span {
+  font-size: 0.76rem;
+  color: var(--gold-700);
+}
+
+/* Calculator Box */
+.admCalculatorBox {
+  display: flex;
+  flex-direction: column;
+  gap: 1.15rem;
+}
+
+.acalcLabel {
+  font-size: 0.84rem;
+  font-weight: 800;
+  color: var(--gray-800);
+}
+
+.acalcSelect {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 1rem;
+  border-radius: 0.85rem;
+  border: 1.5px solid var(--gray-200);
+  background: var(--white);
+  font-family: var(--font-heading);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  outline: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 16px;
+}
+
+.acalcSelect:focus {
+  border-color: var(--red-800);
+  box-shadow: 0 0 0 3px rgba(127, 0, 0, 0.08);
+}
+
+.acalcDynamicResult {
+  background: #f8fafc;
+  border: 1px solid var(--gray-200);
+  border-radius: 1.15rem;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.acalcFeeRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--gray-200);
+  padding-bottom: 0.85rem;
+}
+
+.acalcFeeSub {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  display: block;
+}
+
+.acalcFeeVal {
+  font-family: var(--font-heading);
+  font-size: 1.45rem;
+  font-weight: 900;
+  color: var(--red-800);
+}
+
+.acalcSeatsVal {
+  font-family: var(--font-heading);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--gold-700);
+}
+
+.acalcPerksList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.aperkItem {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.8rem;
+  color: var(--gray-700);
+}
+
+.aperkCheck {
+  color: var(--red-800);
+  font-weight: 900;
+}
+
+.acalcActionsGrid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.btnAdmApply {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.8rem 1.25rem;
+  border-radius: var(--r-full);
+  background: linear-gradient(135deg, #7f0000 0%, #b30000 100%);
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-size: 0.86rem;
+  font-weight: 800;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btnAdmApply:hover {
+  background: linear-gradient(135deg, #b30000 0%, #dc2626 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(127, 0, 0, 0.3);
+}
+
+.btnAdmCall {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.8rem 1.1rem;
+  border-radius: var(--r-full);
+  background: #fffbeb;
+  color: var(--gold-800);
+  border: 1px solid #fde68a;
+  font-family: var(--font-heading);
+  font-size: 0.86rem;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.25s ease;
+}
+
+.btnAdmCall:hover {
+  background: #fef3c7;
+  color: var(--gold-900);
+  transform: translateY(-2px);
+}
+
+/* 3-Step Streamlined Protocol */
+.admStepsWrapper {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 1.5rem;
+  padding: 2rem 2.25rem;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+}
+
+.admStepsHeader {
+  margin-bottom: 1.5rem;
+}
+
+.astepsTag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--red-800);
+}
+
+.astepsTitle {
+  font-family: var(--font-heading);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin: 0.2rem 0 0;
+}
+
+.admStepsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+
+.astepItem {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1.15rem;
+  background: #f8fafc;
+  border: 1px solid var(--gray-200);
+  border-radius: 1.15rem;
+  transition: all 0.25s ease;
+}
+
+.astepItem:hover {
+  border-color: #fde68a;
+  background: #fffbeb;
+  transform: translateY(-2px);
+}
+
+.astepNumBox {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #7f0000 0%, #b30000 100%);
+  color: var(--white);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 900;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(127, 0, 0, 0.25);
+}
+
+.astepContent h4 {
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin: 0 0 0.3rem 0;
+}
+
+.astepContent p {
+  font-size: 0.78rem;
+  color: var(--gray-500);
+  line-height: 1.45;
+  margin: 0;
+}
+
+/* Responsive */
+@media(max-width: 1024px) {
+  .admCoreGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .admStepsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media(max-width: 600px) {
+  .admLiveBanner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .acalcActionsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========== EXECUTIVE QUICK LINKS & E-RESOURCES ENTERPRISE HUB =========== */
+.quicklinksSection {
+  background: var(--white);
+  position: relative;
+}
+
+.qhubFilterBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
+}
+
+.qhubFilterBtn {
+  padding: 0.75rem 1.45rem;
+  border-radius: var(--r-full);
+  border: 1px solid var(--gray-200);
+  background: var(--white);
+  color: var(--gray-700);
+  font-family: var(--font-heading);
+  font-size: 0.86rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.qhubFilterBtn:hover {
+  border-color: #fde68a;
+  background: #fffbeb;
+  color: var(--gray-900);
+}
+
+.qhubFilterBtn.active {
+  background: linear-gradient(135deg, #7f0000 0%, #b30000 100%);
+  color: var(--white);
+  border-color: transparent;
+  box-shadow: 0 4px 14px rgba(138, 0, 0, 0.25);
+}
+
+.qhubGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.qhubCard {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  padding: 1.45rem 1.65rem;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 1.35rem;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.qhubCard:hover {
+  transform: translateY(-4px);
+  border-color: #fde68a;
+  background: #fffdfa;
+  box-shadow: 0 16px 36px rgba(138, 0, 0, 0.08);
+}
+
+.qhubCard.hidden {
+  display: none !important;
+}
+
+.qhubIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.qhubIcon svg {
+  stroke-width: 1 !important;
+}
+
+.qhubCard:hover .qhubIcon {
+  transform: scale(1.12);
+}
+
+.qhubInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.qhubTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.35rem;
+}
+
+.qhubTag {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--r-full);
+}
+
+.qhubArrow {
+  font-size: 1.1rem;
+  font-weight: 900;
+  color: var(--gray-400);
+  transition: all 0.25s ease;
+}
+
+.qhubCard:hover .qhubArrow {
+  color: var(--red-800);
+  transform: translate(3px, -3px);
+}
+
+.qhubTitle {
+  font-family: var(--font-heading);
+  font-size: 1.02rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin: 0 0 0.25rem 0;
+  line-height: 1.35;
+  transition: color 0.2s ease;
+}
+
+.qhubCard:hover .qhubTitle {
+  color: var(--red-800);
+}
+
+.qhubDesc {
+  font-size: 0.8rem;
+  color: var(--gray-500);
+  line-height: 1.45;
+  margin: 0;
+}
+
+@media(max-width: 900px) {
+  .qhubGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* =========== RESPONSIVE FOR NEW SECTIONS =========== */
+@media(max-width: 900px) {
+  .updatesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .placementGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .quicklinksGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .fvContent {
+    grid-template-columns: 1fr;
+  }
+
+  .fvGoals {
+    grid-template-columns: 1fr;
+  }
+
+  .alumniGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .calendarFlex {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media(max-width: 550px) {
+  .placementGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .quicklinksGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .alumniGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* FOOTER */
+.footer {
+  background: var(--gray-900);
+  color: var(--gray-300);
+  padding: 4rem 0 2rem;
+}
+
+.footerGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.footerHeading {
+  font-family: var(--font-heading);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 1.1rem;
+}
+
+.footerLinks {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .65rem;
+}
+
+.footerLinks a {
+  color: var(--gray-400);
+  font-size: .9rem;
+  transition: var(--transition);
+}
+
+.footerLinks a:hover {
+  color: var(--gold-400);
+  padding-left: 4px;
+}
+
+.footerBottom {
+  border-top: 1px solid rgba(255, 255, 255, .08);
+  padding-top: 1.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: .82rem;
+  color: var(--gray-500);
+}
+
+.socialLinks {
+  display: flex;
+  gap: .65rem;
+}
+
+.socialLink {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, .07);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .8rem;
+  font-weight: 800;
+  transition: var(--transition);
+}
+
+.socialLink:hover {
+  background: var(--gold-500);
+  color: var(--gray-900);
+}
+
+/* MODAL */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, .72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: all .28s ease;
+  padding: 1.5rem;
+}
+
+.modalBackdrop.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modalBox {
+  background: var(--white);
+  width: 100%;
+  max-width: 560px;
+  border-radius: var(--r-xl);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, .35);
+  padding: 2.25rem;
+  position: relative;
+  transform: translateY(18px) scale(.97);
+  transition: all .3s cubic-bezier(.16, 1, .3, 1);
+}
+
+.modalBackdrop.active .modalBox {
+  transform: translateY(0) scale(1);
+}
+
+.modalClose {
+  position: absolute;
+  top: 1.1rem;
+  right: 1.1rem;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: var(--transition);
+  line-height: 1;
+  z-index: 5;
+}
+
+.modalClose:hover {
+  background: var(--gold-500);
+  color: var(--gray-900);
+}
+
+.modalBadge {
+  display: inline-block;
+  background: var(--sky-100);
+  color: var(--sky-700);
+  font-size: .72rem;
+  font-weight: 800;
+  padding: .25rem .8rem;
+  border-radius: var(--r-full);
+  text-transform: uppercase;
+  margin-bottom: .65rem;
+}
+
+.modalTitle {
+  font-family: var(--font-heading);
+  font-size: 1.55rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: .4rem;
+}
+
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* =========== RESPONSIVE MEDIA QUERIES =========== */
+@media(min-width:480px) {
+  .statsCardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .footerGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media(min-width:640px) {
+  .heroSlide {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+
+  .tourCard {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .contactGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .overviewGrid {
+    grid-template-columns: 1.15fr 1fr;
+  }
+}
+
+@media(min-width:1024px) {
+
+  .container,
+  .headerContainer {
+    padding: 0 2.5rem;
+  }
+
+  .topGovFlex {
+    padding: 0 2.5rem;
+  }
+
+  .statsCardGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .facilitiesGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .programsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .facultyGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .galleryGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .testimonialGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .footerGrid {
+    grid-template-columns: 2fr 1fr 1fr 1.5fr;
+    gap: 3rem;
+  }
+
+  .whyGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .certGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .hamburger {
+    display: none !important;
+  }
+
+  .navMenu {
+    display: flex !important;
+    position: static !important;
+    flex-direction: row !important;
+    background: none !important;
+    padding: 0 !important;
+    gap: 1.5rem !important;
+    height: auto !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+}
+
+/* ====== 1260px+ WIDE DESKTOP - SYMMETRIC GRID LAYOUTS ====== */
+@media(min-width:1260px) {
+
+  .container,
+  .headerContainer {
+    max-width: 1440px;
+    padding: 0 3.5rem;
+  }
+
+  .topGovFlex {
+    max-width: 1440px;
+    padding: 0 3.5rem;
+  }
+
+  .heroSlide {
+    grid-template-columns: 1.2fr 0.8fr;
+    gap: 5rem;
+  }
+
+  .heroTitle {
+    font-size: 3.5rem;
+  }
+
+  .statsCardGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.25rem;
+    padding: 2.5rem;
+  }
+
+  .overviewGrid {
+    grid-template-columns: 1.2fr 1fr;
+    gap: 5rem;
+  }
+
+  .overviewImg {
+    height: 480px;
+  }
+
+  .whyGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2rem;
+  }
+
+  .facilitiesGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.25rem;
+  }
+
+  .tourCard {
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 3.5rem;
+    padding: 3.5rem;
+  }
+
+  .tourPreviewBox {
+    height: 360px;
+  }
+
+  .programsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.25rem;
+  }
+
+  .certGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.75rem;
+  }
+
+  .facultyGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 2.25rem;
+  }
+
+  .testimonialGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.25rem;
+  }
+
+  .galleryGrid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+  }
+
+  .contactGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 3.5rem;
+  }
+
+  .footerGrid {
+    grid-template-columns: 2.2fr 1fr 1fr 1.4fr;
+    gap: 4rem;
+  }
+
+  .navMenu {
+    gap: 1.9rem;
+  }
+
+  .navLink {
+    font-size: .9rem;
+  }
+}
+
+@media(min-width:1500px) {
+
+  .container,
+  .headerContainer {
+    max-width: 1500px;
+    padding: 0 4rem;
+  }
+
+  .topGovFlex {
+    max-width: 1500px;
+    padding: 0 4rem;
+  }
+
+  .programsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* MOBILE <=768px */
+@media(max-width:768px) {
+  .sectionPadding {
+    padding: 3rem 0;
+  }
+
+  .heroHeaderContainer {
+    padding: 0 1rem;
+  }
+
+  .heroNav {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 5rem;
+    z-index: 998;
+    transition: left 0.35s ease;
+  }
+
+  .heroNav.active {
+    left: 0;
+  }
+
+  .heroNavMenu {
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .heroNavLink {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+  }
+
+  .hamburger {
+    display: flex !important;
+    z-index: 1001;
+  }
+
+  .heroFullscreen {
+    height: 80vh;
+    min-height: 500px;
+  }
+
+  .heroMainTitle {
+    font-size: 2.2rem;
+  }
+
+  .heroSlide {
+    grid-template-columns: 1fr;
+  }
+
+  .overviewGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .tourCard {
+    grid-template-columns: 1fr;
+  }
+
+  .contactGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .footerGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .statsCardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .programsGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .facilitiesGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .facultyGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .galleryGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .testimonialGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .whyGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .certGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .marqueeText {
+    font-size: 1rem;
+  }
+}
+
+/* MOBILE <=480px */
+@media(max-width:480px) {
+  .statsCardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .facultyGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .galleryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .whyGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .certGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .btn {
+    padding: .65rem 1.25rem;
+    font-size: .88rem;
+  }
+
+  .heroTitle {
+    font-size: 1.8rem;
+  }
+}
+
+

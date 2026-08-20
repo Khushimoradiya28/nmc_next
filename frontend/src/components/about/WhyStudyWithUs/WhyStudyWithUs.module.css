@@ -1,0 +1,537 @@
+/* ============================================================
+   WhyStudyWithUs.module.css  â€”  3D Fan + Flip Card Section
+   ============================================================ */
+
+/* â”€â”€ Section shell â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.section {
+  position: relative;
+  background: linear-gradient(160deg, #fafafa 0%, #f7f3ff 30%, #fff5f0 60%, #f0fbf5 100%);
+  padding: 100px var(--container-padding, 32px) 130px;
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Decorative college-themed background elements */
+.section::before {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: -5%;
+  width: 45%;
+  height: 80%;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none'%3E%3Cpath d='M20 140L50 110L80 140L110 110L140 140L170 110' stroke='rgba(80,160,120,0.12)' stroke-width='18' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M20 80L50 50L80 80L110 50L140 80L170 50' stroke='rgba(80,160,120,0.10)' stroke-width='18' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-size: 280px;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.section::after {
+  content: '';
+  position: absolute;
+  top: 5%;
+  right: -5%;
+  width: 40%;
+  height: 75%;
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200' fill='none'%3E%3Ccircle cx='100' cy='100' r='60' stroke='rgba(120,140,200,0.12)' stroke-width='14'/%3E%3Ccircle cx='100' cy='100' r='35' stroke='rgba(120,140,200,0.10)' stroke-width='10'/%3E%3Ccircle cx='60' cy='60' r='20' stroke='rgba(120,140,200,0.08)' stroke-width='8'/%3E%3Ccircle cx='140' cy='60' r='15' stroke='rgba(120,140,200,0.08)' stroke-width='8'/%3E%3Ccircle cx='60' cy='140' r='18' stroke='rgba(120,140,200,0.06)' stroke-width='8'/%3E%3C/svg%3E");
+  background-size: 300px;
+  background-repeat: no-repeat;
+  background-position: center;
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* â”€â”€ Ambient background blobs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.blobTopLeft {
+  position: absolute;
+  top: -120px;
+  left: -100px;
+  width: 480px;
+  height: 480px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(147,0,0,0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+.blobBottomRight {
+  position: absolute;
+  bottom: -140px;
+  right: -120px;
+  width: 520px;
+  height: 520px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(37,99,235,0.07) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* â”€â”€ Page container â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: var(--container-max, 1440px);
+  width: 100%;
+  margin: 0 auto;
+}
+
+/* â”€â”€ Section header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+.header {
+  text-align: center;
+  margin-bottom: 72px;
+}
+.eyebrow {
+  display: inline-block;
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-red, #B00000);
+  background: rgba(176,0,0,0.07);
+  border: 1px solid rgba(176,0,0,0.12);
+  border-radius: 100px;
+  padding: 0.35rem 1rem;
+  margin-bottom: 1.25rem;
+}
+.heading {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(1.9rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  color: #111;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+}
+.headingAccent {
+  color: var(--color-red, #B00000);
+  position: relative;
+}
+.headingAccent::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-red, #B00000), transparent);
+  border-radius: 2px;
+}
+.subheading {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 1.05rem;
+  color: #6b7280;
+  line-height: 1.7;
+  max-width: 600px;
+  margin: 0 auto 1.5rem;
+}
+.decorLine {
+  width: 56px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-red, #B00000), var(--color-yellow, #F4B000));
+  border-radius: 2px;
+  margin: 0 auto;
+}
+
+/* ══════════════════════════════════════════════════════════
+   FAN DECK — outer row, no gap, perspective for depth
+   ══════════════════════════════════════════════════════════ */
+.fanDeck {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  min-height: 480px;
+  perspective: 1200px;
+  perspective-origin: 50% 100%;
+  gap: 0 !important;
+  padding: 50px 80px 80px;
+}
+
+/* ══════════════════════════════════════════════════════════
+   CARD WRAPPER — each card slot
+   Uses margin-right (not margin-left) so the global layout.css
+   [class*="container"] rule cannot interfere.
+   ══════════════════════════════════════════════════════════ */
+.cardWrapper {
+  flex: 0 0 360px;
+  width: 360px;
+  height: 460px;
+  margin-right: -70px;
+  perspective: 1000px;
+  transform-origin: center bottom;
+  position: relative;
+  cursor: pointer;
+  outline: none;
+  transition:
+    transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    z-index 0s 0.1s;
+}
+
+/* Per-card fan rotation, z-index, and right-margin */
+.fanDeck .cardWrapper:nth-child(1) {
+  transform: rotate(-10deg) translateY(15px);
+  z-index: 1;
+}
+.fanDeck .cardWrapper:nth-child(2) {
+  transform: rotate(-3deg) translateY(0px);
+  z-index: 2;
+}
+.fanDeck .cardWrapper:nth-child(3) {
+  transform: rotate(3deg) translateY(0px);
+  z-index: 3;
+}
+.fanDeck .cardWrapper:nth-child(4) {
+  transform: rotate(10deg) translateY(15px);
+  z-index: 4;
+  margin-right: 0;
+}
+
+.wrapperHovered {
+  transform: rotate(0deg) scale(1.08) translateY(-25px) !important;
+  z-index: 99 !important;
+  transition:
+    transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    z-index 0s !important;
+}
+
+/* ── Sibling dimming ──────────────────────────────────────── */
+.wrapperDimmed {
+  opacity: 0.65;
+  filter: saturate(0.6) brightness(0.93);
+  transition:
+    opacity 0.3s ease,
+    filter 0.3s ease,
+    transform 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+    z-index 0s 0.1s;
+}
+
+/* Focus ring on the container (keyboard nav) */
+.cardWrapper:focus-visible {
+  outline: 3px solid var(--card-accent, #930000);
+  outline-offset: 6px;
+  border-radius: 22px;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   2ï¸âƒ£  CARD INNER â€” the element that actually flips
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.cardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  /* Must preserve 3D so child faces stack in 3D space */
+  transform-style: preserve-3d;
+
+  /* Default: showing front (no rotation) */
+  transform: rotateY(0deg);
+
+  /* The flip animation â€” spring easing for a satisfying snap */
+  transition: transform 0.75s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Trigger 180-degree Y flip when container is hovered */
+.cardFlipped {
+  transform: rotateY(180deg);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   3ï¸âƒ£ & 4ï¸âƒ£  SHARED FACE RULES
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.cardFront,
+.cardBack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+  padding: 24px;
+  overflow: hidden;
+
+  /* THE KEY: hide each face when it is rotated away */
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+
+  box-shadow:
+    0 4px 20px rgba(0,0,0,0.07),
+    0 1px 4px rgba(0,0,0,0.04);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   3ï¸âƒ£  FRONT FACE  (shown by default)
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.cardFront {
+  background: var(--card-bg, #fff5f5);
+  border: 1px solid var(--card-border, rgba(0,0,0,0.06));
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+
+  /* Front shows normally â€” no extra rotation */
+  transform: rotateY(0deg);
+}
+
+/* Accent stripe along the top */
+.stripe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: var(--card-accent, #930000);
+  border-radius: 20px 20px 0 0;
+}
+
+/* Small badge pill */
+.frontBadge {
+  display: inline-block;
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--card-accent, #930000);
+  background: rgba(0,0,0,0.04);
+  border: 1px solid var(--card-border, rgba(0,0,0,0.08));
+  border-radius: 100px;
+  padding: 0.22rem 0.7rem;
+  margin-top: 18px;          /* clears the 5px stripe + some space */
+  margin-bottom: 16px;
+}
+
+/* Icon on the front face */
+.frontIconWrap {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 16px;
+  flex-shrink: 0;
+}
+.frontIconWrap svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Title */
+.frontTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #111;
+  line-height: 1.3;
+  margin: 0 0 8px;
+}
+
+/* One-liner teaser */
+.frontTeaser {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.82rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+
+/* Subtle "hover to flip" hint */
+.flipHint {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.7rem;
+  color: var(--card-accent, #930000);
+  opacity: 0.55;
+  margin-top: auto;
+  letter-spacing: 0.04em;
+}
+
+/* Decorative circle bottom-right — larger for visual impact */
+.frontCircle {
+  position: absolute;
+  bottom: -50px;
+  right: -50px;
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: var(--card-accent, #930000);
+  opacity: 0.06;
+  pointer-events: none;
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   4ï¸âƒ£  BACK FACE  (shown after 180-deg flip)
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+.cardBack {
+  /* Must start pre-rotated so it is hidden initially */
+  transform: rotateY(180deg);
+
+  /* Rich gradient using per-card --back-bg variable */
+  background: var(--back-bg, linear-gradient(145deg, #7a0000, #930000));
+  border: none;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  color: #fff;
+}
+
+/* Large icon centred at the top */
+.backIconWrap {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 14px;
+  flex-shrink: 0;
+  align-self: center;
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25));
+}
+.backIconWrap svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Back title */
+.backTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1rem;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.25;
+  margin: 0 0 10px;
+  text-align: center;
+  width: 100%;
+}
+
+/* Full description */
+.backDesc {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.80rem;
+  line-height: 1.65;
+  color: rgba(255,255,255,0.88);
+  margin: 0;
+  flex: 1;
+  white-space: pre-line;   /* respects the \n in Get Admission */
+}
+
+/* Thin white divider */
+.backDivider {
+  width: 40px;
+  height: 2px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 2px;
+  margin: 12px 0 10px;
+}
+
+/* Badge pill on the back */
+.backTag {
+  display: inline-block;
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #fff;
+  background: rgba(255,255,255,0.18);
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 100px;
+  padding: 0.22rem 0.8rem;
+}
+
+/* Decorative rings (back face only) */
+.backRing1,
+.backRing2 {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.10);
+  pointer-events: none;
+}
+.backRing1 {
+  width: 160px;
+  height: 160px;
+  bottom: -60px;
+  right: -60px;
+}
+.backRing2 {
+  width: 100px;
+  height: 100px;
+  bottom: -30px;
+  right: -30px;
+  border-color: rgba(255,255,255,0.07);
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   RESPONSIVE â€” Tablet  (â‰¤ 900px)
+   Disable fan rotation; keep the flip; switch to 2-col grid
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+@media (max-width: 900px) {
+  .fanDeck {
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 1.5rem;
+    padding: 20px 0 40px;
+    perspective: none;
+  }
+
+  .cardWrapper {
+    flex: 0 0 calc(50% - 1.5rem);
+    width: calc(50% - 1.5rem);
+    height: 440px;
+    margin: 0;
+    /* Reset the fan tilt */
+    transform: none !important;
+  }
+
+  .wrapperHovered {
+    transform: translateY(-6px) scale(1.02) !important;
+    box-shadow: 0 16px 40px var(--card-glow, rgba(0,0,0,0.14));
+  }
+
+  .wrapperDimmed {
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   RESPONSIVE â€” Mobile  (â‰¤ 560px)
+   Single column
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+@media (max-width: 560px) {
+  .section {
+    padding: 72px 1.25rem 80px;
+  }
+  .header {
+    margin-bottom: 48px;
+  }
+  .fanDeck {
+    gap: 1.25rem;
+  }
+  .cardWrapper {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 320px;
+  }
+}
+
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+   REDUCED MOTION
+   â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+@media (prefers-reduced-motion: reduce) {
+  .cardWrapper,
+  .wrapperHovered,
+  .cardInner,
+  .cardFlipped {
+    transition: none !important;
+  }
+  .cardWrapper {
+    transform: none !important;
+  }
+  /* Show back content inline instead of flipping */
+  .cardFlipped {
+    transform: none !important;
+  }
+}

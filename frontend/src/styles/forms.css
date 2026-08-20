@@ -1,0 +1,243 @@
+/* ============================================
+   Form Design System
+   CSS-only reusable form styles
+   ============================================ */
+
+/* ---- Base Input ---- */
+.form-input {
+  display: block;
+  width: 100%;
+  height: var(--input-height-md);
+  padding: var(--input-padding-y) var(--input-padding-x);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  color: var(--input-text);
+  background-color: var(--input-bg);
+  border: var(--input-border-width) solid var(--input-border-color);
+  border-radius: var(--input-radius);
+  transition: border-color var(--transition-base),
+              box-shadow var(--transition-base);
+  outline: none;
+}
+
+.form-input::placeholder {
+  color: var(--input-placeholder);
+}
+
+.form-input:focus {
+  border-color: var(--input-border-color-focus);
+  box-shadow: var(--input-shadow-focus);
+}
+
+.form-input[disabled] {
+  background-color: var(--input-bg-disabled);
+  border-color: var(--input-border-color-disabled);
+  color: var(--input-text-disabled);
+  cursor: not-allowed;
+}
+
+/* ---- Input Sizes ---- */
+.form-input-sm {
+  height: var(--input-height-sm);
+  padding: var(--space-1) var(--space-3);
+  font-size: var(--fs-body-sm);
+}
+
+.form-input-lg {
+  height: var(--input-height-lg);
+  padding: var(--space-3) var(--space-5);
+  font-size: var(--fs-body-lg);
+}
+
+/* ---- Error State ---- */
+.form-input-error {
+  border-color: var(--input-border-color-error);
+}
+
+.form-input-error:focus {
+  border-color: var(--input-border-color-error);
+  box-shadow: var(--input-shadow-error);
+}
+
+/* ---- Textarea ---- */
+.form-textarea {
+  display: block;
+  width: 100%;
+  min-height: 120px;
+  padding: var(--input-padding-y) var(--input-padding-x);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  color: var(--input-text);
+  background-color: var(--input-bg);
+  border: var(--input-border-width) solid var(--input-border-color);
+  border-radius: var(--input-radius);
+  transition: border-color var(--transition-base),
+              box-shadow var(--transition-base);
+  outline: none;
+  resize: vertical;
+}
+
+.form-textarea::placeholder {
+  color: var(--input-placeholder);
+}
+
+.form-textarea:focus {
+  border-color: var(--input-border-color-focus);
+  box-shadow: var(--input-shadow-focus);
+}
+
+.form-textarea[disabled] {
+  background-color: var(--input-bg-disabled);
+  border-color: var(--input-border-color-disabled);
+  color: var(--input-text-disabled);
+  cursor: not-allowed;
+}
+
+/* ---- Select ---- */
+.form-select {
+  display: block;
+  width: 100%;
+  height: var(--input-height-md);
+  padding: var(--input-padding-y) var(--space-10) var(--input-padding-y) var(--input-padding-x);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--lh-normal);
+  color: var(--input-text);
+  background-color: var(--input-bg);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--input-padding-x) center;
+  background-size: 16px;
+  border: var(--input-border-width) solid var(--input-border-color);
+  border-radius: var(--input-radius);
+  transition: border-color var(--transition-base),
+              box-shadow var(--transition-base);
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+.form-select:focus {
+  border-color: var(--input-border-color-focus);
+  box-shadow: var(--input-shadow-focus);
+}
+
+.form-select[disabled] {
+  background-color: var(--input-bg-disabled);
+  border-color: var(--input-border-color-disabled);
+  color: var(--input-text-disabled);
+  cursor: not-allowed;
+}
+
+/* ---- Checkbox ---- */
+.form-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.form-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  border: var(--input-border-width) solid var(--input-border-color);
+  border-radius: var(--radius-sm);
+  background-color: var(--input-bg);
+  appearance: none;
+  cursor: pointer;
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+.form-checkbox input[type="checkbox"]:checked {
+  background-color: var(--color-red);
+  border-color: var(--color-red);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 12px;
+}
+
+.form-checkbox input[type="checkbox"]:focus-visible {
+  border-color: var(--input-border-color-focus);
+  box-shadow: var(--input-shadow-focus);
+}
+
+.form-checkbox input[type="checkbox"]:disabled {
+  background-color: var(--input-bg-disabled);
+  border-color: var(--input-border-color-disabled);
+  cursor: not-allowed;
+}
+
+/* ---- Radio ---- */
+.form-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  cursor: pointer;
+}
+
+.form-radio input[type="radio"] {
+  width: 18px;
+  height: 18px;
+  border: var(--input-border-width) solid var(--input-border-color);
+  border-radius: var(--radius-full);
+  background-color: var(--input-bg);
+  appearance: none;
+  cursor: pointer;
+  transition: background-color var(--transition-base),
+              border-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+.form-radio input[type="radio"]:checked {
+  border-color: var(--color-red);
+  background-color: var(--color-white);
+  box-shadow: inset 0 0 0 4px var(--color-red);
+}
+
+.form-radio input[type="radio"]:focus-visible {
+  border-color: var(--input-border-color-focus);
+  box-shadow: var(--input-shadow-focus);
+}
+
+.form-radio input[type="radio"]:disabled {
+  background-color: var(--input-bg-disabled);
+  border-color: var(--input-border-color-disabled);
+  cursor: not-allowed;
+}
+
+/* ---- Form Label ---- */
+.form-label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  color: var(--color-black);
+}
+
+/* ---- Form Help Text ---- */
+.form-help {
+  margin-top: var(--space-1);
+  font-size: var(--fs-caption);
+  color: var(--color-gray-500);
+}
+
+/* ---- Form Error Text ---- */
+.form-error {
+  margin-top: var(--space-1);
+  font-size: var(--fs-caption);
+  color: var(--color-error);
+}
+
+/* ---- Form Group ---- */
+.form-group {
+  margin-bottom: var(--space-5);
+}

@@ -1,0 +1,364 @@
+/* ============================================
+   Committee, Cells & Clubs — Premium Editorial
+   Awwwards/Godly-inspired layout
+   ============================================ */
+
+/* Hero Banner */
+.heroSection {
+  position: relative;
+  min-height: 50vh;
+  height: 50vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.heroBgImage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroBgImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.4));
+  z-index: 1;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem 80px 2rem;
+}
+
+.heroTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+  font-weight: 700;
+  color: var(--white, #ffffff);
+  line-height: 1.15;
+  margin: 0;
+}
+
+.heroTitle em {
+  font-style: normal;
+}
+
+/* ============================================
+   Container
+   ============================================ */
+.container {
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ============================================
+   Intro Section — Big Statement + Offset Text
+   ============================================ */
+.introSection {
+  padding: 6rem 0 4rem;
+  background: var(--white, #ffffff);
+}
+
+.introLayout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 4rem;
+  align-items: end;
+}
+
+.introBigText {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 700;
+  color: var(--gray-900, #111827);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.introBigText span {
+  background: var(--grad-red, linear-gradient(135deg, #7f0000 0%, #b30000 100%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.introMeta {
+  font-size: 0.95rem;
+  line-height: 1.8;
+  color: var(--gray-500, #6b7280);
+  border-left: 3px solid var(--gold-500, #f59e0b);
+  padding-left: 1.5rem;
+}
+
+/* ============================================
+   Main Grid — Bento/Masonry Inspired
+   Large + small cells, varied aspect ratios
+   ============================================ */
+.gridSection {
+  padding: 2rem 0 6rem;
+  background: var(--white, #ffffff);
+}
+
+.bentoGrid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 1.25rem;
+}
+
+/* Card base */
+.cell {
+  border-radius: 1.25rem;
+  padding: 2.25rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cell:hover {
+  transform: scale(0.98);
+}
+
+/* Sizing variations — rows must add to 12 */
+.cellLg { grid-column: span 7; min-height: 320px; }
+.cellMd { grid-column: span 5; min-height: 320px; }
+.cellSm { grid-column: span 4; min-height: 280px; }
+.cellSmR { grid-column: span 5; min-height: 280px; }
+.cellWide { grid-column: span 8; min-height: 280px; }
+.cellHalf { grid-column: span 6; min-height: 300px; }
+.cellFull { grid-column: span 12; min-height: 200px; }
+
+/* Color themes */
+.bgDark {
+  background: var(--gray-900, #111827);
+  color: var(--white, #ffffff);
+}
+
+.bgDark .cellTitle,
+.bgDark .cellDesc,
+.bgDark .cellNum {
+  color: var(--white, #ffffff);
+}
+
+.bgDark .cellDesc {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.bgRed {
+  background: var(--red-800, #8a0000);
+  color: var(--white, #ffffff);
+}
+
+.bgRed .cellTitle,
+.bgRed .cellDesc,
+.bgRed .cellNum {
+  color: var(--white, #ffffff);
+}
+
+.bgRed .cellDesc {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.bgCream {
+  background: #fef9e7;
+  border: 1px solid rgba(245, 158, 11, 0.15);
+}
+
+.bgLight {
+  background: var(--gray-50, #f9fafb);
+  border: 1px solid var(--gray-200, #e5e7eb);
+}
+
+.bgGlass {
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+}
+
+/* Cell content */
+.cellNum {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  margin-bottom: auto;
+}
+
+.cellTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 700;
+  color: var(--gray-900, #111827);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.cellDesc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--gray-600, #4b5563);
+  margin: 0;
+  max-width: 480px;
+}
+
+/* Tags */
+.cellTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.cellTag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.3rem 0.65rem;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  color: inherit;
+  letter-spacing: 0.02em;
+}
+
+.bgLight .cellTag,
+.bgCream .cellTag,
+.bgGlass .cellTag {
+  background: rgba(138, 0, 0, 0.06);
+  color: var(--red-800, #8a0000);
+}
+
+/* Decorative corner element */
+.cellCorner {
+  position: absolute;
+  top: 2rem;
+  right: 2rem;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.4;
+}
+
+.bgDark .cellCorner,
+.bgRed .cellCorner {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white, #ffffff);
+}
+
+.bgLight .cellCorner,
+.bgCream .cellCorner,
+.bgGlass .cellCorner {
+  background: rgba(138, 0, 0, 0.06);
+  color: var(--red-800, #8a0000);
+}
+
+/* Full-width CTA row */
+.cellCta {
+  grid-column: span 12;
+  background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+  border-radius: 1.25rem;
+  padding: 2.5rem 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.ctaText {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--white, #ffffff);
+}
+
+.ctaText strong {
+  color: var(--gold-400, #f4c749);
+}
+
+.ctaBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.75rem;
+  border-radius: var(--radius-full, 9999px);
+  background: var(--gold-500, #f59e0b);
+  color: var(--gray-900, #111827);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.3);
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 1024px) {
+  .cellLg, .cellWide { grid-column: span 6; }
+  .cellMd, .cellSmR { grid-column: span 6; }
+  .cellSm { grid-column: span 6; }
+  .cellHalf { grid-column: span 6; }
+  .cellFull { grid-column: span 12; }
+}
+
+@media (max-width: 768px) {
+  .heroSection {
+    min-height: 40vh;
+    height: 40vh;
+  }
+
+  .heroContent { padding-bottom: 50px; }
+
+  .introSection { padding: 4rem 0 2.5rem; }
+  .introLayout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .gridSection { padding: 1.5rem 0 4rem; }
+
+  .bentoGrid { grid-template-columns: 1fr; }
+  .cellLg, .cellMd, .cellSm, .cellSmR, .cellWide, .cellHalf, .cellFull, .cellCta {
+    grid-column: span 1;
+    min-height: 240px;
+  }
+
+  .cellCta {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .heroSection { min-height: 35vh; height: 35vh; }
+  .heroContent { padding: 0 1rem 40px 1rem; }
+  .cell { padding: 1.75rem; min-height: 220px; }
+}

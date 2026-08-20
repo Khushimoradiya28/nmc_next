@@ -1,0 +1,740 @@
+/* ============================================
+   IQAC Page — Aligned to NMC Theme
+   Uses same patterns as homepage (premium tags,
+   glass cards, gradient text, progress bars, chips)
+   ============================================ */
+
+/* Hero */
+.heroSection { position: relative; min-height: 50vh; height: 50vh; display: flex; align-items: flex-end; overflow: hidden; }
+.heroBgImage { position: absolute; inset: 0; z-index: 0; }
+.heroBgImg { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.82), rgba(0,0,0,0.4)); z-index: 1; }
+.heroContent { position: relative; z-index: 2; width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem 80px 2rem; }
+.heroTitle { font-family: var(--font-heading, 'Outfit', sans-serif); font-size: clamp(2.5rem,5vw,3.75rem); font-weight: 700; color: #fff; line-height: 1.15; margin: 0; }
+.heroTitle em { font-style: normal; }
+
+.container { width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem; }
+
+/* ============================================
+   Premium Tag (reusable)
+   ============================================ */
+.premiumTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.45rem 1.1rem;
+  border-radius: var(--r-full, 9999px);
+  background: var(--sky-100, #fffbeb);
+  color: var(--sky-700, #8a0000);
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--sky-200, #fde68a);
+}
+
+.premiumTagDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sky-600, #b30000);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.6; transform: scale(0.85); }
+}
+
+/* Section Title (same as homepage) */
+.sectionTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  font-weight: 700;
+  color: var(--gray-900, #111827);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.85rem;
+}
+
+.sectionTitle span {
+  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.sectionDesc {
+  font-size: 0.96rem;
+  color: var(--gray-600, #4b5563);
+  line-height: 1.8;
+  max-width: 600px;
+}
+
+/* ============================================
+   1. ABOUT IQAC — "The Overlap" Composition
+   Editorial image bleeds right, content overlaps left
+   ============================================ */
+.introSection {
+  position: relative;
+  padding: 6rem 0 8rem;
+  background: var(--white, #ffffff);
+  overflow: visible;
+}
+
+.introLayout {
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  position: relative;
+  min-height: 560px;
+}
+
+/* --- Editorial Image (right-aligned, extends beyond grid) --- */
+.introVisual {
+  position: absolute;
+  top: 0;
+  right: -2rem;
+  width: 55%;
+  height: 100%;
+  overflow: hidden;
+  clip-path: polygon(8% 0, 100% 0, 100% 100%, 0% 100%);
+}
+
+.introVisual img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: grayscale(20%) contrast(1.05);
+}
+
+/* Subtle warm tint overlay on image */
+.introVisualOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.3) 25%,
+    rgba(127, 0, 0, 0.06) 100%
+  );
+  pointer-events: none;
+}
+
+/* --- Content Block (overlaps image by ~15%) --- */
+.introContentBlock {
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
+  padding: 3rem 0;
+}
+
+/* IQAC identity label */
+.introLabel {
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red-800, #8a0000);
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.introLabelLine {
+  width: 28px;
+  height: 2px;
+  background: var(--red-800, #8a0000);
+}
+
+/* Large editorial heading */
+.introHeading {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  color: var(--gray-900, #111827);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  margin: 0 0 0.5rem 0;
+}
+
+.introHeadingAccent {
+  display: block;
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 900;
+  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  line-height: 1.15;
+}
+
+.introDesc {
+  font-size: 0.95rem;
+  color: var(--gray-600, #4b5563);
+  line-height: 1.85;
+  margin: 1.5rem 0 0 0;
+  max-width: 480px;
+}
+
+.introDesc strong {
+  color: var(--gray-900, #111827);
+}
+
+/* --- Statistics (vertical strip, left-aligned) --- */
+.introStats {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin-top: 2.5rem;
+  border-left: 2px solid var(--gray-200, #e5e7eb);
+  padding-left: 1.5rem;
+}
+
+.introStatItem {
+  padding: 0.75rem 0;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.introStatItem + .introStatItem {
+  border-top: 1px solid var(--gray-100, #f3f4f6);
+}
+
+.introStatNum {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: var(--gray-900, #111827);
+  line-height: 1;
+  min-width: 56px;
+}
+
+.introStatLabel {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--gray-500, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* --- Ghost IQAC text (between layers) --- */
+.introGhost {
+  position: absolute;
+  bottom: -1rem;
+  right: 10%;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 9rem;
+  font-weight: 900;
+  color: rgba(138, 0, 0, 0.03);
+  letter-spacing: -0.05em;
+  line-height: 0.8;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+/* ============================================
+   2. COMPOSITION — Single Member Spotlight (Interactive)
+   ============================================ */
+.compSection {
+  padding: 0;
+  background: var(--gray-900, #111827);
+  position: relative;
+  overflow: hidden;
+  min-height: 620px;
+  display: grid;
+  grid-template-columns: 360px 1fr;
+}
+
+/* Left: Navigation Column */
+.compNav {
+  padding: 4rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  z-index: 2;
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.compNavLabel {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold-400, #f4c749);
+  margin-bottom: 0.5rem;
+}
+
+.compNavTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--white, #ffffff);
+  margin: 0 0 2.5rem 0;
+  line-height: 1.3;
+}
+
+.compNavList {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.compNavItem {
+  padding: 0.65rem 0;
+  padding-left: 1rem;
+  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.3);
+  cursor: pointer;
+  border-left: 2px solid transparent;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.compNavItem:hover {
+  color: rgba(255, 255, 255, 0.6);
+  padding-left: 1.15rem;
+}
+
+.compNavItemActive {
+  color: var(--white, #ffffff);
+  border-left-color: var(--gold-400, #f4c749);
+  padding-left: 1.35rem;
+  font-weight: 700;
+}
+
+/* Right: Spotlight Area */
+.compSpotlight {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 4rem 5rem;
+  overflow: hidden;
+}
+
+/* Background editorial image */
+.compBgImage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.compBgImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0.12;
+  filter: grayscale(40%);
+  transition: opacity 0.6s ease;
+}
+
+/* Gradient overlay for text readability */
+.compBgOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(17,24,39,0.92) 0%, rgba(17,24,39,0.7) 60%, rgba(17,24,39,0.85) 100%);
+  z-index: 1;
+}
+
+/* Giant background number */
+.compBgNum {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 18rem;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.025);
+  line-height: 0.75;
+  letter-spacing: -0.06em;
+  position: absolute;
+  bottom: -2rem;
+  right: 2rem;
+  pointer-events: none;
+  z-index: 1;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Active member content */
+.compMemberContent {
+  position: relative;
+  z-index: 2;
+  max-width: 520px;
+}
+
+.compMemberIndex {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gold-400, #f4c749);
+  margin-bottom: 1.25rem;
+  transition: all 0.4s ease;
+}
+
+.compMemberName {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  color: var(--white, #ffffff);
+  line-height: 1.1;
+  margin: 0 0 0.6rem 0;
+  letter-spacing: -0.02em;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.compMemberRole {
+  font-size: 1.05rem;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 500;
+  margin: 0;
+  transition: all 0.4s ease;
+}
+
+.compMemberBar {
+  width: 48px;
+  height: 3px;
+  background: var(--gold-400, #f4c749);
+  border-radius: 3px;
+  margin-top: 2rem;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Image credit/note */
+.compImageNote {
+  position: absolute;
+  bottom: 1.5rem;
+  right: 2rem;
+  font-size: 0.6rem;
+  color: rgba(255, 255, 255, 0.15);
+  z-index: 2;
+  font-style: italic;
+  letter-spacing: 0.02em;
+}
+
+/* ============================================
+   3. STRATEGIES — Feature Cards (2x3 grid)
+   ============================================ */
+.stratSection {
+  padding: 5rem 0;
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.stratGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.stratCard {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 1.25rem;
+  padding: 2rem 1.6rem;
+  border: 1px solid rgba(229, 231, 235, 0.85);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.stratCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 45px rgba(138, 0, 0, 0.07), 0 4px 12px rgba(0, 0, 0, 0.03);
+  border-color: rgba(138, 0, 0, 0.12);
+}
+
+.stratCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.stratCardIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.stratCard:hover .stratCardIcon {
+  transform: scale(1.1) rotate(4deg);
+}
+
+.stratIconRed { background: var(--red-50, #fef2f2); color: var(--red-800, #8a0000); }
+.stratIconGold { background: var(--gold-100, #fef9c3); color: var(--gold-700, #b45309); }
+.stratIconGreen { background: #ecfdf5; color: #16a34a; }
+
+.stratCardChip {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--r-full, 9999px);
+  background: var(--red-50, #fef2f2);
+  color: var(--red-800, #8a0000);
+  border: 1px solid var(--red-200, #fecaca);
+}
+
+.stratCardTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gray-900, #111827);
+  margin: 0 0 0.5rem 0;
+}
+
+.stratCardDesc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: var(--gray-600, #4b5563);
+  margin: 0 0 1.25rem 0;
+}
+
+/* Progress meter (like homepage stats) */
+.stratMeter {
+  height: 4px;
+  border-radius: 4px;
+  background: var(--gray-200, #e5e7eb);
+  overflow: hidden;
+}
+
+.stratMeterFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.meterRed { background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000)); width: 85%; }
+.meterGold { background: var(--grad-gold, linear-gradient(135deg, #f4c749, #d97706)); width: 75%; }
+.meterGreen { background: linear-gradient(135deg, #16a34a, #22c55e); width: 70%; }
+
+/* ============================================
+   4. EVENTS — Horizontal Cards
+   ============================================ */
+.eventsSection {
+  padding: 5rem 0;
+  background: var(--sky-50, #fffdf5);
+}
+
+.eventsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+}
+
+.eventCard {
+  position: relative;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 1.25rem;
+  padding: 1.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+  border: 1px solid rgba(229, 231, 235, 0.85);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.eventCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(245, 158, 11, 0.06), 0 4px 10px rgba(0, 0, 0, 0.03);
+  border-color: rgba(245, 158, 11, 0.2);
+}
+
+.eventCardIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.9rem;
+  background: var(--gold-100, #fef9c3);
+  color: var(--gold-700, #b45309);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.eventCard:hover .eventCardIcon {
+  transform: scale(1.1) rotate(4deg);
+}
+
+.eventCardTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--gray-900, #111827);
+  margin: 0 0 0.35rem 0;
+}
+
+.eventCardDesc {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: var(--gray-600, #4b5563);
+  margin: 0;
+}
+
+/* ============================================
+   5. NAAC/NIRF — Dark Section with Glass Cards
+   ============================================ */
+.accredSection {
+  padding: 5rem 0;
+  background: var(--gray-900, #111827);
+  position: relative;
+  overflow: hidden;
+}
+
+.accredSection::before {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  top: -200px;
+  right: -150px;
+  background: radial-gradient(circle, rgba(138,0,0,0.15) 0%, transparent 70%);
+  filter: blur(60px);
+  pointer-events: none;
+}
+
+.accredHeader {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.accredHeaderTag {
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--gold-400, #f4c749);
+  margin-bottom: 0.75rem;
+}
+
+.accredHeaderTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(1.7rem, 3vw, 2.5rem);
+  font-weight: 700;
+  color: var(--white, #ffffff);
+  margin: 0;
+}
+
+.accredGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.75rem;
+  position: relative;
+}
+
+.accredCard {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.accredCard:hover {
+  transform: translateY(-6px);
+  background: rgba(255, 255, 255, 0.07);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+}
+
+.accredCardIcon {
+  width: 56px;
+  height: 56px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem auto;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+}
+
+.accredIconRed { background: rgba(138, 0, 0, 0.25); color: #ff8a8a; }
+.accredIconGold { background: rgba(245, 158, 11, 0.2); color: var(--gold-400, #f4c749); }
+
+.accredCardTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: var(--white, #ffffff);
+  margin: 0 0 0.25rem 0;
+}
+
+.accredCardSub {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--gold-400, #f4c749);
+  margin: 0 0 1.25rem 0;
+}
+
+.accredCardText {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.55);
+  margin: 0;
+}
+
+/* ============================================
+   Responsive
+   ============================================ */
+@media (max-width: 1024px) {
+  .stratGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .heroSection { min-height: 40vh; height: 40vh; }
+  .heroContent { padding-bottom: 50px; }
+  .introVisual { position: relative; right: 0; width: 100%; height: 300px; clip-path: none; margin-bottom: -3rem; }
+  .introContentBlock { max-width: 100%; padding: 2rem 0; }
+  .introLayout { min-height: auto; }
+  .introGhost { font-size: 5rem; bottom: auto; top: 0; right: 0; }
+  .introHeading { font-size: 1.8rem; }
+  .introHeadingAccent { font-size: 2rem; }
+  .compSection { grid-template-columns: 1fr; min-height: auto; }
+  .compNav { padding: 2.5rem 2rem; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .compNavList { flex-direction: row; flex-wrap: wrap; gap: 0.4rem; }
+  .compNavItem { padding: 0.45rem 0.7rem; border-left: none; border-bottom: 2px solid transparent; font-size: 0.78rem; }
+  .compNavItemActive { border-bottom-color: var(--gold-400); border-left: none; padding-left: 0.7rem; }
+  .compSpotlight { padding: 3rem 2rem; min-height: 280px; }
+  .compBgNum { font-size: 10rem; right: 1rem; }
+  .stratSection { padding: 3.5rem 0; }
+  .stratGrid { grid-template-columns: 1fr; }
+  .eventsSection { padding: 3.5rem 0; }
+  .eventsGrid { grid-template-columns: 1fr; }
+  .accredSection { padding: 3.5rem 0; }
+  .accredGrid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .heroSection { min-height: 35vh; height: 35vh; }
+  .heroContent { padding: 0 1rem 40px 1rem; }
+  .introSection { padding: 3rem 0 5rem; }
+  .introVisual { height: 220px; }
+  .introGhost { font-size: 4rem; }
+  .introStats { padding-left: 1rem; }
+  .stratCard { padding: 1.5rem; }
+  .accredCard { padding: 2rem; }
+}

@@ -1,0 +1,573 @@
+/* =========== LUXURY CERTIFICATE COURSES - MULTI-CARD SLIDER =========== */
+.certCoursesSection {
+  background: var(--sky-50);
+  position: relative;
+  overflow: hidden;
+}
+
+.certSliderWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.certCardsTrack {
+  display: flex;
+  gap: 1.75rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  padding: 1rem 0.25rem;
+  flex: 1;
+}
+
+.certCardsTrack::-webkit-scrollbar {
+  display: none;
+}
+
+/* Luxury Multi-Card Item (3 per row on desktop) */
+.certCardLuxury {
+  min-width: calc(33.333% - 1.2rem);
+  flex: 0 0 calc(33.333% - 1.2rem);
+  scroll-snap-align: start;
+  background: var(--white);
+  border-radius: 1.35rem;
+  border: 1px solid var(--gray-200);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.02);
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.certCardLuxury:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 50px rgba(138, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+  border-color: rgba(138, 0, 0, 0.25);
+}
+
+/* Card Media Frame */
+.certCardMedia {
+  position: relative;
+  width: 100%;
+  height: 210px;
+  overflow: hidden;
+  background: #f1f5f9;
+}
+
+.certCardImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.certCardLuxury:hover .certCardImg {
+  transform: scale(1.08);
+}
+
+/* Floating Media Badges */
+.certMediaBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.32rem 0.8rem;
+  border-radius: var(--r-full);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.tagRuby {
+  background: rgba(254, 242, 242, 0.95);
+  color: var(--red-800);
+  border: 1px solid #fecaca;
+}
+
+.aseatTag {
+  background: none !important;
+  border: none !important;
+  padding: 0 !important;
+  font-weight: 700;
+  font-size: 0.75rem;
+  border-radius: 0;
+}
+
+.tagAzure,
+.tagCrimson {
+  background: rgba(254, 242, 242, 0.95);
+  color: var(--red-900);
+  border: 1px solid #fecaca;
+}
+
+.tagGold {
+  background: rgba(255, 251, 235, 0.95);
+  color: var(--gold-600);
+  border: 1px solid #fde68a;
+}
+
+.tagEmerald,
+.tagAmber {
+  background: rgba(255, 251, 235, 0.95);
+  color: var(--gold-700);
+  border: 1px solid #fde68a;
+}
+
+.tagPurple {
+  background: rgba(255, 251, 235, 0.95);
+  color: var(--gold-800);
+  border: 1px solid #fde68a;
+}
+
+.tagRose {
+  background: rgba(254, 242, 242, 0.95);
+  color: var(--red-800);
+  border: 1px solid #fecaca;
+}
+
+.certHighlightPill {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.32rem 0.75rem;
+  border-radius: var(--r-full);
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: rgba(15, 23, 42, 0.78);
+  color: var(--white);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Card Body */
+.certCardBody {
+  padding: 1.6rem 1.6rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.certCardTitle {
+  font-family: var(--font-heading);
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: 0.45rem;
+  line-height: 1.35;
+}
+
+.certCardDesc {
+  font-size: 0.86rem;
+  color: var(--gray-500);
+  line-height: 1.55;
+  margin-bottom: 1.15rem;
+}
+
+/* Bullets List */
+.certBulletsList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.25rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.certBulletsList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--gray-700);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.certBulletsList li svg {
+  color: #10b981;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+/* Meta Strip */
+.certMetaStrip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.65rem 0.95rem;
+  background: #f8fafc;
+  border-radius: 0.75rem;
+  border: 1px solid var(--gray-200);
+  margin-top: auto;
+  margin-bottom: 1.25rem;
+}
+
+.certMetaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--gray-600);
+}
+
+.certMetaItem svg {
+  color: var(--gray-400);
+}
+
+/* Action CTA Button */
+.certActionBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 0.75rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: var(--white);
+  background: var(--grad-red);
+  box-shadow: var(--shadow-red);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.certActionBtn:hover {
+  background: var(--gold-500);
+  color: var(--gray-900);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.35);
+}
+
+.certActionBtn svg {
+  transition: transform 0.3s ease;
+}
+
+.certActionBtn:hover svg {
+  transform: translateX(4px);
+}
+
+/* Cert Carousel Navigation Arrows */
+.certArrow {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--white);
+  color: var(--gray-700);
+  border: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+  z-index: 4;
+}
+
+.certArrow:hover {
+  background: var(--grad-red);
+  color: var(--white);
+  border-color: transparent;
+  box-shadow: 0 8px 24px rgba(138, 0, 0, 0.3);
+  transform: scale(1.08);
+}
+
+.certArrow svg {
+  stroke: currentColor;
+}
+
+/* Responsive */
+@media(max-width: 1024px) {
+  .certCardLuxury {
+    min-width: calc(50% - 0.9rem);
+    flex: 0 0 calc(50% - 0.9rem);
+  }
+}
+
+@media(max-width: 640px) {
+  .certCardLuxury {
+    min-width: 88%;
+    flex: 0 0 88%;
+  }
+
+  .certArrow {
+    display: none;
+  }
+}
+
+
+/* FACULTY */
+.facultySection {
+  background: var(--white);
+}
+
+.facultyGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 2rem;
+}
+
+.facultyCard {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--r-lg);
+  padding: 1.75rem;
+  text-align: center;
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition);
+}
+
+.facultyCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-md);
+}
+
+.facultyAvatar {
+  width: 78px;
+  height: 78px;
+  border-radius: 50%;
+  background: var(--grad-red);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  font-weight: 900;
+  margin: 0 auto 1rem;
+  box-shadow: var(--shadow-red);
+}
+
+.facultyName {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: .25rem;
+}
+
+.facultyRole {
+  color: var(--sky-700);
+  font-weight: 700;
+  font-size: .85rem;
+}
+
+/* =========== LUXURY EXPERIENCED FACULTY SPOTLIGHT =========== */
+.facultySpotlightSection {
+  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.facultyExecutiveGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.75rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Individual Faculty Card */
+.facultyExecCard {
+  position: relative;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: var(--white);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06), 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  border: 1px solid var(--gray-200);
+}
+
+.facultyExecCard:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 45px rgba(138, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+  border-color: rgba(138, 0, 0, 0.25);
+}
+
+.facultyExecMedia {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+  background: #f8fafc;
+}
+
+.facultyExecImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  display: block;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.facultyExecCard:hover .facultyExecImg {
+  transform: scale(1.08);
+}
+
+/* Floating Leadership Badge */
+.facultyBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.35rem 0.85rem;
+  border-radius: var(--r-full);
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  z-index: 3;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.badgeRuby {
+  background: rgba(138, 0, 0, 0.92);
+  color: var(--white);
+}
+
+.badgeGold {
+  background: rgba(217, 119, 6, 0.95);
+  color: var(--white);
+}
+
+.badgeAzure,
+.badgeCrimson {
+  background: rgba(179, 0, 0, 0.92);
+  color: var(--white);
+}
+
+.badgePurple,
+.badgeAmber {
+  background: rgba(180, 83, 9, 0.95);
+  color: var(--white);
+}
+
+/* Floating Transparent Glassmorphic Card Stacked Over Picture */
+.facultyExecOverlay {
+  position: absolute;
+  bottom: 0.85rem;
+  left: 0.85rem;
+  right: 0.85rem;
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  border-radius: 1.15rem;
+  padding: 0.95rem 1.1rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.04);
+  z-index: 2;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.facultyExecCard:hover .facultyExecOverlay {
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 1);
+  box-shadow: 0 14px 35px rgba(0, 0, 0, 0.14);
+}
+
+.facultyExecInfo {
+  display: flex;
+  flex-direction: column;
+}
+
+.facultyExecRole {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--red-800);
+  margin-bottom: 0.15rem;
+}
+
+.facultyExecName {
+  font-family: var(--font-heading);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin: 0;
+  line-height: 1.25;
+}
+
+/* Hidden by default; smoothly revealed on hover */
+.facultyExecDetails {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(10px);
+  pointer-events: none;
+  transition: max-height 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), margin-top 0.3s ease;
+}
+
+.facultyExecCard:hover .facultyExecDetails {
+  max-height: 160px;
+  opacity: 1;
+  transform: translateY(0);
+  margin-top: 0.5rem;
+  pointer-events: auto;
+}
+
+.facultyExecQual {
+  font-size: 0.76rem;
+  color: var(--gray-600);
+  font-weight: 600;
+  line-height: 1.35;
+  margin-bottom: 0.5rem;
+}
+
+/* Micro Specialization Pills */
+.facultySpecializationTags {
+  display: flex;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.fspecTag {
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--r-full);
+  background: rgba(138, 0, 0, 0.06);
+  color: var(--red-800);
+  font-size: 0.68rem;
+  font-weight: 700;
+  border: 1px solid rgba(138, 0, 0, 0.16);
+}
+
+/* Responsive */
+@media(max-width: 1024px) {
+  .facultyExecutiveGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+}
+
+@media(max-width: 580px) {
+  .facultyExecutiveGrid {
+    grid-template-columns: 1fr;
+    max-width: 330px;
+    margin: 0 auto;
+  }
+}
+
+

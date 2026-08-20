@@ -1,0 +1,238 @@
+/* ============================================
+   Grid System
+   ============================================ */
+
+/* ---- Base Grid ---- */
+.grid {
+  display: grid;
+  gap: var(--space-6);
+}
+
+/* ---- Column Templates ---- */
+.grid-cols-1 {
+  grid-template-columns: 1fr;
+}
+
+.grid-cols-2 {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid-cols-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.grid-cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+.grid-cols-5 {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.grid-cols-6 {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+/* ---- Auto Grid (min-max auto-fit) ---- */
+.grid-auto-sm {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-6);
+}
+
+.grid-auto-md {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+.grid-auto-lg {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-6);
+}
+
+.grid-auto-xl {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--space-6);
+}
+
+/* ---- Auto Fill Grid ---- */
+.grid-fill-sm {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-6);
+}
+
+.grid-fill-md {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-6);
+}
+
+.grid-fill-lg {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: var(--space-6);
+}
+
+/* ---- Equal Height ---- */
+.grid-equal-height {
+  align-items: stretch;
+}
+
+.grid-equal-height > * {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---- Grid Alignment ---- */
+.grid-center {
+  align-items: center;
+  justify-items: center;
+}
+
+.grid-start {
+  align-items: start;
+  justify-items: start;
+}
+
+.grid-stretch {
+  align-items: stretch;
+}
+
+/* ---- Grid Gap Variants ---- */
+.grid-gap-none {
+  gap: 0;
+}
+
+.grid-gap-sm {
+  gap: var(--space-3);
+}
+
+.grid-gap-md {
+  gap: var(--space-6);
+}
+
+.grid-gap-lg {
+  gap: var(--space-8);
+}
+
+.grid-gap-xl {
+  gap: var(--space-12);
+}
+
+/* ---- Asymmetric Layouts ---- */
+.grid-sidebar-left {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: var(--space-8);
+}
+
+.grid-sidebar-right {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: var(--space-8);
+}
+
+.grid-content-sidebar {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: var(--space-8);
+}
+
+.grid-sidebar-content {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: var(--space-8);
+}
+
+/* ---- Grid Span Utilities ---- */
+.col-span-2 {
+  grid-column: span 2;
+}
+
+.col-span-3 {
+  grid-column: span 3;
+}
+
+.col-span-4 {
+  grid-column: span 4;
+}
+
+.col-span-full {
+  grid-column: 1 / -1;
+}
+
+/* ============================================
+   Responsive Grid Behavior
+   ============================================ */
+
+/* ---- Tablet (1024px) ---- */
+@media (max-width: 1024px) {
+  .grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-cols-5 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid-cols-6 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .grid-sidebar-left,
+  .grid-sidebar-right,
+  .grid-content-sidebar,
+  .grid-sidebar-content {
+    grid-template-columns: 1fr;
+  }
+
+  .col-span-3,
+  .col-span-4 {
+    grid-column: span 1;
+  }
+}
+
+/* ---- Mobile (768px) ---- */
+@media (max-width: 768px) {
+  .grid-cols-2,
+  .grid-cols-3 {
+    grid-template-columns: 1fr;
+  }
+
+  .grid-cols-4,
+  .grid-cols-5,
+  .grid-cols-6 {
+    grid-template-columns: 1fr;
+  }
+
+  .col-span-2,
+  .col-span-3,
+  .col-span-4 {
+    grid-column: span 1;
+  }
+
+  .grid-gap-lg {
+    gap: var(--space-6);
+  }
+
+  .grid-gap-xl {
+    gap: var(--space-8);
+  }
+}
+
+/* ---- Small Mobile (480px) ---- */
+@media (max-width: 480px) {
+  .grid-auto-sm,
+  .grid-auto-md,
+  .grid-auto-lg,
+  .grid-auto-xl,
+  .grid-fill-sm,
+  .grid-fill-md,
+  .grid-fill-lg {
+    grid-template-columns: 1fr;
+  }
+}

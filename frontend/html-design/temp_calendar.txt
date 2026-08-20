@@ -1,0 +1,274 @@
+﻿  <section class="section-padding calendar-section" id="calendar">
+    <div class="container">
+      <div class="section-header">
+        <div class="section-subtitle">Academic Planner &amp; Schedule</div>
+        <h2 class="section-title">Academic Year Calendar &amp; <span>Timetable</span></h2>
+        <p class="section-description">Interactive semester milestones, daily lecture shift schedules, university exam dates, and official calendar downloads.</p>
+      </div>
+
+      <!-- Quick Status & Download Ribbon -->
+      <div class="cal-status-ribbon">
+        <div class="cal-ribbon-left">
+          <span class="ribbon-live-pulse"><span class="pulse-dot"></span> Active Term</span>
+          <strong class="ribbon-term-title">Academic Year 2026-27 &bull; Semester 1, 3 &amp; 5 Active</strong>
+        </div>
+        <div class="cal-ribbon-actions">
+          <a href="#" class="cal-action-chip chip-ruby">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/></svg>
+            <span>Calendar (PDF)</span>
+          </a>
+          <a href="#" class="cal-action-chip chip-gold">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            <span>Timetable (PDF)</span>
+          </a>
+          <a href="#" class="cal-action-chip chip-crimson">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Exam Dates (PDF)</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Interactive 4-Category Switcher Filter Tabs -->
+      <div class="cal-tabs-bar">
+        <button class="cal-tab-btn active" data-cal-tab="milestones">
+          <span>ðŸ“… Semester Milestones</span>
+        </button>
+        <button class="cal-tab-btn" data-cal-tab="shifts">
+          <span>â° Daily Shift Timetable</span>
+        </button>
+        <button class="cal-tab-btn" data-cal-tab="exams">
+          <span>ðŸ“ Exams &amp; Tests</span>
+        </button>
+        <button class="cal-tab-btn" data-cal-tab="holidays">
+          <span>ðŸ–ï¸ Holidays &amp; Breaks</span>
+        </button>
+      </div>
+
+      <!-- Main 2-Column Command Center Architecture -->
+      <div class="cal-command-grid">
+        
+        <!-- Left: Dynamic Interactive Tab Content -->
+        <div class="cal-tab-panels-wrap">
+          
+          <!-- PANEL 1: Semester Milestones -->
+          <div class="cal-tab-panel active" id="cal-panel-milestones">
+            <div class="cal-milestones-grid">
+              
+              <div class="cal-milestone-card spotlight-active">
+                <div class="cmile-top">
+                  <span class="cmile-badge badge-ruby">Term 1 Opening</span>
+                  <span class="cmile-date">June 15, 2026</span>
+                </div>
+                <h4 class="cmile-title">Academic Session &amp; Orientation</h4>
+                <p class="cmile-desc">Commencement of regular classroom lectures, induction bootcamps for freshers &amp; library registration.</p>
+                <div class="cmile-footer">
+                  <span class="cmile-tag">ðŸŽ“ FY, SY &amp; TY Classes</span>
+                </div>
+              </div>
+
+              <div class="cal-milestone-card spotlight-active">
+                <div class="cmile-top">
+                  <span class="cmile-badge badge-gold">Continuous Eval</span>
+                  <span class="cmile-date">Aug 28 &ndash; Sep 05</span>
+                </div>
+                <h4 class="cmile-title">Mid-Semester Internal Assessments</h4>
+                <p class="cmile-desc">Subject-wise written internal tests, assignments submission &amp; computer lab practical evaluations.</p>
+                <div class="cmile-footer">
+                  <span class="cmile-tag">ðŸ“Š Internal 30 Marks</span>
+                </div>
+              </div>
+
+              <div class="cal-milestone-card spotlight-active">
+                <div class="cmile-top">
+                  <span class="cmile-badge badge-crimson">Festival Break</span>
+                  <span class="cmile-date">Oct 20 &ndash; Nov 10</span>
+                </div>
+                <h4 class="cmile-title">Diwali &amp; Mid-Term Vacation</h4>
+                <p class="cmile-desc">21-day sanctioned festive break for students and faculty following MKBU academic guidelines.</p>
+                <div class="cmile-footer">
+                  <span class="cmile-tag">ðŸª” 21 Days Vacation</span>
+                </div>
+              </div>
+
+              <div class="cal-milestone-card spotlight-active">
+                <div class="cmile-top">
+                  <span class="cmile-badge badge-amber">University Exam</span>
+                  <span class="cmile-date">Nov 25 Onwards</span>
+                </div>
+                <h4 class="cmile-title">MKBU Final Semester Examinations</h4>
+                <p class="cmile-desc">Theory papers and university practical viva across all undergraduate and postgraduate streams.</p>
+                <div class="cmile-footer">
+                  <span class="cmile-tag">ðŸŽ¯ External 70 Marks</span>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- PANEL 2: Daily Shift Timetable -->
+          <div class="cal-tab-panel" id="cal-panel-shifts">
+            <div class="cal-shifts-grid">
+              
+              <div class="cal-shift-card spotlight-active">
+                <div class="cshift-header header-ruby">
+                  <div class="cshift-icon">â˜€ï¸</div>
+                  <div>
+                    <span class="cshift-sub">Morning Session</span>
+                    <h4 class="cshift-title">UG Degree Programs Shift</h4>
+                    <span class="cshift-time">07:45 AM &ndash; 12:30 PM</span>
+                  </div>
+                </div>
+                <div class="cshift-body">
+                  <div class="cshift-row">
+                    <span class="cslot-time">07:45 - 08:35</span>
+                    <span class="cslot-name">Lecture 1 &bull; Core Specialization</span>
+                  </div>
+                  <div class="cshift-row">
+                    <span class="cslot-time">08:35 - 09:25</span>
+                    <span class="cslot-name">Lecture 2 &bull; Domain Theory</span>
+                  </div>
+                  <div class="cshift-row cshift-recess">
+                    <span class="cslot-time">09:25 - 09:45</span>
+                    <span class="cslot-name">â˜• Morning Tea &amp; Campus Recess</span>
+                  </div>
+                  <div class="cshift-row">
+                    <span class="cslot-time">09:45 - 10:35</span>
+                    <span class="cslot-name">Lecture 3 &bull; Applied Electives</span>
+                  </div>
+                  <div class="cshift-row">
+                    <span class="cslot-time">10:35 - 12:30</span>
+                    <span class="cslot-name">Lab Sessions / Soft Skills / Library</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cal-shift-card spotlight-active">
+                <div class="cshift-header header-gold">
+                  <div class="cshift-icon">ðŸ’»</div>
+                  <div>
+                    <span class="cshift-sub">Afternoon &amp; Lab Session</span>
+                    <h4 class="cshift-title">BCA, IT &amp; Studio Shift</h4>
+                    <span class="cshift-time">12:45 PM &ndash; 05:30 PM</span>
+                  </div>
+                </div>
+                <div class="cshift-body">
+                  <div class="cshift-row">
+                    <span class="cslot-time">12:45 - 01:35</span>
+                    <span class="cslot-name">Programming / Garment Studio Lab</span>
+                  </div>
+                  <div class="cshift-row">
+                    <span class="cslot-time">01:35 - 02:25</span>
+                    <span class="cslot-name">Web Development &amp; Cloud Lab</span>
+                  </div>
+                  <div class="cshift-row cshift-recess">
+                    <span class="cslot-time">02:25 - 02:45</span>
+                    <span class="cslot-name">ðŸ¥ª Afternoon Refreshment Recess</span>
+                  </div>
+                  <div class="cshift-row">
+                    <span class="cslot-time">02:45 - 03:35</span>
+                    <span class="cslot-name">Database Systems &amp; Live Projects</span>
+                  </div>
+                  <div class="cshift-row">
+                    <span class="cslot-time">03:35 - 05:30</span>
+                    <span class="cslot-name">Hands-on Coding &amp; Mentorship</span>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- PANEL 3: Exams & Assessments -->
+          <div class="cal-tab-panel" id="cal-panel-exams">
+            <div class="cal-exams-list">
+              <div class="cal-exam-item spotlight-active">
+                <div class="cexam-icon icon-ruby">ðŸ“</div>
+                <div class="cexam-info">
+                  <strong>Unit Test 1 (Classroom Assessment)</strong>
+                  <span>Syllabus: Units 1 &amp; 2 | Marks: 20 | Schedule: July 22 - July 28</span>
+                </div>
+                <span class="cexam-status status-gold">Upcoming</span>
+              </div>
+              <div class="cal-exam-item spotlight-active">
+                <div class="cexam-icon icon-gold">ðŸ“Š</div>
+                <div class="cexam-info">
+                  <strong>Mid-Semester Internal Assessment</strong>
+                  <span>Syllabus: 50% Course | Marks: 30 | Schedule: August 28 - September 05</span>
+                </div>
+                <span class="cexam-status status-gold">Scheduled</span>
+              </div>
+              <div class="cal-exam-item spotlight-active">
+                <div class="cexam-icon icon-crimson">ðŸŽ¯</div>
+                <div class="cexam-info">
+                  <strong>MKBU University Semester Examination</strong>
+                  <span>Syllabus: Complete Course | Marks: 70 | Schedule: November 25 Onwards</span>
+                </div>
+                <span class="cexam-status status-ruby">Final Exam</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- PANEL 4: Holidays & Breaks -->
+          <div class="cal-tab-panel" id="cal-panel-holidays">
+            <div class="cal-holidays-grid">
+              <div class="choliday-chip"><span class="choli-date">15 AUG</span> <strong>Independence Day</strong></div>
+              <div class="choliday-chip"><span class="choli-date">19 AUG</span> <strong>Raksha Bandhan</strong></div>
+              <div class="choliday-chip"><span class="choli-date">26 AUG</span> <strong>Janmashtami</strong></div>
+              <div class="choliday-chip"><span class="choli-date">07 SEP</span> <strong>Ganesh Chaturthi</strong></div>
+              <div class="choliday-chip"><span class="choli-date">02 OCT</span> <strong>Gandhi Jayanti</strong></div>
+              <div class="choliday-chip"><span class="choli-date">12 OCT</span> <strong>Dussehra (Vijaya Dashami)</strong></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Right: Interactive Month Calendar Mini-Matrix Widget -->
+        <div class="cal-widget-wrap">
+          <div class="cal-matrix-card spotlight-active">
+            
+            <div class="cmatrix-header">
+              <div class="cmatrix-month-title">
+                <strong>August 2026</strong>
+                <span>Term 1 &bull; Active Phase</span>
+              </div>
+              <span class="cmatrix-badge">MKBU Calendar</span>
+            </div>
+
+            <!-- Calendar Days Header -->
+            <div class="cmatrix-days-grid">
+              <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+            </div>
+
+            <!-- Calendar Date Numbers Grid -->
+            <div class="cmatrix-numbers-grid">
+              <span class="dim">26</span><span class="dim">27</span><span class="dim">28</span><span class="dim">29</span><span class="dim">30</span><span class="dim">31</span><span>1</span>
+              <span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span>
+              <span>9</span><span>10</span><span>11</span><span>12</span><span>13</span><span>14</span>
+              <span class="highlight-ruby" title="Aug 15: Independence Day">15</span>
+              <span>16</span><span>17</span><span>18</span>
+              <span class="highlight-gold" title="Aug 19: Raksha Bandhan">19</span>
+              <span>20</span><span>21</span><span>22</span>
+              <span>23</span><span>24</span><span>25</span>
+              <span class="highlight-ruby" title="Aug 26: Janmashtami">26</span>
+              <span>27</span>
+              <span class="highlight-gold active-now" title="Aug 28: Sem 3 Internal Tests Begin">28</span>
+              <span>29</span>
+              <span>30</span><span>31</span><span class="dim">1</span><span class="dim">2</span><span class="dim">3</span><span class="dim">4</span><span class="dim">5</span>
+            </div>
+
+            <!-- Selected Event Snapshot -->
+            <div class="cmatrix-event-snapshot">
+              <div class="cevent-snap-icon">ðŸ””</div>
+              <div class="cevent-snap-text">
+                <strong>Next Milestone: Aug 28, 2026</strong>
+                <span>Sem 3 &amp; Sem 5 Internal Written Tests Begin</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>

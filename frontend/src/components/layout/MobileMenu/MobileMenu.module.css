@@ -1,0 +1,196 @@
+/* ============================================
+   Fullscreen Navigation Overlay — Unizin-inspired
+   Dark background, large links, staggered animation
+   ============================================ */
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  z-index: 999;
+  background-color: #111111;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0s linear 0.45s;
+}
+
+.overlayOpen {
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1),
+              visibility 0s linear 0s;
+}
+
+.content {
+  width: 100%;
+  max-width: 900px;
+  padding: 100px 32px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100%;
+}
+
+/* --- Navigation --- */
+.nav {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.navList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+.navItem {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.overlayOpen .navItem {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.navItem:first-child {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 0;
+  text-decoration: none;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.25s ease, padding-left 0.3s ease;
+}
+
+.navLink:hover {
+  color: #ffffff;
+  padding-left: 8px;
+}
+
+.navLinkActive {
+  color: #ffffff;
+}
+
+.linkIndex {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.75rem;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.35);
+  min-width: 24px;
+}
+
+.linkLabel {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  flex: 1;
+}
+
+.linkArrow {
+  opacity: 0;
+  transform: translateX(-8px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.navLink:hover .linkArrow {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.navLinkActive .linkArrow {
+  opacity: 0.6;
+  transform: translateX(0);
+}
+
+/* --- Footer Section --- */
+.menuFooter {
+  padding-top: 2rem;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease 0.5s, transform 0.4s ease 0.5s;
+}
+
+.overlayOpen .menuFooter {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.footerContact {
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+
+.footerLink {
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.footerLink:hover {
+  color: #ffffff;
+}
+
+.footerAddress {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.3);
+  margin: 0;
+}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+
+@media (max-width: 768px) {
+  .content {
+    padding: 90px 24px 40px;
+  }
+
+  .navLink {
+    padding: 1rem 0;
+    gap: 1rem;
+  }
+
+  .linkLabel {
+    font-size: 1.25rem;
+  }
+
+  .footerContact {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 80px 16px 32px;
+  }
+
+  .linkLabel {
+    font-size: 1.125rem;
+  }
+
+  .navLink {
+    padding: 0.875rem 0;
+  }
+}
