@@ -3,6 +3,11 @@
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
 
+// Global reference so other components can stop/start Lenis
+if (typeof window !== 'undefined') {
+  window.__lenis = null;
+}
+
 export default function SmoothScrollProvider({ children }) {
   const lenisRef = useRef(null);
 
@@ -16,6 +21,7 @@ export default function SmoothScrollProvider({ children }) {
     });
 
     lenisRef.current = lenis;
+    window.__lenis = lenis;
 
     function raf(time) {
       lenis.raf(time);
@@ -27,6 +33,7 @@ export default function SmoothScrollProvider({ children }) {
     return () => {
       lenis.destroy();
       lenisRef.current = null;
+      window.__lenis = null;
     };
   }, []);
 
