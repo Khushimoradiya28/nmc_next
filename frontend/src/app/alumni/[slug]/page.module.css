@@ -1,0 +1,490 @@
+/* ══════════════════════════════════════════════════════
+   Alumni Legacy Pages — Minimal Premium Design
+   Theme: Red #B00000 · Gold #F4B000
+   ══════════════════════════════════════════════════════ */
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  box-sizing: border-box;
+}
+
+/* ── Shared ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(176, 0, 0, 0.07);
+  border: 1px solid rgba(176, 0, 0, 0.2);
+  color: var(--color-primary, #B00000);
+  padding: 5px 14px;
+  border-radius: 50px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 1rem;
+}
+
+.pageTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(1.9rem, 3.5vw, 2.75rem);
+  font-weight: 800;
+  color: #111;
+  line-height: 1.15;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.5px;
+}
+
+.highlight { color: var(--color-primary, #B00000); }
+.highlightGold { color: var(--color-secondary, #F4B000); }
+
+.leadText {
+  font-size: 1.05rem;
+  color: #555;
+  line-height: 1.8;
+  margin: 0;
+  max-width: 640px;
+}
+
+/* ══════════════════════════════════════
+   CONTENT SECTION
+   ══════════════════════════════════════ */
+.contentSection {
+  background: #f8f9fb;
+  padding: 5rem 0 6rem;
+}
+
+/* ══════════════════════════════════════
+   PAGE 1 — ALUMNI ASSOCIATION
+   ══════════════════════════════════════ */
+.introGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+  margin-bottom: 4rem;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid #eee;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+}
+
+.introImageWrap {
+  position: relative;
+  height: 360px;
+  overflow: hidden;
+}
+
+.introImage {
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+
+.introImageWrap:hover .introImage {
+  transform: scale(1.04);
+}
+
+.introImageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(176,0,0,0.35) 0%, transparent 60%);
+}
+
+.introContent {
+  padding: 2.5rem 3rem 2.5rem 0;
+}
+
+.programCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.programCard {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.28s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.programCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background: var(--color-primary, #B00000);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease;
+}
+
+.programCard:hover {
+  border-color: rgba(176,0,0,0.2);
+  box-shadow: 0 10px 28px rgba(176,0,0,0.06);
+  transform: translateY(-4px);
+}
+
+.programCard:hover::before { transform: scaleX(1); }
+
+.cardIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardIcon.red {
+  background: rgba(176,0,0,0.08);
+  color: var(--color-primary, #B00000);
+  border: 1px solid rgba(176,0,0,0.15);
+}
+
+.cardIcon.gold {
+  background: rgba(244,176,0,0.1);
+  color: #c8920a;
+  border: 1px solid rgba(244,176,0,0.25);
+}
+
+.cardIcon.dark {
+  background: #f4f4f4;
+  color: #333;
+  border: 1px solid #e0e0e0;
+}
+
+.cardTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.cardDesc {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.cardAction {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: auto;
+  padding-top: 0.75rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--color-primary, #B00000);
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  transition: gap 0.2s ease;
+}
+
+.cardAction:hover { gap: 8px; }
+
+/* ══════════════════════════════════════
+   PAGE 2 — OTHER DETAILS
+   ══════════════════════════════════════ */
+.timelineWrap {
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.timelineWrap::before {
+  content: '';
+  position: absolute;
+  left: 32px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, var(--color-primary, #B00000), var(--color-secondary, #F4B000));
+}
+
+.timelineItem {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.timelineDot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--color-primary, #B00000);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--color-primary, #B00000);
+  flex-shrink: 0;
+  margin-top: 4px;
+  margin-left: 24px;
+  z-index: 1;
+}
+
+.timelineItemDot.gold { background: var(--color-secondary, #F4B000); box-shadow: 0 0 0 2px var(--color-secondary, #F4B000); }
+
+.timelineContent {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 14px;
+  padding: 1.75rem 2rem;
+  flex: 1;
+  transition: all 0.25s ease;
+  margin-left: 0.5rem;
+}
+
+.timelineContent:hover {
+  border-color: rgba(176,0,0,0.2);
+  box-shadow: 0 8px 24px rgba(176,0,0,0.05);
+  transform: translateX(4px);
+}
+
+.timelineYear {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-primary, #B00000);
+  margin-bottom: 0.4rem;
+}
+
+.timelineTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0 0 0.5rem 0;
+}
+
+.timelineDesc {
+  font-size: 0.87rem;
+  color: #666;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Testimonial */
+.testimonialBox {
+  background: var(--color-primary, #B00000);
+  border-radius: 20px;
+  padding: 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.testimonialBox::before {
+  content: '❝';
+  position: absolute;
+  top: -1rem;
+  right: 2rem;
+  font-size: 10rem;
+  color: rgba(255,255,255,0.06);
+  line-height: 1;
+  pointer-events: none;
+  font-family: serif;
+}
+
+.testimonialText {
+  font-size: 1.1rem;
+  color: rgba(255,255,255,0.9);
+  line-height: 1.75;
+  font-style: italic;
+  margin: 0 0 1.5rem 0;
+}
+
+.testimonialAuthor {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-secondary, #F4B000);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Alumni image grid */
+.alumniImageGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+.alumniImageItem {
+  position: relative;
+  height: 180px;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.alumniImageItem img {
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.alumniImageItem:hover img {
+  transform: scale(1.06);
+}
+
+/* ══════════════════════════════════════
+   PAGE 3 — FEEDBACK
+   ══════════════════════════════════════ */
+.feedbackIntro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+  margin-bottom: 3.5rem;
+}
+
+.feedbackImageWrap {
+  position: relative;
+  height: 300px;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.feedbackImage {
+  object-fit: cover;
+}
+
+.feedbackImageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(244,176,0,0.3) 0%, transparent 60%);
+}
+
+.feedbackCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.feedbackCard {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 16px;
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  transition: all 0.28s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.feedbackCard::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 3px;
+  width: 0;
+  background: linear-gradient(90deg, var(--color-primary, #B00000), var(--color-secondary, #F4B000));
+  transition: width 0.35s ease;
+}
+
+.feedbackCard:hover {
+  box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+  transform: translateY(-4px);
+  border-color: rgba(176,0,0,0.18);
+}
+
+.feedbackCard:hover::after { width: 100%; }
+
+.feedbackNum {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: rgba(176,0,0,0.08);
+  line-height: 1;
+  margin-bottom: 0.25rem;
+}
+
+.feedbackType {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: #111;
+  margin: 0;
+}
+
+.feedbackDesc {
+  font-size: 0.84rem;
+  color: #666;
+  line-height: 1.65;
+  margin: 0;
+  flex: 1;
+}
+
+.feedbackBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 0.5rem;
+  background: var(--color-primary, #B00000);
+  color: #fff;
+  border: none;
+  padding: 9px 18px;
+  border-radius: 7px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.22s ease;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  width: fit-content;
+  text-decoration: none;
+}
+
+.feedbackBtn:hover {
+  background: #900000;
+  transform: translateY(-1px);
+}
+
+/* ══════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .introGrid { grid-template-columns: 1fr; }
+  .introImageWrap { height: 280px; }
+  .introContent { padding: 2rem; }
+  .programCards { grid-template-columns: repeat(2, 1fr); }
+  .feedbackIntro { grid-template-columns: 1fr; }
+  .feedbackImageWrap { height: 240px; }
+  .feedbackCards { grid-template-columns: repeat(2, 1fr); }
+  .alumniImageGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 1.25rem; }
+  .contentSection { padding: 3.5rem 0 4rem; }
+  .programCards { grid-template-columns: 1fr; }
+  .feedbackCards { grid-template-columns: 1fr; }
+  .timelineWrap::before { left: 20px; }
+  .timelineDot { margin-left: 12px; }
+  .testimonialBox { padding: 2rem; }
+  .testimonialText { font-size: 1rem; }
+  .alumniImageGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 480px) {
+  .container { padding: 0 1rem; }
+  .contentSection { padding: 2.5rem 0 3rem; }
+  .pageTitle { font-size: 1.65rem; }
+  .alumniImageGrid { grid-template-columns: 1fr; }
+  .alumniImageItem { height: 160px; }
+}
