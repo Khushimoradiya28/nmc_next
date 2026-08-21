@@ -25,7 +25,7 @@ export default function Page() {
           <div className="hero-overlay" style={{ background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))" }}></div>
           <div className="hero-content"
             style={{ paddingTop: "100px", display: "flex", alignItems: "flex-end", height: "100%", paddingBottom: "80px" }}>
-            <h1 className="hero-main-title" style={{ fontSize: "60px", fontWeight: "600", paddingRight: "15px" }}><em>About Us</em></h1>
+            <h1 className="hero-main-title"><em>About Us</em></h1>
           </div>
         </section>
 
@@ -130,9 +130,9 @@ export default function Page() {
             <div className="vm-luxury-grid">
 
               {/* CARD 1: OUR VISION */}
-              <div className="vm-simple-card vm-card-blue" style={{ position: "relative", overflow: "hidden" }}>
+              <div className="vm-simple-card vm-card-blue">
                 {/* Light backdrop SVG vector icon */}
-                <svg width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="rgba(2, 132, 199, 0.06)" strokeWidth="1.2" style={{ position: "absolute", bottom: "-20px", right: "-20px", pointerEvents: "none", zIndex: 1 }}>
+                <svg width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="rgba(2, 132, 199, 0.06)" strokeWidth="1.2" >
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                   <circle cx="12" cy="12" r="3" />
                 </svg>
@@ -146,7 +146,7 @@ export default function Page() {
                   conducive environment that is characterized by academic eminence, inspiring and preparing girls to serve as
                   ethical, enlightened citizens and leaders in an increasingly intricate, multifarious, and global
                   environment.</p>
-                <div className="vm-simple-badges vm-badges-blue" style={{ position: "relative", zIndex: 2 }}>
+                <div className="vm-simple-badges vm-badges-blue">
                   <span className="vm-simple-badge">EMPOWERMENT</span>
                   <span className="vm-simple-badge">GLOBAL VISION</span>
                   <span className="vm-simple-badge">GENDER EQUALITY</span>
@@ -154,9 +154,9 @@ export default function Page() {
               </div>
 
               {/* CARD 2: OUR MISSION */}
-              <div className="vm-simple-card vm-card-gold" style={{ position: "relative", overflow: "hidden" }}>
+              <div className="vm-simple-card vm-card-gold">
                 {/* Light backdrop SVG vector icon */}
-                <svg width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="rgba(245, 158, 11, 0.07)" strokeWidth="1.2" style={{ position: "absolute", bottom: "-20px", right: "-20px", pointerEvents: "none", zIndex: 1 }}>
+                <svg width="180" height="180" viewBox="0 0 24 24" fill="none" stroke="rgba(245, 158, 11, 0.07)" strokeWidth="1.2" >
                   <circle cx="12" cy="12" r="10" />
                   <circle cx="12" cy="12" r="6" />
                   <circle cx="12" cy="12" r="2" />
@@ -171,7 +171,7 @@ export default function Page() {
                   unbiased and liberated. To create awareness of the responsibility and accountability that goes hand-in-hand
                   with freedom. To empower learners with effective career planning skills. To advocate diversity through a
                   personalized approach.</p>
-                <div className="vm-simple-badges vm-badges-gold" style={{ position: "relative", zIndex: 2 }}>
+                <div className="vm-simple-badges vm-badges-gold">
                   <span className="vm-simple-badge">QUALITY EDUCATION</span>
                   <span className="vm-simple-badge">CURIOSITY</span>
                   <span className="vm-simple-badge">CAREER GROWTH</span>
@@ -191,8 +191,7 @@ export default function Page() {
               </div>
               <h2 className="vm-main-title">History &amp; <span>Legacy</span></h2>
 
-              <div
-                style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "4rem", marginTop: "3rem", alignItems: "center" }}>
+              <div className="vm-content-grid vm-content-grid-lg">
                 <div style={{ position: "relative", zIndex: 1 }}>
                   <div style={{ overflow: "hidden", borderRadius: "1.5rem", boxShadow: "0 20px 45px rgba(0,0,0,0.08)", display: "block" }}>
                     <Image
@@ -270,12 +269,12 @@ export default function Page() {
                 {/* Top gradient accent */}
                 <div style={{ height:"4px", background:"linear-gradient(90deg, #8a0000, #c0392b, #f59e0b)" }} />
 
-                <div style={{ padding:"2rem 1.75rem 1.75rem" }}>
+                <div className="founder-card-body">
                   {/* Profile Area */}
                   <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1.25rem" }}>
-                    <div style={{ position:"relative", flexShrink:0 }}>
+                    <div className="founder-avatar-wrap">
                       <div style={{ position:"absolute", inset:"-3px", borderRadius:"50%", background:"linear-gradient(135deg, #8a0000, #f59e0b)" }} />
-                      <div style={{ position:"relative", width:"72px", height:"72px", borderRadius:"50%", overflow:"hidden", border:"3px solid #ffffff", boxShadow:"0 4px 12px rgba(138,0,0,0.15)" }}>
+                      <div style={{ position:"relative", width:"85px", height:"85px", borderRadius:"50%", overflow:"hidden", border:"3px solid #ffffff", boxShadow:"0 4px 12px rgba(138,0,0,0.15)" }}>
                         <Image src="/assets/about/team/1.jpg" alt="Shri Samkit" width={150} height={150} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
                       </div>
                     </div>
@@ -315,12 +314,12 @@ export default function Page() {
                 {/* Top gradient accent */}
                 <div style={{ height:"4px", background:"linear-gradient(90deg, #d97706, #f59e0b, #fcd34d)" }} />
 
-                <div style={{ padding:"2rem 1.75rem 1.75rem" }}>
+                <div className="founder-card-body">
                   {/* Profile Area */}
                   <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1.25rem" }}>
-                    <div style={{ position:"relative", flexShrink:0 }}>
+                    <div className="founder-avatar-wrap">
                       <div style={{ position:"absolute", inset:"-3px", borderRadius:"50%", background:"linear-gradient(135deg, #d97706, #f59e0b)" }} />
-                      <div style={{ position:"relative", width:"72px", height:"72px", borderRadius:"50%", overflow:"hidden", border:"3px solid #ffffff", boxShadow:"0 4px 12px rgba(245,158,11,0.2)" }}>
+                      <div style={{ position:"relative", width:"85px", height:"85px", borderRadius:"50%", overflow:"hidden", border:"3px solid #ffffff", boxShadow:"0 4px 12px rgba(245,158,11,0.2)" }}>
                         <Image src="/assets/about/team/2.jpg" alt="Shri Mehul" width={150} height={150} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
                       </div>
                     </div>
@@ -707,7 +706,7 @@ export default function Page() {
                 excellence.</p>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "2rem" }}>
+            <div className="vm-content-grid">
               <div
                 style={{ background: "var(--white)", borderRadius: "1rem", padding: "2rem", borderBottom: "4px solid var(--gold-warm)", boxShadow: "0 4px 15px rgba(0,0,0,0.05)", transition: "transform 0.3s ease" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
@@ -833,7 +832,7 @@ export default function Page() {
             <div style={{ height: "420px", borderRadius: "var(--radius-md)", overflow: "hidden", background: "#000" }}>
               <iframe
                 src="https://www.google.com/maps/embed?pb=!4v1700000000000!6m8!1m7!1sCAoSLEFGMVFpcE1UZFlXTEt1Zk1rMVVUT3VlNXJ4TnpGVEp2Z1JrdjVkTlNWQW91!2m2!1d21.7490487!2d72.1588143!3f0!4f0!5f0.7820865974013092"
-                width="100%" height="100%" style={{ border: "0" }} allowfullscreen="" loading="lazy"></iframe>
+                width="100%" height="100%" style={{ border: "0" }} allowFullScreen loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
             </div>
           </div>
         </div>
