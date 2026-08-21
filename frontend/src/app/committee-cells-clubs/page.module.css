@@ -1,13 +1,12 @@
 /* ============================================
-   Committee, Cells & Clubs — Premium Editorial
-   Awwwards/Godly-inspired layout
+   Committee, Cells & Clubs — Clean Professional
    ============================================ */
 
 /* Hero Banner */
 .heroSection {
   position: relative;
-  min-height: 50vh;
-  height: 50vh;
+  min-height: 45vh;
+  height: 45vh;
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -39,12 +38,12 @@
   width: 100%;
   max-width: 1380px;
   margin: 0 auto;
-  padding: 0 2rem 80px 2rem;
+  padding: 0 2rem 60px 2rem;
 }
 
 .heroTitle {
   font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: clamp(2.2rem, 4.5vw, 3.5rem);
+  font-size: clamp(2rem, 4vw, 3.2rem);
   font-weight: 700;
   color: var(--white, #ffffff);
   line-height: 1.15;
@@ -62,87 +61,86 @@
   width: 100%;
   max-width: 1380px;
   margin: 0 auto;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
 }
 
 /* ============================================
-   Intro Section — Big Statement + Offset Text
+   Intro Section
    ============================================ */
 .introSection {
-  padding: 6rem 0 4rem;
+  padding: 3.5rem 0 2rem;
   background: var(--white, #ffffff);
 }
 
 .introLayout {
-  display: grid;
-  grid-template-columns: 1.4fr 1fr;
-  gap: 4rem;
-  align-items: end;
+  display: flex;
+  align-items: baseline;
+  gap: 3rem;
+  flex-wrap: wrap;
 }
 
 .introBigText {
   font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-size: clamp(1.4rem, 2.5vw, 2rem);
   font-weight: 700;
   color: var(--gray-900, #111827);
-  line-height: 1.4;
+  line-height: 1.45;
   margin: 0;
+  flex: 1 1 500px;
 }
 
 .introBigText span {
-  background: var(--grad-red, linear-gradient(135deg, #7f0000 0%, #b30000 100%));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--red-800, #8a0000);
 }
 
 .introMeta {
-  font-size: 0.95rem;
-  line-height: 1.8;
+  font-size: 0.9rem;
+  line-height: 1.75;
   color: var(--gray-500, #6b7280);
   border-left: 3px solid var(--gold-500, #f59e0b);
-  padding-left: 1.5rem;
+  padding-left: 1.25rem;
+  flex: 1 1 300px;
+  max-width: 400px;
 }
 
 /* ============================================
-   Main Grid — Bento/Masonry Inspired
-   Large + small cells, varied aspect ratios
+   Grid Section — Compact Cards
    ============================================ */
 .gridSection {
-  padding: 2rem 0 6rem;
+  padding: 1rem 0 4rem;
   background: var(--white, #ffffff);
 }
 
 .bentoGrid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 1.25rem;
+  gap: 0.875rem;
 }
 
 /* Card base */
 .cell {
-  border-radius: 1.25rem;
-  padding: 2.25rem;
+  border-radius: 1rem;
+  padding: 1.5rem 1.5rem 1.25rem;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
 }
 
 .cell:hover {
-  transform: scale(0.98);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-/* Sizing variations — rows must add to 12 */
-.cellLg { grid-column: span 7; min-height: 320px; }
-.cellMd { grid-column: span 5; min-height: 320px; }
-.cellSm { grid-column: span 4; min-height: 280px; }
-.cellSmR { grid-column: span 5; min-height: 280px; }
-.cellWide { grid-column: span 8; min-height: 280px; }
-.cellHalf { grid-column: span 6; min-height: 300px; }
-.cellFull { grid-column: span 12; min-height: 200px; }
+/* Sizing — compact, no min-height, let content define height */
+.cellLg { grid-column: span 7; }
+.cellMd { grid-column: span 5; }
+.cellSm { grid-column: span 4; }
+.cellSmR { grid-column: span 5; }
+.cellWide { grid-column: span 8; }
+.cellHalf { grid-column: span 6; }
+.cellFull { grid-column: span 12; }
 
 /* Color themes */
 .bgDark {
@@ -150,34 +148,22 @@
   color: var(--white, #ffffff);
 }
 
-.bgDark .cellTitle,
-.bgDark .cellDesc,
-.bgDark .cellNum {
-  color: var(--white, #ffffff);
-}
-
-.bgDark .cellDesc {
-  color: rgba(255, 255, 255, 0.7);
-}
+.bgDark .cellTitle { color: var(--white, #ffffff); }
+.bgDark .cellDesc { color: rgba(255, 255, 255, 0.7); }
+.bgDark .cellNum { color: rgba(255, 255, 255, 0.5); }
 
 .bgRed {
-  background: var(--red-800, #8a0000);
+  background: linear-gradient(135deg, #8a0000 0%, #a11b1b 100%);
   color: var(--white, #ffffff);
 }
 
-.bgRed .cellTitle,
-.bgRed .cellDesc,
-.bgRed .cellNum {
-  color: var(--white, #ffffff);
-}
-
-.bgRed .cellDesc {
-  color: rgba(255, 255, 255, 0.75);
-}
+.bgRed .cellTitle { color: var(--white, #ffffff); }
+.bgRed .cellDesc { color: rgba(255, 255, 255, 0.8); }
+.bgRed .cellNum { color: rgba(255, 255, 255, 0.5); }
 
 .bgCream {
-  background: #fef9e7;
-  border: 1px solid rgba(245, 158, 11, 0.15);
+  background: linear-gradient(135deg, #fffcf5 0%, #fef7e8 100%);
+  border: 1px solid rgba(245, 158, 11, 0.12);
 }
 
 .bgLight {
@@ -186,54 +172,51 @@
 }
 
 .bgGlass {
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  background: linear-gradient(135deg, #ffffff 0%, #fafafa 100%);
+  border: 1px solid rgba(138, 0, 0, 0.08);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
 }
 
 /* Cell content */
 .cellNum {
   font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: 0.75rem;
+  font-size: 0.68rem;
   font-weight: 700;
-  letter-spacing: 0.15em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  opacity: 0.5;
-  margin-bottom: auto;
+  color: var(--gray-400, #9ca3af);
+  margin-bottom: 0.75rem;
 }
 
 .cellTitle {
   font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: clamp(1.25rem, 2vw, 1.6rem);
-  font-weight: 700;
+  font-size: 1.15rem;
+  font-weight: 800;
   color: var(--gray-900, #111827);
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.4rem 0;
   line-height: 1.3;
 }
 
 .cellDesc {
-  font-size: 0.88rem;
-  line-height: 1.65;
+  font-size: 0.82rem;
+  line-height: 1.6;
   color: var(--gray-600, #4b5563);
   margin: 0;
-  max-width: 480px;
 }
 
 /* Tags */
 .cellTags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
-  margin-top: 1rem;
+  gap: 0.35rem;
+  margin-top: 0.85rem;
 }
 
 .cellTag {
-  font-size: 0.72rem;
+  font-size: 0.65rem;
   font-weight: 700;
-  padding: 0.3rem 0.65rem;
-  border-radius: 4px;
+  padding: 0.22rem 0.55rem;
+  border-radius: 3px;
   background: rgba(255, 255, 255, 0.15);
   color: inherit;
   letter-spacing: 0.02em;
@@ -249,15 +232,15 @@
 /* Decorative corner element */
 .cellCorner {
   position: absolute;
-  top: 2rem;
-  right: 2rem;
-  width: 40px;
-  height: 40px;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  opacity: 0.4;
+  opacity: 0.35;
 }
 
 .bgDark .cellCorner,
@@ -273,21 +256,21 @@
   color: var(--red-800, #8a0000);
 }
 
-/* Full-width CTA row */
+/* CTA row */
 .cellCta {
   grid-column: span 12;
   background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
-  border-radius: 1.25rem;
-  padding: 2.5rem 3rem;
+  border-radius: 1rem;
+  padding: 1.75rem 2.25rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 2rem;
+  gap: 1.5rem;
 }
 
 .ctaText {
   font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: 1.25rem;
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--white, #ffffff);
 }
@@ -299,17 +282,18 @@
 .ctaBtn {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.75rem;
+  gap: 0.45rem;
+  padding: 0.65rem 1.5rem;
   border-radius: var(--radius-full, 9999px);
   background: var(--gold-500, #f59e0b);
   color: var(--gray-900, #111827);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   text-decoration: none;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
+  white-space: nowrap;
 }
 
 .ctaBtn:hover {
@@ -330,35 +314,37 @@
 
 @media (max-width: 768px) {
   .heroSection {
-    min-height: 40vh;
-    height: 40vh;
+    min-height: 38vh;
+    height: 38vh;
   }
 
-  .heroContent { padding-bottom: 50px; }
+  .heroContent { padding-bottom: 40px; }
 
-  .introSection { padding: 4rem 0 2.5rem; }
+  .introSection { padding: 2.5rem 0 1.5rem; }
   .introLayout {
-    grid-template-columns: 1fr;
-    gap: 2rem;
+    flex-direction: column;
+    gap: 1.5rem;
   }
 
-  .gridSection { padding: 1.5rem 0 4rem; }
+  .introBigText { font-size: 1.35rem; }
+  .introMeta { max-width: 100%; }
 
-  .bentoGrid { grid-template-columns: 1fr; }
+  .gridSection { padding: 1rem 0 3rem; }
+  .bentoGrid { grid-template-columns: 1fr; gap: 0.75rem; }
+
   .cellLg, .cellMd, .cellSm, .cellSmR, .cellWide, .cellHalf, .cellFull, .cellCta {
     grid-column: span 1;
-    min-height: 240px;
   }
 
   .cellCta {
     flex-direction: column;
     align-items: flex-start;
-    padding: 2rem;
+    padding: 1.5rem;
   }
 }
 
 @media (max-width: 480px) {
-  .heroSection { min-height: 35vh; height: 35vh; }
-  .heroContent { padding: 0 1rem 40px 1rem; }
-  .cell { padding: 1.75rem; min-height: 220px; }
+  .heroSection { min-height: 32vh; height: 32vh; }
+  .heroContent { padding: 0 1rem 30px 1rem; }
+  .cell { padding: 1.25rem; }
 }
