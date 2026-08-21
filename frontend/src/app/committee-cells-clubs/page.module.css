@@ -114,18 +114,22 @@
 .bentoGrid {
   display: grid;
   grid-template-columns: repeat(12, 1fr);
-  gap: 0.875rem;
+  grid-auto-rows: 1fr;
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
+  align-items: stretch;
 }
 
 /* Card base */
 .cell {
   border-radius: 1rem;
-  padding: 1.5rem 1.5rem 1.25rem;
+  padding: 1.75rem;
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease;
+  min-height: 0;
 }
 
 .cell:hover {
@@ -133,7 +137,7 @@
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
-/* Sizing — compact, no min-height, let content define height */
+/* Sizing — consistent height per row */
 .cellLg { grid-column: span 7; }
 .cellMd { grid-column: span 5; }
 .cellSm { grid-column: span 4; }
@@ -202,6 +206,7 @@
   line-height: 1.6;
   color: var(--gray-600, #4b5563);
   margin: 0;
+  flex: 1;
 }
 
 /* Tags */
@@ -305,20 +310,24 @@
    Responsive
    ============================================ */
 @media (max-width: 1024px) {
-  .cellLg, .cellWide { grid-column: span 6; }
-  .cellMd, .cellSmR { grid-column: span 6; }
-  .cellSm { grid-column: span 6; }
-  .cellHalf { grid-column: span 6; }
-  .cellFull { grid-column: span 12; }
+  .bentoGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .cellLg, .cellMd, .cellSm, .cellSmR, .cellWide, .cellHalf {
+    grid-column: span 1;
+  }
+  .cellFull, .cellCta { grid-column: span 2; }
 }
 
 @media (max-width: 768px) {
   .heroSection {
-    min-height: 38vh;
-    height: 38vh;
+    min-height: 35vh;
+    height: 35vh;
   }
 
   .heroContent { padding-bottom: 40px; }
+  .heroTitle { font-size: 1.8rem; }
 
   .introSection { padding: 2.5rem 0 1.5rem; }
   .introLayout {
@@ -326,11 +335,14 @@
     gap: 1.5rem;
   }
 
-  .introBigText { font-size: 1.35rem; }
+  .introBigText { font-size: 1.3rem; }
   .introMeta { max-width: 100%; }
 
   .gridSection { padding: 1rem 0 3rem; }
-  .bentoGrid { grid-template-columns: 1fr; gap: 0.75rem; }
+  .bentoGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
 
   .cellLg, .cellMd, .cellSm, .cellSmR, .cellWide, .cellHalf, .cellFull, .cellCta {
     grid-column: span 1;
@@ -340,11 +352,17 @@
     flex-direction: column;
     align-items: flex-start;
     padding: 1.5rem;
+    gap: 1rem;
   }
+
+  .ctaText { font-size: 1rem; }
 }
 
 @media (max-width: 480px) {
-  .heroSection { min-height: 32vh; height: 32vh; }
+  .heroSection { min-height: 30vh; height: 30vh; }
   .heroContent { padding: 0 1rem 30px 1rem; }
+  .container { padding: 0 1rem; }
   .cell { padding: 1.25rem; }
+  .cellTitle { font-size: 1.05rem; }
+  .cellDesc { font-size: 0.78rem; }
 }

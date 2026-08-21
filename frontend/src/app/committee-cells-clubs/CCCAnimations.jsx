@@ -40,11 +40,11 @@ export default function CCCAnimations({ children }) {
         gsap.utils.toArray('[data-animate="stagger-cards"]').forEach((container) => {
           const cards = container.children;
           gsap.from(cards, {
-            y: 50,
             opacity: 0,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: 'power3.out',
+            scale: 0.97,
+            duration: 0.5,
+            stagger: 0.08,
+            ease: 'power2.out',
             scrollTrigger: {
               trigger: container,
               start: 'top 85%',
