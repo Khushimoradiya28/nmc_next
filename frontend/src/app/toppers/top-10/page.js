@@ -176,15 +176,21 @@ export default function Top10Page() {
                   <div key={idx} className={styles.leaderboardRow}>
                     
                     {/* Rank Circle Badge */}
-                    <span className={`${styles.rankBadge} ${getRankClass(row.rank)}`}>
-                      {row.rank.replace(/(st|nd|rd|th)/, '')}
-                    </span>
+                    <div className={styles.rankBadgeWrap}>
+                      <span className={`${styles.rankBadge} ${getRankClass(row.rank)}`}>
+                        {row.rank.replace(/(st|nd|rd|th)/, '')}
+                      </span>
+                    </div>
 
                     {/* Student Name */}
                     <span className={styles.studentName}>{row.name}</span>
 
                     {/* Creative Dot Connector Bridge (takes up all the white space) */}
-                    <div className={styles.connectorLine}></div>
+                    <div className={styles.connectorLine}>
+                      <div className={styles.hoverImage}>
+                        <Image src={`/assets/toppers/${['anjali', 'priya', 'meera', 'anjali', 'priya', 'meera', 'anjali', 'priya', 'meera', 'anjali'][idx]}.jpg`} alt={row.name} width={120} height={140} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+                      </div>
+                    </div>
 
                     {/* Department Badge */}
                     <span className={styles.deptBadge}>{row.dept}</span>

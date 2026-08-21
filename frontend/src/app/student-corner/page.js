@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
+import CounterAnimation from './CounterAnimation';
 
 export const metadata = {
   title: 'Student Corner | Nandkunvarba Mahila College',
@@ -13,6 +14,7 @@ export default function Page() {
     <>
       <Header />
       <main>
+        <CounterAnimation />
         {/* Scroll Progress Indicator Bar */}
 
 

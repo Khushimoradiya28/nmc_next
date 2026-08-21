@@ -212,15 +212,6 @@ export default function CommitteeCellsClubsPage() {
                   </div>
                 </div>
 
-                {/* CTA Row */}
-                <div className={styles.cellCta}>
-                  <span className={styles.ctaText}>Want to join a committee or club? <strong>Get involved today.</strong></span>
-                  <Link href="/contact" className={styles.ctaBtn}>
-                    Contact Us
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>
-                  </Link>
-                </div>
-
               </div>
             </div>
           </section>
