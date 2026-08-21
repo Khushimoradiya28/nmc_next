@@ -21,7 +21,7 @@
 .heroOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.4));
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.4));
   z-index: 2;
 }
 
@@ -140,8 +140,13 @@
 }
 
 @keyframes tickerScroll {
-  from { transform: translateX(100%); }
-  to { transform: translateX(-100%); }
+  from {
+    transform: translateX(100%);
+  }
+
+  to {
+    transform: translateX(-100%);
+  }
 }
 
 /* Notices Grid */
@@ -450,20 +455,20 @@
   .noticesGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .runwayGrid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .portalsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .visionGrid {
     grid-template-columns: 1fr;
     gap: 2.5rem;
   }
-  
+
   .alumniGrid {
     grid-template-columns: repeat(2, 1fr);
   }
@@ -473,11 +478,11 @@
   .runwayGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .portalsGrid {
     grid-template-columns: 1fr;
   }
-  
+
   .alumniGrid {
     grid-template-columns: 1fr;
   }

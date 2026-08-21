@@ -43,9 +43,71 @@
   border: 1px solid rgba(226, 232, 240, 0.9);
 }
 
-.aboutPremiumImg {
+.sliderContainer {
+  position: relative;
   width: 100%;
   height: 520px;
+  overflow: hidden;
+}
+
+.sliderSlide {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1.2s ease-in-out, visibility 1.2s ease-in-out;
+}
+
+.sliderSlide.activeSlide {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1;
+}
+
+.sliderPagination {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 5;
+  background: rgba(15, 23, 42, 0.45);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--r-full);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.paginationDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.paginationDot:hover {
+  background: rgba(255, 255, 255, 0.85);
+  transform: scale(1.2);
+}
+
+.paginationDot.activeDot {
+  background: var(--white);
+  width: 20px;
+  border-radius: 4px;
+}
+
+.aboutPremiumImg {
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover;
   display: block;
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
@@ -86,10 +148,11 @@
 
 /* Floating Stats Badge (Bottom Left) */
 .aboutFbadgeStats {
-  position: absolute;
-  bottom: 1.75rem;
-  left: -1.5rem;
-  z-index: 3;
+  position: absolute !important;
+  top: 1.25rem !important;
+  left: 1.25rem !important;
+  bottom: auto !important;
+  z-index: 3 !important;
   background: rgba(255, 255, 255, 0.96);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -342,13 +405,14 @@
     gap: 3.5rem;
   }
 
-  .aboutPremiumImg {
+  .sliderContainer {
     height: 420px;
   }
 
   .aboutFbadgeStats {
-    left: 1rem;
-    bottom: 1rem;
+    left: 1.25rem !important;
+    top: 1.25rem !important;
+    bottom: auto !important;
   }
 
   .aboutFbadgeAffil {
@@ -363,7 +427,7 @@
     gap: 0.85rem;
   }
 
-  .aboutPremiumImg {
+  .sliderContainer {
     height: 320px;
   }
 

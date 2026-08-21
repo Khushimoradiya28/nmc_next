@@ -1,3 +1,5 @@
+import path from 'path';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   /* config options here */
@@ -16,6 +18,9 @@ const nextConfig = {
         hostname: 'nandkunvarbamahilacollege.com',
       },
     ],
+  },
+  turbopack: {
+    root: path.resolve(process.cwd(), '..'),
   },
 };
 

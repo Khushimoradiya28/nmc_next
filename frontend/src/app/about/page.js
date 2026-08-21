@@ -31,63 +31,73 @@ export default function Page() {
 
 
         {/* COLLEGE OVERVIEW SECTION */}
-        <section className="section-padding" id="overview">
+        <section className="section-padding" id="overview" style={{ padding: "3rem 0" }}>
           <div className="container">
-            <div className="vm-header-wrap" style={{ textAlign: "left", alignItems: "flex-start", maxWidth: "100%" }}>
-              <div className="about-premium-tag">
-                <span className="about-tag-dot"></span>
-                <span>NMC Overview</span>
-              </div>
-              <h2 className="vm-main-title">College <span>Overview</span></h2>
-
-              <div
-                style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "3rem", marginTop: "2rem" }}>
-                <div>
-                  <p className="vm-main-subtitle"
-                    style={{ textAlign: "left", fontSize: "1.05rem", lineHeight: "1.8", color: "var(--gray-700)" }}>
-                    Nandkunvarba Mahila College (NMC) is a premier institution dedicated exclusively to the higher education
-                    and holistic development of women. Affiliated with Maharaja Krishnakumarsinhji Bhavnagar University
-                    (MKBU), NMC offers a wide array of undergraduate and postgraduate programs across Arts, Commerce,
-                    Management, IT, and Social Work.
-                  </p>
-                  <p className="vm-main-subtitle"
-                    style={{ textAlign: "left", fontSize: "1.05rem", lineHeight: "1.8", color: "var(--gray-700)", marginTop: "1rem" }}>
-                    With state-of-the-art infrastructure, highly experienced faculty members, and unique student welfare
-                    initiatives like a 100% free bus service and robust placement support, the college stands as a beacon of
-                    women's empowerment, fostering intellect, autonomy, and leadership in the region.
-                  </p>
+            <div className="about-overview-grid" style={{ marginTop: "0" }}>
+              <div className="about-overview-left">
+                <div className="about-premium-tag" style={{ marginBottom: "0.5rem", alignSelf: "flex-start" }}>
+                  <span className="about-tag-dot"></span>
+                  <span>NMC Overview</span>
                 </div>
-                <div
-                  style={{ background: "var(--white)", borderRadius: "1rem", padding: "2.5rem", boxShadow: "0 4px 25px rgba(0,0,0,0.06)", border: "1px solid rgba(0,0,0,0.05)" }}>
-                  <h3
-                    style={{ fontFamily: "var(--font-heading)", fontSize: "1.25rem", fontWeight: "800", color: "var(--gray-900)", marginBottom: "1.5rem" }}>
-                    Key Highlights</h3>
-                  <ul style={{ listStyle: "none", padding: "0", display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-                    <li
-                      style={{ display: "flex", alignItems: "center", gap: "0.75rem", color: "var(--gray-700)", fontSize: "0.95rem", fontWeight: "600" }}>
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red-800)" strokeWidth="2.5">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg> Exclusive Women's College
-                    </li>
-                    <li
-                      style={{ display: "flex", alignItems: "center", gap: "0.75rem", color: "var(--gray-700)", fontSize: "0.95rem", fontWeight: "600" }}>
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red-800)" strokeWidth="2.5">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg> MKBU Affiliated Programs
-                    </li>
-                    <li
-                      style={{ display: "flex", alignItems: "center", gap: "0.75rem", color: "var(--gray-700)", fontSize: "0.95rem", fontWeight: "600" }}>
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red-800)" strokeWidth="2.5">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg> 100% Free Bus Service
-                    </li>
-                    <li
-                      style={{ display: "flex", alignItems: "center", gap: "0.75rem", color: "var(--gray-700)", fontSize: "0.95rem", fontWeight: "600" }}>
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--red-800)" strokeWidth="2.5">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg> Career Placement Assistance
-                    </li>
-                  </ul>
+                <h2 className="vm-main-title" style={{ marginBottom: "1.25rem", fontSize: "2.5rem" }}>
+                  College <span>Overview</span>
+                </h2>
+                <p className="about-overview-lead">
+                  Nandkunvarba Mahila College (NMC) is a premier institution dedicated exclusively to the higher education
+                  and holistic development of women. Affiliated with Maharaja Krishnakumarsinhji Bhavnagar University
+                  (MKBU), NMC offers a wide array of undergraduate and postgraduate programs.
+                </p>
+                <p className="about-overview-body">
+                  With state-of-the-art infrastructure, highly experienced faculty members, and unique student welfare
+                  initiatives like a 100% free bus service and robust placement support, the college stands as a beacon of
+                  women's empowerment, fostering intellect, autonomy, and leadership in the region.
+                </p>
+              </div>
+
+              <div className="about-overview-cards">
+                <div className="about-overview-card">
+                  <div className="about-card-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                      <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                    </svg>
+                  </div>
+                  <h3 className="about-card-title">Exclusive Women's College</h3>
+                  <p className="about-card-desc">Empowering female leaders through focused education since 2009.</p>
+                </div>
+
+                <div className="about-overview-card">
+                  <div className="about-card-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                    </svg>
+                  </div>
+                  <h3 className="about-card-title">MKBU Affiliated</h3>
+                  <p className="about-card-desc">Degrees affiliated with M.K. Bhavnagar University for academic reliability.</p>
+                </div>
+
+                <div className="about-overview-card">
+                  <div className="about-card-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="4" y="3" width="16" height="16" rx="2" ry="2"/>
+                      <path d="M4 11h16M9 19v3M15 19v3"/>
+                      <circle cx="8" cy="15" r="1"/>
+                      <circle cx="16" cy="15" r="1"/>
+                    </svg>
+                  </div>
+                  <h3 className="about-card-title">100% Free Bus</h3>
+                  <p className="about-card-desc">Fully subsidized transport covering 40+ routes across the region.</p>
+                </div>
+
+                <div className="about-overview-card">
+                  <div className="about-card-icon-wrap">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                    </svg>
+                  </div>
+                  <h3 className="about-card-title">Placement Assistance</h3>
+                  <p className="about-card-desc">Dedicated placement cell connecting graduates to top opportunities.</p>
                 </div>
               </div>
             </div>
@@ -576,81 +586,25 @@ export default function Page() {
                 standards of education.</p>
             </div>
 
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem", justifyContent: "center" }}>
+            <div className="affil-cards-container">
               {/* MKBU Card */}
-              <div style={{
-                background: "var(--white)",
-                padding: "2.5rem 2rem",
-                borderRadius: "1rem",
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 10px 30px rgba(15, 23, 42, 0.03)",
-                textAlign: "center",
-                width: "290px",
-                position: "relative",
-                transition: "transform 0.3s ease"
-              }}>
-                <div style={{
-                  width: "70px",
-                  height: "70px",
-                  margin: "0 auto 1.25rem auto",
-                  background: "rgba(138, 0, 0, 0.04)",
-                  borderRadius: "1rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#8a0000"
-                }}>
+              <div className="affil-card theme-ruby">
+                <div className="affil-card-bg-glow"></div>
+                <div className="affil-icon-box">
                   <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ margin: "auto" }}>
                     <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
                     <path d="M6 12v5c3 3 9 3 12 0v-5" />
                   </svg>
                 </div>
-                <h4 style={{ fontFamily: "var(--font-heading)", color: "var(--gray-900)", fontSize: "1.1rem", marginBottom: "0.5rem", fontWeight: "800" }}>
-                  MK Bhavnagar University
-                </h4>
-                <span style={{
-                  display: "inline-block",
-                  fontSize: "0.64rem",
-                  fontWeight: "800",
-                  color: "var(--gray-500)",
-                  background: "#f8fafc",
-                  border: "1px solid #e2e8f0",
-                  padding: "0.2rem 0.65rem",
-                  borderRadius: "2rem",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.8px",
-                  marginBottom: "1rem"
-                }}>
-                  MKBU Affiliated
-                </span>
-                <p style={{ fontSize: "0.88rem", color: "var(--gray-600)", lineHeight: "1.5", margin: 0 }}>
-                  Permanently affiliated for all UG and PG programs.
-                </p>
+                <h4 className="affil-title">MK Bhavnagar University</h4>
+                <span className="affil-badge">MKBU Affiliated</span>
+                <p className="affil-desc">Permanently affiliated for all UG and PG programs.</p>
               </div>
 
               {/* Govt of Gujarat Card */}
-              <div style={{
-                background: "var(--white)",
-                padding: "2.5rem 2rem",
-                borderRadius: "1rem",
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 10px 30px rgba(15, 23, 42, 0.03)",
-                textAlign: "center",
-                width: "290px",
-                position: "relative",
-                transition: "transform 0.3s ease"
-              }}>
-                <div style={{
-                  width: "70px",
-                  height: "70px",
-                  margin: "0 auto 1.25rem auto",
-                  background: "rgba(245, 158, 11, 0.05)",
-                  borderRadius: "1rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#d97706"
-                }}>
+              <div className="affil-card theme-gold">
+                <div className="affil-card-bg-glow"></div>
+                <div className="affil-icon-box">
                   <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ margin: "auto" }}>
                     <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
                     <line x1="16" y1="2" x2="16" y2="6" />
@@ -658,79 +612,24 @@ export default function Page() {
                     <line x1="3" y1="10" x2="21" y2="10" />
                   </svg>
                 </div>
-                <h4 style={{ fontFamily: "var(--font-heading)", color: "var(--gray-900)", fontSize: "1.1rem", marginBottom: "0.5rem", fontWeight: "800" }}>
-                  Government of Gujarat
-                </h4>
-                <span style={{
-                  display: "inline-block",
-                  fontSize: "0.64rem",
-                  fontWeight: "800",
-                  color: "var(--gray-500)",
-                  background: "#f8fafc",
-                  border: "1px solid #e2e8f0",
-                  padding: "0.2rem 0.65rem",
-                  borderRadius: "2rem",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.8px",
-                  marginBottom: "1rem"
-                }}>
-                  State Approved
-                </span>
-                <p style={{ fontSize: "0.88rem", color: "var(--gray-600)", lineHeight: "1.5", margin: 0 }}>
-                  Recognized and approved by the State Education Department.
-                </p>
+                <h4 className="affil-title">Government of Gujarat</h4>
+                <span className="affil-badge">State Approved</span>
+                <p className="affil-desc">Recognized and approved by the State Education Department.</p>
               </div>
 
               {/* UGC Card */}
-              <div style={{
-                background: "var(--white)",
-                padding: "2.5rem 2rem",
-                borderRadius: "1rem",
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 10px 30px rgba(15, 23, 42, 0.03)",
-                textAlign: "center",
-                width: "290px",
-                position: "relative",
-                transition: "transform 0.3s ease"
-              }}>
-                <div style={{
-                  width: "70px",
-                  height: "70px",
-                  margin: "0 auto 1.25rem auto",
-                  background: "rgba(138, 0, 0, 0.04)",
-                  borderRadius: "1rem",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  color: "#8a0000"
-                }}>
+              <div className="affil-card theme-ruby">
+                <div className="affil-card-bg-glow"></div>
+                <div className="affil-icon-box">
                   <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" style={{ margin: "auto" }}>
                     <circle cx="12" cy="12" r="10" />
                     <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
                     <path d="M2 12h20" />
                   </svg>
                 </div>
-                <h4 style={{ fontFamily: "var(--font-heading)", color: "var(--gray-900)", fontSize: "1.1rem", marginBottom: "0.5rem", fontWeight: "800" }}>
-                  UGC Recognition
-                </h4>
-                <span style={{
-                  display: "inline-block",
-                  fontSize: "0.64rem",
-                  fontWeight: "800",
-                  color: "var(--gray-500)",
-                  background: "#f8fafc",
-                  border: "1px solid #e2e8f0",
-                  padding: "0.2rem 0.65rem",
-                  borderRadius: "2rem",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.8px",
-                  marginBottom: "1rem"
-                }}>
-                  UGC Recognized
-                </span>
-                <p style={{ fontSize: "0.88rem", color: "var(--gray-600)", lineHeight: "1.5", margin: 0 }}>
-                  Acknowledged under section 2(f) and 12(B) of the UGC Act.
-                </p>
+                <h4 className="affil-title">UGC Recognition</h4>
+                <span className="affil-badge">UGC Recognized</span>
+                <p className="affil-desc">Acknowledged under section 2(f) and 12(B) of the UGC Act.</p>
               </div>
             </div>
           </div>

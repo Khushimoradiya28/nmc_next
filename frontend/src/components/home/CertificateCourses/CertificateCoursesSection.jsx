@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './CertificateCoursesSection.module.css';
 
 export default function CertificateCoursesSection() {
@@ -297,10 +298,10 @@ export default function CertificateCoursesSection() {
       </div>
 
       <div style={{textAlign: 'center', marginTop: '2.5rem'}}>
-        <a href="courses.html" className={`${styles.btn} ${styles.btnCrimson} btn btn-crimson`}>
+        <Link href="/courses" className={`${styles.btn} ${styles.btnCrimson} btn btn-crimson`}>
           <span>View More</span>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z"/></svg>
-        </a>
+        </Link>
       </div>
     </div>
   </section>

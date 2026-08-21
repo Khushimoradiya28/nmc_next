@@ -27,6 +27,8 @@ export default async function ActivitiesSubPage({ params }) {
   const pageTitle = slug.length > 0 ? formatText(slug[slug.length - 1]) : 'Activity';
   const parentCategory = slug.length > 1 ? formatText(slug[0]) : '';
 
+  let content = null;
+
   if (slug.length === 1) {
     const events = getEventsByCategory(slug[0]);
     content = (

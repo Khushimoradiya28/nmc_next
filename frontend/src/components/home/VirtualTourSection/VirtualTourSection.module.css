@@ -482,4 +482,218 @@
   transform: translateX(4px);
 }
 
+/* Modal Backdrop */
+.modalBackdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modalBackdropActive {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Modal Content Box */
+.modalBox {
+  width: 95%;
+  max-width: 1050px;
+  background: var(--white);
+  border-radius: 1.5rem;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: scale(0.9);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.modalBackdropActive .modalBox {
+  transform: scale(1);
+}
+
+.modalClose {
+  position: absolute;
+  top: 1.25rem;
+  right: 1.25rem;
+  font-size: 2.2rem;
+  line-height: 1;
+  color: var(--gray-400);
+  cursor: pointer;
+  transition: color 0.3s ease;
+  border: none;
+  background: none;
+  padding: 0;
+}
+
+.modalClose:hover {
+  color: var(--red-800);
+}
+
+.modalHeader {
+  margin-bottom: 1.5rem;
+}
+
+.modalTitle {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: 0.25rem;
+}
+
+.modalSubtitle {
+  font-size: 0.9rem;
+  color: var(--gray-500);
+}
+
+/* Tabs */
+.modalTabs {
+  display: flex;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--gray-200);
+  padding-bottom: 0.75rem;
+}
+
+.modalTabBtn {
+  padding: 0.5rem 1.25rem;
+  border-radius: var(--r-full);
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: 1px solid var(--gray-300);
+  background: transparent;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.modalTabBtnActive {
+  background: var(--red-800);
+  border-color: var(--red-800);
+  color: var(--white);
+}
+
+/* Content Container */
+.modalContent {
+  height: 520px;
+  background: #000;
+  border-radius: 1rem;
+  overflow: hidden;
+  position: relative;
+}
+
+@media (max-width: 768px) {
+  .modalContent {
+    height: 380px;
+  }
+  .modalBox {
+    padding: 1.5rem;
+  }
+}
+
+/* Photos Slider */
+.modalSlider {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.modalSlide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
+}
+
+.modalSlideActive {
+  opacity: 1;
+  visibility: visible;
+}
+
+.modalSlideImg {
+  object-fit: cover;
+}
+
+/* Slider Arrows */
+.sliderArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+}
+
+.sliderArrow:hover {
+  background: rgba(15, 23, 42, 0.9);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.sliderArrowLeft {
+  left: 1rem;
+}
+
+.sliderArrowRight {
+  right: 1rem;
+}
+
+/* Slider Pagination */
+.sliderPagination {
+  position: absolute;
+  bottom: 1.25rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+  background: rgba(15, 23, 42, 0.5);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--r-full);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.paginationDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.paginationDot:hover {
+  background: rgba(255, 255, 255, 0.85);
+  transform: scale(1.2);
+}
+
+.paginationDotActive {
+  background: var(--white);
+  width: 20px;
+  border-radius: 4px;
+}
+
 

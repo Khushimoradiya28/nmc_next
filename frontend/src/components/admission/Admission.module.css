@@ -134,10 +134,15 @@
 
 .admTimerBox {
   background: rgba(255, 255, 255, 0.15);
-  padding: 0.2rem 0.55rem;
+  padding: 0.25rem 0.15rem;
   border-radius: 6px;
   text-align: center;
-  min-width: 38px;
+  width: 52px;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
 }
 
 .atimerNum {

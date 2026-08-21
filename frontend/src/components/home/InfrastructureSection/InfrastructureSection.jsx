@@ -215,12 +215,6 @@ export default function InfrastructureSection() {
           </button>
         </div>
 
-        <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
-          <a href="gallery.html" className={`${styles.btn} ${styles.btnCrimson} btn btn-crimson`}>
-            <span>View More</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z" /></svg>
-          </a>
-        </div>
       </div>
     </section>
   );
