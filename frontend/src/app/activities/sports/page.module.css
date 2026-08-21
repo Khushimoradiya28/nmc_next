@@ -645,198 +645,7 @@
   cursor: not-allowed;
 }
 
-/* Responsive */
-
-/* Large Laptop – 1280px and below */
-@media (max-width: 1280px) {
-  .container {
-    max-width: 1100px;
-    padding: 0 2rem;
-  }
-  .tournamentsGrid {
-    gap: 1.5rem;
-  }
-  .champsGrid, .otherGrid, .selectionsGrid {
-    gap: 1.25rem;
-  }
-  .galleryGrid {
-    gap: 1.25rem;
-  }
-  .galleryItem {
-    height: 230px;
-  }
-  .champMarqueeCard {
-    width: 340px;
-  }
-  .sectionTitle {
-    font-size: 2rem;
-  }
-}
-
-/* Small Laptop / Large Tablet – 1024px and below */
-@media (max-width: 1024px) {
-  .container {
-    padding: 0 1.5rem;
-  }
-  .tournamentsGrid, .champsGrid, .otherGrid, .galleryGrid, .selectionsGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1.25rem;
-  }
-  .tabNavbarSection {
-    top: 80px;
-  }
-  .sectionTitle {
-    font-size: 1.9rem;
-  }
-  .tournamentHeader {
-    padding: 2rem;
-  }
-  .tournamentBody {
-    padding: 1.75rem;
-  }
-  .galleryItem {
-    height: 220px;
-  }
-  .gallerySection {
-    padding: 4rem 0;
-  }
-  .champMarqueeCard {
-    width: 320px;
-    height: 115px;
-  }
-  .contentSection {
-    padding: 2rem 0 4rem;
-  }
-  .sectionHeader {
-    margin-bottom: 2.5rem;
-  }
-}
-
-/* Tablet – 768px and below */
-@media (max-width: 768px) {
-  .container {
-    padding: 0 1.25rem;
-  }
-  .lightboxPrevBtn {
-    position: absolute;
-    left: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-right: 0;
-    width: 44px;
-    height: 44px;
-    font-size: 1.5rem;
-    z-index: 10003;
-    background: rgba(255, 255, 255, 0.9);
-  }
-  .lightboxNextBtn {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    margin-left: 0;
-    width: 44px;
-    height: 44px;
-    font-size: 1.5rem;
-    z-index: 10003;
-    background: rgba(255, 255, 255, 0.9);
-  }
-  .lightboxContent {
-    padding: 1rem;
-    max-width: 85%;
-  }
-  .lightboxCloseBtn {
-    top: -10px;
-    right: -10px;
-    width: 32px;
-    height: 32px;
-  }
-  .sectionTitle {
-    font-size: 1.75rem;
-  }
-  .searchWrapper {
-    max-width: 100%;
-  }
-}
-
-/* Mobile – 640px and below */
-@media (max-width: 640px) {
-  .container {
-    padding: 0 1rem;
-  }
-  .tournamentsGrid, .champsGrid, .otherGrid, .galleryGrid, .selectionsGrid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  .sectionTitle {
-    font-size: 1.6rem;
-  }
-  .sectionSubtitle {
-    font-size: 0.92rem;
-  }
-  .tabBtn {
-    font-size: 0.82rem;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-  }
-  .tabNavbar {
-    gap: 0.5rem;
-    padding: 0.65rem 0;
-  }
-  .tabNavbarSection {
-    top: 70px;
-  }
-  .tournamentHeader {
-    padding: 1.5rem;
-  }
-  .tournamentBody {
-    padding: 1.25rem;
-  }
-  .cardTitle {
-    font-size: 1.15rem;
-  }
-  .champMarqueeCard {
-    width: 280px;
-    height: 105px;
-    padding: 1rem;
-  }
-  .champTitle {
-    font-size: 0.95rem;
-  }
-  .champDetail {
-    font-size: 0.78rem;
-  }
-  .selectionCard {
-    min-height: 120px;
-    padding: 1.1rem;
-  }
-  .selectionCardText {
-    font-size: 0.86rem;
-    margin-bottom: 0.65rem;
-  }
-  .otherCard {
-    padding: 1.25rem;
-    min-height: 130px;
-  }
-  .otherTitle {
-    font-size: 1.05rem;
-  }
-  .galleryItem {
-    height: 200px;
-  }
-  .gallerySection {
-    padding: 3rem 0;
-  }
-  .contentSection {
-    padding: 1.5rem 0 3rem;
-  }
-  .sectionHeader {
-    margin-bottom: 2rem;
-  }
-  .searchSection {
-    padding: 1.25rem 0 0.75rem;
-  }
-}
+/* Media Queries temporarily moved for bottom consolidation */
 
 
 /* Lightbox Overlay (Centered Card Style) */
@@ -955,7 +764,127 @@
   transform: scale(1.08);
 }
 
-@media (max-width: 768px) {
+/* ==========================================================================
+   DESKTOP & LARGE LAPTOPS (1440px and above)
+   ========================================================================== */
+
+/* ==========================================================================
+   LAPTOPS & SMALL DESKTOPS (1024px to 1439px)
+   ========================================================================== */
+@media screen and (max-width: 1439px) {
+  .container {
+    max-width: 1100px;
+    padding: 0 2rem;
+  }
+  .tournamentsGrid {
+    gap: 1.5rem;
+  }
+  .champsGrid, .otherGrid, .selectionsGrid {
+    gap: 1.25rem;
+  }
+  .galleryGrid {
+    gap: 1.25rem;
+  }
+  .galleryItem {
+    height: 230px;
+  }
+  .champMarqueeCard {
+    width: 340px;
+  }
+  .sectionTitle {
+    font-size: 2rem;
+  }
+}
+
+/* ==========================================================================
+   TABLETS & PORTRAIT SCREENS (768px to 1023px)
+   ========================================================================== */
+@media screen and (max-width: 1023px) {
+  .container {
+    padding: 0 1.5rem;
+  }
+  .tournamentsGrid, .champsGrid, .otherGrid, .galleryGrid, .selectionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .tabNavbarSection {
+    top: 80px;
+  }
+  .sectionTitle {
+    font-size: 1.9rem;
+  }
+  .tournamentHeader {
+    padding: 2rem;
+  }
+  .tournamentBody {
+    padding: 1.75rem;
+  }
+  .galleryItem {
+    height: 220px;
+  }
+  .gallerySection {
+    padding: 4rem 0;
+  }
+  .champMarqueeCard {
+    width: 320px;
+    height: 115px;
+  }
+  .contentSection {
+    padding: 2rem 0 4rem;
+  }
+  .sectionHeader {
+    margin-bottom: 2.5rem;
+  }
+}
+
+/* ==========================================================================
+   MOBILE DEVICES (767px and below)
+   ========================================================================== */
+@media screen and (max-width: 767px) {
+  .container {
+    padding: 0 1.25rem;
+  }
+  .lightboxPrevBtn {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-right: 0;
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+    z-index: 10003;
+    background: rgba(255, 255, 255, 0.9);
+  }
+  .lightboxNextBtn {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    margin-left: 0;
+    width: 44px;
+    height: 44px;
+    font-size: 1.5rem;
+    z-index: 10003;
+    background: rgba(255, 255, 255, 0.9);
+  }
+  .lightboxContent {
+    padding: 1rem;
+    max-width: 85%;
+  }
+  .lightboxCloseBtn {
+    top: -10px;
+    right: -10px;
+    width: 32px;
+    height: 32px;
+  }
+  .sectionTitle {
+    font-size: 1.75rem;
+  }
+  .searchWrapper {
+    max-width: 100%;
+  }
+
   .lightboxWrapper {
     gap: 0.75rem;
     max-width: 95vw;
@@ -965,13 +894,88 @@
     width: 40px;
     height: 40px;
   }
-  .lightboxContent {
-    padding: 1rem;
-  }
   .lightboxCloseBtn {
     top: -10px;
     right: -10px;
     width: 30px;
     height: 30px;
+  }
+
+  @media (max-width: 640px) {
+    .container {
+      padding: 0 1rem;
+    }
+    .tournamentsGrid, .champsGrid, .otherGrid, .galleryGrid, .selectionsGrid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .sectionTitle {
+      font-size: 1.6rem;
+    }
+    .sectionSubtitle {
+      font-size: 0.92rem;
+    }
+    .tabBtn {
+      font-size: 0.82rem;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+    }
+    .tabNavbar {
+      gap: 0.5rem;
+      padding: 0.65rem 0;
+    }
+    .tabNavbarSection {
+      top: 70px;
+    }
+    .tournamentHeader {
+      padding: 1.5rem;
+    }
+    .tournamentBody {
+      padding: 1.25rem;
+    }
+    .cardTitle {
+      font-size: 1.15rem;
+    }
+    .champMarqueeCard {
+      width: 280px;
+      height: 105px;
+      padding: 1rem;
+    }
+    .champTitle {
+      font-size: 0.95rem;
+    }
+    .champDetail {
+      font-size: 0.78rem;
+    }
+    .selectionCard {
+      min-height: 120px;
+      padding: 1.1rem;
+    }
+    .selectionCardText {
+      font-size: 0.86rem;
+      margin-bottom: 0.65rem;
+    }
+    .otherCard {
+      padding: 1.25rem;
+      min-height: 130px;
+    }
+    .otherTitle {
+      font-size: 1.05rem;
+    }
+    .galleryItem {
+      height: 200px;
+    }
+    .gallerySection {
+      padding: 3rem 0;
+    }
+    .contentSection {
+      padding: 1.5rem 0 3rem;
+    }
+    .sectionHeader {
+      margin-bottom: 2rem;
+    }
+    .searchSection {
+      padding: 1.25rem 0 0.75rem;
+    }
   }
 }

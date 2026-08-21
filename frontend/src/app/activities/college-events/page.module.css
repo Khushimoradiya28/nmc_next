@@ -362,12 +362,14 @@
   font-size: 1rem;
 }
 
-/* ============================================
-   Responsive Breakpoints
-   ============================================ */
+/* ==========================================================================
+   DESKTOP & LARGE LAPTOPS (1440px and above)
+   ========================================================================== */
 
-/* Laptop / Small Desktop */
-@media (max-width: 1280px) {
+/* ==========================================================================
+   LAPTOPS & SMALL DESKTOPS (1024px to 1439px)
+   ========================================================================== */
+@media screen and (max-width: 1439px) {
   .container {
     max-width: 1100px;
     padding: 0 1.75rem;
@@ -391,8 +393,10 @@
   }
 }
 
-/* Tablet Landscape */
-@media (max-width: 1024px) {
+/* ==========================================================================
+   TABLETS & PORTRAIT SCREENS (768px to 1023px)
+   ========================================================================== */
+@media screen and (max-width: 1023px) {
   .container {
     max-width: 960px;
     padding: 0 1.5rem;
@@ -437,8 +441,10 @@
   }
 }
 
-/* Tablet Portrait */
-@media (max-width: 768px) {
+/* ==========================================================================
+   MOBILE DEVICES (767px and below)
+   ========================================================================== */
+@media screen and (max-width: 767px) {
   .container {
     padding: 0 1.25rem;
   }
@@ -539,301 +545,298 @@
     font-size: 0.82rem;
     padding: 0.5rem 1.15rem;
   }
-}
 
-/* Mobile Large */
-@media (max-width: 640px) {
-  .container {
-    padding: 0 1rem;
+  @media (max-width: 640px) {
+    .container {
+      padding: 0 1rem;
+    }
+
+    .eventsGrid {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+
+    .sectionTitle {
+      font-size: 1.5rem;
+    }
+
+    .sectionPill {
+      font-size: 0.72rem;
+      padding: 3px 11px;
+    }
+
+    .statsGrid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .statValue {
+      font-size: 1.8rem;
+    }
+
+    .featuredTitle {
+      font-size: 1.4rem;
+    }
+
+    .featuredDesc {
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .featuredTextCol {
+      padding: 1.5rem;
+      gap: 1rem;
+    }
+
+    .featuredImg {
+      min-height: 220px;
+      height: 220px;
+    }
+
+    .featuredImgTag {
+      top: 0.75rem;
+      left: 0.75rem;
+      font-size: 0.72rem;
+      padding: 4px 10px;
+    }
+
+    .featuredMeta {
+      gap: 0.5rem;
+    }
+
+    .cardImgWrap {
+      height: 200px;
+    }
+
+    .cardBody {
+      padding: 1.25rem;
+      gap: 0.6rem;
+    }
+
+    .cardTitle {
+      font-size: 1.1rem;
+    }
+
+    .cardDesc {
+      font-size: 0.85rem;
+    }
+
+    .filterRow {
+      gap: 0.4rem;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      padding-bottom: 0.5rem;
+      justify-content: flex-start;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .filterRow::-webkit-scrollbar {
+      display: none;
+    }
+
+    .filterBtn {
+      font-size: 0.8rem;
+      padding: 0.45rem 1rem;
+      flex-shrink: 0;
+    }
+
+    .eventsSection {
+      padding: 2rem 0 3.5rem;
+    }
+
+    .featuredSection {
+      padding: 2.5rem 0 1rem;
+    }
   }
 
-  .eventsGrid {
-    grid-template-columns: 1fr;
-    gap: 1.25rem;
+  @media (max-width: 480px) {
+    .container {
+      padding: 0 0.875rem;
+    }
+
+    .statsStrip {
+      padding: 1.5rem 0;
+    }
+
+    .statsGrid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0;
+    }
+
+    .statItem {
+      padding: 1rem 0.75rem;
+    }
+
+    .statValue {
+      font-size: 1.6rem;
+      letter-spacing: -0.5px;
+    }
+
+    .statLabel {
+      font-size: 0.7rem;
+      letter-spacing: 0.3px;
+    }
+
+    .sectionTitle {
+      font-size: 1.35rem;
+    }
+
+    .sectionSubtitle {
+      font-size: 0.85rem;
+    }
+
+    .sectionHeader {
+      margin-bottom: 1.75rem;
+    }
+
+    .featuredCard {
+      border-radius: 16px;
+    }
+
+    .featuredImg {
+      min-height: 180px;
+      height: 180px;
+    }
+
+    .featuredTextCol {
+      padding: 1.25rem;
+      gap: 0.75rem;
+    }
+
+    .featuredTitle {
+      font-size: 1.25rem;
+    }
+
+    .featuredDesc {
+      font-size: 0.84rem;
+      line-height: 1.55;
+    }
+
+    .featuredDate {
+      font-size: 0.78rem;
+    }
+
+    .eventCard {
+      border-radius: 14px;
+    }
+
+    .cardImgWrap {
+      height: 170px;
+    }
+
+    .cardTag {
+      top: 0.6rem;
+      left: 0.6rem;
+      font-size: 0.68rem;
+      padding: 3px 9px;
+    }
+
+    .cardBody {
+      padding: 1rem;
+      gap: 0.5rem;
+    }
+
+    .cardTitle {
+      font-size: 1rem;
+    }
+
+    .cardDesc {
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .cardDate {
+      font-size: 0.72rem;
+    }
+
+    .cardCat {
+      font-size: 0.62rem;
+    }
+
+    .eventsGrid {
+      gap: 1rem;
+    }
+
+    .chipRow {
+      gap: 0.35rem;
+    }
+
+    .chip {
+      font-size: 0.68rem;
+      padding: 3px 8px;
+    }
   }
 
-  .sectionTitle {
-    font-size: 1.5rem;
-  }
+  @media (max-width: 360px) {
+    .container {
+      padding: 0 0.75rem;
+    }
 
-  .sectionPill {
-    font-size: 0.72rem;
-    padding: 3px 11px;
-  }
+    .statsStrip {
+      padding: 1.25rem 0;
+    }
 
-  .statsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+    .statValue {
+      font-size: 1.4rem;
+    }
 
-  .statValue {
-    font-size: 1.8rem;
-  }
+    .statLabel {
+      font-size: 0.65rem;
+    }
 
-  .featuredTitle {
-    font-size: 1.4rem;
-  }
+    .sectionTitle {
+      font-size: 1.2rem;
+    }
 
-  .featuredDesc {
-    font-size: 0.88rem;
-    line-height: 1.6;
-  }
+    .sectionSubtitle {
+      font-size: 0.8rem;
+    }
 
-  .featuredTextCol {
-    padding: 1.5rem;
-    gap: 1rem;
-  }
+    .featuredImg {
+      min-height: 160px;
+      height: 160px;
+    }
 
-  .featuredImg {
-    min-height: 220px;
-    height: 220px;
-  }
+    .featuredTextCol {
+      padding: 1rem;
+      gap: 0.6rem;
+    }
 
-  .featuredImgTag {
-    top: 0.75rem;
-    left: 0.75rem;
-    font-size: 0.72rem;
-    padding: 4px 10px;
-  }
+    .featuredTitle {
+      font-size: 1.15rem;
+    }
 
-  .featuredMeta {
-    gap: 0.5rem;
-  }
+    .featuredDesc {
+      font-size: 0.8rem;
+    }
 
-  .cardImgWrap {
-    height: 200px;
-  }
+    .cardImgWrap {
+      height: 150px;
+    }
 
-  .cardBody {
-    padding: 1.25rem;
-    gap: 0.6rem;
-  }
+    .cardBody {
+      padding: 0.875rem;
+    }
 
-  .cardTitle {
-    font-size: 1.1rem;
-  }
+    .cardTitle {
+      font-size: 0.95rem;
+    }
 
-  .cardDesc {
-    font-size: 0.85rem;
-  }
+    .cardDesc {
+      font-size: 0.78rem;
+    }
 
-  .filterRow {
-    gap: 0.4rem;
-    overflow-x: auto;
-    flex-wrap: nowrap;
-    padding-bottom: 0.5rem;
-    justify-content: flex-start;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-  }
+    .filterBtn {
+      font-size: 0.75rem;
+      padding: 0.4rem 0.85rem;
+    }
 
-  .filterRow::-webkit-scrollbar {
-    display: none;
-  }
+    .eventsSection {
+      padding: 1.5rem 0 3rem;
+    }
 
-  .filterBtn {
-    font-size: 0.8rem;
-    padding: 0.45rem 1rem;
-    flex-shrink: 0;
-  }
-
-  .eventsSection {
-    padding: 2rem 0 3.5rem;
-  }
-
-  .featuredSection {
-    padding: 2.5rem 0 1rem;
-  }
-}
-
-/* Mobile Small */
-@media (max-width: 480px) {
-  .container {
-    padding: 0 0.875rem;
-  }
-
-  .statsStrip {
-    padding: 1.5rem 0;
-  }
-
-  .statsGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 0;
-  }
-
-  .statItem {
-    padding: 1rem 0.75rem;
-  }
-
-  .statValue {
-    font-size: 1.6rem;
-    letter-spacing: -0.5px;
-  }
-
-  .statLabel {
-    font-size: 0.7rem;
-    letter-spacing: 0.3px;
-  }
-
-  .sectionTitle {
-    font-size: 1.35rem;
-  }
-
-  .sectionSubtitle {
-    font-size: 0.85rem;
-  }
-
-  .sectionHeader {
-    margin-bottom: 1.75rem;
-  }
-
-  .featuredCard {
-    border-radius: 16px;
-  }
-
-  .featuredImg {
-    min-height: 180px;
-    height: 180px;
-  }
-
-  .featuredTextCol {
-    padding: 1.25rem;
-    gap: 0.75rem;
-  }
-
-  .featuredTitle {
-    font-size: 1.25rem;
-  }
-
-  .featuredDesc {
-    font-size: 0.84rem;
-    line-height: 1.55;
-  }
-
-  .featuredDate {
-    font-size: 0.78rem;
-  }
-
-  .eventCard {
-    border-radius: 14px;
-  }
-
-  .cardImgWrap {
-    height: 170px;
-  }
-
-  .cardTag {
-    top: 0.6rem;
-    left: 0.6rem;
-    font-size: 0.68rem;
-    padding: 3px 9px;
-  }
-
-  .cardBody {
-    padding: 1rem;
-    gap: 0.5rem;
-  }
-
-  .cardTitle {
-    font-size: 1rem;
-  }
-
-  .cardDesc {
-    font-size: 0.8rem;
-    line-height: 1.5;
-  }
-
-  .cardDate {
-    font-size: 0.72rem;
-  }
-
-  .cardCat {
-    font-size: 0.62rem;
-  }
-
-  .eventsGrid {
-    gap: 1rem;
-  }
-
-  .chipRow {
-    gap: 0.35rem;
-  }
-
-  .chip {
-    font-size: 0.68rem;
-    padding: 3px 8px;
-  }
-}
-
-/* Mobile Extra Small */
-@media (max-width: 360px) {
-  .container {
-    padding: 0 0.75rem;
-  }
-
-  .statsStrip {
-    padding: 1.25rem 0;
-  }
-
-  .statValue {
-    font-size: 1.4rem;
-  }
-
-  .statLabel {
-    font-size: 0.65rem;
-  }
-
-  .sectionTitle {
-    font-size: 1.2rem;
-  }
-
-  .sectionSubtitle {
-    font-size: 0.8rem;
-  }
-
-  .featuredImg {
-    min-height: 160px;
-    height: 160px;
-  }
-
-  .featuredTextCol {
-    padding: 1rem;
-    gap: 0.6rem;
-  }
-
-  .featuredTitle {
-    font-size: 1.15rem;
-  }
-
-  .featuredDesc {
-    font-size: 0.8rem;
-  }
-
-  .cardImgWrap {
-    height: 150px;
-  }
-
-  .cardBody {
-    padding: 0.875rem;
-  }
-
-  .cardTitle {
-    font-size: 0.95rem;
-  }
-
-  .cardDesc {
-    font-size: 0.78rem;
-  }
-
-  .filterBtn {
-    font-size: 0.75rem;
-    padding: 0.4rem 0.85rem;
-  }
-
-  .eventsSection {
-    padding: 1.5rem 0 3rem;
-  }
-
-  .featuredSection {
-    padding: 2rem 0 0.75rem;
+    .featuredSection {
+      padding: 2rem 0 0.75rem;
+    }
   }
 }

@@ -631,11 +631,14 @@
 }
 
 
-/* ═══════════════════════════════════════════════════════════════
-   RESPONSIVE DESIGN
-   ═══════════════════════════════════════════════════════════════ */
+/* ==========================================================================
+   DESKTOP & LARGE LAPTOPS (1440px and above)
+   ========================================================================== */
 
-@media (max-width: 1280px) {
+/* ==========================================================================
+   LAPTOPS & SMALL DESKTOPS (1024px to 1439px)
+   ========================================================================== */
+@media screen and (max-width: 1439px) {
   .container {
     max-width: 1100px;
     padding: 0 2rem;
@@ -646,7 +649,10 @@
   }
 }
 
-@media (max-width: 1024px) {
+/* ==========================================================================
+   TABLETS & PORTRAIT SCREENS (768px to 1023px)
+   ========================================================================== */
+@media screen and (max-width: 1023px) {
   .container {
     padding: 0 1.5rem;
   }
@@ -666,32 +672,35 @@
   }
 }
 
-@media (max-width: 768px) {
+/* ==========================================================================
+   MOBILE DEVICES (767px and below)
+   ========================================================================== */
+@media screen and (max-width: 767px) {
   .ctaCard {
     flex-direction: column;
     text-align: center;
     padding: 2rem 1.5rem;
     gap: 1.5rem;
   }
-}
 
-@media (max-width: 640px) {
-  .container {
-    padding: 0 1rem;
-  }
-  .statsGrid {
-    grid-template-columns: 1fr;
-  }
-  .seasonMonthsGrid {
-    grid-template-columns: 1fr;
-  }
-  .monthCardHeader {
-    padding: 1.25rem 1.5rem;
-  }
-  .monthCardBody {
-    padding: 1.5rem;
-  }
-  .monthCardName {
-    font-size: 1.25rem;
+  @media (max-width: 640px) {
+    .container {
+      padding: 0 1rem;
+    }
+    .statsGrid {
+      grid-template-columns: 1fr;
+    }
+    .seasonMonthsGrid {
+      grid-template-columns: 1fr;
+    }
+    .monthCardHeader {
+      padding: 1.25rem 1.5rem;
+    }
+    .monthCardBody {
+      padding: 1.5rem;
+    }
+    .monthCardName {
+      font-size: 1.25rem;
+    }
   }
 }
