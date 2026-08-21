@@ -180,8 +180,8 @@ export default function InfrastructureSection() {
         </div>
 
         <div className={`${styles.facilitiesSliderWrap} facilities-slider-wrap`}>
-          <button 
-            className={`${styles.sliderArrow} ${styles.sliderArrowLeft} slider-arrow slider-arrow-left`} 
+          <button
+            className={`${styles.sliderArrow} ${styles.sliderArrowLeft} slider-arrow slider-arrow-left`}
             id="facilityPrev"
             onClick={handlePrev}
           >
@@ -203,8 +203,8 @@ export default function InfrastructureSection() {
             ))}
           </div>
 
-          <button 
-            className={`${styles.sliderArrow} ${styles.sliderArrowRight} slider-arrow slider-arrow-right`} 
+          <button
+            className={`${styles.sliderArrow} ${styles.sliderArrowRight} slider-arrow slider-arrow-right`}
             id="facilityNext"
             onClick={handleNext}
           >

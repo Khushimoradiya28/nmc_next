@@ -41,7 +41,7 @@ export default function RootLayout({ children }) {
         <SmoothScrollProvider>
           {children}
         </SmoothScrollProvider>
-        
+
         <ScrollToTop />
         <ScriptLoader />
       </body>

@@ -93,9 +93,9 @@ export default function AwardsSection() {
         </div>
 
         <div className={`${styles.awardsSliderWrap} awards-slider-wrap`}>
-          <button 
-            className={`${styles.awardsArrow} ${styles.awardsArrowLeft} awards-arrow awards-arrow-left`} 
-            id="awardPrev" 
+          <button
+            className={`${styles.awardsArrow} ${styles.awardsArrowLeft} awards-arrow awards-arrow-left`}
+            id="awardPrev"
             aria-label="Previous Award"
             onClick={handlePrev}
           >
@@ -105,12 +105,12 @@ export default function AwardsSection() {
             </svg>
           </button>
 
-          <div 
+          <div
             className={styles.carouselWrapper}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
           >
-            <div 
+            <div
               className={styles.awardsGallery}
               style={{
                 transform: `translate3d(calc(-${currentIndex} * var(--slide-step)), 0, 0)`,
@@ -132,9 +132,9 @@ export default function AwardsSection() {
             </div>
           </div>
 
-          <button 
-            className={`${styles.awardsArrow} ${styles.awardsArrowRight} awards-arrow awards-arrow-right`} 
-            id="awardNext" 
+          <button
+            className={`${styles.awardsArrow} ${styles.awardsArrowRight} awards-arrow awards-arrow-right`}
+            id="awardNext"
             aria-label="Next Award"
             onClick={handleNext}
           >

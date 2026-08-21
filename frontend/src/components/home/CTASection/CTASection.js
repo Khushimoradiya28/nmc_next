@@ -102,7 +102,8 @@ export default function CTASection() {
               animate={{ scale: [1, 1.03, 1] }}
               transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
             >
-              🎓 Admissions Open 2026-27
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:'inline-block', verticalAlign:'middle', marginRight:'6px', marginTop:'-2px'}}><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+              Admissions Open 2026-27
             </motion.div>
 
             <motion.div
@@ -139,7 +140,8 @@ export default function CTASection() {
 
             {/* Urgency text below description */}
             <p className={styles.urgencyText}>
-              ⏰ Limited seats available — Apply before September 30, 2026
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{display:'inline-block', verticalAlign:'middle', marginRight:'6px', marginTop:'-2px'}}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              Limited seats available — Apply before September 30, 2026
             </p>
 
             <motion.div 
