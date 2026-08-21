@@ -7,6 +7,13 @@
   overflow: hidden;
 }
 
+.container {
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 /* HEADER STYLES */
 .headerArea {
   text-align: center;
@@ -205,44 +212,235 @@
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
 }
 
-/* RESPONSIVE BREAKPOINTS */
-@media (max-width: 992px) {
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+@media (max-width: 1799px) {
   .cardsGrid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
+    gap: 22px;
+  }
+  .card {
+    height: 440px;
   }
 }
 
-@media (max-width: 640px) {
-  .facultyWrapper {
-    padding: 60px 16px;
-  }
-
+@media (max-width: 1599px) {
   .cardsGrid {
-    display: flex;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    padding-bottom: 24px;
-    gap: 16px;
-    margin: 0 -16px;
-    padding-left: 16px;
-    padding-right: 16px;
-    scrollbar-width: none; /* Firefox */
+    gap: 20px;
   }
-
-  .cardsGrid::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
-  }
-  
   .card {
-    min-width: 85%;
-    max-width: 85%;
     height: 420px;
-    scroll-snap-align: center;
-    flex-shrink: 0;
   }
+  .mainHeading {
+    font-size: 34px;
+  }
+}
 
+@media (max-width: 1408px) {
+  .facultyWrapper {
+    padding: 70px 24px;
+  }
+  .card {
+    height: 400px;
+  }
+  .mainHeading {
+    font-size: 32px;
+  }
+  .facultyName {
+    font-size: 22px;
+  }
+  .quote {
+    font-size: 13.5px;
+  }
+}
+
+@media (max-width: 1216px) {
+  .cardsGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .card {
+    height: 420px;
+  }
+  .mainHeading {
+    font-size: 30px;
+  }
+  .headerArea {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .facultyWrapper {
+    padding: 60px 20px;
+  }
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  .card {
+    height: 400px;
+  }
   .mainHeading {
     font-size: 28px;
   }
+  .description {
+    font-size: 14px;
+  }
+  .tabBtn {
+    font-size: 13px;
+    padding: 10px 12px;
+  }
 }
+
+@media (max-width: 768px) {
+  .facultyWrapper {
+    padding: 50px 16px;
+  }
+  .cardsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .card {
+    height: 380px;
+  }
+  .mainHeading {
+    font-size: 26px;
+  }
+  .headerArea {
+    margin-bottom: 32px;
+  }
+  .tabContainer {
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .tabBtn {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+  .facultyName {
+    font-size: 20px;
+  }
+  .quote {
+    font-size: 13px;
+    margin-bottom: 16px;
+  }
+  .badge {
+    font-size: 10.5px;
+    padding: 3px 10px;
+  }
+  .cardOverlay {
+    padding: 24px 20px;
+  }
+}
+
+@media (max-width: 575px) {
+  .cardsGrid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    margin: 0;
+    padding: 0;
+  }
+  .card {
+    min-width: 100%;
+    max-width: 100%;
+    height: 400px;
+    scroll-snap-align: unset;
+    flex-shrink: unset;
+  }
+  .mainHeading {
+    font-size: 24px;
+  }
+  .tabContainer {
+    gap: 8px;
+  }
+  .tabBtn {
+    font-size: 11.5px;
+    padding: 8px 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .facultyWrapper {
+    padding: 40px 14px;
+  }
+  .card {
+    height: 380px;
+  }
+  .mainHeading {
+    font-size: 22px;
+  }
+  .description {
+    font-size: 13px;
+  }
+  .facultyName {
+    font-size: 19px;
+  }
+  .quote {
+    font-size: 12.5px;
+    margin-bottom: 14px;
+  }
+  .cardOverlay {
+    padding: 20px 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .card {
+    height: 360px;
+  }
+  .mainHeading {
+    font-size: 20px;
+  }
+  .tabBtn {
+    font-size: 11px;
+    padding: 7px 8px;
+  }
+  .facultyName {
+    font-size: 18px;
+  }
+  .badge {
+    font-size: 10px;
+    padding: 3px 8px;
+  }
+}
+
+@media (max-width: 380px) {
+  .facultyWrapper {
+    padding: 36px 12px;
+  }
+  .card {
+    height: 340px;
+  }
+  .mainHeading {
+    font-size: 19px;
+  }
+  .headerArea {
+    margin-bottom: 28px;
+  }
+  .quote {
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .card {
+    height: 320px;
+  }
+  .mainHeading {
+    font-size: 18px;
+  }
+  .facultyName {
+    font-size: 17px;
+  }
+  .cardOverlay {
+    padding: 16px 14px;
+  }
+  .badge {
+    font-size: 9.5px;
+    padding: 2px 7px;
+  }
+}
+

@@ -58,31 +58,159 @@
   font-size: 1.15rem;
   font-weight: 700;
   color: var(--gray-900);
-  margin-bottom: .4rem;
+  margin-bottom: 0.4rem;
+}
+
+@media (max-width: 1799px) {
+  .facilityCard {
+    flex: 0 0 calc(25% - 18px);
+  }
+}
+
+@media (max-width: 1599px) {
+  .facilitiesGrid {
+    gap: 20px;
+  }
+  .facilityCard {
+    flex: 0 0 calc(25% - 15px);
+  }
+}
+
+@media (max-width: 1408px) {
+  .facilityCard {
+    flex: 0 0 calc(25% - 15px);
+  }
+  .facilityImg {
+    height: 180px;
+  }
+}
+
+@media (max-width: 1216px) {
+  .facilityCard {
+    flex: 0 0 calc(33.333% - 16px);
+  }
+  .facilitiesGrid {
+    gap: 20px;
+  }
 }
 
 @media (max-width: 1024px) {
   .facilityCard {
-    flex: 0 0 calc(33.333% - 16px); /* 3 cards */
+    flex: 0 0 calc(50% - 10px);
+  }
+  .facilityImg {
+    height: 170px;
+  }
+  .facilityContent {
+    padding: 1.2rem;
+  }
+  .facilityTitle {
+    font-size: 1.05rem;
   }
 }
 
 @media (max-width: 768px) {
+  .sectionTitle {
+    font-size: 30px;
+  }
+  .sectionHeader {
+    margin: 0 auto 1rem;
+  }
+  .sectionDescription {
+    font-size: 14px;
+    line-height: 24px;
+  }
   .facilityCard {
-    flex: 0 0 calc(50% - 12px); /* 2 cards on tablet */
+    flex: 0 0 100%;
+    min-width: 100%;
+  }
+  .facilitiesGrid {
+    gap: 16px;
+    padding: 10px 0;
+    scroll-snap-type: x mandatory;
+  }
+  .facilitiesSliderWrap {
+    display: block;
+  }
+  .desktopArrow {
+    display: none !important;
+  }
+  .mobileArrowsWrap {
+    display: flex !important;
+  }
+  .facilitiesGrid {
+    order: -1;
+    width: 100%;
+  }
+  .facilityImg {
+    height: 200px;
+  }
+  .facilityContent {
+    padding: 1rem;
+  }
+  .facilityTitle {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .sectionTitle {
+    font-size: 24px;
+  }
+  .facilityImg {
+    height: 180px;
+  }
+  .mobileArrowsWrap {
+    margin-top: 20px !important;
   }
 }
 
 @media (max-width: 480px) {
-  .facilityCard {
-    flex: 0 0 100%; /* 1 card on mobile */
+  .facilityImg {
+    height: 160px;
+  }
+  .facilitiesGrid {
+    padding: 10px 12px;
+  }
+}
+
+@media (max-width: 420px) {
+  .facilityContent {
+    padding: 0.9rem;
+  }
+  .facilityTitle {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .facilityImg {
+    height: 150px;
+  }
+}
+
+@media (max-width: 360px) {
+  .facilityImg {
+    height: 140px;
+  }
+  .facilityTitle {
+    font-size: 0.9rem;
   }
 }
 
 .sliderArrow {
-  background: var(--color-primary, #B00000) !important;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--color-primary, #b00000) !important;
   color: var(--white, #ffffff) !important;
-  border-color: var(--color-primary, #B00000) !important;
+  border-color: var(--color-primary, #b00000) !important;
   box-shadow: 0 4px 14px rgba(176, 0, 0, 0.2) !important;
   transition: all 0.3s ease !important;
 }
@@ -92,4 +220,30 @@
   border-color: var(--color-primary-dark, #800000) !important;
   color: var(--white, #ffffff) !important;
   transform: scale(1.08) !important;
+}
+
+/* Mobile arrows - hidden on desktop, row below slider on mobile */
+.mobileArrows {
+  display: none;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.mobileArrows .sliderArrow {
+  flex-shrink: 0;
+}
+
+.mobileArrowsWrap {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.desktopArrow {
+  flex-shrink: 0;
 }

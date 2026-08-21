@@ -1155,3 +1155,43 @@
   background: var(--gold-50);
 }
 
+
+
+/* ===== SECTION TITLE & DESCRIPTION RESPONSIVE ===== */
+@media (max-width: 1216px) {
+  .sectionTitle { font-size: 30px; }
+}
+@media (max-width: 1024px) {
+  .sectionTitle { font-size: 28px; }
+  .sectionDescription { font-size: 14px; }
+  .digiCardsRow { gap: 1.25rem; }
+  .digiCardTitle { font-size: 1.05rem; }
+}
+@media (max-width: 768px) {
+  .sectionTitle { font-size: 26px; }
+  .sectionDescription { font-size: 13px; line-height: 22px; }
+  .sectionHeader { margin-bottom: 1.5rem; }
+  .digiCardInner { padding: 1.75rem 1.5rem; }
+  .testiFeaturedQuote { font-size: 0.85rem; }
+  .testiStudentQuote { font-size: 0.85rem; }
+}
+@media (max-width: 575px) {
+  .sectionTitle { font-size: 24px; }
+  .digiCard { border-radius: 1.15rem; }
+  .testiArrow { width: 38px; height: 38px; }
+}
+@media (max-width: 480px) {
+  .sectionTitle { font-size: 22px; }
+  .digiCardText { font-size: 0.82rem; }
+  .studTestiQuote { font-size: 0.85rem; }
+}
+@media (max-width: 420px) {
+  .sectionTitle { font-size: 20px; }
+  .digiCardInner { padding: 1.5rem 1.25rem; }
+  .testiAuthorName { font-size: 0.88rem; }
+}
+@media (max-width: 360px) {
+  .sectionTitle { font-size: 18px; }
+  .digiCardTitle { font-size: 0.95rem; }
+  .digiCardText { font-size: 0.78rem; }
+}
