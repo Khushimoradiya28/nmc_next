@@ -1,176 +1,537 @@
-.calendarSection {
-  background: #ffffff;
-  padding: 5rem 0;
+/* ═══════════════════════════════════════════════════════════════
+   YEAR CALENDAR PAGE - Academic Calendar Design
+   Nandkunvarba Mahila College | Existing Theme Matcher
+   Colors: Red (#B00000) + Gold (#F4B000) + Clean Backgrounds
+   Animations: whileHover, transition, fade-ins
+═══════════════════════════════════════════════════════════════ */
+
+.mainWrapper {
+  background-color: var(--color-background, #ffffff);
+  min-height: 100vh;
 }
 
 .container {
   width: 100%;
-  max-width: 1320px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: 0 1.5rem;
+  padding: 0 2rem;
   box-sizing: border-box;
 }
 
-.downloadRibbon {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--color-bg-alt, #FFF8E6);
-  border: 1px solid var(--color-gray-100, #e2e8f0);
-  padding: 1.5rem 2rem;
-  border-radius: 16px;
-  margin-bottom: 3.5rem;
-  flex-wrap: wrap;
-  gap: 16px;
+
+/* Section Header - Matching college-events */
+.sectionHeader {
+  text-align: center;
+  margin-bottom: 3rem;
 }
 
-.legend {
+.sectionPill {
+  display: inline-block;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--color-primary, #B00000);
+  background: rgba(176, 0, 0, 0.07);
+  border: 1px solid rgba(176, 0, 0, 0.15);
+  padding: 4px 14px;
+  border-radius: 20px;
+  margin-bottom: 1rem;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: var(--color-black, #111111);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.5px;
+}
+
+.sectionTitle span {
+  color: var(--color-primary, #B00000);
+}
+
+.sectionSubtitle {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 1rem;
+  color: var(--color-gray-500, #555555);
+  margin: 0;
+}
+
+
+/* ── MONTH-BY-MONTH CALENDAR SECTION ── */
+.calendarSection {
+  padding: 4rem 0 6rem;
+}
+
+.tabNavbarSection {
+  background-color: #ffffff;
+  border-bottom: 1px solid #f1f5f9;
+  position: sticky;
+  top: 90px;
+  z-index: 99;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.02);
+}
+
+.tabNavbar {
   display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding: 1rem 0;
+  scrollbar-width: none; /* Firefox */
+  justify-content: center;
+}
+
+.tabNavbar::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+.tabBtn {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-gray-500, #555555);
+  background: var(--color-gray-50, #f9fafb);
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  outline: none;
+}
+
+.tabBtn:focus {
+  outline: none;
+}
+
+.tabBtn:not(.activeTabBtn):hover {
+  background: var(--color-gray-100, #f3f4f6);
+  color: var(--color-black, #111111);
+}
+
+.activeTabBtn {
+  background: var(--color-primary, #B00000) !important;
+  color: #ffffff !important;
+  border-color: var(--color-primary, #B00000) !important;
+  box-shadow: 0 4px 14px rgba(176, 0, 0, 0.25);
+}
+
+.activeTabBtn:hover {
+  background: var(--color-primary, #B00000) !important;
+  border-color: var(--color-primary, #B00000) !important;
+  color: #ffffff !important;
+}
+
+.legendRow {
+  display: flex;
+  justify-content: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+  margin-bottom: 3.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-gray-200, #e5e7eb);
 }
 
 .legendItem {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 0.88rem;
-  color: var(--color-gray-600, #475569);
-  font-weight: 600;
+  gap: 6px;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--color-gray-500, #555555);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.dot {
-  width: 10px;
-  height: 10px;
+.legendDot {
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
   display: inline-block;
 }
 
-.exam {
-  background: #ef4444; /* Red = exam */
+.legendAcademic {
+  background: var(--color-info, #2563eb);
 }
 
-.event {
-  background: #f59e0b; /* Yellow = event */
+.legendExam {
+  background: var(--color-error, #dc2626);
 }
 
-.holiday {
-  background: #10b981; /* Green = holiday */
+.legendEvent {
+  background: var(--color-secondary, #F4B000);
 }
 
-.downloadBtn {
-  background: var(--color-primary, #B00000);
-  color: #ffffff;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 700;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(176, 0, 0, 0.25);
-  border: none;
+.legendHoliday {
+  background: var(--color-success, #16a34a);
 }
 
-.downloadBtn:hover {
-  background: #ffffff;
-  color: var(--color-primary, #B00000);
-  transform: scale(1.02);
-  box-shadow: 0 6px 20px rgba(176, 0, 0, 0.1);
-  border: 1px solid var(--color-primary, #B00000);
+/* Seasons Timeline Layout */
+.seasonsContainer {
+  margin-top: 3.5rem;
 }
 
-/* Grid Matrix */
-.grid {
+.seasonBlock {
+  margin-bottom: 5.5rem;
+}
+
+.seasonHeaderRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 2.5rem;
+  position: relative;
+}
+
+.seasonHeaderBadge {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.seasonHeaderTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--color-black, #111111);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.5px;
+}
+
+.seasonHeaderDesc {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-gray-500, #555555);
+}
+
+.seasonHeaderLine {
+  width: 100%;
+  height: 2px;
+  margin-top: 0.25rem;
+}
+
+.seasonMonthsGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 4rem;
 }
 
 .monthCard {
-  background: #ffffff;
-  border: 1px solid var(--color-gray-100, #e2e8f0);
-  border-radius: 16px;
+  background-color: var(--color-white, #ffffff);
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: 18px;
   overflow: hidden;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--shadow-md, 0 4px 6px -1px rgba(0, 0, 0, 0.08));
   display: flex;
   flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.monthHeader {
-  background: var(--color-primary, #B00000);
-  padding: 1.25rem;
-  text-align: center;
+.monthCard:hover {
+  box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.08));
+  border-color: var(--color-gray-300, #d1d5db);
 }
 
-.monthHeader h3 {
-  font-family: var(--font-heading, serif);
+.monthCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.25rem;
+  background: linear-gradient(135deg, var(--color-gray-50, #f9fafb) 0%, var(--color-white, #ffffff) 100%);
+  border-bottom: 1px solid var(--color-gray-100, #f3f4f6);
+}
+
+.monthCardTitleWrap {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.monthCardName {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
   font-size: 1.2rem;
-  color: #ffffff;
-  margin: 0;
-  font-weight: 700;
+  font-weight: 900;
+  color: var(--color-black, #111111);
 }
 
-.monthBody {
-  padding: 1.5rem;
-  flex-grow: 1;
+.monthCardYear {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--color-gray-400, #9ca3af);
 }
 
+.monthCardBadge {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+.monthCardBody {
+  padding: 1.25rem;
+}
+
+/* Event List Styling */
 .eventList {
   list-style: none;
   padding: 0;
   margin: 0;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 0.75rem;
 }
 
 .eventItem {
-  font-size: 0.9rem;
-  color: var(--color-gray-600, #475569);
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: var(--color-gray-50, #f9fafb);
+  border: 1px solid var(--color-gray-100, #f3f4f6);
+  transition: all 0.2s ease;
+}
+
+.eventItem:hover {
+  background: var(--color-white, #ffffff);
+  box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.06));
+  border-color: var(--color-gray-200, #e5e7eb);
+  transform: translateY(-2px);
+}
+
+.eventText {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-gray-700, #374151);
   line-height: 1.4;
+  flex: 1;
+}
+
+.eventDateBadge {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  text-align: center;
+  min-width: 60px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.badgeType_academic {
+  background: #eff6ff;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.badgeType_exam {
+  background: #fef2f2;
+  color: #991b1b;
+  border: 1px solid #fca5a5;
+}
+
+.badgeType_event {
+  background: #fffbeb;
+  color: #92400e;
+  border: 1px solid #fde68a;
+}
+
+.badgeType_holiday {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.noEventsPlaceholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1rem;
+  background: var(--color-gray-50, #f9fafb);
+  border: 1px dashed var(--color-gray-200, #e5e7eb);
+  border-radius: 12px;
+  text-align: center;
+  color: var(--color-gray-400, #9ca3af);
+}
+
+.noEventsIcon {
+  font-size: 1.25rem;
+  margin-bottom: 0.25rem;
+  opacity: 0.65;
+}
+
+.noEventsText {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-gray-400, #9ca3af);
+}
+
+
+/* ── DOWNLOAD CTA ── */
+.ctaSection {
+  padding: 5rem 0 6rem;
+  background: var(--color-white, #ffffff);
+  border-top: 1px solid var(--color-gray-100, #f3f4f6);
+}
+
+.ctaCard {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding: 3rem 4rem;
+  background: linear-gradient(135deg, var(--color-black, #111111) 0%, var(--color-gray-800, #1f2937) 100%);
+  border-radius: 24px;
   position: relative;
-  padding-left: 18px;
+  overflow: hidden;
+  box-shadow: var(--shadow-xl, 0 20px 25px -5px rgba(0, 0, 0, 0.1));
 }
 
-.eventItem::before {
-  content: "";
+.ctaCard::before {
+  content: '';
   position: absolute;
-  left: 0;
-  top: 6px;
-  width: 8px;
-  height: 8px;
+  top: -50%;
+  right: -20%;
+  width: 350px;
+  height: 350px;
   border-radius: 50%;
+  background: radial-gradient(circle, rgba(244, 176, 0, 0.08) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.eventItem.exam::before {
-  background: #ef4444;
+.ctaCard::after {
+  content: '';
+  position: absolute;
+  bottom: -30%;
+  left: -10%;
+  width: 250px;
+  height: 250px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(176, 0, 0, 0.15) 0%, transparent 70%);
+  pointer-events: none;
 }
 
-.eventItem.event::before {
-  background: #f59e0b;
+.ctaContent {
+  position: relative;
+  z-index: 10;
 }
 
-.eventItem.holiday::before {
-  background: #10b981;
+.ctaTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: var(--color-white, #ffffff);
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.5px;
 }
 
-/* ── RESPONSIVE MEDIA BREAKPOINTS ── */
+.ctaText {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.65);
+  margin: 0;
+  line-height: 1.6;
+}
+
+.ctaButton {
+  position: relative;
+  z-index: 10;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.9rem 1.8rem;
+  background: linear-gradient(135deg, var(--color-primary, #B00000) 0%, var(--color-primary-light, #d11c1c) 100%);
+  color: var(--color-white, #ffffff);
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  border-radius: 12px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(176, 0, 0, 0.25);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ctaButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(176, 0, 0, 0.35);
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN
+═══════════════════════════════════════════════════════════════ */
+
+@media (max-width: 1280px) {
+  .container {
+    max-width: 1100px;
+    padding: 0 2rem;
+  }
+}
+
 @media (max-width: 1024px) {
-  .grid {
+  .container {
+    padding: 0 1.5rem;
+  }
+  .seasonMonthsGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .ctaCard {
+    flex-direction: column;
+    text-align: center;
+    padding: 2rem 1.5rem;
     gap: 1.5rem;
   }
 }
 
 @media (max-width: 640px) {
-  .grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+  .container {
+    padding: 0 1rem;
   }
-  .downloadRibbon {
-    padding: 1.25rem;
+  .seasonMonthsGrid {
+    grid-template-columns: 1fr;
+  }
+  .monthCardHeader {
+    padding: 1.25rem 1.5rem;
+  }
+  .monthCardBody {
+    padding: 1.5rem;
+  }
+  .monthCardName {
+    font-size: 1.25rem;
   }
 }

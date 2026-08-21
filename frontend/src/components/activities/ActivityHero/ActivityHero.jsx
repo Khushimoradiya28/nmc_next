@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import styles from './ActivityHero.module.css';
 
-export default function ActivityHero({ title, subtitle, bgImage = '/assets/home/hero/2.jpg', height = '45vh', breadcrumbs = [] }) {
+export default function ActivityHero({ title, subtitle, bgImage = '/assets/home/hero/2.jpg', height = '45vh', breadcrumbs = [], decorative = false }) {
   return (
     <section className={styles.heroSection} style={{ height }}>
       <div className={styles.heroBgImage}>
@@ -20,6 +20,20 @@ export default function ActivityHero({ title, subtitle, bgImage = '/assets/home/
         />
       </div>
       <div className={styles.heroOverlay}></div>
+
+      {/* Decorative gold accent elements */}
+      {decorative && (
+        <div className={styles.heroDecorative} aria-hidden="true">
+          <div className={styles.decoCircle1}></div>
+          <div className={styles.decoCircle2}></div>
+          <div className={styles.decoLine}></div>
+          <div className={styles.decoGlow}></div>
+          <div className={styles.decoDots}>
+            <span></span><span></span><span></span><span></span><span></span>
+          </div>
+        </div>
+      )}
+
       <div className={styles.container}>
         <motion.div 
           className={styles.heroContent}
