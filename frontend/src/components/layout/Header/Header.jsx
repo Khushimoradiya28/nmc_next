@@ -9,26 +9,53 @@ import styles from './Header.module.css';
 export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileActive, setMobileActive] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(null);
+  const [isMobileView, setIsMobileView] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 50) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 50);
     };
+
+    const handleResize = () => {
+      setIsMobileView(window.innerWidth <= 1216);
+    };
+
+    handleResize();
     window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const toggleMobileNav = () => {
-    setMobileActive(!mobileActive);
+    const next = !mobileActive;
+    setMobileActive(next);
+    setOpenDropdown(null);
+    document.body.style.overflow = next ? 'hidden' : '';
+    if (window.__lenis) {
+      next ? window.__lenis.stop() : window.__lenis.start();
+    }
   };
 
   const closeMobileNav = () => {
     setMobileActive(false);
+    setOpenDropdown(null);
+    document.body.style.overflow = '';
+    if (window.__lenis) {
+      window.__lenis.start();
+    }
+  };
+
+  const toggleDropdown = (id, e) => {
+    if (isMobileView) {
+      e.preventDefault();
+      e.stopPropagation();
+      setOpenDropdown(openDropdown === id ? null : id);
+    }
   };
 
   return (
@@ -47,7 +74,11 @@ export default function Header() {
         </Link>
 
         {/* Navigation Links */}
-        <nav className={`${styles.heroNav} ${mobileActive ? styles.active : ''}`}>
+        <nav 
+          className={`${styles.heroNav} ${mobileActive ? styles.active : ''}`}
+          onWheel={(e) => e.stopPropagation()}
+          data-lenis-prevent
+        >
           <ul className={styles.heroNavMenu}>
             <li>
               <Link 
@@ -59,10 +90,13 @@ export default function Header() {
               </Link>
             </li>
             
-            <li className={styles.heroNavDropdown}>
-              <span className={`${styles.heroNavLink} ${pathname.startsWith('/about') ? styles.activeLink : ''}`}>
+            <li className={`${styles.heroNavDropdown} ${openDropdown === 'about' ? styles.dropdownOpen : ''}`}>
+              <span 
+                className={`${styles.heroNavLink} ${pathname.startsWith('/about') ? styles.activeLink : ''}`}
+                onClick={(e) => toggleDropdown('about', e)}
+              >
                 ABOUT US 
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </span>
@@ -103,33 +137,20 @@ export default function Header() {
               </Link>
             </li>
 
-            <li className={styles.heroNavDropdown}>
-              <Link 
-                href="/activities" 
+            <li className={`${styles.heroNavDropdown} ${openDropdown === 'activities' ? styles.dropdownOpen : ''}`}>
+              <span 
                 className={`${styles.heroNavLink} ${pathname.startsWith('/activities') ? styles.activeLink : ''}`}
-                onClick={closeMobileNav}
+                onClick={(e) => toggleDropdown('activities', e)}
               >
                 ACTIVITIES 
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
-              </Link>
+              </span>
               <ul className={styles.heroDropdownMenu}>
-                <li>
-                  <Link href="/activities/by-club" onClick={closeMobileNav}>
-                    By Club
-                  </Link>
-                </li>
-                <li className={styles.heroSubDropdown}>
-                  <Link href="/activities/by-department" onClick={closeMobileNav}>
-                    By Department
-                  </Link>
-                </li>
-                <li className={styles.heroSubDropdown}>
-                  <Link href="/activities/orientation" onClick={closeMobileNav}>
-                    Orientation Programs
-                  </Link>
-                </li>
+                <li><Link href="/activities/by-club" onClick={closeMobileNav}>By Club</Link></li>
+                <li><Link href="/activities/by-department" onClick={closeMobileNav}>By Department</Link></li>
+                <li><Link href="/activities/orientation" onClick={closeMobileNav}>Orientation Programs</Link></li>
                 <li><Link href="/activities/sports" onClick={closeMobileNav}>Sports</Link></li>
                 <li><Link href="/activities/college-events" onClick={closeMobileNav}>College Events</Link></li>
                 <li><Link href="/activities/year-calendar" onClick={closeMobileNav}>Year-Calendar</Link></li>
@@ -137,10 +158,13 @@ export default function Header() {
               </ul>
             </li>
 
-            <li className={styles.heroNavDropdown}>
-              <span className={`${styles.heroNavLink} ${pathname.startsWith('/toppers') ? styles.activeLink : ''}`}>
+            <li className={`${styles.heroNavDropdown} ${openDropdown === 'toppers' ? styles.dropdownOpen : ''}`}>
+              <span 
+                className={`${styles.heroNavLink} ${pathname.startsWith('/toppers') ? styles.activeLink : ''}`}
+                onClick={(e) => toggleDropdown('toppers', e)}
+              >
                 TOPPERS
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </span>
@@ -150,10 +174,13 @@ export default function Header() {
               </ul>
             </li>
 
-            <li className={styles.heroNavDropdown}>
-              <span className={`${styles.heroNavLink} ${pathname.startsWith('/student-corner') ? styles.activeLink : ''}`}>
+            <li className={`${styles.heroNavDropdown} ${openDropdown === 'student' ? styles.dropdownOpen : ''}`}>
+              <span 
+                className={`${styles.heroNavLink} ${pathname.startsWith('/student-corner') ? styles.activeLink : ''}`}
+                onClick={(e) => toggleDropdown('student', e)}
+              >
                 STUDENT CORNER 
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </span>
@@ -180,10 +207,13 @@ export default function Header() {
               </Link>
             </li>
             
-            <li className={styles.heroNavDropdown}>
-              <span className={`${styles.heroNavLink} ${pathname.startsWith('/iqac') ? styles.activeLink : ''}`}>
+            <li className={`${styles.heroNavDropdown} ${openDropdown === 'iqac' ? styles.dropdownOpen : ''}`}>
+              <span 
+                className={`${styles.heroNavLink} ${pathname.startsWith('/iqac') ? styles.activeLink : ''}`}
+                onClick={(e) => toggleDropdown('iqac', e)}
+              >
                 IQAC
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </span>
@@ -198,17 +228,24 @@ export default function Header() {
               </ul>
             </li>
 
-            <li className={styles.heroNavDropdown}>
-              <span className={`${styles.heroNavLink} ${pathname.startsWith('/contact') || pathname.startsWith('/alumni') ? styles.activeLink : ''}`}>
+            <li className={`${styles.heroNavDropdown} ${openDropdown === 'contact' ? styles.dropdownOpen : ''}`}>
+              <span 
+                className={`${styles.heroNavLink} ${pathname.startsWith('/contact') || pathname.startsWith('/alumni') ? styles.activeLink : ''}`}
+                onClick={(e) => toggleDropdown('contact', e)}
+              >
                 CONTACT US
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="6 9 12 15 18 9"></polyline>
                 </svg>
               </span>
               <ul className={styles.heroDropdownMenu}>
                 <li><Link href="/contact" onClick={closeMobileNav}>Contact Us</Link></li>
-                <li className={styles.heroSubDropdown}>
-                  <a href="#" className={styles.heroSubMenuToggle} onClick={(e) => { e.preventDefault(); closeMobileNav(); }}>
+                <li className={`${styles.heroSubDropdown} ${openDropdown === 'alumni' ? styles.dropdownOpen : ''}`}>
+                  <a 
+                    href="#" 
+                    className={styles.heroSubMenuToggle} 
+                    onClick={(e) => { e.preventDefault(); toggleDropdown('alumni', e); }}
+                  >
                     Alumni Legacy
                     <span>»</span>
                   </a>
