@@ -5,13 +5,6 @@ import Image from 'next/image';
 import styles from './Footer.module.css';
 
 export default function Footer() {
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
-
   return (
     <footer className={styles.footer} id="quick-links">
       <div className={styles.container}>
@@ -160,12 +153,12 @@ export default function Footer() {
             </div>
 
             {/* Expert Button with Glow Aura wrapper */}
-            <div className={styles.ctaWrapper}>
+            {/* <div className={styles.ctaWrapper}>
               <div className={styles.ctaGlowAura} />
               <button className={styles.ctaExpertBtn}>
                 Speech with Expert / Admission Help
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
 
@@ -177,15 +170,6 @@ export default function Footer() {
           
           <div className={styles.bottomRight}>
             <span className={styles.bottomAffiliation}>Affiliated to Maharaja Krishnakumarsinhji Bhavnagar University (MKBU).</span>
-            <button 
-              className={styles.scrollTopBtn} 
-              onClick={scrollToTop} 
-              aria-label="Scroll to top"
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="18 15 12 9 6 15" />
-              </svg>
-            </button>
           </div>
         </div>
       </div>

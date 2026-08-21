@@ -60,3 +60,25 @@
 .backToTopBtn:hover .backToTopArrow {
     transform: translateY(-2px);
 }
+
+
+@media (max-width: 1216px) {
+    .backToTopBtn {
+        width: 35px;
+        height: 35px;
+        bottom: 3rem;
+        right: 1rem;
+    }
+
+    .progressRingSvg {
+        width: 31px;
+        height: 31px;
+        top: 2px;
+        left: 2px;
+    }
+
+    .backToTopArrow svg {
+        width: 14px;
+        height: 14px;
+    }
+}

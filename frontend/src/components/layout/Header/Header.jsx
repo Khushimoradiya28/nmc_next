@@ -60,6 +60,7 @@ export default function Header() {
 
   return (
     <header className={`${styles.heroHeader} ${scrolled ? styles.scrolled : ''}`} id="header">
+      <div className="container">
       <div className={styles.heroHeaderContainer}>
         {/* College Logo */}
         <Link href="/" className={styles.heroLogoBox} title="Nandkunvarba Mahila College">
@@ -270,6 +271,7 @@ export default function Header() {
           <span></span>
           <span></span>
         </div>
+      </div>
       </div>
     </header>
   );
