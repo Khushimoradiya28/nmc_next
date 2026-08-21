@@ -58,8 +58,8 @@ export default function Page() {
                 <div className="about-overview-card">
                   <div className="about-card-icon-wrap">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                      <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                      <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                      <path d="M6 12v5c3 3 9 3 12 0v-5" />
                     </svg>
                   </div>
                   <h3 className="about-card-title">Exclusive Women's College</h3>
@@ -69,7 +69,7 @@ export default function Page() {
                 <div className="about-overview-card">
                   <div className="about-card-icon-wrap">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
                   </div>
                   <h3 className="about-card-title">MKBU Affiliated</h3>
@@ -79,10 +79,10 @@ export default function Page() {
                 <div className="about-overview-card">
                   <div className="about-card-icon-wrap">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="4" y="3" width="16" height="16" rx="2" ry="2"/>
-                      <path d="M4 11h16M9 19v3M15 19v3"/>
-                      <circle cx="8" cy="15" r="1"/>
-                      <circle cx="16" cy="15" r="1"/>
+                      <rect x="4" y="3" width="16" height="16" rx="2" ry="2" />
+                      <path d="M4 11h16M9 19v3M15 19v3" />
+                      <circle cx="8" cy="15" r="1" />
+                      <circle cx="16" cy="15" r="1" />
                     </svg>
                   </div>
                   <h3 className="about-card-title">100% Free Bus</h3>
@@ -92,8 +92,8 @@ export default function Page() {
                 <div className="about-overview-card">
                   <div className="about-card-icon-wrap">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
-                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+                      <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+                      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
                     </svg>
                   </div>
                   <h3 className="about-card-title">Placement Assistance</h3>
@@ -241,208 +241,125 @@ export default function Page() {
         </section>
 
         {/* 2. FOUNDING FATHERS */}
-        <section className="section-padding" id="founders" style={{ position: "relative", overflow: "hidden", background: "linear-gradient(135deg, #fffaf4 0%, #fcf8f2 50%, #fff5e8 100%)" }}>
-          {/* Ambient design background glow blobs */}
-          <div style={{ position: "absolute", top: "-10%", left: "-10%", width: "400px", height: "400px", background: "rgba(245, 158, 11, 0.12)", filter: "blur(90px)", borderRadius: "50%", pointerEvents: "none" }} />
-          <div style={{ position: "absolute", bottom: "-10%", right: "-10%", width: "500px", height: "500px", background: "rgba(138, 0, 0, 0.06)", filter: "blur(110px)", borderRadius: "50%", pointerEvents: "none" }} />
+        <section className="section-padding" id="founders" style={{ position:"relative", overflow:"hidden", background:"linear-gradient(160deg, #fffdf8 0%, #fff7ed 40%, #fef3e2 100%)" }}>
+          {/* Soft ambient glow */}
+          <div style={{ position:"absolute", top:"-15%", left:"-10%", width:"500px", height:"500px", background:"radial-gradient(ellipse, rgba(138,0,0,0.05) 0%, transparent 65%)", pointerEvents:"none" }} />
+          <div style={{ position:"absolute", bottom:"-15%", right:"-10%", width:"500px", height:"500px", background:"radial-gradient(ellipse, rgba(245,158,11,0.06) 0%, transparent 65%)", pointerEvents:"none" }} />
 
-          <div className="container" style={{ position: "relative", zIndex: "2" }}>
-            <div className="vm-header-wrap"
-              style={{ textAlign: "center", alignItems: "center", maxWidth: "800px", margin: "0 auto 3rem auto" }}>
-              <div className="about-premium-tag">
+          <div className="container" style={{ position:"relative", zIndex:2 }}>
+
+            {/* Section Header — consistent with site */}
+            <div data-aos="fade-up" style={{ textAlign:"center", maxWidth:"650px", margin:"0 auto 3rem auto" }}>
+              <div className="about-premium-tag" style={{ marginBottom:"0.75rem", justifyContent:"center" }}>
                 <span className="about-tag-dot"></span>
                 <span>The Pioneers</span>
               </div>
-              <h2 className="vm-main-title">Founding <span>Fathers</span></h2>
-              <p className="vm-main-subtitle" style={{ marginTop: "1rem" }}>Visionaries who laid the cornerstone of women's education
-                and empowerment.</p>
+              <h2 className="vm-main-title" style={{ fontSize:"40px", marginBottom:"0.75rem" }}>
+                Founding <span>Fathers</span>
+              </h2>
+              <p style={{ fontSize:"0.95rem", color:"var(--gray-500)", lineHeight:"1.7", margin:0 }}>
+                Visionaries who laid the cornerstone of women&apos;s education and empowerment.
+              </p>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(340px, 1fr))", gap: "2.5rem", marginTop: "1rem" }}>
-              {/* Shri Samkit Card */}
-              <div style={{
-                background: "linear-gradient(135deg, #ffffff 0%, #fffdfa 100%)",
-                borderRadius: "1.5rem",
-                padding: "2.5rem 2rem",
-                boxShadow: "0 20px 40px rgba(15, 23, 42, 0.04)",
-                border: "1px solid rgba(0, 0, 0, 0.04)",
-                borderTop: "5px solid var(--gold-500, #f59e0b)", /* Gold top border */
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textAlign: "center",
-                position: "relative",
-                overflow: "hidden"
-              }}>
-                {/* Rotated background design accent inside card */}
-                <div style={{ position: "absolute", bottom: "-30px", right: "-30px", width: "120px", height: "120px", borderRadius: "50%", background: "rgba(138, 0, 0, 0.02)", pointerEvents: "none" }} />
+            {/* Cards Row */}
+            <div style={{ display:"grid", gridTemplateColumns:"repeat(auto-fit, minmax(320px, 1fr))", gap:"2rem" }}>
 
-                <div style={{ position: "relative", width: "160px", height: "160px", marginBottom: "1.5rem" }}>
-                  {/* Rotated brand color plate backing */}
-                  <div style={{
-                    position: "absolute",
-                    inset: "-4px",
-                    background: "linear-gradient(135deg, #8a0000 0%, #f59e0b 100%)",
-                    borderRadius: "1.4rem",
-                    transform: "rotate(3deg)",
-                    opacity: 0.15,
-                    zIndex: 1
-                  }} />
-                  <div style={{
-                    position: "relative",
-                    width: "160px",
-                    height: "160px",
-                    borderRadius: "1.25rem",
-                    border: "3px solid var(--white)",
-                    overflow: "hidden",
-                    boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
-                    zIndex: 2
-                  }}>
-                    <Image src="/assets/about/team/1.jpg" alt="Shri Samkit" width={400} height={400} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+              {/* Card 1 — Shri Samkit */}
+              <div data-aos="fade-up" data-aos-delay="0" style={{ background:"#ffffff", borderRadius:"1.5rem", overflow:"hidden", border:"1px solid rgba(138,0,0,0.08)", boxShadow:"0 10px 40px rgba(138,0,0,0.06), 0 2px 8px rgba(0,0,0,0.03)", transition:"transform 0.3s ease, box-shadow 0.3s ease" }}>
+                {/* Top gradient accent */}
+                <div style={{ height:"4px", background:"linear-gradient(90deg, #8a0000, #c0392b, #f59e0b)" }} />
+
+                <div style={{ padding:"2rem 1.75rem 1.75rem" }}>
+                  {/* Profile Area */}
+                  <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1.25rem" }}>
+                    <div style={{ position:"relative", flexShrink:0 }}>
+                      <div style={{ position:"absolute", inset:"-3px", borderRadius:"50%", background:"linear-gradient(135deg, #8a0000, #f59e0b)" }} />
+                      <div style={{ position:"relative", width:"72px", height:"72px", borderRadius:"50%", overflow:"hidden", border:"3px solid #ffffff", boxShadow:"0 4px 12px rgba(138,0,0,0.15)" }}>
+                        <Image src="/assets/about/team/1.jpg" alt="Shri Samkit" width={150} height={150} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+                      </div>
+                    </div>
+                    <div>
+                      <h4 style={{ fontFamily:"var(--font-heading)", fontSize:"1.25rem", fontWeight:"800", color:"var(--gray-900)", margin:"0 0 0.2rem 0" }}>Shri Samkit</h4>
+                      <span style={{ fontSize:"0.62rem", fontWeight:"800", color:"#8a0000", background:"rgba(138,0,0,0.06)", border:"1px solid rgba(138,0,0,0.12)", padding:"0.2rem 0.65rem", borderRadius:"2rem", textTransform:"uppercase", letterSpacing:"1.2px" }}>Chief Patron</span>
+                    </div>
                   </div>
-                </div>
-                <div style={{ zIndex: 2 }}>
-                  <h4 style={{ fontFamily: "var(--font-heading)", fontSize: "1.35rem", color: "var(--gray-900)", margin: "0 0 0.4rem 0", fontWeight: "800" }}>
-                    Shri Samkit
-                  </h4>
-                  <span style={{
-                    display: "inline-block",
-                    fontSize: "0.68rem",
-                    fontWeight: "900",
-                    color: "#8a0000",
-                    background: "rgba(138, 0, 0, 0.05)",
-                    padding: "0.25rem 0.75rem",
-                    borderRadius: "2rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.8px",
-                    marginBottom: "1rem",
-                    border: "1px solid rgba(138, 0, 0, 0.08)"
-                  }}>
-                    Chief Patron
-                  </span>
-                  <p style={{ fontSize: "0.92rem", color: "var(--gray-600)", lineHeight: "1.6", fontStyle: "italic", margin: 0 }}>
-                    "Empowering a woman is empowering a generation. Education is the key to unlock their boundless potential."
-                  </p>
 
-                  {/* Strategic Milestones list to fill empty card container */}
-                  <ul style={{
-                    listStyle: "none",
-                    padding: 0,
-                    margin: "1.5rem 0 0 0",
-                    borderTop: "1px solid rgba(0,0,0,0.06)",
-                    paddingTop: "1.25rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.55rem",
-                    width: "100%",
-                    alignItems: "center"
-                  }}>
-                    <li style={{ fontSize: "0.82rem", color: "var(--gray-600)", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                      <span style={{ color: "var(--gold-500)", fontWeight: "900" }}>•</span> Founding Visionary of the Institution
-                    </li>
-                    <li style={{ fontSize: "0.82rem", color: "var(--gray-600)", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                      <span style={{ color: "var(--gold-500)", fontWeight: "900" }}>•</span> Pioneering Advocate for Women's Education
-                    </li>
-                    <li style={{ fontSize: "0.82rem", color: "var(--gray-600)", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                      <span style={{ color: "var(--gold-500)", fontWeight: "900" }}>•</span> Senior Patron of Shree Sahajanand Trust
-                    </li>
-                  </ul>
+                  {/* Quote */}
+                  <div style={{ background:"rgba(138,0,0,0.03)", borderLeft:"3px solid #8a0000", borderRadius:"0 0.6rem 0.6rem 0", padding:"0.85rem 1rem", marginBottom:"1.25rem" }}>
+                    <p style={{ fontSize:"0.88rem", color:"var(--gray-600)", lineHeight:"1.7", fontStyle:"italic", margin:0 }}>
+                      &ldquo;Empowering a woman is empowering a generation. Education is the key to unlock their boundless potential.&rdquo;
+                    </p>
+                  </div>
+
+                  {/* Contributions */}
+                  <div style={{ display:"flex", flexDirection:"column", gap:"0.6rem" }}>
+                    {[
+                      "Founding Visionary of the Institution",
+                      "Pioneering Advocate for Women\u2019s Education",
+                      "Senior Patron of Shree Sahajanand Trust",
+                    ].map((label, i) => (
+                      <div key={i} style={{ display:"flex", alignItems:"center", gap:"0.6rem" }}>
+                        <div style={{ flexShrink:0, width:"28px", height:"28px", borderRadius:"50%", background:"rgba(138,0,0,0.06)", border:"1px solid rgba(138,0,0,0.12)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#8a0000" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span style={{ fontSize:"0.82rem", color:"var(--gray-600)", fontWeight:"500", lineHeight:"1.4" }}>{label}</span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
 
-              {/* Shri Mehul Card */}
-              <div style={{
-                background: "linear-gradient(135deg, #ffffff 0%, #fffdfa 100%)",
-                borderRadius: "1.5rem",
-                padding: "2.5rem 2rem",
-                boxShadow: "0 20px 40px rgba(15, 23, 42, 0.04)",
-                border: "1px solid rgba(0, 0, 0, 0.04)",
-                borderTop: "5px solid var(--gold-500, #f59e0b)", /* Gold top border */
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                textAlign: "center",
-                position: "relative",
-                overflow: "hidden"
-              }}>
-                {/* Rotated background design accent inside card */}
-                <div style={{ position: "absolute", bottom: "-30px", right: "-30px", width: "120px", height: "120px", borderRadius: "50%", background: "rgba(138, 0, 0, 0.02)", pointerEvents: "none" }} />
+              {/* Card 2 — Shri Mehul */}
+              <div data-aos="fade-up" data-aos-delay="150" style={{ background:"#ffffff", borderRadius:"1.5rem", overflow:"hidden", border:"1px solid rgba(245,158,11,0.12)", boxShadow:"0 10px 40px rgba(245,158,11,0.06), 0 2px 8px rgba(0,0,0,0.03)", transition:"transform 0.3s ease, box-shadow 0.3s ease" }}>
+                {/* Top gradient accent */}
+                <div style={{ height:"4px", background:"linear-gradient(90deg, #d97706, #f59e0b, #fcd34d)" }} />
 
-                <div style={{ position: "relative", width: "160px", height: "160px", marginBottom: "1.5rem" }}>
-                  {/* Rotated brand color plate backing */}
-                  <div style={{
-                    position: "absolute",
-                    inset: "-4px",
-                    background: "linear-gradient(135deg, #8a0000 0%, #f59e0b 100%)",
-                    borderRadius: "1.4rem",
-                    transform: "rotate(3deg)",
-                    opacity: 0.15,
-                    zIndex: 1
-                  }} />
-                  <div style={{
-                    position: "relative",
-                    width: "160px",
-                    height: "160px",
-                    borderRadius: "1.25rem",
-                    border: "3px solid var(--white)",
-                    overflow: "hidden",
-                    boxShadow: "0 8px 20px rgba(0,0,0,0.06)",
-                    zIndex: 2
-                  }}>
-                    <Image src="/assets/about/team/2.jpg" alt="Shri Mehul" width={400} height={400} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                <div style={{ padding:"2rem 1.75rem 1.75rem" }}>
+                  {/* Profile Area */}
+                  <div style={{ display:"flex", alignItems:"center", gap:"1rem", marginBottom:"1.25rem" }}>
+                    <div style={{ position:"relative", flexShrink:0 }}>
+                      <div style={{ position:"absolute", inset:"-3px", borderRadius:"50%", background:"linear-gradient(135deg, #d97706, #f59e0b)" }} />
+                      <div style={{ position:"relative", width:"72px", height:"72px", borderRadius:"50%", overflow:"hidden", border:"3px solid #ffffff", boxShadow:"0 4px 12px rgba(245,158,11,0.2)" }}>
+                        <Image src="/assets/about/team/2.jpg" alt="Shri Mehul" width={150} height={150} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+                      </div>
+                    </div>
+                    <div>
+                      <h4 style={{ fontFamily:"var(--font-heading)", fontSize:"1.25rem", fontWeight:"800", color:"var(--gray-900)", margin:"0 0 0.2rem 0" }}>Shri Mehul</h4>
+                      <span style={{ fontSize:"0.62rem", fontWeight:"800", color:"#92400e", background:"rgba(245,158,11,0.08)", border:"1px solid rgba(245,158,11,0.2)", padding:"0.2rem 0.65rem", borderRadius:"2rem", textTransform:"uppercase", letterSpacing:"1.2px" }}>Managing Trustee</span>
+                    </div>
+                  </div>
+
+                  {/* Quote */}
+                  <div style={{ background:"rgba(245,158,11,0.04)", borderLeft:"3px solid #f59e0b", borderRadius:"0 0.6rem 0.6rem 0", padding:"0.85rem 1rem", marginBottom:"1.25rem" }}>
+                    <p style={{ fontSize:"0.88rem", color:"var(--gray-600)", lineHeight:"1.7", fontStyle:"italic", margin:0 }}>
+                      &ldquo;Building institutions that not only educate but also instil strong cultural and ethical values.&rdquo;
+                    </p>
+                  </div>
+
+                  {/* Contributions */}
+                  <div style={{ display:"flex", flexDirection:"column", gap:"0.6rem" }}>
+                    {[
+                      "Spearheads Modern Infrastructure & Lab Upgrades",
+                      "Formulates Strategic University Collaborations",
+                      "Implements 100% Free Campus Security Audits",
+                    ].map((label, i) => (
+                      <div key={i} style={{ display:"flex", alignItems:"center", gap:"0.6rem" }}>
+                        <div style={{ flexShrink:0, width:"28px", height:"28px", borderRadius:"50%", background:"rgba(245,158,11,0.08)", border:"1px solid rgba(245,158,11,0.18)", display:"flex", alignItems:"center", justifyContent:"center" }}>
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#d97706" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                        <span style={{ fontSize:"0.82rem", color:"var(--gray-600)", fontWeight:"500", lineHeight:"1.4" }}>{label}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
-                <div style={{ zIndex: 2 }}>
-                  <h4 style={{ fontFamily: "var(--font-heading)", fontSize: "1.3rem", color: "var(--gray-900)", margin: "0 0 0.4rem 0", fontWeight: "800" }}>
-                    Shri Mehul
-                  </h4>
-                  <span style={{
-                    display: "inline-block",
-                    fontSize: "0.68rem",
-                    fontWeight: "900",
-                    color: "#8a0000",
-                    background: "rgba(138, 0, 0, 0.05)",
-                    padding: "0.25rem 0.75rem",
-                    borderRadius: "2rem",
-                    textTransform: "uppercase",
-                    letterSpacing: "0.8px",
-                    marginBottom: "1rem",
-                    border: "1px solid rgba(138, 0, 0, 0.08)"
-                  }}>
-                    Managing Trustee
-                  </span>
-                  <p style={{ fontSize: "0.92rem", color: "var(--gray-600)", lineHeight: "1.6", fontStyle: "italic", margin: 0 }}>
-                    "Building institutions that not only educate but also instil strong cultural and ethical values."
-                  </p>
-
-                  {/* Strategic Milestones list to fill empty card container */}
-                  <ul style={{
-                    listStyle: "none",
-                    padding: 0,
-                    margin: "1.5rem 0 0 0",
-                    borderTop: "1px solid rgba(0,0,0,0.06)",
-                    paddingTop: "1.25rem",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "0.55rem",
-                    width: "100%",
-                    alignItems: "center"
-                  }}>
-                    <li style={{ fontSize: "0.82rem", color: "var(--gray-600)", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                      <span style={{ color: "var(--gold-500)", fontWeight: "900" }}>•</span> Spearheads Modern Infrastructure & Lab Upgrades
-                    </li>
-                    <li style={{ fontSize: "0.82rem", color: "var(--gray-600)", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                      <span style={{ color: "var(--gold-500)", fontWeight: "900" }}>•</span> Formulates Strategic University Collaborations
-                    </li>
-                    <li style={{ fontSize: "0.82rem", color: "var(--gray-600)", fontWeight: "600", display: "flex", alignItems: "center", gap: "0.35rem" }}>
-                      <span style={{ color: "var(--gold-500)", fontWeight: "900" }}>•</span> Implements 100% Free Campus Security Audits
-                    </li>
-                  </ul>
-                </div>
               </div>
+
             </div>
           </div>
         </section>
+
+        {/* 3. CHAIRMAN'S MESSAGE */}
 
         {/* 3. CHAIRMAN'S MESSAGE */}
         <section className="section-padding" id="chairman" style={{ position: "relative", overflow: "hidden", background: "#ffffff" }}>
@@ -651,7 +568,7 @@ export default function Page() {
               <h2 className="vm-main-title">NMC <span>Song</span></h2>
             </div>
 
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "stretch", justifyContent: "center", gap: "0", maxWidth: "1000px", margin: "0 auto" }}>
+            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "stretch", justifyContent: "center", gap: "0" }}>
 
               {/* Interactive Player Card (Dark Red Accent) */}
               <div style={{ flex: "1 1 300px", background: "var(--red-900)", color: "var(--white)", borderRadius: "2rem 0 0 2rem", padding: "4rem 3rem", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative", overflow: "hidden", boxShadow: "10px 0 30px rgba(0,0,0,0.1)", zIndex: "2" }}>
