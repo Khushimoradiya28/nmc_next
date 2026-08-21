@@ -1,6 +1,7 @@
 /* TESTIMONIALS - CREATIVE TABBED DESIGN */
 .digiTestiSection {
   background-color: var(--white) !important;
+  overflow: hidden;
 }
 
 /* Tab Switcher */

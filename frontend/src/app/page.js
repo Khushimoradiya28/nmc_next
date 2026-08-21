@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main style={{ paddingTop: 0 }}>
+      <main style={{ paddingTop: 0, overflowX: 'hidden' }}>
         <Hero />
         <StatsSection />
         <CollegeOverview />

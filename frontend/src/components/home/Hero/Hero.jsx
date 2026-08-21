@@ -9,7 +9,7 @@ export default function Hero() {
         <Image src="/assets/hero/hero-section.png" alt="NMC Campus Life" width={600} height={400} className={`${styles.heroBgImg} hero-bg-img`} />
       </div>
       <div className={`${styles.heroOverlay} hero-overlay`}></div>
-      <div className={`${styles.heroContent} hero-content`}>
+      <div className={`${styles.heroContent} container`}>
         <div className={`${styles.heroTagPill} hero-tag-pill`}>
           <span className={`${styles.heroTagDot} hero-tag-dot`}></span>
           <span>Empowering Women Through Excellence</span>
