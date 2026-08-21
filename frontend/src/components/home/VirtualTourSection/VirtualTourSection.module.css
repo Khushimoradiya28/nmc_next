@@ -1,6 +1,7 @@
 /* 360 TOUR - LIGHT SKY BG */
 .tourSection {
   background: var(--sky-50);
+  overflow: hidden;
 }
 
 .tourCard {

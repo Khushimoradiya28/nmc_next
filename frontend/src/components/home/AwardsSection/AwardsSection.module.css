@@ -2,6 +2,7 @@
 .awardsSection {
   background: #FFFFFF;
   position: relative;
+  overflow: hidden;
 }
 
 .awardsSliderWrap {

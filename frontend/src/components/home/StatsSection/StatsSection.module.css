@@ -6,6 +6,13 @@
   z-index: 10;
 }
 
+.container {
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
 .statsPremiumGrid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -222,6 +229,10 @@
 
 .statPremiumCard.revealed .statMeterFill {
   width: 100%;
+}
+
+.revealed {
+  /* Marker class for JS — triggers meter fill animation */
 }
 
 /* Card Hover Border Glow */
