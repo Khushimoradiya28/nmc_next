@@ -294,7 +294,7 @@ export default function YearCalendarPage() {
   return (
     <>
       <Header />
-      <main>
+      <main className={styles.mainWrapper}>
         <ActivityHero
           title="Year Calendar 2025-26"
           subtitle="Complete academic schedule, examination timelines, important dates & holiday roster for the current session"
@@ -307,6 +307,8 @@ export default function YearCalendarPage() {
             { label: 'Year Calendar' },
           ]}
         />
+
+
         {/* Tab Controls Navigation */}
         <section className={styles.tabNavbarSection}>
           <div className={styles.container}>
@@ -362,70 +364,81 @@ export default function YearCalendarPage() {
                   transition={{ duration: 0.3 }}
                 >
                   {SEASONS_DATA.map((season, sIdx) => {
-                    const seasonMonths = filteredMonths.filter(m => season.months.includes(m.month));
+                    const seasonMonths = filteredMonths
+                      .filter(m => season.months.includes(m.month))
+                      .filter(m => activeFilter === 'all' || m.events.length > 0);
                     if (seasonMonths.length === 0) return null;
 
                     return (
                       <div key={sIdx} className={styles.seasonBlock}>
-                        {/* Season Header Row (Minimal & Elegant) */}
-                        <div className={styles.seasonHeaderRow}>
-                          <span className={styles.seasonHeaderBadge} style={{ color: season.accent, backgroundColor: `${season.accent}12` }}>
-                            Academic Term
-                          </span>
-                          <h3 className={styles.seasonHeaderTitle}>
-                            {season.title} <span className={styles.seasonHeaderDesc}>— {season.desc}</span>
-                          </h3>
-                          <div className={styles.seasonHeaderLine} style={{ background: `linear-gradient(90deg, ${season.accent}, transparent)` }} />
-                        </div>
+                        <div className={styles.seasonRow}>
+                          {/* Season Visual Column */}
+                          <div className={styles.seasonVisualCard}>
+                            <div className={styles.seasonImageWrapper}>
+                              <img src={season.image} alt={season.title} className={styles.seasonImage} />
+                              <div className={styles.seasonOverlay} style={{ background: `linear-gradient(to bottom, transparent 20%, ${season.accent}aa 100%)` }} />
+                            </div>
+                            <div className={styles.seasonMeta}>
+                              <span className={styles.seasonHeaderBadge} style={{ color: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.2)' }}>
+                                Academic Term
+                              </span>
+                              <h3 className={styles.seasonHeaderTitle}>{season.title}</h3>
+                              <p className={styles.seasonHeaderDesc}>{season.desc}</p>
+                            </div>
+                          </div>
 
-                        {/* Months Grid for this season (Compact & Clean) */}
-                        <div className={styles.seasonMonthsGrid}>
-                          {seasonMonths.map((month) => (
-                            <motion.div
-                              key={`${month.month}-${activeFilter}`}
-                              initial={{ opacity: 0, y: 20 }}
-                              whileInView={{ opacity: 1, y: 0 }}
-                              viewport={{ once: true }}
-                              transition={{ duration: 0.4 }}
-                            >
-                              {/* Month Card */}
-                              <motion.div
-                                className={styles.monthCard}
-                                whileHover={{ y: -8 }}
-                                transition={{ duration: 0.25 }}
-                                layout
-                              >
-                                <div className={styles.monthCardHeader} style={{ borderTop: `4px solid ${season.accent}` }}>
-                                  <div className={styles.monthCardTitleWrap}>
-                                    <span className={styles.monthCardName}>{month.month}</span>
-                                    <span className={styles.monthCardYear}>{month.year}</span>
-                                  </div>
-                                  <span className={styles.monthCardBadge} style={{ color: season.accent, borderColor: `${season.accent}20`, backgroundColor: `${season.accent}10` }}>
-                                    {month.events.length} {month.events.length === 1 ? 'Event' : 'Events'}
-                                  </span>
-                                </div>
-                                <div className={styles.monthCardBody}>
-                                  {month.events.length > 0 ? (
-                                    <ul className={styles.eventList}>
-                                      {month.events.map((evt, eIdx) => (
-                                        <li key={eIdx} className={`${styles.eventItem} ${styles[`eventType_${evt.type}`]}`}>
-                                          <span className={`${styles.eventDateBadge} ${styles[`badgeType_${evt.type}`]}`}>
-                                            {evt.date}
-                                          </span>
-                                          <span className={styles.eventText}>{evt.text}</span>
-                                        </li>
-                                      ))}
-                                    </ul>
-                                  ) : (
-                                    <div className={styles.noEventsPlaceholder}>
-                                      <span className={styles.noEventsIcon}>🌱</span>
-                                      <span className={styles.noEventsText}>No events scheduled</span>
+                          {/* Months Grid for this season */}
+                          <div className={styles.seasonContent}>
+                            <div className={styles.seasonMonthsGrid}>
+                              {seasonMonths.map((month) => (
+                                <motion.div
+                                  key={`${month.month}-${activeFilter}`}
+                                  initial={{ opacity: 0, y: 20 }}
+                                  whileInView={{ opacity: 1, y: 0 }}
+                                  viewport={{ once: true }}
+                                  transition={{ duration: 0.4 }}
+                                  className={styles.monthCardWrapper}
+                                >
+                                  {/* Month Card */}
+                                  <motion.div
+                                    className={styles.monthCard}
+                                    whileHover={{ y: -8 }}
+                                    transition={{ duration: 0.25 }}
+                                    layout
+                                  >
+                                    <div className={styles.monthCardHeader} style={{ borderTop: `4px solid ${season.accent}` }}>
+                                      <div className={styles.monthCardTitleWrap}>
+                                        <span className={styles.monthCardName}>{month.month}</span>
+                                        <span className={styles.monthCardYear}>{month.year}</span>
+                                      </div>
+                                      <span className={styles.monthCardBadge} style={{ color: season.accent, borderColor: `${season.accent}20`, backgroundColor: `${season.accent}10` }}>
+                                        {month.events.length} {month.events.length === 1 ? 'Event' : 'Events'}
+                                      </span>
                                     </div>
-                                  )}
-                                </div>
-                              </motion.div>
-                            </motion.div>
-                          ))}
+                                    <div className={styles.monthCardBody}>
+                                      {month.events.length > 0 ? (
+                                        <ul className={styles.eventList}>
+                                          {month.events.map((evt, eIdx) => (
+                                            <li key={eIdx} className={`${styles.eventItem} ${styles[`eventType_${evt.type}`]}`}>
+                                              <span className={`${styles.eventDateBadge} ${styles[`badgeType_${evt.type}`]}`}>
+                                                {evt.date}
+                                              </span>
+                                              <span className={styles.eventText}>{evt.text}</span>
+                                            </li>
+                                          ))}
+                                        </ul>
+                                      ) : (
+                                        <div className={styles.noEventsPlaceholder}>
+                                          <span className={styles.noEventsIcon}>🌱</span>
+                                          <span className={styles.noEventsText}>No events scheduled</span>
+                                        </div>
+                                      )}
+                                    </div>
+                                  </motion.div>
+                                </motion.div>
+                              ))}
+                            </div>
+                          </div>
                         </div>
                       </div>
                     );
