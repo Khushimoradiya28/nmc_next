@@ -1,0 +1,393 @@
+/* ============================================================
+   COURSES PAGE STYLES (Academic Programs)
+   Extracted from designer.css
+   ============================================================ */
+
+/* PROGRAMS */
+.programs-section {
+    background: var(--white);
+}
+
+.program-filter-bar {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: .55rem;
+    margin-bottom: 2.5rem;
+}
+
+/* =========== LUXURY ACADEMIC PROGRAMS SECTION =========== */
+.programs-section {
+    background: var(--gray-50);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Enhanced Category Filter Bar */
+.program-filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 3.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+.prog-filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.65rem 1.35rem;
+    border-radius: var(--r-full);
+    background: var(--white);
+    color: var(--gray-700);
+    font-weight: 700;
+    font-size: 0.88rem;
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.prog-count-pill {
+    font-size: 0.72rem;
+    font-weight: 800;
+    padding: 0.15rem 0.5rem;
+    border-radius: var(--r-full);
+    background: var(--gray-100);
+    color: var(--gray-600);
+    transition: all 0.3s ease;
+}
+
+.prog-filter-btn:hover {
+    background: var(--gold-50);
+    border-color: var(--gold-400);
+    color: var(--gray-900);
+    transform: translateY(-2px);
+}
+
+.prog-filter-btn.active {
+    background: var(--grad-red);
+    color: var(--white);
+    border-color: transparent;
+    box-shadow: 0 6px 20px rgba(138, 0, 0, 0.25);
+}
+
+.prog-filter-btn.active svg {
+    stroke: var(--white);
+}
+
+.prog-filter-btn.active .prog-count-pill {
+    background: rgba(255, 255, 255, 0.25);
+    color: var(--white);
+}
+
+/* Programs Grid */
+.programs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Luxury Program Card */
+.prog-card-luxury {
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 1.35rem;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05), 0 1px 3px rgba(15, 23, 42, 0.02);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    overflow: hidden;
+    position: relative;
+}
+
+.prog-card-luxury:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 50px rgba(15, 23, 42, 0.12), 0 4px 12px rgba(15, 23, 42, 0.04);
+    border-color: transparent;
+}
+
+/* Top Accent Line */
+.prog-card-luxury::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #8a0000 0%, #dc2626 100%);
+    border-radius: 1.35rem 1.35rem 0 0;
+    transition: height 0.3s ease;
+}
+
+.prog-card-luxury[data-category="pg"]::before {
+    background: linear-gradient(90deg, #d97706 0%, #f59e0b 100%);
+}
+
+.prog-card-luxury[data-category="diploma"]::before {
+    background: linear-gradient(90deg, #0284c7 0%, #38bdf8 100%);
+}
+
+.prog-card-luxury:hover::before {
+    height: 5px;
+}
+
+/* Card Inner Content */
+.prog-card-inner {
+    padding: 2rem 1.85rem 1.25rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header Bar: Tag & Icon */
+.prog-card-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.prog-tag {
+    display: inline-block;
+    padding: 0.28rem 0.85rem;
+    border-radius: var(--r-full);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.tag-ug {
+    background: #fef2f2;
+    color: var(--red-800);
+    border: 1px solid #fecaca;
+}
+
+.tag-pg {
+    background: #fffbeb;
+    color: var(--gold-600);
+    border: 1px solid #fde68a;
+}
+
+.tag-diploma {
+    background: #fef2f2;
+    color: var(--red-900);
+    border: 1px solid #fecaca;
+}
+
+.prog-icon-badge {
+    width: 40px;
+    height: 40px;
+    border-radius: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
+}
+
+.prog-icon-badge svg {
+    stroke-width: 1 !important;
+}
+
+.prog-card-luxury:hover .prog-icon-badge {
+    transform: scale(1.1) rotate(4deg);
+}
+
+.prog-ibadge-ruby {
+    background: #fef2f2;
+    color: var(--red-800);
+    border: 1px solid #fecaca;
+}
+
+.prog-ibadge-azure,
+.prog-ibadge-crimson {
+    background: #fef2f2;
+    color: var(--red-900);
+    border: 1px solid #fecaca;
+}
+
+.prog-ibadge-gold {
+    background: #fffbeb;
+    color: var(--gold-600);
+    border: 1px solid #fde68a;
+}
+
+.prog-ibadge-purple,
+.prog-ibadge-amber {
+    background: #fffbeb;
+    color: var(--gold-700);
+    border: 1px solid #fde68a;
+}
+
+/* Acronym Badge */
+.prog-acronym-badge {
+    display: inline-block;
+    font-family: var(--font-heading);
+    font-size: 1.35rem;
+    font-weight: 900;
+    letter-spacing: -0.01em;
+    background: linear-gradient(135deg, #7f0000 0%, #b30000 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.35rem;
+}
+
+.acronym-azure,
+.acronym-crimson {
+    background: linear-gradient(135deg, #8a0000 0%, #dc2626 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.acronym-gold {
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.acronym-purple,
+.acronym-amber {
+    background: linear-gradient(135deg, #b45309 0%, #fbbf24 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.prog-title {
+    font-family: var(--font-heading);
+    font-size: 1.12rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin-bottom: 0.6rem;
+    line-height: 1.35;
+}
+
+.prog-summary {
+    font-size: 0.86rem;
+    color: var(--gray-600);
+    line-height: 1.55;
+    margin-bottom: 1.25rem;
+}
+
+/* Curriculum Points List */
+.prog-points-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+}
+
+.prog-points-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.55rem;
+    font-size: 0.82rem;
+    color: var(--gray-700);
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.prog-points-list li svg {
+    color: var(--gold-600);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+/* Meta Details Strip */
+.prog-meta-strip {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 1rem;
+    background: #f8fafc;
+    border-radius: 0.85rem;
+    border: 1px solid var(--gray-200);
+    margin-top: auto;
+}
+
+.prog-meta-item {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--gray-600);
+}
+
+.prog-meta-item svg {
+    color: var(--gray-400);
+}
+
+.prog-fee-badge {
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--red-800);
+    background: none;
+    padding: 0;
+    border-radius: 0;
+    border: none;
+}
+
+.fee-azure,
+.fee-crimson {
+    color: var(--red-800);
+    background: none;
+    border: none;
+}
+
+.fee-gold {
+    color: var(--gold-600);
+    background: none;
+    border: none;
+}
+
+.fee-purple,
+.fee-amber {
+    color: var(--gold-700);
+    background: none;
+    border: none;
+}
+
+.fee-ruby {
+    color: var(--red-800);
+    background: none;
+    border: none;
+}
+
+/* Apply CTA Button */
+.prog-card-btn {
+    margin: 0 1.85rem 1.85rem;
+    width: calc(100% - 3.7rem);
+    font-size: 0.92rem;
+    font-weight: 800;
+    border-radius: 0.75rem;
+    padding: 0.8rem 1.25rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.prog-card-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(138, 0, 0, 0.3);
+}
+
+.prog-card-btn svg {
+    transition: transform 0.3s ease;
+}
+
+.prog-card-btn:hover svg {
+    transform: translateX(4px);
+} 

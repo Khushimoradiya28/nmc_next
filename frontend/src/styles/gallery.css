@@ -1,0 +1,473 @@
+/* ============================================================
+   GALLERY PAGE STYLES
+   Extracted from designer.css (gallery + lightbox + responsive)
+   ============================================================ */
+
+/* =========== PHOTO & VIDEO GALLERY - CREATIVE & INTERACTIVE =========== */
+.gallery-section {
+    background: var(--white);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Gallery Category Filter Bar */
+.gallery-filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 2;
+}
+
+.gfilter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.65rem 1.4rem;
+    background: var(--gray-50);
+    border: 1px solid var(--gray-200);
+    border-radius: var(--r-full);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--gray-600);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gfilter-btn:hover {
+    background: var(--gold-50);
+    border-color: var(--gold-400);
+    color: var(--gray-900);
+    transform: translateY(-2px);
+}
+
+.gfilter-btn.active {
+    background: var(--grad-red);
+    color: var(--white);
+    border-color: transparent;
+    box-shadow: 0 6px 20px rgba(138, 0, 0, 0.25);
+}
+
+.gfilter-btn.active svg {
+    stroke: var(--white);
+}
+
+/* Modern Interactive Gallery Grid */
+.gallery-interactive-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    position: relative;
+    z-index: 2;
+}
+
+/* Individual Gallery Card */
+.gcard-item {
+    position: relative;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    background: var(--gray-900);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gcard-item:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.16);
+}
+
+.gcard-media {
+    position: relative;
+    width: 100%;
+    height: 250px;
+    overflow: hidden;
+}
+
+.gcard-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gcard-item:hover .gcard-media img {
+    transform: scale(1.09);
+}
+
+/* Category Badge (Top Left) */
+.gcard-badge {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    padding: 0.35rem 0.85rem;
+    border-radius: var(--r-full);
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    z-index: 3;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.gbadge-campus {
+    background: rgba(2, 132, 199, 0.85);
+    color: var(--white);
+}
+
+.gbadge-events {
+    background: rgba(245, 158, 11, 0.9);
+    color: var(--gray-900);
+}
+
+.gbadge-video {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: rgba(138, 0, 0, 0.85);
+    color: var(--white);
+}
+
+/* Video Center Glowing Play Button */
+.gcard-play-pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    pointer-events: none;
+}
+
+.play-pulse-btn {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    background: var(--white);
+    color: var(--red-800);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease;
+}
+
+.play-pulse-ring {
+    position: absolute;
+    top: -8px;
+    left: -8px;
+    right: -8px;
+    bottom: -8px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.75);
+    animation: playGlowRing 2s infinite ease-out;
+}
+
+@keyframes playGlowRing {
+    0% {
+        transform: scale(0.9);
+        opacity: 0.9;
+    }
+
+    100% {
+        transform: scale(1.4);
+        opacity: 0;
+    }
+}
+
+.gcard-item:hover .play-pulse-btn {
+    transform: scale(1.12);
+    background: var(--gold-500);
+    color: var(--gray-900);
+}
+
+/* Slide-up Frosted Overlay */
+.gcard-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(17, 24, 39, 0.1) 0%, rgba(17, 24, 39, 0.9) 100%);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 4;
+}
+
+.gcard-item:hover .gcard-overlay {
+    opacity: 1;
+}
+
+.gcard-info {
+    display: flex;
+    flex-direction: column;
+    transform: translateY(10px);
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gcard-item:hover .gcard-info {
+    transform: translateY(0);
+}
+
+.gcard-tag {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--gold-400);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 0.2rem;
+}
+
+.gcard-title {
+    font-family: var(--font-heading);
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--white);
+    line-height: 1.25;
+    margin-bottom: 0.25rem;
+}
+
+.gcard-text {
+    display: none;
+    font-size: 0.78rem;
+    color: rgba(255, 255, 255, 0.78);
+    line-height: 1.4;
+    margin: 0;
+    max-width: 220px;
+}
+
+.gcard-action-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.gcard-action-btn:hover {
+    background: var(--gold-500);
+    color: var(--gray-900);
+    border-color: var(--gold-500);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+/* ==========================================================================
+   FULLSCREEN GALLERY LIGHTBOX MODAL
+   ========================================================================== */
+.gallery-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 10010;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-lightbox.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 15, 25, 0.92);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+}
+
+.lightbox-modal-content {
+    position: relative;
+    z-index: 2;
+    width: 90%;
+    max-width: 960px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: scale(0.92);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.gallery-lightbox.active .lightbox-modal-content {
+    transform: scale(1);
+}
+
+.lightbox-close-btn {
+    position: absolute;
+    top: -45px;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.lightbox-close-btn:hover {
+    background: var(--red-800);
+    border-color: var(--red-800);
+    transform: rotate(90deg);
+}
+
+.lightbox-stage {
+    width: 100%;
+    background: #0f172a;
+    border-radius: 1.25rem;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.lightbox-media-container {
+    width: 100%;
+    max-height: 70vh;
+    min-height: 380px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #020617;
+    overflow: hidden;
+}
+
+.lightbox-media-container img {
+    max-width: 100%;
+    max-height: 70vh;
+    object-fit: contain;
+    animation: fadeIn 0.3s ease;
+}
+
+.lightbox-media-container iframe,
+.lightbox-media-container video {
+    width: 100%;
+    height: 480px;
+    border: none;
+}
+
+.lightbox-info-bar {
+    padding: 1.25rem 1.75rem;
+    background: rgba(15, 23, 42, 0.95);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.lightbox-meta {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.25rem;
+}
+
+.lightbox-counter {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--gold-400);
+    padding: 0.2rem 0.6rem;
+    background: rgba(245, 158, 11, 0.15);
+    border-radius: var(--r-full);
+}
+
+.lightbox-title {
+    font-family: var(--font-heading);
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--white);
+    margin: 0;
+}
+
+.lightbox-desc {
+    font-size: 0.85rem;
+    color: var(--gray-400);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* Nav arrows */
+.lightbox-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.lightbox-prev-btn {
+    left: -65px;
+}
+
+.lightbox-next-btn {
+    right: -65px;
+}
+
+.lightbox-nav-btn:hover {
+    background: var(--gold-500);
+    color: var(--gray-900);
+    border-color: var(--gold-500);
+    transform: translateY(-50%) scale(1.1);
+} 
+
+/* Responsive - gallery (tablet) */
+@media (max-width: 1024px) {
+    .gallery-interactive-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .lightbox-prev-btn {
+        left: 10px;
+    }
+
+    .lightbox-next-btn {
+        right: 10px;
+    }
+}
+
+/* Responsive - gallery (mobile) */
+@media (max-width: 640px) {
+    .gallery-interactive-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .lightbox-media-container iframe,
+    .lightbox-media-container video {
+        height: 260px;
+    }
+
+    .gfilter-btn {
+        font-size: 0.8rem;
+        padding: 0.5rem 1rem;
+    }
+}
