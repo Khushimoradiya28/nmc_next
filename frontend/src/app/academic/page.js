@@ -13,7 +13,9 @@ export default function AcademicPage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [activeModalTeacher, setActiveModalTeacher] = useState(null);
   const [isDeptOpen, setIsDeptOpen] = useState(false);
+  const [isSearchActive, setIsSearchActive] = useState(false);
   const deptDropdownRef = React.useRef(null);
+  const searchInputRef = React.useRef(null);
 
   // Close department dropdown on outside click
   useEffect(() => {
@@ -64,7 +66,7 @@ export default function AcademicPage() {
   const filteredFaculty = useMemo(() => {
     return ALL_FACULTY.filter(faculty => {
       const matchesDept = selectedDept === 'all' || faculty.departments.includes(selectedDept);
-      
+
       if (!matchesDept) return false;
       if (!searchQuery.trim()) return true;
 
@@ -82,6 +84,7 @@ export default function AcademicPage() {
   const handleResetFilters = () => {
     setSelectedDept('all');
     setSearchQuery('');
+    setIsSearchActive(false);
   };
 
   return (
@@ -93,10 +96,11 @@ export default function AcademicPage() {
         <section className={styles.heroBanner} id="hero-banner">
           <div className={styles.heroBgMedia}>
             <Image
-              src="/assets/hero/hero-section.png"
-              alt="NMC Academic Department and Faculty"
+              src="/assets/hero/academic-hero-ai.jpg"
+              alt="Academic Mentors and College Campus"
               fill
               priority
+              unoptimized
               className={styles.heroBgImage}
             />
           </div>
@@ -104,40 +108,16 @@ export default function AcademicPage() {
           <div className={styles.heroOverlayMesh} />
 
           <div className={`${styles.container} ${styles.heroContentContainer}`}>
-            <div className={styles.heroBreadcrumb}>
-              <Link href="/" className={styles.heroBreadcrumbLink}>Home</Link>
-              <span className={styles.heroBreadcrumbSep}>/</span>
-              <span>Academic Faculty</span>
-            </div>
-
             <h1 className={styles.heroTitle}>
-              Our Esteemed <span className={styles.heroTitleHighlight}>Academic Mentors</span>
+              <span className={styles.heroTitleHighlight}>Academic Mentors</span>
             </h1>
-            <p className={styles.subtitle || styles.heroSubtitle}>
-              Empowering students through academic excellence, Ph.D. scholars, seasoned professors, and passionate educators across multidisciplinary streams.
-            </p>
-
-            <div className={styles.heroStatsStrip}>
-              <div className={styles.heroStatCard}>
-                <span className={styles.heroStatNum}>{ALL_FACULTY.length}+</span>
-                <span className={styles.heroStatLabel}>Experienced Faculty</span>
-              </div>
-              <div className={styles.heroStatCard}>
-                <span className={styles.heroStatNum}>11+</span>
-                <span className={styles.heroStatLabel}>Specialized Streams</span>
-              </div>
-              <div className={styles.heroStatCard}>
-                <span className={styles.heroStatNum}>100%</span>
-                <span className={styles.heroStatLabel}>Dedicated Mentorship</span>
-              </div>
-            </div>
           </div>
         </section>
 
         {/* FACULTY DIRECTORY SPOTLIGHT */}
         <section className={styles.facultySection} id="faculty-directory">
           <div className={styles.container}>
-            
+
             {/* Section Header */}
             <div className={styles.sectionHeader}>
               <div className={styles.sectionBadge}>Academic Leadership &amp; Mentors</div>
@@ -149,28 +129,55 @@ export default function AcademicPage() {
               </p>
             </div>
 
-            {/* Senior UX: Persistent Unified Single-Row Control Bar (Department + Search) */}
-            <div className={styles.compactControlWrapper}>
-              <div className={styles.compactControlBar}>
-                
-                {/* Custom Themed Department Selector Dropdown */}
-                <div className={styles.customDeptDropdownContainer} ref={deptDropdownRef}>
+            {/* Senior UI/UX Pro Command Hub (Search + Department Filter) */}
+            <div className={styles.commandHubWrapper}>
+              <div className={styles.commandHubBar}>
+
+                {/* Left: Instant Directory Search */}
+                <div className={styles.hubSearchSection}>
+                  <svg className={styles.hubSearchIcon} width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                  </svg>
+                  <input
+                    type="text"
+                    placeholder="Search by faculty name, qualification, subject..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className={styles.hubSearchInput}
+                    aria-label="Search faculty directory"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      className={styles.hubSearchClearBtn}
+                      aria-label="Clear search query"
+                      title="Clear search"
+                    >
+                      ×
+                    </button>
+                  )}
+                </div>
+
+                {/* Vertical Divider */}
+                <div className={styles.hubDivider} aria-hidden="true" />
+
+                {/* Right: Themed Department Dropdown Trigger */}
+                <div className={styles.hubDeptSection} ref={deptDropdownRef}>
                   <button
                     type="button"
                     onClick={() => setIsDeptOpen(!isDeptOpen)}
-                    className={`${styles.customDeptTrigger} ${isDeptOpen ? styles.triggerActive : ''}`}
+                    className={`${styles.hubDeptTrigger} ${isDeptOpen ? styles.triggerActive : ''}`}
                     aria-expanded={isDeptOpen}
                     aria-haspopup="listbox"
                     aria-label="Filter faculty by department"
                   >
-                    <svg className={styles.unifiedDeptIcon} width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                      <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
-                    </svg>
-                    <span className={styles.currentDeptLabel}>
+                    <span className={styles.hubDeptLabelText}>
                       {DEPARTMENT_CATEGORIES.find(d => d.value === selectedDept)?.label || 'All Departments'}
-                      <span className={styles.triggerCountBadge}>({deptCounts[selectedDept] || 0})</span>
+                      <span className={styles.hubDeptCountText}>({deptCounts[selectedDept] || 0})</span>
                     </span>
-                    <svg className={`${styles.unifiedArrowIcon} ${isDeptOpen ? styles.arrowRotated : ''}`} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg className={`${styles.hubArrowIcon} ${isDeptOpen ? styles.arrowRotated : ''}`} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <polyline points="6 9 12 15 18 9"></polyline>
                     </svg>
                   </button>
@@ -208,17 +215,17 @@ export default function AcademicPage() {
                               }}
                               className={`${styles.deptMenuItem} ${isSelected ? styles.deptMenuItemActive : ''}`}
                             >
-                              <span className={styles.itemLabel}>{dept.label}</span>
-                              <div className={styles.itemRightWrap}>
+                              <span className={styles.itemLabel}>
+                                {dept.label}
                                 <span className={`${styles.itemCountText} ${isSelected ? styles.itemCountTextActive : ''}`}>
-                                  {count}
+                                  ({count})
                                 </span>
-                                {isSelected && (
-                                  <svg className={styles.activeCheckIcon} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                                    <polyline points="20 6 9 17 4 12"></polyline>
-                                  </svg>
-                                )}
-                              </div>
+                              </span>
+                              {isSelected && (
+                                <svg className={styles.activeCheckIcon} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                  <polyline points="20 6 9 17 4 12"></polyline>
+                                </svg>
+                              )}
                             </button>
                           );
                         })}
@@ -227,47 +234,23 @@ export default function AcademicPage() {
                   )}
                 </div>
 
-                {/* Divider Line */}
-                <div className={styles.controlDivider} aria-hidden="true" />
-
-                {/* Search Input Side */}
-                <div className={styles.unifiedSearchWrap}>
-                  <input
-                    type="text"
-                    placeholder="Search faculty..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className={styles.unifiedSearchInput}
-                    aria-label="Search faculty by name, qualification, or subject"
-                  />
-                  {searchQuery ? (
-                    <button
-                      type="button"
-                      onClick={() => setSearchQuery('')}
-                      className={styles.unifiedClearBtn}
-                      aria-label="Clear search input"
-                      title="Clear search"
-                    >
-                      ×
-                    </button>
-                  ) : (
-                    <div className={styles.searchStaticIcon} aria-hidden="true">
-                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <circle cx="11" cy="11" r="8"></circle>
-                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-                      </svg>
-                    </div>
-                  )}
-                </div>
-
               </div>
 
-              {/* Minimal Clean Status Counter */}
-              <div className={styles.compactStatusBar}>
-                <span>
+              {/* Minimal Clean Status & Active Filter Strip */}
+              <div className={styles.hubMetaBar}>
+                <div className={styles.hubCountInfo}>
                   Showing <strong>{filteredFaculty.length}</strong> of <strong>{ALL_FACULTY.length}</strong> Faculty Members
-                  {searchQuery && <span> for &ldquo;{searchQuery}&rdquo;</span>}
-                </span>
+                  {selectedDept !== 'all' && (
+                    <span className={styles.hubActiveTag}>
+                      in <em>{DEPARTMENT_CATEGORIES.find(d => d.value === selectedDept)?.label}</em>
+                    </span>
+                  )}
+                  {searchQuery && (
+                    <span className={styles.hubActiveTag}>
+                      matching &ldquo;{searchQuery}&rdquo;
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
 
@@ -279,10 +262,10 @@ export default function AcademicPage() {
                     fac.badgeType === 'ruby'
                       ? styles.badgeRuby
                       : fac.badgeType === 'gold'
-                      ? styles.badgeGold
-                      : fac.badgeType === 'azure'
-                      ? styles.badgeAzure
-                      : styles.badgePurple;
+                        ? styles.badgeGold
+                        : fac.badgeType === 'azure'
+                          ? styles.badgeAzure
+                          : styles.badgePurple;
 
                   return (
                     <article
@@ -414,7 +397,7 @@ export default function AcademicPage() {
 
             {/* Modal Body */}
             <div className={styles.modalBody}>
-              
+
               {/* Meta Grid */}
               <div className={styles.modalMetaGrid}>
                 <div className={styles.modalMetaCard}>

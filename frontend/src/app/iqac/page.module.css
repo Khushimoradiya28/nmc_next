@@ -13,6 +13,37 @@
 .heroTitle { font-family: var(--font-heading, 'Outfit', sans-serif); font-size: clamp(2.6rem, 5.8vw, 4.5rem); font-weight: 700; color: #fff; line-height: 1.15; margin: 0; }
 .heroTitle em { font-style: normal; }
 
+.heroBreadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 0.65rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.heroBreadcrumb a {
+  color: #f4c749;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.heroBreadcrumb a:hover {
+  color: #fde047;
+  text-decoration: underline;
+}
+
+.heroBreadcrumbSep {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+}
+
+.heroBreadcrumbCurrent {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 700;
+}
+
 .container { width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem; }
 
 /* ============================================
@@ -73,71 +104,35 @@
 }
 
 /* ============================================
-   1. ABOUT IQAC — "The Overlap" Composition
-   Editorial image bleeds right, content overlaps left
+   1. ABOUT IQAC — Senior UI/UX Responsive Layout
    ============================================ */
 .introSection {
   position: relative;
-  padding: 6rem 0 8rem;
-  background: var(--white, #ffffff);
-  overflow: visible;
+  padding: 5.5rem 0 6.5rem;
+  background: #ffffff;
+  overflow: hidden;
 }
 
 .introLayout {
-  max-width: 1380px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  position: relative;
-  min-height: 560px;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 3.5rem;
+  align-items: center;
 }
 
-/* --- Editorial Image (right-aligned, extends beyond grid) --- */
-.introVisual {
-  position: absolute;
-  top: 0;
-  right: -2rem;
-  width: 55%;
-  height: 100%;
-  overflow: hidden;
-  clip-path: polygon(8% 0, 100% 0, 100% 100%, 0% 100%);
-}
-
-.introVisual img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: grayscale(20%) contrast(1.05);
-}
-
-/* Subtle warm tint overlay on image */
-.introVisualOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(255, 255, 255, 0.95) 0%,
-    rgba(255, 255, 255, 0.3) 25%,
-    rgba(127, 0, 0, 0.06) 100%
-  );
-  pointer-events: none;
-}
-
-/* --- Content Block (overlaps image by ~15%) --- */
+/* Content Block — Left */
 .introContentBlock {
   position: relative;
   z-index: 2;
-  max-width: 560px;
-  padding: 3rem 0;
 }
 
-/* IQAC identity label */
 .introLabel {
-  font-size: 0.68rem;
+  font-size: 0.76rem;
   font-weight: 800;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--red-800, #8a0000);
-  margin-bottom: 1.5rem;
+  color: #8a0000;
+  margin-bottom: 1.25rem;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -146,595 +141,1444 @@
 .introLabelLine {
   width: 28px;
   height: 2px;
-  background: var(--red-800, #8a0000);
+  background: #8a0000;
+  border-radius: 2px;
 }
 
-/* Large editorial heading */
 .introHeading {
-  font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: clamp(2.1rem, 3.8vw, 3rem);
   font-weight: 800;
-  color: var(--gray-900, #111827);
-  line-height: 1.2;
+  color: #0f172a;
+  line-height: 1.18;
   letter-spacing: -0.02em;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 1.25rem 0;
 }
 
 .introHeadingAccent {
   display: block;
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
+  font-size: clamp(2.3rem, 4.2vw, 3.4rem);
   font-weight: 900;
-  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+  background: linear-gradient(135deg, #8a0000 0%, #dc2626 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   line-height: 1.15;
+  margin-top: 0.2rem;
 }
 
 .introDesc {
-  font-size: 0.95rem;
-  color: var(--gray-600, #4b5563);
-  line-height: 1.85;
-  margin: 1.5rem 0 0 0;
-  max-width: 480px;
+  font-size: 0.96rem;
+  color: #475569;
+  line-height: 1.8;
+  margin: 0 0 2.25rem 0;
+  max-width: 540px;
 }
 
 .introDesc strong {
-  color: var(--gray-900, #111827);
+  color: #0f172a;
+  font-weight: 700;
 }
 
-/* --- Statistics (vertical strip, left-aligned) --- */
-.introStats {
+/* 4 Stats Grid (2x2) */
+.introStatsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  max-width: 520px;
+}
+
+.introStatCard {
+  background: #fdf8f8;
+  border: 1px solid rgba(138, 0, 0, 0.12);
+  border-radius: 1rem;
+  padding: 1.15rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0;
-  margin-top: 2.5rem;
-  border-left: 2px solid var(--gray-200, #e5e7eb);
-  padding-left: 1.5rem;
+  gap: 0.25rem;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.introStatItem {
-  padding: 0.75rem 0;
-  display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
-}
-
-.introStatItem + .introStatItem {
-  border-top: 1px solid var(--gray-100, #f3f4f6);
+.introStatCard:hover {
+  background: #fff0f0;
+  border-color: rgba(138, 0, 0, 0.22);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(138, 0, 0, 0.05);
 }
 
 .introStatNum {
   font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: 1.6rem;
+  font-size: 1.85rem;
   font-weight: 900;
-  color: var(--gray-900, #111827);
+  color: #8a0000;
   line-height: 1;
-  min-width: 56px;
 }
 
 .introStatLabel {
-  font-size: 0.78rem;
-  font-weight: 600;
-  color: var(--gray-500, #6b7280);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 
-/* --- Ghost IQAC text (between layers) --- */
-.introGhost {
-  position: absolute;
-  bottom: -1rem;
-  right: 10%;
-  font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: 9rem;
-  font-weight: 900;
-  color: rgba(138, 0, 0, 0.03);
-  letter-spacing: -0.05em;
-  line-height: 0.8;
-  pointer-events: none;
-  user-select: none;
-  z-index: 1;
+/* Campus & Mentors Visual — Right */
+.introVisualWrap {
+  position: relative;
+  width: 100%;
 }
 
-/* ============================================
-   2. COMPOSITION — Single Member Spotlight (Interactive)
-   ============================================ */
-.compSection {
-  padding: 0;
-  background: var(--gray-900, #111827);
+.introVisual {
   position: relative;
+  width: 100%;
+  height: 480px;
+  border-radius: 1.5rem;
   overflow: hidden;
-  min-height: 620px;
-  display: grid;
-  grid-template-columns: 360px 1fr;
+  box-shadow: 0 20px 45px rgba(15, 23, 42, 0.08), 0 4px 12px rgba(138, 0, 0, 0.04);
+  border: 1px solid rgba(138, 0, 0, 0.08);
 }
 
-/* Left: Navigation Column */
-.compNav {
-  padding: 4rem 2.5rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  z-index: 2;
-  border-right: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.compNavLabel {
-  font-size: 0.65rem;
-  font-weight: 700;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gold-400, #f4c749);
-  margin-bottom: 0.5rem;
-}
-
-.compNavTitle {
-  font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: var(--white, #ffffff);
-  margin: 0 0 2.5rem 0;
-  line-height: 1.3;
-}
-
-.compNavList {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.compNavItem {
-  padding: 0.65rem 0;
-  padding-left: 1rem;
-  font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.3);
-  cursor: pointer;
-  border-left: 2px solid transparent;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: none;
-}
-
-.compNavItem:hover {
-  color: rgba(255, 255, 255, 0.6);
-  padding-left: 1.15rem;
-}
-
-.compNavItemActive {
-  color: var(--white, #ffffff);
-  border-left-color: var(--gold-400, #f4c749);
-  padding-left: 1.35rem;
-  font-weight: 700;
-}
-
-/* Right: Spotlight Area */
-.compSpotlight {
-  position: relative;
-  display: flex;
-  align-items: center;
-  padding: 4rem 5rem;
-  overflow: hidden;
-}
-
-/* Background editorial image */
-.compBgImage {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-}
-
-.compBgImage img {
+.introVisual img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.12;
-  filter: grayscale(40%);
-  transition: opacity 0.6s ease;
+  border-radius: 1.5rem;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Gradient overlay for text readability */
-.compBgOverlay {
+.introVisual:hover img {
+  transform: scale(1.03);
+}
+
+/* Floating Quality Badge on Visual */
+.introFloatingBadge {
   position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(17,24,39,0.92) 0%, rgba(17,24,39,0.7) 60%, rgba(17,24,39,0.85) 100%);
-  z-index: 1;
+  bottom: -1.25rem;
+  left: 2rem;
+  background: #ffffff;
+  border: 1px solid rgba(138, 0, 0, 0.15);
+  border-radius: 1rem;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.1);
+  z-index: 3;
 }
 
-/* Giant background number */
-.compBgNum {
-  font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: 18rem;
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.025);
-  line-height: 0.75;
-  letter-spacing: -0.06em;
-  position: absolute;
-  bottom: -2rem;
-  right: 2rem;
-  pointer-events: none;
-  z-index: 1;
-  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+.introBadgeIcon {
+  width: 38px;
+  height: 38px;
+  border-radius: 0.65rem;
+  background: #fef2f2;
+  color: #8a0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-/* Active member content */
-.compMemberContent {
-  position: relative;
-  z-index: 2;
-  max-width: 520px;
+.introBadgeText {
+  display: flex;
+  flex-direction: column;
 }
 
-.compMemberIndex {
-  font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold-400, #f4c749);
-  margin-bottom: 1.25rem;
-  transition: all 0.4s ease;
-}
-
-.compMemberName {
-  font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: clamp(2.2rem, 4vw, 3.2rem);
+.introBadgeText strong {
+  font-size: 0.88rem;
+  color: #0f172a;
   font-weight: 800;
-  color: var(--white, #ffffff);
-  line-height: 1.1;
-  margin: 0 0 0.6rem 0;
-  letter-spacing: -0.02em;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  line-height: 1.2;
 }
 
-.compMemberRole {
-  font-size: 1.05rem;
-  color: rgba(255, 255, 255, 0.5);
-  font-weight: 500;
-  margin: 0;
-  transition: all 0.4s ease;
-}
-
-.compMemberBar {
-  width: 48px;
-  height: 3px;
-  background: var(--gold-400, #f4c749);
-  border-radius: 3px;
-  margin-top: 2rem;
-  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-/* Image credit/note */
-.compImageNote {
-  position: absolute;
-  bottom: 1.5rem;
-  right: 2rem;
-  font-size: 0.6rem;
-  color: rgba(255, 255, 255, 0.15);
-  z-index: 2;
-  font-style: italic;
-  letter-spacing: 0.02em;
+.introBadgeText span {
+  font-size: 0.72rem;
+  color: #8a0000;
+  font-weight: 600;
 }
 
 /* ============================================
-   3. STRATEGIES — Feature Cards (2x3 grid)
+   2. COMPOSITION OF IQAC — Luxury Theme-Aligned Console
+   ============================================ */
+.compSection {
+  padding: 5.5rem 0 6.5rem;
+  background: linear-gradient(180deg, #fff5f5 0%, #fdf2f2 50%, #fff8f8 100%);
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(138, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(138, 0, 0, 0.08);
+}
+
+.compSection::before {
+  content: '';
+  position: absolute;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(138, 0, 0, 0.07) 0%, rgba(220, 38, 38, 0.03) 45%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.compHeaderBlock {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 3.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.compBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  background: #fef2f2;
+  border: 1px solid rgba(138, 0, 0, 0.18);
+  border-radius: var(--r-full, 9999px);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #8a0000;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.85rem;
+}
+
+.compBadgeDot {
+  width: 6px;
+  height: 6px;
+  background: #8a0000;
+  border-radius: 50%;
+}
+
+.compTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: clamp(2rem, 3.8vw, 2.75rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+}
+
+.compTitleAccent {
+  color: #8a0000;
+  background: linear-gradient(135deg, #8a0000 0%, #b91c1c 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.compSubtitle {
+  font-size: 0.96rem;
+  color: #64748b;
+  line-height: 1.65;
+  margin: 0 auto;
+}
+
+/* Centered Spotlight Console - Full Width */
+.compConsoleWrapperCentered {
+  width: 100%;
+  max-width: 100%;
+  margin: 1.25rem auto 0;
+  position: relative;
+}
+
+.compSpotlightCardFull {
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  padding: 3.5rem 3.5rem 2.75rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  box-shadow: 0 20px 50px rgba(15, 23, 42, 0.05), 0 4px 12px rgba(0, 0, 0, 0.02);
+  min-height: 480px;
+  overflow: hidden;
+}
+
+.compBgNum {
+  font-family: var(--font-heading, sans-serif);
+  font-size: 14rem;
+  font-weight: 900;
+  color: rgba(138, 0, 0, 0.035);
+  position: absolute;
+  bottom: -1.5rem;
+  right: 1.5rem;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  z-index: 1;
+}
+
+.spotlightTopMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.spotlightMemberBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.85rem;
+  background: #fef2f2;
+  border: 1px solid rgba(138, 0, 0, 0.2);
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #8a0000;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.spotlightTierTag {
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #b45309;
+  background: #fffbeb;
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  padding: 0.3rem 0.85rem;
+  border-radius: 9999px;
+}
+
+.spotlightProfile {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.spotlightIconWrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 1rem;
+  background: linear-gradient(135deg, #8a0000 0%, #b91c1c 100%);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 8px 20px rgba(138, 0, 0, 0.25);
+}
+
+.spotlightHeadingWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.spotlightRoleLabel {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #8a0000;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.spotlightName {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: clamp(1.6rem, 2.8vw, 2.2rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+  margin: 0;
+}
+
+.spotlightDescBox {
+  background: #ffffff;
+  border: 1px solid #f1f5f9;
+  border-left: 3px solid #8a0000;
+  border-radius: 0.85rem;
+  padding: 1.25rem 1.35rem;
+  margin-bottom: 1.75rem;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
+}
+
+.spotlightDescTitle {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.45rem;
+}
+
+.spotlightDescText {
+  font-size: 0.92rem;
+  color: #334155;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.spotlightRespBlock {
+  margin-bottom: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+.spotlightRespTitle {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #475569;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.75rem;
+}
+
+.spotlightTags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+}
+
+.spotlightTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  font-size: 0.8rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 0.6rem;
+}
+
+.spotlightTag svg {
+  color: #8a0000;
+}
+
+.spotlightFooterControls {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f1f5f9;
+  position: relative;
+  z-index: 2;
+}
+
+.spotlightProgressDots {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.spotlightDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: #cbd5e1;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.2s ease;
+}
+
+.spotlightDotActive {
+  width: 24px;
+  background: #8a0000;
+}
+
+.spotlightArrows {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.spotlightNavBtn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.spotlightNavBtn:hover {
+  background: #8a0000;
+  border-color: #8a0000;
+  color: #ffffff;
+  transform: scale(1.05);
+}
+
+/* ============================================
+   3. STRATEGIES & KEY FUNCTIONS (Luxury 3x2 Grid)
    ============================================ */
 .stratSection {
-  padding: 5rem 0;
-  background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+  padding: 5.5rem 0 6.5rem;
+  background: #ffffff;
+  position: relative;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.stratHeaderBlock {
+  text-align: center;
+  max-width: 800px;
+  margin: 0 auto 3.5rem;
+}
+
+.stratBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  background: #fef2f2;
+  border: 1px solid rgba(138, 0, 0, 0.18);
+  border-radius: var(--r-full, 9999px);
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #8a0000;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.85rem;
+}
+
+.stratBadgeDot {
+  width: 6px;
+  height: 6px;
+  background: #8a0000;
+  border-radius: 50%;
+}
+
+.stratMainTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: clamp(2.1rem, 4vw, 2.85rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+}
+
+.stratTitleAccent {
+  color: #8a0000;
+  background: linear-gradient(135deg, #8a0000 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stratMainSubtitle {
+  font-size: 0.98rem;
+  color: #64748b;
+  line-height: 1.65;
+  margin: 0 auto;
 }
 
 .stratGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-top: 2.5rem;
+  gap: 1.75rem;
 }
 
 .stratCard {
   position: relative;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 1.25rem;
-  padding: 2rem 1.6rem;
-  border: 1px solid rgba(229, 231, 235, 0.85);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  overflow: hidden;
+  background: #ffffff;
+  border-radius: 1.35rem;
+  padding: 2.25rem 1.85rem;
+  border: 1px solid #e2e8f0;
+  border-top: 3.5px solid #8a0000;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04), 0 2px 6px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .stratCard:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 45px rgba(138, 0, 0, 0.07), 0 4px 12px rgba(0, 0, 0, 0.03);
-  border-color: rgba(138, 0, 0, 0.12);
+  transform: translateY(-6px);
+  box-shadow: 0 20px 45px rgba(138, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03);
+  border-color: rgba(138, 0, 0, 0.2);
+  border-top-color: #8a0000;
 }
 
-.stratCardTop {
+.cardRuby { border-top-color: #8a0000; }
+.cardGold { border-top-color: #d97706; }
+.cardEmerald { border-top-color: #059669; }
+.cardAzure { border-top-color: #0284c7; }
+.cardPurple { border-top-color: #7c3aed; }
+
+.stratCardHeader {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1.35rem;
 }
 
 .stratCardIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: 0.9rem;
+  width: 52px;
+  height: 52px;
+  border-radius: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
 }
 
 .stratCard:hover .stratCardIcon {
-  transform: scale(1.1) rotate(4deg);
+  transform: scale(1.08) rotate(3deg);
 }
 
-.stratIconRed { background: var(--red-50, #fef2f2); color: var(--red-800, #8a0000); }
-.stratIconGold { background: var(--gold-100, #fef9c3); color: var(--gold-700, #b45309); }
-.stratIconGreen { background: #ecfdf5; color: #16a34a; }
+.iconRuby { background: #fef2f2; color: #8a0000; }
+.iconGold { background: #fffbeb; color: #b45309; }
+.iconEmerald { background: #ecfdf5; color: #059669; }
+.iconAzure { background: #f0f9ff; color: #0284c7; }
+.iconPurple { background: #f5f3ff; color: #7c3aed; }
 
 .stratCardChip {
-  font-size: 0.68rem;
+  font-size: 0.72rem;
   font-weight: 700;
-  padding: 0.3rem 0.6rem;
-  border-radius: var(--r-full, 9999px);
-  background: var(--red-50, #fef2f2);
-  color: var(--red-800, #8a0000);
-  border: 1px solid var(--red-200, #fecaca);
+  padding: 0.28rem 0.65rem;
+  border-radius: 9999px;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  letter-spacing: 0.03em;
 }
 
 .stratCardTitle {
-  font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: 1.05rem;
-  font-weight: 700;
-  color: var(--gray-900, #111827);
-  margin: 0 0 0.5rem 0;
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.18rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.3;
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.01em;
 }
 
 .stratCardDesc {
   font-size: 0.88rem;
   line-height: 1.65;
-  color: var(--gray-600, #4b5563);
-  margin: 0 0 1.25rem 0;
+  color: #64748b;
+  margin: 0 0 1.5rem 0;
+  flex-grow: 1;
 }
 
-/* Progress meter (like homepage stats) */
-.stratMeter {
-  height: 4px;
-  border-radius: 4px;
-  background: var(--gray-200, #e5e7eb);
-  overflow: hidden;
-}
-
-.stratMeterFill {
-  height: 100%;
-  border-radius: 4px;
-  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.meterRed { background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000)); width: 85%; }
-.meterGold { background: var(--grad-gold, linear-gradient(135deg, #f4c749, #d97706)); width: 75%; }
-.meterGreen { background: linear-gradient(135deg, #16a34a, #22c55e); width: 70%; }
-
-/* ============================================
-   4. EVENTS — Horizontal Cards
-   ============================================ */
-.eventsSection {
-  padding: 5rem 0;
-  background: var(--sky-50, #fffdf5);
-}
-
-.eventsGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1.5rem;
-  margin-top: 2.5rem;
-}
-
-.eventCard {
-  position: relative;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 1.25rem;
-  padding: 1.75rem;
-  display: flex;
-  align-items: flex-start;
-  gap: 1.25rem;
-  border: 1px solid rgba(229, 231, 235, 0.85);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.eventCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 16px 40px rgba(245, 158, 11, 0.06), 0 4px 10px rgba(0, 0, 0, 0.03);
-  border-color: rgba(245, 158, 11, 0.2);
-}
-
-.eventCardIcon {
-  width: 48px;
-  height: 48px;
-  border-radius: 0.9rem;
-  background: var(--gold-100, #fef9c3);
-  color: var(--gold-700, #b45309);
+.stratCardFooter {
+  padding-top: 1.2rem;
+  border-top: 1px solid #f1f5f9;
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.1);
-  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  justify-content: space-between;
 }
 
-.eventCard:hover .eventCardIcon {
-  transform: scale(1.1) rotate(4deg);
-}
-
-.eventCardTitle {
-  font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: 1rem;
+.stratMetricBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fdf8f8;
+  border: 1px solid rgba(138, 0, 0, 0.15);
+  color: #8a0000;
+  font-size: 0.78rem;
   font-weight: 700;
-  color: var(--gray-900, #111827);
-  margin: 0 0 0.35rem 0;
-}
-
-.eventCardDesc {
-  font-size: 0.85rem;
-  line-height: 1.6;
-  color: var(--gray-600, #4b5563);
-  margin: 0;
+  padding: 0.3rem 0.75rem;
+  border-radius: 0.55rem;
 }
 
 /* ============================================
-   5. NAAC/NIRF — Dark Section with Glass Cards
+   4. CONFERENCES, FDP & WORKSHOPS — Minimal & Clean
    ============================================ */
-.accredSection {
-  padding: 5rem 0;
-  background: var(--gray-900, #111827);
+.eventsSection {
+  padding: 5.5rem 0 6rem;
+  background: linear-gradient(180deg, #fffcfc 0%, #fff8f8 50%, #ffffff 100%);
   position: relative;
-  overflow: hidden;
+  border-top: 1px solid rgba(138, 0, 0, 0.08);
+  border-bottom: 1px solid rgba(138, 0, 0, 0.08);
 }
 
-.accredSection::before {
-  content: '';
-  position: absolute;
-  width: 500px;
-  height: 500px;
-  border-radius: 50%;
-  top: -200px;
-  right: -150px;
-  background: radial-gradient(circle, rgba(138,0,0,0.15) 0%, transparent 70%);
-  filter: blur(60px);
-  pointer-events: none;
-}
-
-.accredHeader {
+.eventsHeaderBlock {
   text-align: center;
-  margin-bottom: 3rem;
+  max-width: 760px;
+  margin: 0 auto 3rem;
 }
 
-.accredHeaderTag {
+.eventsBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  background: #fef2f2;
+  border: 1px solid rgba(138, 0, 0, 0.18);
+  border-radius: 9999px;
   font-size: 0.76rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--gold-400, #f4c749);
-  margin-bottom: 0.75rem;
-}
-
-.accredHeaderTitle {
-  font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: clamp(1.7rem, 3vw, 2.5rem);
   font-weight: 700;
-  color: var(--white, #ffffff);
-  margin: 0;
+  color: #8a0000;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.85rem;
 }
 
-.accredGrid {
+.eventsBadgeDot {
+  width: 6px;
+  height: 6px;
+  background: #8a0000;
+  border-radius: 50%;
+}
+
+.eventsMainTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: clamp(2rem, 3.8vw, 2.75rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+  margin: 0 0 0.85rem;
+  letter-spacing: -0.02em;
+}
+
+.eventsTitleAccent {
+  color: #8a0000;
+  background: linear-gradient(135deg, #8a0000 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.eventsMainSubtitle {
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.65;
+  margin: 0 auto;
+}
+
+/* Minimal 4-Card Grid */
+.eventsMinimalGrid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.75rem;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.eventMinimalCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 2rem 1.65rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 }
 
-.accredCard {
-  background: rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 1.25rem;
-  padding: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  text-align: center;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+.eventMinimalCard:hover {
+  transform: translateY(-5px);
+  border-color: rgba(138, 0, 0, 0.25);
+  box-shadow: 0 14px 35px rgba(138, 0, 0, 0.07);
 }
 
-.accredCard:hover {
-  transform: translateY(-6px);
-  background: rgba(255, 255, 255, 0.07);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-}
-
-.accredCardIcon {
-  width: 56px;
-  height: 56px;
+.eventMinimalIcon {
+  width: 48px;
+  height: 48px;
   border-radius: 1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto 1.25rem auto;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.25rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }
 
-.accredIconRed { background: rgba(138, 0, 0, 0.25); color: #ff8a8a; }
-.accredIconGold { background: rgba(245, 158, 11, 0.2); color: var(--gold-400, #f4c749); }
-
-.accredCardTitle {
-  font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: var(--white, #ffffff);
-  margin: 0 0 0.25rem 0;
-}
-
-.accredCardSub {
+.eventMinimalTag {
   font-size: 0.72rem;
   font-weight: 700;
+  color: #8a0000;
   text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--gold-400, #f4c749);
-  margin: 0 0 1.25rem 0;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.4rem;
 }
 
-.accredCardText {
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: rgba(255, 255, 255, 0.55);
+.eventMinimalTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.35;
+  margin: 0 0 0.75rem 0;
+}
+
+.eventMinimalDesc {
+  font-size: 0.86rem;
+  line-height: 1.65;
+  color: #64748b;
   margin: 0;
 }
 
 /* ============================================
-   Responsive
+   5. NAAC & NIRF — Creative Quality Benchmarks Hub
    ============================================ */
-@media (max-width: 1024px) {
-  .stratGrid { grid-template-columns: repeat(2, 1fr); }
+.accredSection {
+  padding: 6rem 0 6.5rem;
+  background: linear-gradient(180deg, #fdf8f8 0%, #fafbfc 50%, #ffffff 100%);
+  position: relative;
+  overflow: hidden;
+  border-top: 1px solid rgba(138, 0, 0, 0.08);
 }
 
-@media (max-width: 768px) {
-  .heroSection { min-height: 40vh; height: 40vh; }
-  .heroContent { padding-bottom: 50px; }
-  .introVisual { position: relative; right: 0; width: 100%; height: 300px; clip-path: none; margin-bottom: -3rem; }
-  .introContentBlock { max-width: 100%; padding: 2rem 0; }
-  .introLayout { min-height: auto; }
-  .introGhost { font-size: 5rem; bottom: auto; top: 0; right: 0; }
-  .introHeading { font-size: 1.8rem; }
-  .introHeadingAccent { font-size: 2rem; }
-  .compSection { grid-template-columns: 1fr; min-height: auto; }
-  .compNav { padding: 2.5rem 2rem; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.05); }
-  .compNavList { flex-direction: row; flex-wrap: wrap; gap: 0.4rem; }
-  .compNavItem { padding: 0.45rem 0.7rem; border-left: none; border-bottom: 2px solid transparent; font-size: 0.78rem; }
-  .compNavItemActive { border-bottom-color: var(--gold-400); border-left: none; padding-left: 0.7rem; }
-  .compSpotlight { padding: 3rem 2rem; min-height: 280px; }
-  .compBgNum { font-size: 10rem; right: 1rem; }
-  .stratSection { padding: 3.5rem 0; }
-  .stratGrid { grid-template-columns: 1fr; }
-  .eventsSection { padding: 3.5rem 0; }
-  .eventsGrid { grid-template-columns: 1fr; }
-  .accredSection { padding: 3.5rem 0; }
-  .accredGrid { grid-template-columns: 1fr; }
+.accredHeader {
+  text-align: center;
+  max-width: 780px;
+  margin: 0 auto 3.5rem;
 }
 
+.accredBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.35rem 1rem;
+  background: #fef2f2;
+  border: 1px solid rgba(138, 0, 0, 0.18);
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #8a0000;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.85rem;
+}
+
+.accredBadgeDot {
+  width: 6px;
+  height: 6px;
+  background: #8a0000;
+  border-radius: 50%;
+}
+
+.accredMainTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: clamp(2rem, 3.8vw, 2.75rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.2;
+  margin: 0 0 1rem;
+  letter-spacing: -0.02em;
+}
+
+.accredTitleAccent {
+  color: #8a0000;
+  background: linear-gradient(135deg, #8a0000 0%, #dc2626 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.accredSubtitle {
+  font-size: 0.96rem;
+  color: #64748b;
+  line-height: 1.65;
+  margin: 0 auto;
+}
+
+/* Dual Pillar Grid */
+.accredDualGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2.5rem;
+}
+
+.accredConsoleCard {
+  background: #ffffff;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.05), 0 2px 6px rgba(0, 0, 0, 0.02);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.accredConsoleCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 55px rgba(138, 0, 0, 0.08), 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.naacCardTheme {
+  border-top: 4px solid #8a0000;
+}
+
+.nirfCardTheme {
+  border-top: 4px solid #d97706;
+}
+
+.accredCardTop {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  margin-bottom: 1.5rem;
+}
+
+.accredEmblemIcon {
+  width: 58px;
+  height: 58px;
+  border-radius: 1.15rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.06);
+}
+
+.emblemRuby { background: #fef2f2; color: #8a0000; }
+.emblemGold { background: #fffbeb; color: #b45309; }
+
+.accredMetaGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.accredGovTag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #8a0000;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.accredGovTagGold {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #b45309;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.accredCouncilName {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.85rem;
+  font-weight: 900;
+  color: #0f172a;
+  line-height: 1;
+  margin: 0;
+}
+
+.accredFullName {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 0.75rem 0;
+  line-height: 1.35;
+}
+
+.accredDescription {
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: #64748b;
+  margin: 0 0 1.75rem 0;
+}
+
+/* Criteria / Dimensions Container */
+.accredCriteriaBox {
+  background: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 1.15rem;
+  padding: 1.35rem 1.4rem;
+  margin-bottom: 1.75rem;
+  flex-grow: 1;
+}
+
+.accredCriteriaHeader {
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 1rem 0;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.criteriaPillGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.criteriaItem {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.criteriaItem svg {
+  color: #8a0000;
+  flex-shrink: 0;
+}
+
+/* NIRF Dimensions */
+.nirfDimensionList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.nirfDimItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.nirfDimCode {
+  font-family: var(--font-heading, monospace);
+  font-size: 0.74rem;
+  font-weight: 800;
+  background: #fffbeb;
+  color: #b45309;
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.4rem;
+  flex-shrink: 0;
+}
+
+.nirfDimInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.nirfDimInfo strong {
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.nirfDimInfo span {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+/* Footer Badge */
+.accredFooterStrip {
+  padding-top: 1.25rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.verifiedBadgeRuby {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #8a0000;
+  background: #fdf8f8;
+  border: 1px solid rgba(138, 0, 0, 0.15);
+  padding: 0.35rem 0.85rem;
+  border-radius: 0.6rem;
+}
+
+.verifiedBadgeGold {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #b45309;
+  background: #fffdf5;
+  border: 1px solid rgba(217, 119, 6, 0.2);
+  padding: 0.35rem 0.85rem;
+  border-radius: 0.6rem;
+}
+
+/* Quality Pledge Banner */
+.qualityPledgeBanner {
+  background: #ffffff;
+  border: 1px solid rgba(138, 0, 0, 0.14);
+  border-radius: 1.35rem;
+  padding: 2rem 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  box-shadow: 0 12px 30px rgba(15, 23, 42, 0.04);
+}
+
+.pledgeHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  max-width: 600px;
+}
+
+.pledgeIconWrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #fef2f2;
+  color: #8a0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 14px rgba(138, 0, 0, 0.08);
+}
+
+.pledgeTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.3rem 0;
+}
+
+.pledgeDesc {
+  font-size: 0.86rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+.pledgeStatsRow {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-shrink: 0;
+}
+
+.pledgeStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.pledgeStat strong {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.35rem;
+  font-weight: 900;
+  color: #8a0000;
+  line-height: 1;
+}
+
+.pledgeStat span {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  margin-top: 0.25rem;
+}
+
+.pledgeDivider {
+  width: 1px;
+  height: 36px;
+  background: #e2e8f0;
+}
+
+/* ============================================
+   4-TIER RESPONSIVE ARCHITECTURE
+   (Desktop > 1200px | Laptop 1024-1199px | Tablet 768-1023px | Mobile <= 767px)
+   ============================================ */
+
+/* 1. LAPTOP VIEW (1024px to 1199px) */
+@media (max-width: 1199px) {
+  .introLayout {
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+  }
+  .introVisual {
+    height: 440px;
+  }
+  .stratGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .compSpotlightCardFull {
+    padding: 2.5rem 2.25rem;
+  }
+  .eventsMinimalGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* 2. TABLET VIEW (768px to 1023px) */
+@media (max-width: 1023px) {
+  .heroSection {
+    min-height: 42vh;
+    height: 42vh;
+  }
+  .introSection {
+    padding: 4.5rem 0 5rem;
+  }
+  .introLayout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .introContentBlock {
+    max-width: 100%;
+  }
+  .introVisual {
+    height: 380px;
+  }
+  .introFloatingBadge {
+    bottom: -1rem;
+    left: 1.5rem;
+  }
+  .compSection {
+    padding: 4.5rem 0 5rem;
+  }
+  .compSpotlightCardFull {
+    padding: 2.25rem 2rem;
+    min-height: auto;
+  }
+  .compBgNum {
+    font-size: 10rem;
+    right: 1rem;
+    bottom: -1rem;
+  }
+  .stratSection {
+    padding: 4.5rem 0 5rem;
+  }
+  .stratGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .eventsSection {
+    padding: 4.5rem 0 5rem;
+  }
+  .eventsMinimalGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .accredSection {
+    padding: 4.5rem 0 5rem;
+  }
+  .accredDualGrid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+  .qualityPledgeBanner {
+    flex-direction: column;
+    text-align: center;
+    gap: 1.5rem;
+    padding: 2rem 1.5rem;
+  }
+  .pledgeHeaderRow {
+    flex-direction: column;
+    text-align: center;
+  }
+  .pledgeStatsRow {
+    width: 100%;
+    justify-content: space-around;
+  }
+}
+
+/* 3. MOBILE VIEW (<= 767px) */
+@media (max-width: 767px) {
+  .heroSection {
+    min-height: 36vh;
+    height: 36vh;
+  }
+  .heroContent {
+    padding-bottom: 35px;
+  }
+  .heroBreadcrumb {
+    font-size: 0.82rem;
+    gap: 0.4rem;
+  }
+  .introSection {
+    padding: 3.5rem 0 4rem;
+  }
+  .introLayout {
+    gap: 2.25rem;
+  }
+  .introHeading {
+    font-size: 1.85rem;
+  }
+  .introHeadingAccent {
+    font-size: 2.05rem;
+  }
+  .introDesc {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+  }
+  .introStatsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .introStatCard {
+    padding: 0.9rem 1rem;
+  }
+  .introStatNum {
+    font-size: 1.6rem;
+  }
+  .introStatLabel {
+    font-size: 0.7rem;
+  }
+  .introVisual {
+    height: 260px;
+    border-radius: 1.25rem;
+  }
+  .introVisual img {
+    border-radius: 1.25rem;
+  }
+  .introFloatingBadge {
+    position: static;
+    margin-top: 1rem;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .compSection {
+    padding: 3.5rem 0 4rem;
+  }
+  .compHeaderBlock {
+    margin-bottom: 2.25rem;
+  }
+  .compSpotlightCardFull {
+    padding: 2rem 1.4rem;
+    border-radius: 1.25rem;
+  }
+  .spotlightProfile {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.85rem;
+  }
+  .spotlightName {
+    font-size: 1.55rem;
+  }
+  .spotlightTopMeta {
+    gap: 0.5rem;
+  }
+  .stratSection {
+    padding: 3.5rem 0 4rem;
+  }
+  .stratHeaderBlock {
+    margin-bottom: 2.25rem;
+  }
+  .stratGrid {
+    grid-template-columns: 1fr;
+  }
+  .eventsSection {
+    padding: 3.5rem 0 4rem;
+  }
+  .eventsMinimalGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .eventMinimalCard {
+    padding: 1.6rem 1.35rem;
+  }
+  .accredSection {
+    padding: 3.5rem 0 4rem;
+  }
+  .accredDualGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .accredConsoleCard {
+    padding: 1.75rem 1.35rem;
+  }
+  .qualityPledgeBanner {
+    padding: 1.5rem 1.2rem;
+  }
+  .pledgeStatsRow {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 0.9rem;
+  }
+  .pledgeStat {
+    width: 100%;
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+  .pledgeStat:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .pledgeDivider {
+    display: none;
+  }
+}
+
+/* 4. SMALL MOBILE (<= 480px) */
 @media (max-width: 480px) {
-  .heroSection { min-height: 35vh; height: 35vh; }
-  .heroContent { padding: 0 1rem 40px 1rem; }
-  .introSection { padding: 3rem 0 5rem; }
-  .introVisual { height: 220px; }
-  .introGhost { font-size: 4rem; }
-  .introStats { padding-left: 1rem; }
-  .stratCard { padding: 1.5rem; }
-  .accredCard { padding: 2rem; }
+  .heroSection {
+    min-height: 32vh;
+    height: 32vh;
+  }
+  .heroContent {
+    padding: 0 1rem 30px 1rem;
+  }
+  .introSection {
+    padding: 2.75rem 0 3.25rem;
+  }
+  .introHeading {
+    font-size: 1.65rem;
+  }
+  .introHeadingAccent {
+    font-size: 1.85rem;
+  }
+  .introVisual {
+    height: 220px;
+  }
+  .introStatsGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem;
+  }
+  .introStatCard {
+    padding: 0.75rem 0.85rem;
+  }
+  .introStatNum {
+    font-size: 1.4rem;
+  }
+  .introStatLabel {
+    font-size: 0.65rem;
+  }
+  .compSpotlightCardFull {
+    padding: 1.5rem 1.1rem;
+  }
+  .spotlightFooterControls {
+    flex-direction: column-reverse;
+    gap: 1rem;
+    align-items: center;
+  }
+  .spotlightProgressDots {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.4rem;
+  }
+  .stratCard {
+    padding: 1.5rem 1.2rem;
+  }
+  .eventsMinimalGrid {
+    grid-template-columns: 1fr;
+    gap: 0.85rem;
+  }
+  .eventMinimalCard {
+    padding: 1.35rem 1.1rem;
+  }
+  .accredConsoleCard {
+    padding: 1.35rem 1rem;
+  }
+  .accredCouncilName {
+    font-size: 1.55rem;
+  }
+  .accredFullName {
+    font-size: 0.95rem;
+  }
+  .criteriaItem {
+    font-size: 0.78rem;
+  }
 }

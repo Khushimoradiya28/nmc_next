@@ -1,0 +1,1693 @@
+/* ============================================
+   IQAC Subpages Stylesheet
+   ============================================ */
+
+.heroSection {
+  position: relative;
+  min-height: 48vh;
+  height: 48vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+.heroBgImage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroBgImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.45));
+  z-index: 1;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1380px;
+  margin: 0 auto;
+  padding: 0 2rem 70px 2rem;
+}
+
+.heroTitle {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(2.4rem, 5.2vw, 4.2rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.15;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.02em;
+}
+
+.heroTitle em {
+  font-style: normal;
+}
+
+/* Breadcrumb Component */
+.heroBreadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.heroBreadcrumb a {
+  color: #f4c749;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.heroBreadcrumb a:hover {
+  color: #fde047;
+  text-decoration: underline;
+}
+
+.heroBreadcrumbSep {
+  color: rgba(255, 255, 255, 0.45);
+  font-size: 0.8rem;
+}
+
+.heroBreadcrumbCurrent {
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 700;
+}
+
+/* ============================================
+   Page Layout & Container (Clean Alternating Flow)
+   ============================================ */
+.subpageMain {
+  background: #fcfbfa;
+  padding: 4.5rem 0 6rem;
+}
+
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ============================================
+   Executive Intro Banner Card (Image Split)
+   ============================================ */
+.execBannerCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.5rem;
+  padding: 3rem 3.5rem;
+  margin-bottom: 4.5rem;
+  box-shadow: 0 12px 35px rgba(15, 23, 42, 0.04);
+  position: relative;
+  overflow: hidden;
+  border-top: 4px solid #8a0000;
+}
+
+.execBannerGrid {
+  display: grid;
+  grid-template-columns: 1.25fr 0.85fr;
+  gap: 2.75rem;
+  align-items: center;
+  margin-bottom: 2.25rem;
+}
+
+.execBannerTextCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.execBannerImgWrap {
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(138, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+  aspect-ratio: 4 / 3;
+}
+
+.execBannerImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.execBannerImgWrap:hover .execBannerImg {
+  transform: scale(1.04);
+}
+
+.execImgFloatingBadge {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  padding: 0.65rem 1rem;
+  border-radius: 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.execBadgeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1.15rem;
+}
+
+.execBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fef2f2;
+  border: 1px solid rgba(138, 0, 0, 0.18);
+  color: #8a0000;
+  padding: 0.35rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.76rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.execBadgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8a0000;
+  flex-shrink: 0;
+}
+
+.execHeading {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: clamp(1.8rem, 3vw, 2.35rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+  margin: 0 0 1rem 0;
+  letter-spacing: -0.01em;
+}
+
+.execHeading span {
+  color: #8a0000;
+}
+
+.execDescription {
+  color: #475569;
+  font-size: 1.02rem;
+  line-height: 1.75;
+  margin: 0;
+}
+
+/* Executive Micro-KPIs */
+.execKpiRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.execKpiItem {
+  display: flex;
+  flex-direction: column;
+}
+
+.execKpiNum {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #8a0000;
+  line-height: 1;
+  margin-bottom: 0.35rem;
+}
+
+.execKpiLabel {
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+/* ============================================
+   Section Headings
+   ============================================ */
+.sectionHeaderWrap {
+  margin-bottom: 2.25rem;
+  position: relative;
+}
+
+.sectionMiniTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.74rem;
+  font-weight: 800;
+  color: #8a0000;
+  background: #fef2f2;
+  border: 1px solid rgba(138, 0, 0, 0.15);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 0.5rem;
+}
+
+.sectionMiniTagGold {
+  color: #b45309;
+  background: #fefce8;
+  border-color: rgba(217, 119, 6, 0.25);
+}
+
+.sectionMainHeading {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+  margin: 0 0 0.5rem 0;
+  letter-spacing: -0.01em;
+}
+
+.sectionSubtext {
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 750px;
+}
+
+/* ============================================
+   1. STRATEGIES — 6 Pillar Grid (Alternating Soft Yellow)
+   ============================================ */
+.strategiesGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4.5rem;
+}
+
+.strategyCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 2rem 1.85rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.03);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.strategyCard:hover {
+  transform: translateY(-5px);
+  border-color: #f59e0b;
+  box-shadow: 0 14px 35px rgba(217, 119, 6, 0.1);
+}
+
+.strategyCard:nth-child(even) {
+  background: #fffdf5;
+  border-color: #fde68a;
+}
+
+.strategyCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.strategyIconWrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fef2f2;
+  color: #8a0000;
+  border: 1px solid rgba(138, 0, 0, 0.15);
+}
+
+.strategyCard:nth-child(even) .strategyIconWrap {
+  background: #fef3c7;
+  color: #b45309;
+  border: 1px solid rgba(217, 119, 6, 0.25);
+}
+
+.strategyIndex {
+  font-family: var(--font-heading, monospace);
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.04em;
+}
+
+.strategyCard:nth-child(even) .strategyIndex {
+  color: #d97706;
+}
+
+.strategyTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.35;
+  margin: 0 0 0.65rem 0;
+}
+
+.strategyDesc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #64748b;
+  margin: 0 0 1.25rem 0;
+  flex-grow: 1;
+}
+
+.strategyTag {
+  display: inline-block;
+  align-self: flex-start;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #8a0000;
+  background: #fdf8f8;
+  border: 1px solid rgba(138, 0, 0, 0.12);
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.strategyCard:nth-child(even) .strategyTag {
+  color: #b45309;
+  background: #fefce8;
+  border-color: rgba(217, 119, 6, 0.2);
+}
+
+/* ============================================
+   2. BENEFITS — 4 Beneficiary Quadrants (White Surface)
+   ============================================ */
+.benefitsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem;
+  margin-bottom: 4.5rem;
+}
+
+.benefitCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.35rem;
+  padding: 2.25rem 2.25rem;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.03);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.benefitCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+}
+
+.benefitRuby { border-top: 4px solid #8a0000; }
+.benefitGold { 
+  background: #fffdf8;
+  border-color: #fde68a;
+  border-top: 4px solid #d97706; 
+}
+.benefitEmerald { border-top: 4px solid #059669; }
+.benefitAzure { border-top: 4px solid #0284c7; }
+
+.benefitHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.benefitIconBox {
+  width: 50px;
+  height: 50px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.iconRuby { background: #fef2f2; color: #8a0000; border: 1px solid rgba(138, 0, 0, 0.15); }
+.iconGold { background: #fef3c7; color: #b45309; border: 1px solid rgba(217, 119, 6, 0.3); }
+.iconEmerald { background: #ecfdf5; color: #047857; border: 1px solid rgba(5, 150, 105, 0.2); }
+.iconAzure { background: #f0f9ff; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.2); }
+
+.benefitTitleWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.benefitAudience {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #64748b;
+}
+
+.benefitHeading {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+  line-height: 1.25;
+}
+
+.benefitPointsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.benefitPointItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #334155;
+  line-height: 1.55;
+}
+
+.benefitCheckSvg {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  color: #8a0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 0.15rem;
+}
+
+.benefitGold .benefitCheckSvg {
+  background: #fef3c7;
+  color: #b45309;
+}
+
+/* ============================================
+   3. FUNCTIONS — 6 Execution Streams
+   ============================================ */
+.functionsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4.5rem;
+}
+
+.functionCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 2rem 1.85rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.03);
+  transition: all 0.3s ease;
+}
+
+.functionCard:hover {
+  transform: translateY(-4px);
+  border-color: #f59e0b;
+  box-shadow: 0 12px 30px rgba(217, 119, 6, 0.08);
+}
+
+.functionCard:nth-child(even) {
+  background: #fffdf5;
+  border-color: #fef3c7;
+}
+
+.functionNumPill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 0.65rem;
+  background: #fdf2f2;
+  color: #8a0000;
+  font-size: 0.78rem;
+  font-weight: 800;
+  margin-bottom: 1.2rem;
+  font-family: var(--font-heading, monospace);
+  border: 1px solid rgba(138, 0, 0, 0.15);
+}
+
+.functionCard:nth-child(even) .functionNumPill {
+  background: #fef3c7;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.functionTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.35;
+  margin: 0 0 0.65rem 0;
+}
+
+.functionDesc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #64748b;
+  margin: 0;
+}
+
+/* ============================================
+   4. CONFERENCES & WORKSHOPS — Image-Rich 3 Pillars
+   ============================================ */
+.confCategoryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.75rem;
+  margin-bottom: 4.5rem;
+}
+
+.confCategoryCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.35rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 6px 20px rgba(15, 23, 42, 0.04);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.confCategoryCard:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(138, 0, 0, 0.09);
+  border-color: rgba(138, 0, 0, 0.3);
+}
+
+.confCatRuby { border-top: 4px solid #8a0000; }
+.confCatGold { 
+  border-top: 4px solid #d97706; 
+  background: #fffdf8;
+  border-color: #fde68a;
+}
+.confCatEmerald { border-top: 4px solid #059669; }
+
+.confCatImgWrap {
+  position: relative;
+  width: 100%;
+  height: 190px;
+  overflow: hidden;
+}
+
+.confCatImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.confCategoryCard:hover .confCatImg {
+  transform: scale(1.06);
+}
+
+.confCatOverlayBadge {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  background: rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  padding: 0.3rem 0.85rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.confCatBody {
+  padding: 2rem 1.85rem;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.confCatTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.65rem 0;
+  line-height: 1.3;
+}
+
+.confCatDesc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #64748b;
+  margin: 0 0 1.25rem 0;
+  flex-grow: 1;
+}
+
+.confCatFeatureList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding-top: 1.15rem;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.confCatFeatureItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.confCatCheckDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8a0000;
+  flex-shrink: 0;
+}
+
+.confCatGold .confCatCheckDot {
+  background: #d97706;
+}
+
+.confCatEmerald .confCatCheckDot {
+  background: #059669;
+}
+
+/* ============================================
+   5. FLAGSHIP EVENTS SCHEDULE (Crisp Cards with Images)
+   ============================================ */
+.eventsScheduleGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.75rem;
+  margin-bottom: 4.5rem;
+}
+
+.eventScheduleCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.35rem;
+  padding: 2.25rem 2rem;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.eventScheduleCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(138, 0, 0, 0.3);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.06);
+}
+
+.eventCardTop {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.eventDateBadge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  background: #fdf2f2;
+  border: 1px solid rgba(138, 0, 0, 0.2);
+  border-radius: 0.85rem;
+  padding: 0.5rem 0.65rem;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.eventDateDay {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: #8a0000;
+  line-height: 1;
+  margin-bottom: 0.2rem;
+}
+
+.eventDateMonth {
+  font-size: 0.68rem;
+  font-weight: 800;
+  color: #64748b;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.eventCatPill {
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  display: inline-block;
+}
+
+.catPillRed {
+  background: #fef2f2;
+  color: #8a0000;
+  border: 1px solid rgba(138, 0, 0, 0.18);
+}
+
+.catPillGold {
+  background: #fef3c7;
+  color: #92400e;
+  border: 1px solid rgba(217, 119, 6, 0.25);
+}
+
+.catPillEmerald {
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+.catPillAzure {
+  background: #f0f9ff;
+  color: #0284c7;
+  border: 1px solid rgba(2, 132, 199, 0.2);
+}
+
+.eventCardHeading {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.35;
+  margin: 0 0 0.85rem 0;
+}
+
+.eventMetaInfoWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.eventMetaRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: #64748b;
+}
+
+.eventMetaRow svg {
+  color: #8a0000;
+  flex-shrink: 0;
+}
+
+.eventMetaRow strong {
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.eventHighlightsList {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex-grow: 1;
+}
+
+.eventHighlightItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.85rem;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.eventHighlightItem svg {
+  color: #8a0000;
+  flex-shrink: 0;
+  margin-top: 0.2rem;
+}
+
+.eventActionsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding-top: 1.15rem;
+  border-top: 1px solid #f1f5f9;
+}
+
+.eventBtnPrimary {
+  background: #8a0000;
+  color: #ffffff;
+  border: 1px solid #8a0000;
+  padding: 0.55rem 1.15rem;
+  border-radius: 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.eventBtnPrimary:hover {
+  background: #700000;
+  border-color: #700000;
+  color: #ffffff;
+}
+
+.eventBtnOutline {
+  background: #ffffff;
+  color: #0f172a;
+  border: 1px solid #cbd5e1;
+  padding: 0.55rem 1.15rem;
+  border-radius: 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.eventBtnOutline:hover {
+  background: #f8fafc;
+  border-color: #94a3b8;
+  color: #0f172a;
+}
+
+/* ============================================
+   6. LIVE EVENT GALLERY MOMENTS (Visual Photo Strip)
+   ============================================ */
+.gallerySpotlightGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 4.5rem;
+}
+
+.gallerySpotlightCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  transition: all 0.3s ease;
+}
+
+.gallerySpotlightCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(138, 0, 0, 0.08);
+}
+
+.galleryImgWrap {
+  width: 100%;
+  height: 160px;
+  position: relative;
+  overflow: hidden;
+}
+
+.galleryImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.gallerySpotlightCard:hover .galleryImg {
+  transform: scale(1.07);
+}
+
+.galleryCaptionBox {
+  padding: 1rem 1.15rem;
+}
+
+.galleryCaptionTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.3;
+}
+
+.galleryCaptionDesc {
+  font-size: 0.78rem;
+  color: #64748b;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ============================================
+   7. DEMING QUALITY CYCLE — Brand Theme Creative Console
+   ============================================ */
+.qualityLoopCard {
+  background: linear-gradient(135deg, #ffffff 0%, #fffdfa 45%, #fdf6f6 100%);
+  border: 1.5px solid rgba(138, 0, 0, 0.15);
+  border-radius: 1.75rem;
+  padding: 3.5rem 3rem;
+  box-shadow: 0 16px 45px rgba(138, 0, 0, 0.06);
+  position: relative;
+  overflow: hidden;
+  border-top: 4px solid #8a0000;
+}
+
+.qualityLoopHeader {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 3rem;
+}
+
+.qualityLoopBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #fef2f2;
+  border: 1px solid rgba(138, 0, 0, 0.18);
+  color: #8a0000;
+  padding: 0.35rem 1.1rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 1rem;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.qualityLoopBadgeDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8a0000;
+  flex-shrink: 0;
+}
+
+.qualityLoopTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: clamp(1.8rem, 2.8vw, 2.35rem);
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.25;
+  margin: 0 0 0.75rem 0;
+  letter-spacing: -0.01em;
+}
+
+.qualityLoopTitle span {
+  color: #8a0000;
+}
+
+.qualityLoopSubtitle {
+  font-size: 0.96rem;
+  color: #64748b;
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* Connected 4-Step Interactive Grid */
+.qualityLoopGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 2.5rem;
+}
+
+.loopStepItem {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 1.85rem 1.45rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.loopStepItem:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+}
+
+.loopStepPlan { border-top: 4px solid #8a0000; }
+.loopStepPlan:hover {
+  border-color: rgba(138, 0, 0, 0.4);
+  box-shadow: 0 14px 30px rgba(138, 0, 0, 0.08);
+}
+
+.loopStepDo {
+  border-top: 4px solid #d97706;
+  background: #fffdf8;
+}
+.loopStepDo:hover {
+  border-color: rgba(217, 119, 6, 0.4);
+  box-shadow: 0 14px 30px rgba(217, 119, 6, 0.1);
+}
+
+.loopStepCheck { border-top: 4px solid #059669; }
+.loopStepCheck:hover {
+  border-color: rgba(5, 150, 105, 0.4);
+  box-shadow: 0 14px 30px rgba(5, 150, 105, 0.08);
+}
+
+.loopStepAct {
+  border-top: 4px solid #0284c7;
+  background: #fafcfe;
+}
+.loopStepAct:hover {
+  border-color: rgba(2, 132, 199, 0.4);
+  box-shadow: 0 14px 30px rgba(2, 132, 199, 0.08);
+}
+
+.loopStepHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.loopStepIconBox {
+  width: 44px;
+  height: 44px;
+  border-radius: 0.85rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.iconBoxPlan { background: #fef2f2; color: #8a0000; border: 1px solid rgba(138, 0, 0, 0.15); }
+.iconBoxDo { background: #fef3c7; color: #b45309; border: 1px solid rgba(217, 119, 6, 0.25); }
+.iconBoxCheck { background: #ecfdf5; color: #047857; border: 1px solid rgba(5, 150, 105, 0.2); }
+.iconBoxAct { background: #f0f9ff; color: #0284c7; border: 1px solid rgba(2, 132, 199, 0.2); }
+
+.loopStepNum {
+  font-family: var(--font-heading, monospace);
+  font-size: 0.76rem;
+  font-weight: 800;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.loopStepName {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.35;
+  margin: 0 0 0.65rem 0;
+}
+
+.loopStepDesc {
+  font-size: 0.86rem;
+  color: #475569;
+  line-height: 1.6;
+  margin: 0 0 1.25rem 0;
+  flex-grow: 1;
+}
+
+.loopTagsWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding-top: 0.85rem;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.loopMiniTag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #64748b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0.4rem;
+}
+
+.qualityLoopRibbon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 9999px;
+  padding: 0.85rem 1.75rem;
+  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.02);
+}
+
+.qualityLoopRibbonItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.84rem;
+  font-weight: 700;
+  color: #0f172a;
+}
+
+.qualityLoopRibbonItem svg {
+  color: #8a0000;
+}
+
+.qualityLoopRibbonDivider {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+}
+
+/* ============================================
+   8. RESOURCE & PROCEEDINGS ARCHIVE CONSOLE
+   ============================================ */
+.confArchiveCard {
+  background: #ffffff;
+  border: 1.5px solid rgba(138, 0, 0, 0.15);
+  border-radius: 1.5rem;
+  padding: 2.75rem 2.5rem;
+  box-shadow: 0 12px 35px rgba(138, 0, 0, 0.05);
+  margin-top: 4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+  border-top: 4px solid #8a0000;
+}
+
+.confArchiveTextWrap {
+  max-width: 680px;
+}
+
+.confArchiveBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  background: #fef2f2;
+  border: 1px solid rgba(138, 0, 0, 0.18);
+  color: #8a0000;
+  padding: 0.3rem 0.9rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+}
+
+.confArchiveHeading {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.55rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.3;
+}
+
+.confArchiveDesc {
+  font-size: 0.92rem;
+  color: #475569;
+  line-height: 1.65;
+  margin: 0;
+}
+
+.confArchiveBtnGroup {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+/* ============================================
+   Generic Subpage Card Styles (for other subpages)
+   ============================================ */
+.genericCard {
+  background: #ffffff;
+  padding: 3rem 2.5rem;
+  border-radius: 1.25rem;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.04);
+  margin-bottom: 3rem;
+  border: 1px solid #e2e8f0;
+}
+
+.genericTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.genericTable th {
+  padding: 1rem 1.25rem;
+  background: #f8fafc;
+  border-bottom: 2px solid #e2e8f0;
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #0f172a;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.genericTable td {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid #f1f5f9;
+  font-size: 0.92rem;
+  color: #334155;
+  line-height: 1.55;
+}
+
+/* ============================================
+   4-TIER RESPONSIVE ARCHITECTURE
+   ============================================ */
+
+/* 1. LAPTOP (1024px to 1199px) */
+@media (max-width: 1199px) {
+  .strategiesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .functionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .confCategoryGrid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+  .eventsScheduleGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .gallerySpotlightGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .execBannerCard {
+    padding: 2.5rem 2.5rem;
+  }
+  .qualityLoopCard {
+    padding: 2.5rem 2.5rem;
+  }
+  .qualityLoopGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+}
+
+/* 2. TABLET (768px to 1023px) */
+@media (max-width: 1023px) {
+  .heroSection {
+    min-height: 42vh;
+    height: 42vh;
+  }
+  .subpageMain {
+    padding: 4rem 0 5rem;
+  }
+  .execBannerCard {
+    padding: 2.25rem 2rem;
+    margin-bottom: 3rem;
+  }
+  .execBannerGrid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+  .execKpiRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .strategiesGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .benefitsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .functionsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .confCategoryGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .eventsScheduleGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .gallerySpotlightGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .qualityLoopCard {
+    padding: 2.5rem 2rem;
+  }
+  .qualityLoopGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .confArchiveCard {
+    padding: 2.25rem 2rem;
+  }
+}
+
+/* 3. MOBILE (<= 767px) */
+@media (max-width: 767px) {
+  .heroSection {
+    min-height: 36vh;
+    height: 36vh;
+  }
+  .heroContent {
+    padding-bottom: 35px;
+  }
+  .heroBreadcrumb {
+    font-size: 0.82rem;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+  }
+  .subpageMain {
+    padding: 3rem 0 4rem;
+  }
+  .container {
+    padding: 0 1.25rem;
+  }
+  .execBannerCard {
+    padding: 1.75rem 1.35rem;
+    border-radius: 1.25rem;
+    margin-bottom: 2.5rem;
+  }
+  .execBannerGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .execHeading {
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+  .execDescription {
+    font-size: 0.92rem;
+    line-height: 1.7;
+    margin-bottom: 1.75rem;
+  }
+  .execKpiRow {
+    grid-template-columns: 1fr;
+    gap: 0.9rem;
+    padding-top: 1.5rem;
+  }
+  .execKpiItem {
+    padding-bottom: 0.9rem;
+    border-bottom: 1px solid #fef3c7;
+  }
+  .execKpiItem:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .sectionMainHeading {
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+  .strategiesGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .strategyCard {
+    padding: 1.6rem 1.35rem;
+  }
+  .strategyTitle {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .benefitsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .benefitCard {
+    padding: 1.75rem 1.35rem;
+  }
+  .benefitAudience {
+    font-weight: 700;
+    font-size: 0.7rem;
+  }
+  .benefitHeading {
+    font-size: 1.18rem;
+    font-weight: 700;
+    line-height: 1.3;
+  }
+  .functionsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .functionCard {
+    padding: 1.6rem 1.35rem;
+  }
+  .functionTitle {
+    font-size: 1.02rem;
+    font-weight: 700;
+  }
+  .confCategoryGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .confCategoryCard {
+    padding: 0;
+  }
+  .confCatBody {
+    padding: 1.5rem 1.35rem;
+  }
+  .confCatTitle {
+    font-size: 1.12rem;
+    font-weight: 700;
+  }
+  .eventsScheduleGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+    margin-bottom: 3rem;
+  }
+  .eventScheduleCard {
+    padding: 1.6rem 1.35rem;
+  }
+  .eventCardHeading {
+    font-size: 1.12rem;
+    font-weight: 700;
+  }
+  .gallerySpotlightGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .confArchiveCard {
+    padding: 1.75rem 1.35rem;
+    border-radius: 1.25rem;
+    margin-top: 3rem;
+  }
+  .confArchiveHeading {
+    font-size: 1.35rem;
+    font-weight: 700;
+  }
+  .qualityLoopBadge {
+    font-size: 0.68rem;
+    padding: 0.3rem 0.85rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    max-width: 100%;
+    margin-bottom: 0.85rem;
+  }
+  .qualityLoopBadgeDot {
+    width: 5px;
+    height: 5px;
+    flex-shrink: 0;
+  }
+  .execBadge {
+    font-size: 0.68rem;
+    padding: 0.3rem 0.85rem;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+    max-width: 100%;
+  }
+  .execBadgeDot {
+    width: 5px;
+    height: 5px;
+    flex-shrink: 0;
+  }
+  .qualityLoopCard {
+    padding: 2rem 1.35rem;
+    border-radius: 1.25rem;
+  }
+  .qualityLoopTitle {
+    font-size: 1.38rem;
+    font-weight: 700;
+  }
+  .qualityLoopGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .loopStepItem {
+    padding: 1.5rem 1.25rem;
+  }
+  .loopStepName {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .qualityLoopRibbon {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+    border-radius: 1rem;
+    padding: 1.1rem 1.25rem;
+  }
+  .qualityLoopRibbonDivider {
+    display: none;
+  }
+}
+
+/* 4. SMALL MOBILE (<= 480px) */
+@media (max-width: 480px) {
+  .heroSection {
+    min-height: 32vh;
+    height: 32vh;
+  }
+  .heroContent {
+    padding: 0 1rem 30px 1rem;
+  }
+  .heroBreadcrumb {
+    font-size: 0.78rem;
+  }
+  .execBannerCard {
+    padding: 1.4rem 1.1rem;
+  }
+  .execHeading {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .sectionMainHeading {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .execBadge {
+    font-size: 0.64rem;
+    padding: 0.28rem 0.75rem;
+    letter-spacing: 0.02em;
+  }
+  .qualityLoopBadge {
+    font-size: 0.64rem;
+    padding: 0.28rem 0.75rem;
+    letter-spacing: 0.02em;
+  }
+  .strategyCard {
+    padding: 1.35rem 1.1rem;
+  }
+  .strategyTitle {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+  .benefitCard {
+    padding: 1.4rem 1.1rem;
+  }
+  .benefitHeading {
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+  .functionCard {
+    padding: 1.35rem 1.1rem;
+  }
+  .functionTitle {
+    font-size: 0.98rem;
+    font-weight: 700;
+  }
+  .confCategoryCard {
+    padding: 0;
+  }
+  .confCatBody {
+    padding: 1.35rem 1.1rem;
+  }
+  .confCatTitle {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .eventScheduleCard {
+    padding: 1.35rem 1.1rem;
+  }
+  .eventCardHeading {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .confArchiveCard {
+    padding: 1.4rem 1.1rem;
+  }
+  .confArchiveHeading {
+    font-size: 1.2rem;
+    font-weight: 700;
+  }
+  .qualityLoopCard {
+    padding: 1.75rem 1.1rem;
+  }
+  .qualityLoopTitle {
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  .loopStepName {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+}
