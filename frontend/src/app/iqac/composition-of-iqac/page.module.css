@@ -570,7 +570,6 @@
 
   /* Retain card hover animations on mobile touch devices without layout shifting */
   .leaderCard:hover, .boardCard:hover {
-    transform: translateY(-4px) !important;
     box-shadow: 0 15px 30px rgba(138, 0, 0, 0.05) !important;
   }
 

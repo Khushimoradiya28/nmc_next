@@ -1023,16 +1023,144 @@ export default async function IQACSubPage({ params }) {
         };
       case 'naac':
         return {
-          subtitle: "National Assessment & Accreditation Council",
-          description: "The college maintains rigorous academic standards and actively participates in the NAAC accreditation assessment cycles.",
-          isCustomLayout: false,
+          subtitle: "Accreditation & Compliance Registry",
+          description: "Nandkunvarba Mahila College actively upholds strict academic criteria, regularly submitting annual reports and participating in assessment cycles overseen by the National Assessment and Accreditation Council.",
+          isCustomLayout: true,
           details: (
-            <div className={styles.genericCard}>
-              <h3 className={styles.cardTitle}>NAAC Accreditation &amp; AQAR Submissions</h3>
-              <p className={styles.cardDesc}>
-                All Annual Quality Assurance Reports (AQAR) are compiled by the IQAC committee and submitted to NAAC registry databases in accordance with regulatory mandates.
-              </p>
-            </div>
+            <>
+              {/* Executive Assessment Intro Card */}
+              <div className={styles.execBannerCard}>
+                <div className={styles.execBadgeRow}>
+                  <div className={styles.execBadge}>
+                    <span className={styles.execBadgeDot}></span>
+                    <span>Accreditation Cycle Dashboard</span>
+                  </div>
+                </div>
+                <h2 className={styles.execHeading}>
+                  NAAC Compliance, Annual AQARs &amp; <span>Accreditation Quality</span>
+                </h2>
+                <p className={styles.execDescription}>
+                  As part of the continuous quality upkeep guidelines monitored by UGC, the college compiles extensive Annual Quality Assurance Reports (AQAR) tracking infrastructure growth, smart pedagogy, research outputs, and gender empowerment initiatives.
+                </p>
+                <div className={styles.execKpiRow}>
+                  <div className={styles.execKpiItem}>
+                    <strong className={styles.execKpiNum}>Active</strong>
+                    <span className={styles.execKpiLabel}>IQAC Assessment Wing</span>
+                  </div>
+                  <div className={styles.execKpiItem}>
+                    <strong className={styles.execKpiNum}>Annual</strong>
+                    <span className={styles.execKpiLabel}>AQAR Audits Filed</span>
+                  </div>
+                  <div className={styles.execKpiItem}>
+                    <strong className={styles.execKpiNum}>7 Pillars</strong>
+                    <span className={styles.execKpiLabel}>Assessment Matrix</span>
+                  </div>
+                  <div className={styles.execKpiItem}>
+                    <strong className={styles.execKpiNum}>UGC</strong>
+                    <span className={styles.execKpiLabel}>Affiliated Norms</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Interactive Seven Pillars Grid */}
+              <div className={styles.sectionHeaderWrap}>
+                <span className={`${styles.sectionMiniTag} ${styles.sectionMiniTagGold}`}>Quality Matrix</span>
+                <h3 className={styles.sectionMainHeading}>The 7 Key Assessment Pillars</h3>
+                <p className={styles.sectionSubtext}>
+                  Every academic year, college performance is meticulously evaluated across the seven critical criteria mandated by the NAAC manual.
+                </p>
+              </div>
+
+              <div className={styles.confCategoryGrid}>
+                {[
+                  {
+                    title: "1. Curricular Aspects",
+                    desc: "Focuses on curriculum design, feedback systems from students, teachers, alumni, and integration of vocational courses.",
+                    pill: "Outcome-Based"
+                  },
+                  {
+                    title: "2. Teaching-Learning",
+                    desc: "Assesses student enrollment metrics, catering to diverse learning paces, student-centric classrooms, and ICT-enabled pedagogies.",
+                    pill: "Smart Pedagogy"
+                  },
+                  {
+                    title: "3. Research & Innovations",
+                    desc: "Measures resource mobilization for research projects, active MoUs, patent filings, and publications in UGC care journals.",
+                    pill: "Scholarly"
+                  },
+                  {
+                    title: "4. Infrastructure & Assets",
+                    desc: "Evaluates physical classroom quality, high-speed WiFi, library databases, computing labs, and outdoor sports setups.",
+                    pill: "Campus Facilities"
+                  },
+                  {
+                    title: "5. Student Support",
+                    desc: "Tracks scholarship disbursements, counseling wings, student council operations, and active graduate placements.",
+                    pill: "Career Progression"
+                  },
+                  {
+                    title: "6. Governance & Leadership",
+                    desc: "Evaluates decentralization strategies, e-governance systems, employee welfare schemes, and institutional strategic plans.",
+                    pill: "Strategic Planning"
+                  }
+                ].map((p, pIdx) => (
+                  <div className={`${styles.confCategoryCard} ${styles.confCatGold}`} key={pIdx}>
+                    <div className={styles.confCatBody} style={{ paddingTop: '1.75rem' }}>
+                      <h4 className={styles.confCatTitle}>{p.title}</h4>
+                      <p className={styles.confCatDesc}>{p.desc}</p>
+                      <div className={styles.confCatFeatureItem} style={{ marginTop: '1rem' }}>
+                        <span className={styles.confCatCheckDot} style={{ background: '#f59e0b' }}></span>
+                        <span style={{ fontSize: '0.78rem', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: 800, color: '#f59e0b' }}>{p.pill}</span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Dynamic AQAR Downloads Table Section */}
+              <div className={styles.sectionHeaderWrap} style={{ marginTop: '5rem' }}>
+                <span className={styles.sectionMiniTag}>Compliance Archives</span>
+                <h3 className={styles.sectionMainHeading}>AQAR Annual Submissions</h3>
+                <p className={styles.sectionSubtext}>
+                  Access and review the official Annual Quality Assurance Reports submitted by the IQAC Cell to the NAAC database.
+                </p>
+              </div>
+
+              <div className={styles.confArchiveSection} style={{ background: 'rgba(255, 255, 255, 0.9)', border: '1px solid rgba(138, 0, 0, 0.1)', padding: '2.5rem' }}>
+                <table className={styles.genericTable} style={{ width: '100%', borderCollapse: 'collapse', marginTop: '0.5rem' }}>
+                  <thead>
+                    <tr style={{ background: 'rgba(138, 0, 0, 0.04)', borderBottom: '2px solid rgba(138, 0, 0, 0.12)' }}>
+                      <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '800', color: 'var(--red-800, #8a0000)' }}>Academic Session</th>
+                      <th style={{ padding: '1rem', textAlign: 'left', fontWeight: '800', color: 'var(--red-800, #8a0000)' }}>Compliance Document Type</th>
+                      <th style={{ padding: '1rem', textAlign: 'right', fontWeight: '800', color: 'var(--red-800, #8a0000)' }}>Official Access Link</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[
+                      { year: "2024 - 2025", doc: "Annual Quality Assurance Report (AQAR) - Draft Under Review", file: "#" },
+                      { year: "2023 - 2024", doc: "Annual Quality Assurance Report (AQAR) - Final Submission", file: "#" },
+                      { year: "2022 - 2023", doc: "Annual Quality Assurance Report (AQAR) - Approved Compliance", file: "#" },
+                      { year: "2021 - 2022", doc: "Annual Quality Assurance Report (AQAR) - Approved Compliance", file: "#" }
+                    ].map((row, idx) => (
+                      <tr key={idx} style={{ borderBottom: '1px solid rgba(0, 0, 0, 0.05)' }}>
+                        <td style={{ padding: '1.25rem 1rem', fontWeight: '700', color: '#111827' }}>{row.year}</td>
+                        <td style={{ padding: '1.25rem 1rem', color: '#4b5563' }}>{row.doc}</td>
+                        <td style={{ padding: '1.25rem 1rem', textAlign: 'right' }}>
+                          <a href={row.file} className={styles.eventBtnOutline} style={{ display: 'inline-flex', padding: '0.5rem 1rem', fontSize: '0.78rem' }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '6px' }}>
+                              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                              <polyline points="7 10 12 15 17 10" />
+                              <line x1="12" y1="15" x2="12" y2="3" />
+                            </svg>
+                            <span>Download PDF</span>
+                          </a>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           )
         };
       case 'nirf':

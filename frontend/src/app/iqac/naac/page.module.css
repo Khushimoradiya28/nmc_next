@@ -1,0 +1,1685 @@
+/* ═══════════════════════════════════════════════
+   NAAC PAGE — Premium Design (Theme-Aligned)
+   Reduced Spacing • Even Cards • Smooth Hover
+   Minimal Timeline • Theme Dark Section
+═══════════════════════════════════════════════ */
+
+/* ─── Keyframe Animations ─── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.3); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+@keyframes lineGrow {
+  from { height: 0; }
+  to { height: 100%; }
+}
+
+/* ─── Page Base ─── */
+.naacPage {
+  overflow-x: hidden;
+  background: #fafbfc;
+}
+
+/* ═══════════════ HERO — Matching Vision/Mission Style ═══════════════ */
+.heroSection {
+  position: relative;
+  width: 100%;
+  min-height: 35vh;
+  height: 35vh;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.heroBgImage {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.heroBgImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  animation: heroKenBurns 24s ease-in-out infinite alternate;
+}
+
+@keyframes heroKenBurns {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.06); }
+}
+
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 30% 50%, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.65) 100%);
+  z-index: 1;
+}
+
+.heroParticles {
+  display: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  max-width: var(--container-max, 1440px);
+  margin: 0 auto;
+  padding: 0 2rem 45px 2rem;
+  display: flex;
+  flex-direction: column;
+  animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.heroAccentBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.35rem 1rem;
+  background: rgba(244, 176, 0, 0.12);
+  border: 1px solid rgba(244, 176, 0, 0.3);
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-secondary, #F4B000);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.85rem;
+  width: fit-content;
+}
+
+.heroAccentDot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-secondary, #F4B000);
+  border-radius: 50%;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.heroTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 900;
+  color: #ffffff;
+  line-height: 1.15;
+  margin: 0 0 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.heroTitle em {
+  font-style: italic;
+}
+
+.heroTitleAccent {
+  font-style: italic;
+  color: var(--color-secondary, #F4B000);
+}
+
+.heroSubtitle {
+  font-size: clamp(0.88rem, 1.2vw, 1rem);
+  color: rgba(255, 255, 255, 0.7);
+  line-height: 1.6;
+  max-width: 550px;
+  margin: 0 0 1rem;
+}
+
+.heroBreadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.heroBreadcrumb a {
+  color: rgba(255, 255, 255, 0.65);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.heroBreadcrumb a:hover {
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.heroBreadcrumbSep {
+  color: rgba(255, 255, 255, 0.35);
+  font-size: 0.75rem;
+}
+
+.heroBreadcrumbCurrent {
+  color: var(--color-secondary, #F4B000);
+  font-weight: 700;
+}
+
+/* ─── Container ─── */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ─── Section Shared ─── */
+.sectionHeader {
+  text-align: center;
+  max-width: 680px;
+  margin: 0 auto 2.5rem;
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.sectionTag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.9rem;
+  background: rgba(176, 0, 0, 0.06);
+  border: 1px solid rgba(176, 0, 0, 0.12);
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--color-primary, #B00000);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin-bottom: 0.75rem;
+}
+
+.tagDot {
+  width: 6px;
+  height: 6px;
+  background: var(--color-primary, #B00000);
+  border-radius: 50%;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  color: var(--color-black, #111111);
+  line-height: 1.2;
+  margin: 0 0 0.6rem;
+  letter-spacing: -0.01em;
+}
+
+.sectionTitle span {
+  color: var(--color-primary, #B00000);
+  font-style: italic;
+}
+
+.sectionSubtext {
+  font-size: 0.92rem;
+  color: var(--color-gray-500, #555555);
+  line-height: 1.65;
+  margin: 0;
+}
+
+/* ═══════════════ ABOUT SECTION ═══════════════ */
+.aboutSection {
+  padding: 3.5rem 0 3rem;
+  background: #ffffff;
+}
+
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+.aboutContent {
+  animation: slideInLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.aboutText {
+  font-size: 0.95rem;
+  color: var(--color-gray-600, #4b5563);
+  line-height: 1.75;
+  margin: 0 0 1rem;
+}
+
+/* About Visual Card */
+.aboutVisual {
+  animation: slideInRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: 0.15s;
+}
+
+.aboutCard {
+  position: relative;
+  border-radius: 1.25rem;
+  overflow: hidden;
+}
+
+.aboutCardGlow {
+  position: absolute;
+  inset: -2px;
+  background: linear-gradient(135deg, var(--color-primary, #B00000), var(--color-secondary, #F4B000), var(--color-primary, #B00000));
+  background-size: 200% 200%;
+  border-radius: 1.3rem;
+  animation: shimmer 5s ease infinite;
+  opacity: 0.5;
+}
+
+.aboutCardInner {
+  position: relative;
+  background: #ffffff;
+  border-radius: 1.2rem;
+  padding: 2.5rem 2rem;
+  text-align: center;
+  margin: 2px;
+}
+
+.naacEmblem {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(176, 0, 0, 0.08), rgba(244, 176, 0, 0.08));
+  border-radius: 1rem;
+  color: var(--color-primary, #B00000);
+  box-shadow: var(--shadow-md);
+}
+
+.aboutCardTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1.2rem;
+  font-weight: 800;
+  color: var(--color-black, #111111);
+  margin: 0 0 0.4rem;
+}
+
+.aboutCardDesc {
+  font-size: 0.84rem;
+  color: var(--color-gray-500, #555555);
+  line-height: 1.55;
+  margin: 0 0 1.5rem;
+}
+
+.aboutStatsRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-gray-200, #e5e7eb);
+}
+
+.aboutStat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.15rem;
+}
+
+.aboutStat strong {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1.15rem;
+  font-weight: 900;
+  color: var(--color-primary, #B00000);
+}
+
+.aboutStat span {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-gray-400, #9ca3af);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.aboutStatDivider {
+  width: 1px;
+  height: 28px;
+  background: var(--color-gray-200, #e5e7eb);
+}
+
+/* ═══════════════ STATUS SECTION ═══════════════ */
+.statusSection {
+  padding: 3rem 0;
+  background: var(--color-gray-50, #f9fafb);
+}
+
+.statusCard {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: 1.25rem;
+  padding: 2.5rem;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.statusCardGlow {
+  position: absolute;
+  top: -40%;
+  right: -15%;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(176, 0, 0, 0.03) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.statusGrid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 2.5rem;
+  align-items: center;
+  position: relative;
+}
+
+.statusLeft .sectionTag {
+  margin-bottom: 0.6rem;
+}
+
+.statusTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(1.4rem, 2.2vw, 1.75rem);
+  font-weight: 800;
+  color: var(--color-black, #111111);
+  margin: 0 0 0.75rem;
+}
+
+.statusDesc {
+  font-size: 0.9rem;
+  color: var(--color-gray-500, #555555);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.statusMetrics {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.85rem;
+}
+
+.metricCard {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 0.85rem;
+  background: var(--color-gray-50, #f9fafb);
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: 0.85rem;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.metricCard:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lg);
+  border-color: rgba(176, 0, 0, 0.15);
+  background: #ffffff;
+}
+
+.metricIconWrap {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(176, 0, 0, 0.08), rgba(244, 176, 0, 0.06));
+  border-radius: 0.7rem;
+  color: var(--color-primary, #B00000);
+  flex-shrink: 0;
+}
+
+.metricInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.05rem;
+}
+
+.metricInfo strong {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--color-black, #111111);
+}
+
+.metricInfo span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--color-gray-400, #9ca3af);
+}
+
+/* ═══════════════ 7 CRITERIA — 4+3 Balanced Layout ═══════════════ */
+.criteriaSection {
+  padding: 3.5rem 0;
+  background: #ffffff;
+}
+
+.criteriaRow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+
+.criteriaRowCentered {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  max-width: 75%;
+  margin: 0 auto;
+}
+
+.criteriaCard {
+  background: #ffffff;
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: 1rem;
+  padding: 1.5rem 1.35rem;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  display: flex;
+  flex-direction: column;
+}
+
+.criteriaCard:nth-child(1) { animation-delay: 0.05s; }
+.criteriaCard:nth-child(2) { animation-delay: 0.08s; }
+.criteriaCard:nth-child(3) { animation-delay: 0.11s; }
+.criteriaCard:nth-child(4) { animation-delay: 0.14s; }
+.criteriaCard:nth-child(5) { animation-delay: 0.17s; }
+.criteriaCard:nth-child(6) { animation-delay: 0.2s; }
+.criteriaCard:nth-child(7) { animation-delay: 0.23s; }
+
+.criteriaCard:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-xl);
+  border-color: var(--card-accent, var(--color-primary, #B00000));
+}
+
+.criteriaCard:hover .criteriaCardLine {
+  transform: scaleX(1);
+}
+
+.criteriaCard:hover .criteriaIconWrap {
+  background: var(--card-accent, var(--color-primary, #B00000));
+  color: #ffffff;
+  border-color: transparent;
+}
+
+.criteriaCardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.criteriaIconWrap {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(176, 0, 0, 0.05);
+  border-radius: 0.85rem;
+  color: var(--card-accent, var(--color-primary, #B00000));
+  border: 1px solid rgba(176, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.criteriaNum {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', monospace);
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: var(--color-gray-300, #d1d5db);
+  letter-spacing: 0.04em;
+}
+
+.criteriaTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-black, #111111);
+  line-height: 1.3;
+  margin: 0 0 0.5rem;
+}
+
+.criteriaDesc {
+  font-size: 0.82rem;
+  color: var(--color-gray-500, #555555);
+  line-height: 1.6;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.criteriaCardLine {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--card-accent, var(--color-primary, #B00000));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ═══════════════ TIMELINE — Tree Layout Desktop, Left-Aligned Mobile ═══════════════ */
+.timelineSection {
+  padding: 3.5rem 0;
+  background: var(--color-gray-50, #f9fafb);
+}
+
+.timeline {
+  position: relative;
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 1rem 0;
+}
+
+.timelineLineBg {
+  position: absolute;
+  left: calc(50% - 1.5px);
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--color-gray-200, #e5e7eb);
+  border-radius: 3px;
+}
+
+.timelineLineProgress {
+  position: absolute;
+  left: calc(50% - 1.5px);
+  top: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--color-primary, #B00000), var(--color-secondary, #F4B000));
+  border-radius: 3px;
+  z-index: 1;
+}
+
+.timelineItem {
+  position: relative;
+  margin-bottom: 2rem;
+  padding-left: calc(50% + 20px);
+}
+
+.timelineItem:nth-child(odd) {
+  padding-left: 0;
+  padding-right: calc(50% + 20px);
+}
+
+.timelineItem:last-child {
+  margin-bottom: 0;
+}
+
+.timelineLeft,
+.timelineRight {
+  display: block;
+}
+
+.timelineNode {
+  position: absolute;
+  left: 50%;
+  top: 1.5rem;
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timelineNodeDot {
+  width: 12px;
+  height: 12px;
+  background: var(--color-primary, #B00000);
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px rgba(176, 0, 0, 0.2);
+  z-index: 2;
+  flex-shrink: 0;
+}
+
+.timelineNodeRing {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid rgba(176, 0, 0, 0.12);
+  animation: pulse 3s ease-in-out infinite;
+  box-sizing: border-box;
+}
+
+.timelineCard {
+  background: #ffffff;
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: 1rem;
+  padding: 1.5rem 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.timelineCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary, #B00000), var(--color-secondary, #F4B000));
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.timelineCard:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-xl);
+  border-color: rgba(176, 0, 0, 0.15);
+}
+
+.timelineCard:hover::before {
+  transform: scaleX(1);
+}
+
+.timelineCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.timelineYear {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  color: #ffffff;
+  background: var(--color-primary, #B00000);
+  padding: 0.22rem 0.65rem;
+  border-radius: 9999px;
+  letter-spacing: 0.03em;
+}
+
+.timelineStep {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-gray-400, #9ca3af);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.timelineTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-black, #111111);
+  margin: 0 0 0.4rem;
+  line-height: 1.3;
+}
+
+.timelineDesc {
+  font-size: 0.84rem;
+  color: var(--color-gray-500, #555555);
+  line-height: 1.6;
+  margin: 0 0 1rem;
+}
+
+/* Progress Bar inside timeline cards */
+.timelineProgressWrap {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.timelineProgressBar {
+  flex: 1;
+  height: 5px;
+  background: var(--color-gray-100, #f3f4f6);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.timelineProgressFill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary, #B00000), var(--color-secondary, #F4B000));
+  border-radius: 5px;
+}
+
+.timelineProgressLabel {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--color-success, #16a34a);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  white-space: nowrap;
+}
+
+/* ═══════════════ AQAR SECTION ═══════════════ */
+.aqarSection {
+  padding: 3.5rem 0;
+  background: #ffffff;
+}
+
+.aqarTableWrap {
+  position: relative;
+  background: #ffffff;
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: 1.25rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.aqarTableGlow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--color-primary, #B00000), var(--color-secondary, #F4B000), var(--color-primary, #B00000));
+  background-size: 200% auto;
+  animation: shimmer 3s linear infinite;
+}
+
+.aqarTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.aqarTable thead {
+  background: var(--color-gray-50, #f9fafb);
+}
+
+.aqarTable th {
+  padding: 1rem 1.25rem;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--color-primary, #B00000);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid var(--color-gray-200, #e5e7eb);
+}
+
+.aqarTable tbody tr {
+  transition: background 0.2s ease;
+  border-bottom: 1px solid var(--color-gray-100, #f3f4f6);
+}
+
+.aqarTable tbody tr:last-child {
+  border-bottom: none;
+}
+
+.aqarTable tbody tr:hover {
+  background: var(--color-gray-50, #f9fafb);
+}
+
+.aqarTable td {
+  padding: 1rem 1.25rem;
+  font-size: 0.88rem;
+}
+
+.aqarYear {
+  font-weight: 700;
+  color: var(--color-black, #111111);
+}
+
+.aqarDoc {
+  color: var(--color-gray-500, #555555);
+}
+
+.aqarStatus {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.statusApproved {
+  background: rgba(22, 163, 74, 0.08);
+  color: #15803d;
+  border: 1px solid rgba(22, 163, 74, 0.2);
+}
+
+.statusSubmitted {
+  background: rgba(37, 99, 235, 0.06);
+  color: #1d4ed8;
+  border: 1px solid rgba(37, 99, 235, 0.15);
+}
+
+.statusPending {
+  background: rgba(245, 158, 11, 0.08);
+  color: #b45309;
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.aqarDownloadBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.9rem;
+  background: #ffffff;
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-radius: 0.5rem;
+  color: var(--color-primary, #B00000);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.aqarDownloadBtn:hover {
+  background: var(--color-primary, #B00000);
+  color: #ffffff;
+  border-color: var(--color-primary, #B00000);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ═══════════════ COMMITMENT — Theme Dark Section ═══════════════ */
+.commitmentSection {
+  padding: 3.5rem 0 4rem;
+  background: var(--color-gray-50, #f9fafb);
+}
+
+.commitmentCard {
+  position: relative;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 40%, #0f3460 100%);
+  border-radius: 1.5rem;
+  padding: 3.5rem;
+  overflow: hidden;
+  box-shadow: var(--shadow-2xl);
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.commitmentGlow {
+  position: absolute;
+  top: -20%;
+  right: -10%;
+  width: 350px;
+  height: 350px;
+  background: radial-gradient(circle, rgba(176, 0, 0, 0.15) 0%, rgba(244, 176, 0, 0.05) 40%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: pulse 6s ease-in-out infinite;
+}
+
+.commitmentContent {
+  position: relative;
+  z-index: 2;
+  max-width: 650px;
+}
+
+.commitmentTitle {
+  font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
+  font-size: clamp(1.6rem, 2.5vw, 2.1rem);
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.25;
+  margin: 0 0 1rem;
+  letter-spacing: -0.01em;
+}
+
+.commitmentTitle span {
+  color: var(--color-secondary, #F4B000);
+  font-style: italic;
+}
+
+.commitmentDesc {
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.7;
+  margin: 0 0 1.75rem;
+}
+
+.commitmentPillars {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.65rem;
+  margin-bottom: 2rem;
+}
+
+.commitmentPillar {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.6rem 0.9rem;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.6rem;
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.25s ease;
+}
+
+.commitmentPillar:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(244, 176, 0, 0.25);
+  transform: translateX(3px);
+}
+
+.commitmentPillar svg {
+  color: var(--color-secondary, #F4B000);
+  flex-shrink: 0;
+}
+
+.commitmentActions {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+}
+
+.btnPrimary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1.5rem;
+  background: var(--color-primary, #B00000);
+  color: #ffffff;
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(176, 0, 0, 0.3);
+}
+
+.btnPrimary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(176, 0, 0, 0.4);
+  background: var(--color-primary-light, #d11c1c);
+}
+
+.btnOutline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.75rem 1.5rem;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.6rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.btnOutline:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+/* ═══════════════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════════════ */
+
+@media (max-width: 1200px) {
+  .criteriaRow {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .criteriaRowCentered {
+    grid-template-columns: repeat(3, 1fr);
+    max-width: 75%;
+  }
+
+  .criteriaCard:nth-child(5),
+  .criteriaCard:nth-child(6),
+  .criteriaCard:nth-child(7) {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 1024px) {
+  .criteriaRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .criteriaRowCentered {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+    gap: 1rem;
+    justify-items: center;
+  }
+
+  .criteriaRowCentered .criteriaCard:last-child {
+    grid-column: 1 / -1;
+    max-width: calc(50% - 0.5rem);
+  }
+
+  .criteriaCard:nth-child(5),
+  .criteriaCard:nth-child(6),
+  .criteriaCard:nth-child(7) {
+    grid-column: auto;
+  }
+
+  .aboutGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.75rem;
+  }
+
+  .statusGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .commitmentCard {
+    padding: 2.5rem;
+  }
+}
+
+/* ─── 500px - 768px (Tablet / Large Mobile) ─── */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+
+  .aboutSection,
+  .criteriaSection,
+  .timelineSection,
+  .aqarSection {
+    padding: 2rem 0;
+  }
+
+  .statusSection {
+    padding: 1.75rem 0;
+  }
+
+  .commitmentSection {
+    padding: 2rem 0 2.5rem;
+  }
+
+  .sectionHeader {
+    margin-bottom: 1.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.4rem;
+    margin-bottom: 0.4rem;
+  }
+
+  .sectionSubtext {
+    font-size: 0.84rem;
+  }
+
+  .sectionTag {
+    font-size: 0.65rem;
+    padding: 0.2rem 0.7rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .aboutGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .aboutVisual {
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .aboutText {
+    font-size: 0.88rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .aboutCardInner {
+    padding: 1.75rem 1.25rem;
+  }
+
+  .aboutCardTitle {
+    font-size: 1.05rem;
+  }
+
+  .aboutCardDesc {
+    font-size: 0.8rem;
+  }
+
+  .statusCard {
+    padding: 1.5rem 1.25rem;
+    border-radius: 1rem;
+  }
+
+  .statusTitle {
+    font-size: 1.2rem;
+  }
+
+  .statusDesc {
+    font-size: 0.84rem;
+  }
+
+  .statusMetrics {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.65rem;
+  }
+
+  .metricCard {
+    padding: 0.75rem 0.65rem;
+    gap: 0.55rem;
+  }
+
+  .metricInfo strong {
+    font-size: 0.82rem;
+  }
+
+  .metricInfo span {
+    font-size: 0.65rem;
+  }
+
+  .metricIconWrap {
+    width: 32px;
+    height: 32px;
+  }
+
+  .criteriaRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.85rem;
+  }
+
+  .criteriaRowCentered {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 100%;
+    gap: 0.85rem;
+    justify-items: center;
+  }
+
+  .criteriaRowCentered .criteriaCard:last-child {
+    grid-column: 1 / -1;
+    max-width: calc(50% - 0.425rem);
+  }
+
+  .criteriaCard:nth-child(5),
+  .criteriaCard:nth-child(6),
+  .criteriaCard:nth-child(7) {
+    grid-column: auto;
+  }
+
+  .criteriaCard {
+    padding: 1.1rem 1rem;
+  }
+
+  .criteriaIconWrap {
+    width: 36px;
+    height: 36px;
+  }
+
+  .criteriaTitle {
+    font-size: 0.84rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .criteriaDesc {
+    font-size: 0.75rem;
+    line-height: 1.5;
+  }
+
+  .criteriaNum {
+    font-size: 0.68rem;
+  }
+
+  /* Timeline — left-aligned on mobile */
+  .timeline {
+    padding: 1rem 0 1rem 38px;
+  }
+
+  .timelineLineBg,
+  .timelineLineProgress {
+    left: 17px;
+  }
+
+  .timelineItem {
+    padding-left: 0;
+    padding-right: 0;
+    position: relative;
+  }
+
+  .timelineItem:nth-child(odd) {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .timelineNode {
+    position: absolute;
+    left: -29px;
+    top: 1.25rem;
+    margin-left: 0;
+    width: 18px;
+    height: 18px;
+    transform: none;
+  }
+
+  .timelineNodeDot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .timelineNodeRing {
+    display: none;
+  }
+
+  .timelineCard {
+    padding: 1.15rem 1rem;
+  }
+
+  .timelineTitle {
+    font-size: 0.9rem;
+  }
+
+  .timelineDesc {
+    font-size: 0.78rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .timelineItem {
+    margin-bottom: 1.5rem;
+  }
+
+  .aqarTable th,
+  .aqarTable td {
+    padding: 0.75rem 0.85rem;
+    font-size: 0.8rem;
+  }
+
+  .aqarTable th:nth-child(2),
+  .aqarTable td:nth-child(2) {
+    display: none;
+  }
+
+  .commitmentPillars {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .commitmentCard {
+    padding: 1.75rem 1.25rem;
+    border-radius: 1rem;
+  }
+
+  .commitmentTitle {
+    font-size: 1.25rem;
+  }
+
+  .commitmentDesc {
+    font-size: 0.84rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .commitmentPillar {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+
+  .btnPrimary,
+  .btnOutline {
+    padding: 0.6rem 1.25rem;
+    font-size: 0.8rem;
+  }
+}
+
+/* ─── 400px - 500px (Small Mobile) ─── */
+@media (max-width: 500px) {
+  .container {
+    padding: 0 0.85rem;
+  }
+
+  .aboutSection,
+  .criteriaSection,
+  .timelineSection,
+  .aqarSection {
+    padding: 1.5rem 0;
+  }
+
+  .statusSection {
+    padding: 1.25rem 0;
+  }
+
+  .commitmentSection {
+    padding: 1.5rem 0 2rem;
+  }
+
+  .sectionHeader {
+    margin-bottom: 1.25rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.2rem;
+  }
+
+  .sectionSubtext {
+    font-size: 0.78rem;
+  }
+
+  .aboutText {
+    font-size: 0.82rem;
+    line-height: 1.65;
+  }
+
+  .aboutStatsRow {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .aboutStatDivider {
+    display: none;
+  }
+
+  .aboutStat strong {
+    font-size: 1rem;
+  }
+
+  .aboutStat span {
+    font-size: 0.62rem;
+  }
+
+  .statusCard {
+    padding: 1.25rem 1rem;
+  }
+
+  .statusTitle {
+    font-size: 1.1rem;
+  }
+
+  .statusDesc {
+    font-size: 0.8rem;
+  }
+
+  .statusMetrics {
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .criteriaRow {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .criteriaRowCentered {
+    grid-template-columns: 1fr;
+    max-width: 100%;
+    gap: 0.75rem;
+  }
+
+  .criteriaRowCentered .criteriaCard:last-child {
+    grid-column: auto;
+    max-width: 100%;
+  }
+
+  .criteriaCard {
+    padding: 1rem 0.85rem;
+  }
+
+  .criteriaTitle {
+    font-size: 0.82rem;
+  }
+
+  .criteriaDesc {
+    font-size: 0.72rem;
+  }
+
+  .timeline {
+    padding-left: 34px;
+  }
+
+  .timelineLineBg,
+  .timelineLineProgress {
+    left: 14px;
+  }
+
+  .timelineNode {
+    left: -26px;
+    width: 16px;
+    height: 16px;
+  }
+
+  .timelineNodeDot {
+    width: 8px;
+    height: 8px;
+    border-width: 2px;
+  }
+
+  .aqarTableWrap {
+    border-radius: 0.75rem;
+  }
+
+  .aqarTable th,
+  .aqarTable td {
+    padding: 0.6rem 0.65rem;
+    font-size: 0.74rem;
+  }
+
+  .aqarTable th:nth-child(3),
+  .aqarTable td:nth-child(3) {
+    display: none;
+  }
+
+  .aqarDownloadBtn {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.68rem;
+  }
+
+  .commitmentCard {
+    padding: 1.5rem 1rem;
+  }
+
+  .commitmentTitle {
+    font-size: 1.1rem;
+  }
+
+  .commitmentDesc {
+    font-size: 0.78rem;
+    margin-bottom: 1rem;
+  }
+
+  .commitmentPillar {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.7rem;
+  }
+
+  .commitmentActions {
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+
+  .btnPrimary,
+  .btnOutline {
+    justify-content: center;
+    width: 100%;
+    padding: 0.55rem 1rem;
+    font-size: 0.78rem;
+  }
+}
+
+/* ─── Below 400px (Extra Small) ─── */
+@media (max-width: 400px) {
+  .container {
+    padding: 0 0.75rem;
+  }
+
+  .aboutSection,
+  .criteriaSection,
+  .timelineSection,
+  .aqarSection {
+    padding: 1.25rem 0;
+  }
+
+  .statusSection {
+    padding: 1rem 0;
+  }
+
+  .commitmentSection {
+    padding: 1.25rem 0 1.5rem;
+  }
+
+  .sectionHeader {
+    margin-bottom: 1rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.05rem;
+  }
+
+  .sectionSubtext {
+    font-size: 0.72rem;
+    line-height: 1.5;
+  }
+
+  .sectionTag {
+    font-size: 0.6rem;
+    padding: 0.18rem 0.55rem;
+  }
+
+  .aboutText {
+    font-size: 0.78rem;
+    line-height: 1.55;
+    margin-bottom: 0.6rem;
+  }
+
+  .highlightItem {
+    padding: 0.4rem 0.55rem;
+    font-size: 0.72rem;
+  }
+
+  .highlightIcon {
+    width: 22px;
+    height: 22px;
+  }
+
+  .aboutCardInner {
+    padding: 1.25rem 1rem;
+  }
+
+  .aboutCardTitle {
+    font-size: 0.95rem;
+  }
+
+  .aboutCardDesc {
+    font-size: 0.72rem;
+  }
+
+  .aboutStat strong {
+    font-size: 0.9rem;
+  }
+
+  .statusCard {
+    padding: 1rem 0.85rem;
+    border-radius: 0.85rem;
+  }
+
+  .statusTitle {
+    font-size: 1rem;
+  }
+
+  .statusDesc {
+    font-size: 0.75rem;
+  }
+
+  .statusMetrics {
+    grid-template-columns: 1fr;
+    gap: 0.4rem;
+  }
+
+  .metricCard {
+    padding: 0.6rem 0.55rem;
+  }
+
+  .metricInfo strong {
+    font-size: 0.78rem;
+  }
+
+  .criteriaCard {
+    padding: 0.85rem 0.75rem;
+  }
+
+  .criteriaIconWrap {
+    width: 30px;
+    height: 30px;
+    border-radius: 0.6rem;
+  }
+
+  .criteriaTitle {
+    font-size: 0.78rem;
+  }
+
+  .criteriaDesc {
+    font-size: 0.68rem;
+    line-height: 1.45;
+  }
+
+  .timelineCard {
+    padding: 0.85rem 0.75rem;
+    border-radius: 0.75rem;
+  }
+
+  .timelineTitle {
+    font-size: 0.8rem;
+  }
+
+  .timelineDesc {
+    font-size: 0.7rem;
+  }
+
+  .commitmentCard {
+    padding: 1.25rem 0.85rem;
+    border-radius: 0.85rem;
+  }
+
+  .commitmentTitle {
+    font-size: 1rem;
+  }
+
+  .commitmentDesc {
+    font-size: 0.72rem;
+    line-height: 1.55;
+    margin-bottom: 0.85rem;
+  }
+
+  .commitmentPillar {
+    font-size: 0.65rem;
+    padding: 0.35rem 0.5rem;
+    gap: 0.4rem;
+  }
+
+  .commitmentPillar svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .btnPrimary,
+  .btnOutline {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.72rem;
+  }
+}
