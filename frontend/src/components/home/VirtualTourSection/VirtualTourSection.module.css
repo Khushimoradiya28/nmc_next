@@ -599,6 +599,30 @@
   }
   .modalBox {
     padding: 1.5rem;
+    width: 95%;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+  .modalTitle {
+    font-size: 1.25rem;
+  }
+  .modalTabs {
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+  .modalTabBtn {
+    font-size: 0.8rem;
+    padding: 0.4rem 1rem;
+  }
+  .sliderArrow {
+    width: 38px;
+    height: 38px;
+  }
+  .sliderArrowLeft {
+    left: 0.5rem;
+  }
+  .sliderArrowRight {
+    right: 0.5rem;
   }
 }
 
@@ -698,3 +722,364 @@
 }
 
 
+
+/* Tour CTA Button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1.5rem;
+  border-radius: var(--r-full, 50px);
+  font-weight: 700;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.btnCrimson {
+  background: var(--grad-red, linear-gradient(135deg, #8a0000, #dc2626));
+  color: var(--white, #fff);
+  box-shadow: 0 6px 20px rgba(138, 0, 0, 0.25);
+}
+
+.btnCrimson:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(138, 0, 0, 0.35);
+}
+
+.openTourModal {
+  /* marker class */
+}
+
+/* ===== RESPONSIVE BREAKPOINTS ===== */
+
+@media (max-width: 1799px) {
+  .programsGrid {
+    gap: 1.75rem;
+  }
+}
+
+@media (max-width: 1599px) {
+  .tourCard {
+    gap: 3rem;
+    padding: 2.5rem;
+  }
+  .programsGrid {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 1408px) {
+  .tourCard {
+    gap: 2.5rem;
+    padding: 2.25rem;
+  }
+  .tourTitle {
+    font-size: 2rem;
+  }
+  .tourDesc {
+    font-size: 1rem;
+  }
+  .progCardInner {
+    padding: 1.75rem 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 1216px) {
+  .programsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .tourCard {
+    gap: 2rem;
+    padding: 2rem;
+  }
+  .tourPreviewBox {
+    min-height: 320px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .tourCard {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding: 2rem;
+  }
+  .tourPreviewBox {
+    min-height: 300px;
+  }
+  .programsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .programFilterBar {
+    margin-bottom: 2.5rem;
+  }
+  .progFilterBtn {
+    font-size: 0.82rem;
+    padding: 0.55rem 1.1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .tourCard {
+    padding: 1.5rem;
+    border-radius: 1rem;
+  }
+  .tourTitle {
+    font-size: 1.6rem;
+  }
+  .tourDesc {
+    font-size: 0.95rem;
+    margin-bottom: 1.5rem;
+  }
+  .tourPreviewBox {
+    min-height: 250px;
+  }
+  .tourPlayBtn {
+    width: 56px;
+    height: 56px;
+    font-size: 1.5rem;
+  }
+  .programsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .programFilterBar {
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .progFilterBtn {
+    font-size: 0.78rem;
+    padding: 0.5rem 0.9rem;
+  }
+  .progCardInner {
+    padding: 1.5rem 1.25rem 1rem;
+  }
+  .progTitle {
+    font-size: 1rem;
+  }
+  .progCardBtn {
+    margin: 0 1.25rem 1.25rem;
+    width: calc(100% - 2.5rem);
+    font-size: 0.85rem;
+    padding: 0.7rem 1rem;
+  }
+}
+
+@media (max-width: 575px) {
+  .tourCard {
+    padding: 1.25rem;
+  }
+  .tourTitle {
+    font-size: 1.4rem;
+  }
+  .tourDesc {
+    font-size: 0.9rem;
+  }
+  .tourPreviewBox {
+    min-height: 220px;
+  }
+  .tourPlayBtn {
+    width: 50px;
+    height: 50px;
+  }
+  .btn {
+    font-size: 0.85rem !important;
+    padding: 0.7rem 1.2rem;
+    white-space: normal;
+    text-align: center;
+  }
+  .progFilterBtn {
+    font-size: 0.75rem;
+    padding: 0.45rem 0.8rem;
+  }
+  .progCountPill {
+    display: none;
+  }
+  .modalBox {
+    padding: 1.25rem;
+    border-radius: 1rem;
+  }
+  .modalContent {
+    height: 300px;
+    border-radius: 0.75rem;
+  }
+  .modalTitle {
+    font-size: 1.1rem;
+  }
+  .modalSubtitle {
+    font-size: 0.8rem;
+  }
+  .modalTabs {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .modalTabBtn {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.85rem;
+  }
+  .modalClose {
+    font-size: 1.8rem;
+    top: 0.75rem;
+    right: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .tourCard {
+    padding: 1rem;
+  }
+  .tourTitle {
+    font-size: 1.25rem;
+  }
+  .tourPreviewBox {
+    min-height: 200px;
+  }
+  .btn {
+    font-size: 0.8rem !important;
+    padding: 0.65rem 1rem;
+    gap: 0.35rem;
+  }
+  .progCardInner {
+    padding: 1.25rem 1rem 0.75rem;
+  }
+  .progTitle {
+    font-size: 0.95rem;
+  }
+  .progSummary {
+    font-size: 0.8rem;
+  }
+  .progCardBtn {
+    margin: 0 1rem 1rem;
+    width: calc(100% - 2rem);
+    font-size: 0.82rem;
+  }
+  .modalBox {
+    padding: 1rem;
+    border-radius: 0.85rem;
+    width: 98%;
+  }
+  .modalContent {
+    height: 250px;
+  }
+  .modalTitle {
+    font-size: 1rem;
+  }
+  .modalHeader {
+    margin-bottom: 1rem;
+  }
+  .sliderArrow {
+    width: 34px;
+    height: 34px;
+  }
+  .sliderPagination {
+    padding: 0.3rem 0.6rem;
+    gap: 0.35rem;
+  }
+  .paginationDot {
+    width: 6px;
+    height: 6px;
+  }
+  .paginationDotActive {
+    width: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .tourTitle {
+    font-size: 1.15rem;
+  }
+  .tourDesc {
+    font-size: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+  .tourPreviewBox {
+    min-height: 180px;
+  }
+  .btn {
+    font-size: 0.75rem !important;
+    padding: 0.6rem 0.9rem;
+    gap: 0.3rem;
+    width: 100%;
+    justify-content: center;
+  }
+  .btn svg {
+    width: 16px;
+    height: 16px;
+  }
+  .progMetaStrip {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+  }
+  .modalBox {
+    padding: 0.85rem;
+  }
+  .modalContent {
+    height: 220px;
+  }
+  .modalTitle {
+    font-size: 0.9rem;
+  }
+  .modalSubtitle {
+    font-size: 0.75rem;
+  }
+  .modalTabs {
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
+  }
+  .modalTabBtn {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.7rem;
+  }
+  .sliderArrowLeft {
+    left: 0.35rem;
+  }
+  .sliderArrowRight {
+    right: 0.35rem;
+  }
+}
+
+@media (max-width: 380px) {
+  .tourTitle {
+    font-size: 1.1rem;
+  }
+  .tourCard {
+    padding: 0.85rem;
+  }
+  .tourPreviewBox {
+    min-height: 160px;
+  }
+  .btn {
+    font-size: 0.72rem !important;
+    padding: 0.55rem 0.8rem;
+  }
+  .progTitle {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .tourTitle {
+    font-size: 1rem;
+  }
+  .tourPreviewBox {
+    min-height: 150px;
+  }
+  .tourPlayBtn {
+    width: 44px;
+    height: 44px;
+    font-size: 1.2rem;
+  }
+  .btn {
+    font-size: 0.7rem !important;
+  }
+  .progCardBtn {
+    font-size: 0.78rem;
+    padding: 0.6rem 0.85rem;
+  }
+}

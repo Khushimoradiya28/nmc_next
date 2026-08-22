@@ -6,7 +6,7 @@ export default function Hero() {
   return (
     <section className={`${styles.heroFullscreen} hero-fullscreen`} id="home">
       <div className={`${styles.heroBgImage} hero-bg-image`} style={{ transform: 'scaleX(-1)' }}>
-        <Image src="/assets/hero/hero-section.png" alt="NMC Campus Life" width={600} height={400} className={`${styles.heroBgImg} hero-bg-img`} />
+        <Image src="/assets/home/hero/new-banner.png" alt="NMC Campus Life" width={1920} height={1080} className={`${styles.heroBgImg} hero-bg-img`} />
       </div>
       <div className={`${styles.heroOverlay} hero-overlay`}></div>
       <div className={`${styles.heroContent} container`}>

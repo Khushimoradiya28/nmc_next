@@ -79,7 +79,7 @@ export default function FacultySection() {
 
   return (
     <section className={styles.facultyWrapper} id="faculty">
-      <div className={styles.facultyContainer}>
+      <div className={`${styles.container} container`}>
         {/* SECTION HEADER */}
         <div className={styles.headerArea}>
           <span className={styles.subHeading}>EXPERT LECTURERS</span>

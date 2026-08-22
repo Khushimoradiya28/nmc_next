@@ -47,7 +47,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: radial-gradient(circle at 30% 50%, rgba(0, 0, 0, 0.4) 0%, rgba(0, 0, 0, 0.65) 100%);
+  background: radial-gradient(
+    circle at 30% 50%,
+    rgba(0, 0, 0, 0.4) 0%,
+    rgba(0, 0, 0, 0.65) 100%
+  );
   z-index: 2;
 }
 
@@ -90,7 +94,6 @@
 }
 
 @keyframes pulseDot {
-
   0%,
   100% {
     transform: scale(1);
@@ -160,19 +163,23 @@
 }
 
 .heroApplyBtn::after {
-  content: '';
+  content: "";
   position: absolute;
   top: -50%;
   left: -60%;
   width: 40%;
   height: 200%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.8), transparent);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
   transform: rotate(30deg);
   animation: buttonSheen 3.5s infinite;
 }
 
 @keyframes buttonSheen {
-
   0%,
   60% {
     left: -60%;
@@ -279,7 +286,6 @@
 }
 
 @keyframes floatFbadge1 {
-
   0%,
   100% {
     transform: translateY(0);
@@ -291,7 +297,6 @@
 }
 
 @keyframes floatFbadge2 {
-
   0%,
   100% {
     transform: translateY(0);
@@ -313,13 +318,21 @@
 }
 
 .fbadgeBus {
-  background: linear-gradient(135deg, rgba(244, 199, 73, 0.25), rgba(245, 158, 11, 0.35));
+  background: linear-gradient(
+    135deg,
+    rgba(244, 199, 73, 0.25),
+    rgba(245, 158, 11, 0.35)
+  );
   border: 1px solid var(--gold-400);
   color: var(--gold-300);
 }
 
 .fbadgeAward {
-  background: linear-gradient(135deg, rgba(186, 230, 253, 0.25), rgba(2, 132, 199, 0.35));
+  background: linear-gradient(
+    135deg,
+    rgba(186, 230, 253, 0.25),
+    rgba(2, 132, 199, 0.35)
+  );
   border: 1px solid var(--sky-200);
   color: var(--sky-200);
 }
@@ -339,18 +352,6 @@
 .fbadgeText span {
   font-size: 0.76rem;
   color: rgba(255, 255, 255, 0.75);
-}
-
-@media(max-width: 1799px) {
-  .heroFloatingBadges {
-    right: 30px;
-  }
-}
-
-@media(max-width: 991px) {
-  .heroFloatingBadges {
-    display: none;
-  }
 }
 
 /* MARQUEE TICKER */
@@ -411,5 +412,47 @@
 
   100% {
     transform: translateX(-50%);
+  }
+}
+@media (max-width: 1799px) {
+  .heroFloatingBadges {
+    right: 30px;
+  }
+}
+@media (max-width: 991px) {
+  .heroFloatingBadges {
+    display: none;
+  }
+}
+@media (max-width: 575px) {
+  .heroApplyBtn {
+    padding: 8px 15px;
+  }
+  .heroApplyBtn {
+    font-size: 13px;
+  }
+  .heroTagPill {
+    margin-bottom: 10px;
+  }
+  .heroMainTitle {
+    font-size: 35px;
+    line-height: 35px;
+  }
+  .heroMainTitle {
+    margin-bottom: 20px;
+  }
+}
+@media (max-width: 420px) {
+  .heroMainTitle {
+    font-size: 28px;
+    line-height: 28px;
+  }
+  .heroTagPill {
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+
+  .heroSubtitle {
+    margin-bottom: 20px;
   }
 }

@@ -5,8 +5,18 @@ import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
 import ActivityHero from '@/components/activities/ActivityHero/ActivityHero';
 import { motion, AnimatePresence } from 'framer-motion';
-import { IconChevronLeft, IconChevronRight, IconX } from '@tabler/icons-react';
 import styles from './page.module.css';
+
+// Inline icon components (replacing @tabler/icons-react)
+const IconChevronLeft = ({ size = 24, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="15 18 9 12 15 6" /></svg>
+);
+const IconChevronRight = ({ size = 24, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><polyline points="9 18 15 12 9 6" /></svg>
+);
+const IconX = ({ size = 24, ...props }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
+);
 
 // SVG Icons
 const ChessIcon = () => (

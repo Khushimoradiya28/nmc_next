@@ -527,3 +527,50 @@
     justify-content: center;
   }
 }
+
+
+/* ===== SECTION TITLE & DESCRIPTION RESPONSIVE ===== */
+@media (max-width: 1216px) {
+  .sectionTitle { font-size: 30px; }
+  .heading { font-size: clamp(1.85rem, 3.5vw, 2.5rem); }
+}
+@media (max-width: 1024px) {
+  .sectionTitle { font-size: 28px; }
+  .sectionDescription { font-size: 14px; }
+  .heading { font-size: clamp(1.75rem, 3.2vw, 2.25rem); }
+  .subtext { font-size: 1rem; }
+  .actions { width: 80%; }
+}
+@media (max-width: 768px) {
+  .sectionTitle { font-size: 26px; }
+  .sectionDescription { font-size: 13px; line-height: 22px; }
+  .sectionHeader { margin-bottom: 1.5rem; }
+  .heading { font-size: 1.65rem; }
+  .subtext { font-size: 0.95rem; }
+  .actions { width: 100%; }
+  .btnText { font-size: 0.85rem; }
+  .cardValue { font-size: 0.92rem; }
+}
+@media (max-width: 575px) {
+  .sectionTitle { font-size: 24px; }
+  .heading { font-size: 1.5rem; }
+  .subtext { font-size: 0.9rem; }
+  .pill { font-size: 0.82rem; padding: 6px 12px; }
+  .ctaBadge { font-size: 0.72rem; padding: 5px 14px; }
+}
+@media (max-width: 420px) {
+  .sectionTitle { font-size: 20px; }
+  .heading { font-size: 1.35rem; }
+  .subtext { font-size: 0.85rem; line-height: 1.6; }
+  .pill { font-size: 0.78rem; }
+  .primaryBtn { height: 44px; }
+  .secondaryBtn { height: 44px; font-size: 0.82rem; }
+}
+@media (max-width: 360px) {
+  .sectionTitle { font-size: 18px; }
+  .heading { font-size: 1.25rem; }
+  .subtext { font-size: 0.82rem; }
+  .eyebrow { font-size: 0.75rem; }
+  .cardLabel { font-size: 0.68rem; }
+  .cardValue { font-size: 0.88rem; }
+}
