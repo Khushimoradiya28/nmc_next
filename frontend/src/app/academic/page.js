@@ -220,58 +220,48 @@ export default function Page() {
               <p className={`${styles.sectionDescription} section-description`}>Distinguished academic scholars, Ph.D. holders, and dedicated mentors committed to empowering every student.</p>
             </div>
 
-            {/* Department Dropdown Selector */}
+            {/* Department Tabs */}
             <div style={{
-              marginBottom: "3.5rem",
+              marginBottom: "3rem",
               display: "flex",
               justifyContent: "center",
-              alignItems: "center",
               flexWrap: "wrap",
-              gap: "1.25rem",
+              gap: "0.5rem",
               position: "relative",
               zIndex: 10
             }}>
-              <label htmlFor="dept-select" style={{ fontSize: "1.05rem", fontWeight: "700", color: "var(--gray-800)", letterSpacing: "-0.2px" }}>
-                Filter by Department:
-              </label>
-              <div style={{ position: "relative" }}>
-                <select
-                  id="dept-select"
-                  value={selectedDept}
-                  onChange={(e) => setSelectedDept(e.target.value)}
+              {[
+                { value: "all", label: "All" },
+                { value: "B.A.", label: "B.A." },
+                { value: "B.B.A.", label: "B.B.A." },
+                { value: "B.C.A.", label: "B.C.A." },
+                { value: "B.Com.", label: "B.Com." },
+                { value: "F.D.", label: "F.D." },
+                { value: "M.Com.", label: "M.Com." },
+                { value: "M.S.W.", label: "M.S.W." },
+                { value: "PGDPA", label: "PGDPA" },
+                { value: "DMPHW", label: "DMPHW" },
+                { value: "M.A.", label: "M.A." },
+              ].map((dept) => (
+                <button
+                  key={dept.value}
+                  onClick={() => setSelectedDept(dept.value)}
                   style={{
-                    padding: "0.75rem 2.5rem 0.75rem 1.5rem",
+                    padding: "0.55rem 1.25rem",
                     borderRadius: "2rem",
-                    border: "1px solid #cbd5e1",
-                    background: "var(--white)",
-                    boxShadow: "0 10px 25px rgba(0,0,0,0.04)",
-                    color: "var(--gray-800)",
-                    fontWeight: "600",
-                    fontSize: "0.95rem",
-                    outline: "none",
+                    border: selectedDept === dept.value ? "1px solid #8a0000" : "1px solid #e2e8f0",
+                    background: selectedDept === dept.value ? "#8a0000" : "#ffffff",
+                    color: selectedDept === dept.value ? "#ffffff" : "var(--gray-700)",
+                    fontWeight: "700",
+                    fontSize: "0.82rem",
                     cursor: "pointer",
-                    appearance: "none",
-                    minWidth: "220px",
-                    transition: "all 0.3s ease"
+                    transition: "all 0.25s ease",
+                    boxShadow: selectedDept === dept.value ? "0 4px 12px rgba(138,0,0,0.2)" : "0 2px 8px rgba(0,0,0,0.03)",
                   }}
                 >
-                  <option value="all">All Departments</option>
-                  <option value="B.A.">B.A. (Bachelor of Arts)</option>
-                  <option value="B.B.A.">B.B.A. (Bachelor of Business Admin)</option>
-                  <option value="B.C.A.">B.C.A. (Bachelor of Computer Apps)</option>
-                  <option value="B.Com.">B.Com. (Bachelor of Commerce)</option>
-                  <option value="F.D.">F.D. (Fashion Designing)</option>
-                  <option value="M.Com.">M.Com. (Master of Commerce)</option>
-                  <option value="M.S.W.">M.S.W. (Master of Social Work)</option>
-                  <option value="PGDPA">PGDPA (Post Graduate Diploma)</option>
-                  <option value="DMPHW">DMPHW (Multi Purpose Health Worker)</option>
-                  <option value="M.A.">M.A. (Master of Arts)</option>
-                </select>
-                {/* Arrow Icon Indicator */}
-                <div style={{ position: "absolute", right: "1.25rem", top: "50%", transform: "translateY(-50%)", pointerEvents: "none", color: "var(--gray-500)" }}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9" /></svg>
-                </div>
-              </div>
+                  {dept.label}
+                </button>
+              ))}
             </div>
 
             {/* Dynamic Grid Layout */}

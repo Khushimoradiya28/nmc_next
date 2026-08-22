@@ -292,22 +292,212 @@
   stroke: currentColor;
 }
 
-/* Responsive */
-@media(max-width: 1024px) {
+/* ===== CERTIFICATE COURSES RESPONSIVE ===== */
+
+@media (max-width: 1799px) {
+  .certCardsTrack {
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 1599px) {
+  .certCardMedia {
+    height: 190px;
+  }
+}
+
+@media (max-width: 1408px) {
+  .certCardLuxury {
+    min-width: calc(33.333% - 1rem);
+    flex: 0 0 calc(33.333% - 1rem);
+  }
+  .certCardMedia {
+    height: 180px;
+  }
+  .certCardBody {
+    padding: 1.4rem 1.4rem 1.5rem;
+  }
+}
+
+@media (max-width: 1216px) {
+  .sectionTitle {
+    font-size: 30px;
+  }
+  .certCardLuxury {
+    min-width: calc(33.333% - 1rem);
+    flex: 0 0 calc(33.333% - 1rem);
+  }
+  .certCardsTrack {
+    gap: 1.25rem;
+  }
+  .certCardTitle {
+    font-size: 1.1rem;
+  }
+}
+
+@media (max-width: 1024px) {
+  .sectionTitle {
+    font-size: 28px;
+  }
+  .sectionDescription {
+    font-size: 14px;
+  }
   .certCardLuxury {
     min-width: calc(50% - 0.9rem);
     flex: 0 0 calc(50% - 0.9rem);
   }
+  .certCardMedia {
+    height: 180px;
+  }
+  .certCardBody {
+    padding: 1.3rem 1.3rem 1.4rem;
+  }
+  .certCardTitle {
+    font-size: 1.05rem;
+  }
+  .certArrow {
+    width: 42px;
+    height: 42px;
+  }
 }
 
-@media(max-width: 640px) {
-  .certCardLuxury {
-    min-width: 88%;
-    flex: 0 0 88%;
+@media (max-width: 768px) {
+  .sectionTitle {
+    font-size: 26px;
   }
-
+  .sectionDescription {
+    font-size: 13px;
+    line-height: 22px;
+  }
+  .sectionHeader {
+    margin-bottom: 1.5rem;
+  }
+  .certCardLuxury {
+    min-width: calc(50% - 0.75rem);
+    flex: 0 0 calc(50% - 0.75rem);
+  }
+  .certCardsTrack {
+    gap: 1rem;
+  }
+  .certCardMedia {
+    height: 160px;
+  }
+  .certCardBody {
+    padding: 1.1rem 1.1rem 1.25rem;
+  }
+  .certCardTitle {
+    font-size: 1rem;
+  }
+  .certCardDesc {
+    font-size: 0.8rem;
+    margin-bottom: 0.85rem;
+  }
+  .certBulletsList li {
+    font-size: 0.78rem;
+  }
+  .certMetaStrip {
+    padding: 0.5rem 0.75rem;
+  }
+  .certMetaItem {
+    font-size: 0.72rem;
+  }
+  .certActionBtn {
+    font-size: 0.82rem;
+    padding: 0.65rem 1rem;
+  }
   .certArrow {
-    display: none;
+    width: 38px;
+    height: 38px;
+  }
+}
+
+@media (max-width: 575px) {
+  .sectionTitle {
+    font-size: 24px;
+  }
+  .certCardLuxury {
+    min-width: 100%;
+    flex: 0 0 100%;
+  }
+  .certCardMedia {
+    height: 200px;
+  }
+  .certSliderWrap {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .certArrow {
+    position: static;
+    transform: unset;
+    margin-top: 20px;
+  }
+  .certCardsTrack {
+    order: -1;
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .sectionTitle {
+    font-size: 22px;
+  }
+  .certCardMedia {
+    height: 180px;
+  }
+  .certCardBody {
+    padding: 1rem;
+  }
+  .certCardTitle {
+    font-size: 0.95rem;
+  }
+  .certArrow {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+@media (max-width: 420px) {
+  .sectionTitle {
+    font-size: 20px;
+  }
+  .certCardMedia {
+    height: 160px;
+  }
+  .certCardTitle {
+    font-size: 0.9rem;
+  }
+  .certCardDesc {
+    font-size: 0.78rem;
+  }
+  .certMetaStrip {
+    flex-direction: column;
+    gap: 0.4rem;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 380px) {
+  .certCardMedia {
+    height: 145px;
+  }
+  .certCardBody {
+    padding: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .sectionTitle {
+    font-size: 18px;
+  }
+  .certCardMedia {
+    height: 135px;
+  }
+  .certCardTitle {
+    font-size: 0.85rem;
+  }
+  .certActionBtn {
+    font-size: 0.78rem;
+    padding: 0.55rem 0.85rem;
   }
 }
 

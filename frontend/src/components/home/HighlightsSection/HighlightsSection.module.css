@@ -579,3 +579,66 @@
   color: #78350f;
 }
 
+
+
+/* ===== SECTION TITLE & DESCRIPTION RESPONSIVE ===== */
+@media (max-width: 1216px) {
+  .sectionTitle { font-size: 30px; }
+  .vmMainTitle { font-size: 34px; }
+  .pillarTitle { font-size: 1.3rem; }
+}
+@media (max-width: 1024px) {
+  .sectionTitle { font-size: 28px; }
+  .sectionDescription { font-size: 14px; }
+  .vmMainTitle { font-size: 30px; }
+  .vmMainSubtitle { font-size: 0.95rem; }
+  .vmCardTitle { font-size: 1.3rem; }
+  .pillarTitle { font-size: 1.2rem; }
+  .pillarDescription { font-size: 0.88rem; }
+}
+@media (max-width: 768px) {
+  .sectionTitle { font-size: 26px; }
+  .sectionDescription { font-size: 13px; line-height: 22px; }
+  .sectionHeader { margin-bottom: 1.5rem; }
+  .vmMainTitle { font-size: 26px; }
+  .vmMainSubtitle { font-size: 0.9rem; }
+  .vmLuxuryGrid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .vmCardLuxury { padding: 2rem 1.75rem; }
+  .vmCardTitle { font-size: 1.2rem; }
+  .pillarTitle { font-size: 1.15rem; }
+  .infoPillarCard { padding: 2rem 1.5rem; }
+}
+@media (max-width: 575px) {
+  .sectionTitle { font-size: 24px; }
+  .vmMainTitle { font-size: 23px; }
+  .vmMainSubtitle { font-size: 0.85rem; }
+  .vmCardLuxury { padding: 1.75rem 1.5rem; }
+  .vmCardTitle { font-size: 1.1rem; }
+  .vmQuoteBox { font-size: 0.88rem; padding: 1rem 1.15rem; }
+  .pillarTitle { font-size: 1.1rem; }
+  .pillarDescription { font-size: 0.85rem; }
+}
+@media (max-width: 480px) {
+  .sectionTitle { font-size: 22px; }
+  .vmMainTitle { font-size: 21px; }
+  .vmHeaderPill { font-size: 0.72rem; padding: 0.3rem 0.9rem; }
+  .vmCardTitle { font-size: 1.05rem; }
+  .vmIconBubble { width: 48px; height: 48px; min-width: 48px; }
+  .pillarIconWrap { width: 52px; height: 52px; }
+  .infoPillarCard { padding: 1.75rem 1.25rem; }
+}
+@media (max-width: 420px) {
+  .sectionTitle { font-size: 20px; }
+  .vmMainTitle { font-size: 19px; }
+  .vmCardLuxury { padding: 1.5rem 1.25rem; border-radius: 1.15rem; }
+  .vmQuoteBox { font-size: 0.84rem; }
+  .pillarTitle { font-size: 1.05rem; }
+}
+@media (max-width: 360px) {
+  .sectionTitle { font-size: 18px; }
+  .vmMainTitle { font-size: 17px; }
+  .vmMainSubtitle { font-size: 0.8rem; }
+  .vmCardTitle { font-size: 1rem; }
+  .pillarTitle { font-size: 1rem; }
+  .pillarDescription { font-size: 0.8rem; }
+}
