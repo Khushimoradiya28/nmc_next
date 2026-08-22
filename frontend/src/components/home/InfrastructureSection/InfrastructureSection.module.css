@@ -61,6 +61,55 @@
   margin-bottom: 0.4rem;
 }
 
+.sliderArrow {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  border-radius: 50%;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--color-primary, #b00000) !important;
+  color: var(--white, #ffffff) !important;
+  border-color: var(--color-primary, #b00000) !important;
+  box-shadow: 0 4px 14px rgba(176, 0, 0, 0.2) !important;
+  transition: all 0.3s ease !important;
+}
+
+.sliderArrow:hover {
+  background: var(--color-primary-dark, #800000) !important;
+  border-color: var(--color-primary-dark, #800000) !important;
+  color: var(--white, #ffffff) !important;
+  transform: scale(1.08) !important;
+}
+
+/* Mobile arrows - hidden on desktop, row below slider on mobile */
+.mobileArrows {
+  display: none;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.mobileArrows .sliderArrow {
+  flex-shrink: 0;
+}
+
+.mobileArrowsWrap {
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.desktopArrow {
+  flex-shrink: 0;
+}
 @media (max-width: 1799px) {
   .facilityCard {
     flex: 0 0 calc(25% - 18px);
@@ -163,14 +212,16 @@
   .mobileArrowsWrap {
     margin-top: 20px !important;
   }
+  .sliderArrow {
+    width: 40px;
+    min-width: 40px;
+    height: 40px;
+  }
 }
 
 @media (max-width: 480px) {
   .facilityImg {
     height: 160px;
-  }
-  .facilitiesGrid {
-    padding: 10px 12px;
   }
 }
 
@@ -196,54 +247,4 @@
   .facilityTitle {
     font-size: 0.9rem;
   }
-}
-
-.sliderArrow {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
-  border-radius: 50%;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  background: var(--color-primary, #b00000) !important;
-  color: var(--white, #ffffff) !important;
-  border-color: var(--color-primary, #b00000) !important;
-  box-shadow: 0 4px 14px rgba(176, 0, 0, 0.2) !important;
-  transition: all 0.3s ease !important;
-}
-
-.sliderArrow:hover {
-  background: var(--color-primary-dark, #800000) !important;
-  border-color: var(--color-primary-dark, #800000) !important;
-  color: var(--white, #ffffff) !important;
-  transform: scale(1.08) !important;
-}
-
-/* Mobile arrows - hidden on desktop, row below slider on mobile */
-.mobileArrows {
-  display: none;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 30px;
-}
-
-.mobileArrows .sliderArrow {
-  flex-shrink: 0;
-}
-
-.mobileArrowsWrap {
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  margin-top: 30px;
-}
-
-.desktopArrow {
-  flex-shrink: 0;
 }

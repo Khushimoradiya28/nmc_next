@@ -226,6 +226,13 @@
     width: 40px;
     height: 40px;
   }
+  .awardItem {
+    transform: scale(1);
+    opacity: 1;
+  }
+  .cardCenter {
+    transform: scale(1) !important;
+  }
 }
 
 @media (max-width: 575px) {

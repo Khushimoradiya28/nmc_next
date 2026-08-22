@@ -35,7 +35,7 @@ export default function Admission() {
   }, []);
 
   return (
-    <section className={styles.admissionDynamicSection} id="admissions-dynamic">
+    <section className={`${styles.admissionDynamicSection} section-padding`} id="admissions-dynamic">
       <div className={styles.container}>
         <div className={styles.sectionHeader}>
           <div className={styles.sectionSubtitle}>Admissions 2026-27 • Real-Time Portal</div>

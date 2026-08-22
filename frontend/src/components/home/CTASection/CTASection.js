@@ -83,7 +83,7 @@ export default function CTASection() {
   const isInView = useInView(ref, { once: true, margin: '-100px' });
 
   return (
-    <section className={styles.section} id="contact" ref={ref}>
+    <section className={`${styles.section} section-padding`} id="contact" ref={ref}>
       {/* Immersive background elements (hidden in styles but kept for layout integrity) */}
       <div className={styles.bgGlow1} />
       <div className={styles.bgGlow2} />
@@ -167,7 +167,7 @@ export default function CTASection() {
 
           {/* ── RIGHT: GLASS CARDS & BUTTONS ── */}
           <div className={styles.cardsVisual}>
-            <div className={styles.cardsContainer}>
+            <div>
               {infoCards.map((card, i) => {
                 const cardContent = (
                   <motion.div

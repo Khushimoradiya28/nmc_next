@@ -7,20 +7,19 @@
   position: relative;
   background: linear-gradient(
     135deg,
-    #FFE8CC 0%,
-    #FFF0F0 35%,
-    #FFE0E0 65%,
-    #FFF5E6 100%
+    #ffe8cc 0%,
+    #fff0f0 35%,
+    #ffe0e0 65%,
+    #fff5e6 100%
   );
   overflow: hidden;
-  padding: 80px 0;
   color: var(--color-black, #111111);
   border-bottom: 1px solid var(--color-gray-100, #f3f4f6);
 }
 
 /* Red top border accent */
 .section::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -29,8 +28,8 @@
   background: linear-gradient(
     to right,
     transparent 0%,
-    var(--color-primary, #B00000) 20%,
-    var(--color-primary, #B00000) 80%,
+    var(--color-primary, #b00000) 20%,
+    var(--color-primary, #b00000) 80%,
     transparent 100%
   );
   z-index: 10;
@@ -38,12 +37,12 @@
 
 /* Subtle dot pattern overlay */
 .section::after {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   background-image: radial-gradient(
     circle,
-    rgba(176,0,0,0.10) 1px,
+    rgba(176, 0, 0, 0.1) 1px,
     transparent 1px
   );
   background-size: 24px 24px;
@@ -89,24 +88,29 @@
   align-items: flex-start;
   padding-left: 24px;
   z-index: 1;
-  gap: 20px;
+  /* gap: 20px;  */
 }
 
 /* Vertical red line on left edge */
 .textContent::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 10%;
   height: 80%;
   width: 3px;
-  background: linear-gradient(to bottom, transparent, var(--color-primary, #B00000), transparent);
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    var(--color-primary, #b00000),
+    transparent
+  );
   border-radius: 2px;
 }
 
 /* Admissions Open Badge */
 .ctaBadge {
-  background: var(--color-primary, #B00000);
+  background: var(--color-primary, #b00000);
   color: #ffffff;
   padding: 6px 20px;
   border-radius: 999px;
@@ -145,7 +149,7 @@
 .eyebrowLine {
   width: 40px;
   height: 2px;
-  background: var(--color-primary, #B00000);
+  background: var(--color-primary, #b00000);
   border-radius: 2px;
 }
 
@@ -155,7 +159,7 @@
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: var(--color-primary, #B00000);
+  color: var(--color-primary, #b00000);
 }
 
 .heading {
@@ -171,7 +175,7 @@
 }
 
 .headingHighlight {
-  color: var(--color-primary, #B00000);
+  color: var(--color-primary, #b00000);
 }
 
 .subtext {
@@ -190,7 +194,7 @@
 .urgencyText {
   position: relative;
   z-index: 1;
-  color: var(--color-primary, #B00000);
+  color: var(--color-primary, #b00000);
   font-size: 0.875rem;
   font-weight: 600;
   margin-top: 0;
@@ -219,13 +223,13 @@
   font-size: 0.9rem;
   font-weight: 500;
   color: var(--color-gray-700, #374151);
-  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0,0,0,0.05));
+  box-shadow: var(--shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.05));
   text-decoration: none;
 }
 
 .pillIcon {
   display: flex;
-  color: var(--color-primary, #B00000);
+  color: var(--color-primary, #b00000);
 }
 
 .clickablePill {
@@ -234,7 +238,7 @@
 }
 
 .clickablePill:hover {
-  border-color: var(--color-primary, #B00000);
+  border-color: var(--color-primary, #b00000);
   background: rgba(176, 0, 0, 0.02);
   transform: translateY(-1px);
 }
@@ -247,18 +251,23 @@
   gap: 12px;
   align-items: center;
   margin-top: 16px;
-  width: 65%;
+  width: auto;
+  max-width: 480px;
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% center }
-  100% { background-position: 200% center }
+  0% {
+    background-position: -200% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
 }
 
 .primaryBtn {
   display: inline-flex;
   align-items: center;
-  background: var(--color-primary, #B00000);
+  background: var(--color-primary, #b00000);
   border-radius: 999px;
   padding: 4px 4px 4px 24px;
   text-decoration: none;
@@ -267,7 +276,6 @@
   position: relative;
   overflow: hidden;
   background-size: 200% auto;
-  flex: 1;
   justify-content: space-between;
   height: 48px;
   box-sizing: border-box;
@@ -276,9 +284,9 @@
 .primaryBtn:hover {
   background: linear-gradient(
     90deg,
-    var(--color-primary, #B00000) 0%,
+    var(--color-primary, #b00000) 0%,
     #d41010 50%,
-    var(--color-primary, #B00000) 100%
+    var(--color-primary, #b00000) 100%
   );
   background-size: 200% auto;
   animation: shimmer 1.5s linear infinite;
@@ -302,7 +310,7 @@
   width: 38px;
   height: 38px;
   background: #ffffff;
-  color: var(--color-primary, #B00000);
+  color: var(--color-primary, #b00000);
   border-radius: 50%;
   transition: transform 0.3s ease;
 }
@@ -317,8 +325,8 @@
   align-items: center;
   justify-content: center;
   background: transparent;
-  border: 2px solid var(--color-primary, #B00000);
-  color: var(--color-primary, #B00000);
+  border: 2px solid var(--color-primary, #b00000);
+  color: var(--color-primary, #b00000);
   border-radius: 999px;
   padding: 10px 24px;
   font-family: var(--font-body, sans-serif);
@@ -329,11 +337,10 @@
   cursor: pointer;
   box-sizing: border-box;
   height: 48px;
-  flex: 1;
 }
 
 .secondaryBtn:hover {
-  background: var(--color-primary, #B00000);
+  background: var(--color-primary, #b00000);
   color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(176, 0, 0, 0.15);
@@ -383,11 +390,16 @@
   box-sizing: border-box;
   transition: all 0.3s ease;
   cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.cardLink:last-child .glassCard {
+  margin-bottom: 0;
 }
 
 .cardLink:hover .glassCard {
-  border: 1px solid var(--color-primary, #B00000);
-  border-left: 3px solid var(--color-primary, #B00000);
+  border: 1px solid var(--color-primary, #b00000);
+  border-left: 3px solid var(--color-primary, #b00000);
   box-shadow: var(--shadow-card-hover, 0 8px 24px rgba(0, 0, 0, 0.1));
 }
 
@@ -404,17 +416,17 @@
 
 .icon_red {
   background: rgba(176, 0, 0, 0.1);
-  color: var(--color-primary, #B00000);
+  color: var(--color-primary, #b00000);
 }
 
 .icon_gold {
   background: rgba(244, 176, 0, 0.12);
-  color: var(--color-secondary, #F4B000);
+  color: var(--color-secondary, #f4b000);
 }
 
 .icon_blue {
   background: rgba(176, 0, 0, 0.08);
-  color: var(--color-primary, #B00000);
+  color: var(--color-primary, #b00000);
 }
 
 /* Card Typography */
@@ -437,11 +449,11 @@
 
 /* Small colored dot before card label */
 .cardLabel::before {
-  content: '';
+  content: "";
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: var(--color-primary, #B00000);
+  background: var(--color-primary, #b00000);
   display: inline-block;
   margin-right: 6px;
 }
@@ -461,19 +473,15 @@
   .contentWrapper {
     gap: 3rem;
   }
+  .glassCard {
+    padding: 15px 15px;
+  }
 }
 
 @media (max-width: 768px) {
   .contentWrapper {
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
-}
-
-@media (max-width: 640px) {
-  .contentWrapper {
-    grid-template-columns: 1fr;
-    gap: 3rem;
+    grid-template-columns: auto;
+    gap: 15px;
   }
   .glassCard {
     width: 100%;
@@ -528,49 +536,148 @@
   }
 }
 
-
 /* ===== SECTION TITLE & DESCRIPTION RESPONSIVE ===== */
 @media (max-width: 1216px) {
-  .sectionTitle { font-size: 30px; }
-  .heading { font-size: clamp(1.85rem, 3.5vw, 2.5rem); }
+  .sectionTitle {
+    font-size: 30px;
+  }
+  .heading {
+    font-size: clamp(1.85rem, 3.5vw, 2.5rem);
+  }
 }
 @media (max-width: 1024px) {
-  .sectionTitle { font-size: 28px; }
-  .sectionDescription { font-size: 14px; }
-  .heading { font-size: clamp(1.75rem, 3.2vw, 2.25rem); }
-  .subtext { font-size: 1rem; }
-  .actions { width: 80%; }
+  .sectionTitle {
+    font-size: 28px;
+  }
+  .sectionDescription {
+    font-size: 14px;
+  }
+  .heading {
+    font-size: clamp(1.75rem, 3.2vw, 2.25rem);
+  }
+  .subtext {
+    font-size: 1rem;
+  }
+  .actions {
+    width: 100%;
+    max-width: 480px;
+  }
 }
 @media (max-width: 768px) {
-  .sectionTitle { font-size: 26px; }
-  .sectionDescription { font-size: 13px; line-height: 22px; }
-  .sectionHeader { margin-bottom: 1.5rem; }
-  .heading { font-size: 1.65rem; }
-  .subtext { font-size: 0.95rem; }
-  .actions { width: 100%; }
-  .btnText { font-size: 0.85rem; }
-  .cardValue { font-size: 0.92rem; }
+  .sectionTitle {
+    font-size: 26px;
+  }
+  .sectionDescription {
+    font-size: 13px;
+    line-height: 22px;
+  }
+  .sectionHeader {
+    margin-bottom: 1.5rem;
+  }
+  .heading {
+    font-size: 1.65rem;
+  }
+  .subtext {
+    font-size: 0.95rem;
+  }
+  .actions {
+    width: 100%;
+  }
+  .btnText {
+    font-size: 0.85rem;
+  }
+  .cardValue {
+    font-size: 0.92rem;
+  }
+  .cardsVisual .cardsContainer {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .container {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .section {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 @media (max-width: 575px) {
-  .sectionTitle { font-size: 24px; }
-  .heading { font-size: 1.5rem; }
-  .subtext { font-size: 0.9rem; }
-  .pill { font-size: 0.82rem; padding: 6px 12px; }
-  .ctaBadge { font-size: 0.72rem; padding: 5px 14px; }
+  .textContent{
+    padding-left: 15px;
+  }
+  .sectionTitle {
+    font-size: 24px;
+  }
+  .heading {
+    font-size: 1.5rem;
+  }
+  .subtext {
+    font-size: 0.9rem;
+  }
+  .pill {
+    font-size: 0.82rem;
+    padding: 6px 12px;
+  }
+  .ctaBadge {
+    font-size: 0.72rem;
+    padding: 5px 14px;
+  }
+  .glassCard {
+    padding: 15px 10px;
+  }
+  .iconBox {
+    width: 45px;
+    height: 45px;
+  }
+  .iconBox svg {
+    height: 20px;
+    width: 20px;
+  }
 }
 @media (max-width: 420px) {
-  .sectionTitle { font-size: 20px; }
-  .heading { font-size: 1.35rem; }
-  .subtext { font-size: 0.85rem; line-height: 1.6; }
-  .pill { font-size: 0.78rem; }
-  .primaryBtn { height: 44px; }
-  .secondaryBtn { height: 44px; font-size: 0.82rem; }
+  .cardValue {
+    font-size: 12px;
+  }
+  .sectionTitle {
+    font-size: 20px;
+  }
+  .heading {
+    font-size: 1.35rem;
+  }
+  .subtext {
+    font-size: 0.85rem;
+    line-height: 1.6;
+  }
+  .pill {
+    font-size: 0.78rem;
+  }
+  .primaryBtn {
+    height: 44px;
+  }
+  .secondaryBtn {
+    height: 44px;
+    font-size: 0.82rem;
+  }
 }
 @media (max-width: 360px) {
-  .sectionTitle { font-size: 18px; }
-  .heading { font-size: 1.25rem; }
-  .subtext { font-size: 0.82rem; }
-  .eyebrow { font-size: 0.75rem; }
-  .cardLabel { font-size: 0.68rem; }
-  .cardValue { font-size: 0.88rem; }
+  .sectionTitle {
+    font-size: 18px;
+  }
+  .heading {
+    font-size: 1.25rem;
+  }
+  .subtext {
+    font-size: 0.82rem;
+  }
+  .eyebrow {
+    font-size: 0.75rem;
+  }
+  .iconBox {
+    width: 40px;
+    height: 40px;
+  }
+  .glassCard {
+    gap: 10px;
+  }
 }

@@ -2,7 +2,7 @@
 .admissionDynamicSection {
   background: #fffdfa;
   position: relative;
-  padding: 6rem 0;
+  /* padding: 6rem 0; */
 }
 
 .container {
@@ -635,7 +635,7 @@
 }
 
 /* Responsive */
-@media(max-width: 1024px) {
+@media (max-width: 1024px) {
   .admCoreGrid {
     grid-template-columns: 1fr;
   }
@@ -645,11 +645,10 @@
   }
 }
 
-@media(max-width: 600px) {
+@media (max-width: 600px) {
   .admLiveBanner {
     flex-direction: column;
-    align-items: flex-start;
-    padding: 1.5rem;
+    padding: 20px;
   }
 
   .acalcActionsGrid {
@@ -657,44 +656,258 @@
   }
 }
 
-
 /* ===== SECTION TITLE & DESCRIPTION RESPONSIVE ===== */
 @media (max-width: 1216px) {
-  .sectionTitle { font-size: 30px; }
+  .admLiveBanner {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
+  }
+  .admLiveStatus {
+    width: 100%;
+    justify-content: center;
+  }
+  .admCountdownWrap {
+    order: 2;
+  }
+  .admBannerPerk {
+    order: 2;
+  }
+  .sectionTitle {
+    font-size: 30px;
+  }
 }
 @media (max-width: 1024px) {
-  .sectionTitle { font-size: 28px; }
-  .sectionDescription { font-size: 14px; }
+  .sectionTitle {
+    font-size: 28px;
+  }
+  .sectionDescription {
+    font-size: 14px;
+  }
+  .admStepsWrapper {
+    padding: 20px;
+  }
 }
 @media (max-width: 768px) {
-  .sectionTitle { font-size: 26px; }
-  .sectionDescription { font-size: 13px; line-height: 22px; }
-  .sectionHeader { margin-bottom: 1.5rem; }
-  .admStepsWrapper { padding: 1.5rem 1.5rem; }
-  .astepsTitle { font-size: 1.1rem; }
-  .admCardTitle { font-size: 1.05rem; }
+  .admBannerPerk {
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+  }
+  .admIntakeCard,
+  .admEstimatorCard {
+    padding: 20px;
+  }
+  .sectionTitle {
+    font-size: 26px;
+  }
+  .sectionDescription {
+    font-size: 13px;
+    line-height: 22px;
+  }
+  .sectionHeader {
+    margin-bottom: 1.5rem;
+  }
+  .admStepsWrapper {
+    padding: 1.5rem 1.5rem;
+  }
+  .astepsTitle {
+    font-size: 1.1rem;
+  }
+  .admCardTitle {
+    font-size: 1.05rem;
+  }
 }
 @media (max-width: 575px) {
-  .sectionTitle { font-size: 24px; }
-  .admissionDynamicSection { padding: 4rem 0; }
-  .container { padding: 0 1.25rem; }
-  .admIntakeCard, .admEstimatorCard { padding: 1.5rem; }
+  .astepNumBox {
+    font-size: 12px;
+    width: 30px;
+    height: 30px;
+  }
+  .astepItem {
+    padding: 15px;
+  }
+  .sectionTitle {
+    font-size: 24px;
+  }
+  .admissionDynamicSection {
+    padding: 4rem 0;
+  }
+  .container {
+    padding: 0 1.25rem;
+  }
+  .admIntakeCard,
+  .admEstimatorCard {
+    padding: 1.5rem;
+  }
 }
 @media (max-width: 480px) {
-  .sectionTitle { font-size: 22px; }
-  .sectionDescription { font-size: 12px; line-height: 20px; }
-  .admCardTitle { font-size: 1rem; }
-  .acalcFeeVal { font-size: 1.25rem; }
+  .sectionTitle {
+    font-size: 22px;
+  }
+  .sectionDescription {
+    font-size: 12px;
+    line-height: 20px;
+  }
+  .admCardTitle {
+    font-size: 1rem;
+  }
+  .acalcFeeVal {
+    font-size: 16px;
+  }
+  .admLiveBanner {
+    padding: 1.15rem;
+    border-radius: 1rem;
+    gap: 0.75rem;
+  }
+  .admLiveStatus strong {
+    font-size: 0.85rem;
+  }
+  .admLiveStatus span {
+    font-size: 0.68rem;
+  }
+  .admCountdownWrap {
+    gap: 0.5rem;
+    padding: 0.35rem 0.75rem;
+    width: 100%;
+    justify-content: start;
+    flex-direction: column;
+  }
+  .admCountdownLabel {
+    font-size: 0.68rem;
+  }
+  .admTimerBox {
+    width: 42px;
+    padding: 0.2rem 0.1rem;
+  }
+  .atimerNum {
+    font-size: 0.88rem;
+  }
+  .atimerTxt {
+    font-size: 0.5rem;
+  }
+  .admBannerPerk {
+    font-size: 0.72rem;
+    padding: 0.35rem 0.75rem;
+  }
+  .admSeatItem {
+    padding: 0.75rem 0.9rem;
+  }
+  .aseatName {
+    font-size: 0.8rem;
+  }
+  .aseatTag {
+    font-size: 0.6rem;
+  }
+  .aseatCount {
+    font-size: 0.72rem;
+  }
+  .aseatMeta {
+    font-size: 0.68rem;
+  }
+  .admCapacitySummary {
+    padding: 0.85rem 1rem;
+    gap: 0.65rem;
+    flex-direction: column;
+    text-align: center;
+  }
+  .acapText strong {
+    font-size: 0.8rem;
+  }
+  .acapText span {
+    font-size: 0.7rem;
+  }
+  .acalcLabel {
+    font-size: 0.78rem;
+  }
+  .acalcSelect {
+    font-size: 0.82rem;
+    padding: 0.65rem 2rem 0.65rem 0.85rem;
+  }
+  .acalcSeatsVal {
+    font-size: 14px;
+  }
+  .acalcFeeSub {
+    font-size: 10px;
+  }
+  .aperkItem {
+    font-size: 0.74rem;
+  }
+  .admStepsWrapper {
+    padding: 1.25rem;
+    border-radius: 1.15rem;
+  }
+  .astepsTitle {
+    font-size: 1rem;
+  }
+  .astepItem {
+    padding: 0.9rem;
+    gap: 0.75rem;
+    flex-direction: column;
+  }
+  .astepNumBox {
+    width: 32px;
+    height: 32px;
+    font-size: 0.82rem;
+  }
+  .astepContent h4 {
+    font-size: 0.85rem;
+  }
+  .astepContent p {
+    font-size: 0.72rem;
+  }
+  .admCardHeader {
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
+  }
+  .admCardIcon {
+    width: 40px;
+    height: 40px;
+  }
+  .admPulseDot {
+    width: 10px;
+    height: 10px;
+  }
 }
 @media (max-width: 420px) {
-  .sectionTitle { font-size: 20px; }
-  .admissionDynamicSection { padding: 3rem 0; }
-  .container { padding: 0 1rem; }
-  .admIntakeCard, .admEstimatorCard { padding: 1.25rem; border-radius: 1.15rem; }
+  .sectionTitle {
+    font-size: 20px;
+  }
+  .admissionDynamicSection {
+    padding: 3rem 0;
+  }
+  .container {
+    padding: 0 1rem;
+  }
+  .admIntakeCard,
+  .admEstimatorCard {
+    padding: 1.25rem;
+    border-radius: 1.15rem;
+  }
+  .acalcSeatsVal {
+    font-size: 13px;
+  }
+  .admCardHeader {
+    flex-direction: column;
+    align-items: start;
+  }
 }
 @media (max-width: 360px) {
-  .sectionTitle { font-size: 18px; }
-  .sectionSubtitle { font-size: 0.72rem; }
-  .admCardTitle { font-size: 0.95rem; }
-  .btnAdmApply, .btnAdmCall { font-size: 0.8rem; padding: 0.7rem 1rem; }
+  .acalcFeeVal {
+    font-size: 14px;
+  }
+  .sectionTitle {
+    font-size: 18px;
+  }
+  .sectionSubtitle {
+    font-size: 0.72rem;
+  }
+  .admCardTitle {
+    font-size: 0.95rem;
+  }
+  .btnAdmApply,
+  .btnAdmCall {
+    font-size: 0.8rem;
+    padding: 0.7rem 1rem;
+  }
 }
