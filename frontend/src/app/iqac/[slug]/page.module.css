@@ -1862,17 +1862,23 @@
     margin-bottom: 1.75rem;
   }
   .execKpiRow {
-    grid-template-columns: 1fr;
-    gap: 0.9rem;
-    padding-top: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.15rem 0.85rem;
+    padding-top: 1.35rem;
   }
   .execKpiItem {
-    padding-bottom: 0.9rem;
-    border-bottom: 1px solid #fef3c7;
-  }
-  .execKpiItem:last-child {
-    border-bottom: none;
     padding-bottom: 0;
+    border-bottom: none;
+  }
+  .execKpiNum {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+  }
+  .execKpiLabel {
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.3;
   }
   .sectionMainHeading {
     font-size: 1.35rem;
@@ -2090,6 +2096,19 @@
     font-size: 0.64rem;
     padding: 0.28rem 0.75rem;
     letter-spacing: 0.02em;
+  }
+  .execKpiRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 0.65rem;
+    padding-top: 1.15rem;
+  }
+  .execKpiNum {
+    font-size: 1.22rem;
+    font-weight: 800;
+  }
+  .execKpiLabel {
+    font-size: 0.67rem;
+    font-weight: 600;
   }
   .strategyCard {
     padding: 1.35rem 1.1rem;

@@ -15,10 +15,11 @@ import "@/styles/courses.css";
 import ScriptLoader from '@/components/providers/ScriptLoader';
 import TopProgressBar from '@/components/common/TopProgressBar/TopProgressBar';
 import ScrollToTop from '@/components/common/ScrollToTop/ScrollToTop';
+import StickyActions from '@/components/common/StickyActions/StickyActions';
 
 export const metadata = {
-  title: "Nandkuvarba Mahila College",
-  description: "Nandkuvarba Mahila College - Empowering Women Through Education",
+  title: "Nandkunvarba Mahila College",
+  description: "Nandkunvarba Mahila College - Empowering Women Through Education",
 };
 
 export default function RootLayout({ children }) {
@@ -43,6 +44,7 @@ export default function RootLayout({ children }) {
           {children}
         </SmoothScrollProvider>
 
+        <StickyActions />
         <ScrollToTop />
         <ScriptLoader />
       </body>

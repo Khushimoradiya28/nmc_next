@@ -1,20 +1,43 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import styles from './Admission.module.css';
 
 const coursesMeta = {
-  bca: { fee: "₹15,000 / Sem", seats: "10 Seats Left", name: "B.C.A. (Computer Applications)" },
-  bba: { fee: "₹8,000 / Sem", seats: "15 Seats Left", name: "B.B.A. (Business Administration)" },
-  bcom: { fee: "Affordable Merit Subsidy", seats: "36 Seats Left", name: "B.Com (Commerce & Banking)" },
-  ba: { fee: "Affordable Merit Subsidy", seats: "53 Seats Left", name: "B.A. (Bachelor of Arts)" },
-  msw: { fee: "Affordable Merit Subsidy", seats: "6 Seats Left", name: "M.S.W. (Master of Social Work)" },
-  fashion: { fee: "Exclusive Subsidy", seats: "11 Seats Left", name: "Fashion Designing Diploma (DFD)" }
+  bca: { fee: "₹15,000 / Sem", seats: "10 Seats Left", name: "B.C.A.", feeBadge: "₹15,000/Sem" },
+  bba: { fee: "₹8,000 / Sem", seats: "15 Seats Left", name: "B.B.A.", feeBadge: "₹8,000/Sem" },
+  bcom: { fee: "Affordable Merit Subsidy", seats: "36 Seats Left", name: "B.Com", feeBadge: "Merit Fees" },
+  ba: { fee: "Affordable Merit Subsidy", seats: "53 Seats Left", name: "B.A.", feeBadge: "Merit Fees" },
+  msw: { fee: "Affordable Merit Subsidy", seats: "6 Seats Left", name: "M.S.W.", feeBadge: "Merit Fees" },
+  fashion: { fee: "Exclusive Subsidy", seats: "11 Seats Left", name: "DFD (Fashion Design)", feeBadge: "Subsidized" }
 };
+
+const COURSE_OPTIONS = [
+  { value: 'bca', label: 'B.C.A.', feeBadge: '₹15,000/Sem' },
+  { value: 'bba', label: 'B.B.A.', feeBadge: '₹8,000/Sem' },
+  { value: 'bcom', label: 'B.Com', feeBadge: 'Merit Fees' },
+  { value: 'ba', label: 'B.A.', feeBadge: 'Merit Fees' },
+  { value: 'msw', label: 'M.S.W.', feeBadge: 'Merit Fees' },
+  { value: 'fashion', label: 'DFD (Fashion Design)', feeBadge: 'Subsidized' }
+];
 
 export default function Admission() {
   const [selectedCourse, setSelectedCourse] = useState('bca');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
   const [timeLeft, setTimeLeft] = useState({ days: 8, hours: 14, minutes: 35, seconds: 42 });
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -45,7 +68,6 @@ export default function Admission() {
           </p>
         </div>
 
-        {/* Live Admission Status Banner */}
         <div className={styles.admLiveBanner}>
           <div className={styles.admLiveStatus}>
             <span className={styles.admPulseDot}></span>
@@ -92,70 +114,65 @@ export default function Admission() {
           </div>
         </div>
 
-        {/* 2-Column Admissions Grid */}
         <div className={styles.admCoreGrid}>
-          {/* Left Column: Seats Availability */}
           <div className={styles.admIntakeCard}>
             <div className={styles.admCardHeader}>
               <div className={`${styles.admCardIcon} ${styles.iconRuby}`}>
                 <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                 </svg>
               </div>
               <div>
-                <span className={styles.admBadge}>Live Capacity Radar</span>
-                <h3 className={styles.admCardTitle}>Real-Time Seat Intake Availability</h3>
+                <span className={styles.admBadge}>Real-Time Intake</span>
+                <h3 className={styles.admCardTitle}>Course-Wise Seat Status</h3>
               </div>
             </div>
 
             <div className={styles.admSeatsList}>
-              {/* BCA */}
               <div className={styles.admSeatItem}>
                 <div className={styles.aseatTop}>
                   <div className={styles.aseatNameWrap}>
-                    <strong className={styles.aseatName}>B.C.A. – Computer Applications</strong>
-                    <span className={`${styles.aseatTag} ${styles.tagRuby}`}>Fast Filling</span>
+                    <strong className={styles.aseatName}>B.C.A. (Computer Applications)</strong>
+                    <span className={`${styles.aseatTag} ${styles.tagRed}`}>Filling Fast</span>
                   </div>
                   <span className={styles.aseatCount}><strong>110</strong> / 120 Seats (92%)</span>
                 </div>
                 <div className={styles.aseatProgressTrack}>
-                  <div className={`${styles.aseatProgressFill} ${styles.fillRuby}`} style={{ width: '92%' }}></div>
+                  <div className={`${styles.aseatProgressFill} ${styles.fillRed}`} style={{ width: '92%' }}></div>
                 </div>
-                <div className={styles.aseatMeta}><span>10 Seats Remaining for Round 1</span><span>Fee: ₹15,000 / Sem</span></div>
+                <div className={styles.aseatMeta}><span>Only 10 Seats Remaining</span><span>Fast track enrollment</span></div>
               </div>
 
-              {/* BBA */}
               <div className={styles.admSeatItem}>
                 <div className={styles.aseatTop}>
                   <div className={styles.aseatNameWrap}>
-                    <strong className={styles.aseatName}>B.B.A. – Business Administration</strong>
-                    <span className={`${styles.aseatTag} ${styles.tagGold}`}>High Demand</span>
+                    <strong className={styles.aseatName}>B.B.A. (Business Administration)</strong>
+                    <span className={`${styles.aseatTag} ${styles.tagGold}`}>Limited Left</span>
                   </div>
                   <span className={styles.aseatCount}><strong>105</strong> / 120 Seats (88%)</span>
                 </div>
                 <div className={styles.aseatProgressTrack}>
                   <div className={`${styles.aseatProgressFill} ${styles.fillGold}`} style={{ width: '88%' }}></div>
                 </div>
-                <div className={styles.aseatMeta}><span>15 Seats Remaining for Round 1</span><span>Fee: ₹8,000 / Sem</span></div>
+                <div className={styles.aseatMeta}><span>15 Seats Left in Round 1</span><span>Management merit quota</span></div>
               </div>
 
-              {/* BCom */}
               <div className={styles.admSeatItem}>
                 <div className={styles.aseatTop}>
                   <div className={styles.aseatNameWrap}>
-                    <strong className={styles.aseatName}>B.Com – Accounting &amp; Banking</strong>
-                    <span className={`${styles.aseatTag} ${styles.tagCrimson}`}>Merit Seats</span>
+                    <strong className={styles.aseatName}>B.Com (Commerce &amp; Banking)</strong>
+                    <span className={`${styles.aseatTag} ${styles.tagEmerald}`}>Active</span>
                   </div>
                   <span className={styles.aseatCount}><strong>204</strong> / 240 Seats (85%)</span>
                 </div>
                 <div className={styles.aseatProgressTrack}>
-                  <div className={`${styles.aseatProgressFill} ${styles.fillCrimson}`} style={{ width: '85%' }}></div>
+                  <div className={`${styles.aseatProgressFill} ${styles.fillEmerald}`} style={{ width: '85%' }}></div>
                 </div>
-                <div className={styles.aseatMeta}><span>36 Seats Remaining for Round 1</span><span>Affordable Merit Subsidies</span></div>
+                <div className={styles.aseatMeta}><span>36 Seats Remaining</span><span>Merit list published</span></div>
               </div>
 
-              {/* BA & MSW */}
               <div className={styles.admSeatItem}>
                 <div className={styles.aseatTop}>
                   <div className={styles.aseatNameWrap}>
@@ -184,7 +201,6 @@ export default function Admission() {
             </div>
           </div>
 
-          {/* Right Column: Estimator */}
           <div className={styles.admEstimatorCard}>
             <div className={styles.admCardHeader}>
               <div className={`${styles.admCardIcon} ${styles.iconGold}`}>
@@ -200,22 +216,62 @@ export default function Admission() {
             </div>
 
             <div className={styles.admCalculatorBox}>
-              <label className={styles.acalcLabel} htmlFor="admCourseSelect">Select Intended Academic Program:</label>
-              <select 
-                className={styles.acalcSelect} 
-                id="admCourseSelect"
-                value={selectedCourse}
-                onChange={(e) => setSelectedCourse(e.target.value)}
-              >
-                <option value="bca">B.C.A. (Computer Applications) – ₹15,000/Sem</option>
-                <option value="bba">B.B.A. (Business Administration) – ₹8,000/Sem</option>
-                <option value="bcom">B.Com (Commerce &amp; Banking) – Merit Fees</option>
-                <option value="ba">B.A. (Bachelor of Arts) – Merit Fees</option>
-                <option value="msw">M.S.W. (Master of Social Work) – Merit Fees</option>
-                <option value="fashion">Fashion Designing Diploma (DFD) – Subsidized</option>
-              </select>
+              <label className={styles.acalcLabel} id="admCourseSelectLabel">Select Intended Academic Program:</label>
+              
+              <div className={styles.acalcDropdownContainer} ref={dropdownRef}>
+                <button
+                  type="button"
+                  onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                  className={`${styles.acalcDeptTrigger} ${isDropdownOpen ? styles.triggerActive : ''}`}
+                  aria-expanded={isDropdownOpen}
+                  aria-haspopup="listbox"
+                  aria-labelledby="admCourseSelectLabel"
+                >
+                  <span className={styles.acalcDeptLabelText}>
+                    {coursesMeta[selectedCourse]?.name} – {coursesMeta[selectedCourse]?.feeBadge}
+                  </span>
+                  <svg className={`${styles.acalcArrowIcon} ${isDropdownOpen ? styles.arrowRotated : ''}`} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </button>
 
-              {/* Dynamic Result Panel */}
+                {isDropdownOpen && (
+                  <div
+                    className={styles.customAcalcMenu}
+                    role="listbox"
+                    aria-label="Academic Program Options"
+                  >
+                    <div className={styles.acalcMenuList}>
+                      {COURSE_OPTIONS.map((course) => {
+                        const isSelected = selectedCourse === course.value;
+                        return (
+                          <button
+                            key={course.value}
+                            type="button"
+                            role="option"
+                            aria-selected={isSelected}
+                            onClick={() => {
+                              setSelectedCourse(course.value);
+                              setIsDropdownOpen(false);
+                            }}
+                            className={`${styles.acalcMenuItem} ${isSelected ? styles.acalcMenuItemActive : ''}`}
+                          >
+                            <span className={`${styles.itemCourseName} ${isSelected ? styles.itemCourseNameActive : ''}`}>
+                              {course.label} – {course.feeBadge}
+                            </span>
+                            {isSelected && (
+                              <svg className={styles.activeCheckIcon} width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="20 6 9 17 4 12"></polyline>
+                              </svg>
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <div className={styles.acalcDynamicResult}>
                 <div className={styles.acalcFeeRow}>
                   <div>

@@ -4201,70 +4201,76 @@ select.formControl {
 /* ===== BROCHURE RESPONSIVE ===== */
 @media (max-width: 1024px) {
   .brochureCard { flex-direction: column; border-radius: 1.5rem; }
-  .brochureVisual { padding: 3rem 2rem; }
+  .brochureVisual { padding: 3.5rem 2rem; }
   .brochureText { padding: 2.5rem 2rem; }
   .brochureHeading { font-size: 2.2rem; }
-  .brochureMockup { transform: perspective(1000px) rotateY(8deg) rotateX(3deg) rotateZ(-1deg); }
+  .brochureMockup { transform: perspective(1000px) rotateY(8deg) rotateX(3deg) rotateZ(-1deg); height: auto; min-height: 320px; }
 }
 @media (max-width: 768px) {
-  .brochureVisual { padding: 2rem 1.5rem; flex: unset; width: 100%; }
+  .brochureVisual { padding: 3.5rem 1.5rem; flex: unset; width: 100%; }
   .brochureText { padding: 2rem 1.5rem; flex: unset; width: 100%; }
   .brochureHeading { font-size: 1.8rem; }
   .brochureDesc { font-size: 1rem; margin-bottom: 2rem; }
   .brochureCtaRow { flex-direction: column; gap: 1rem; }
   .brochureDownloadBtn { padding: 0.85rem 2rem; font-size: 1rem; width: 100%; }
-  .brochureMockup { width: 180px; height: auto; min-height: 240px; transform: none; padding: 1.5rem 1rem; }
+  .brochureMockup { width: 220px; height: auto; min-height: 290px; transform: none; padding: 2rem 1.25rem; }
   .brochureMockupTitle { font-size: 1.1rem; }
-  .brochureYearBadge { font-size: 0.7rem; padding: 0.15rem 0.75rem; }
-  .brochureCollegeText { font-size: 0.65rem; }
-  .brochureGlowOrb { width: 150px; height: 150px; }
+  .brochureYearBadge { font-size: 0.75rem; padding: 0.2rem 0.85rem; }
+  .brochureCollegeText { font-size: 0.72rem; }
+  .brochureGlowOrb { width: 160px; height: 160px; }
 }
 @media (max-width: 575px) {
+  .brochureVisual { padding: 3.5rem 1.25rem; }
   .brochureHeading { font-size: 1.5rem; }
   .brochureDesc { font-size: 0.92rem; }
-  .brochureMockup { width: 160px; height: auto; min-height: 200px; padding: 1.25rem 0.85rem; }
-  .brochureMockupTitle { font-size: 1rem; }
+  .brochureMockup { width: 200px; height: auto; min-height: 270px; padding: 1.75rem 1.15rem; }
+  .brochureMockupTitle { font-size: 1.05rem; }
   .brochureDownloadBtn { font-size: 0.95rem; padding: 0.8rem 1.5rem; }
   .brochureOfficialTag { font-size: 0.72rem; padding: 0.3rem 0.8rem; }
+  .brochureCollegeText { font-size: 0.7rem; }
 }
 @media (max-width: 480px) {
-  .brochureVisual { padding: 1.5rem 1rem; }
+  .brochureVisual { padding: 3.25rem 1rem; }
   .brochureText { padding: 1.5rem 1.25rem; }
   .brochureHeading { font-size: 1.35rem; }
   .brochureDesc { font-size: 0.88rem; margin-bottom: 1.5rem; }
-  .brochureMockup { width: 145px; height: auto; min-height: 185px; padding: 1rem 0.75rem; }
-  .brochureMockupTitle { font-size: 0.9rem; }
-  .brochureYearBadge { font-size: 0.65rem; padding: 0.12rem 0.6rem; margin-bottom: 1rem; }
+  .brochureMockup { width: 185px; height: auto; min-height: 250px; padding: 1.6rem 1rem; }
+  .brochureMockupTitle { font-size: 0.95rem; }
+  .brochureYearBadge { font-size: 0.7rem; padding: 0.15rem 0.7rem; margin-bottom: 1rem; }
   .brochureDownloadBtn { font-size: 0.9rem; padding: 0.75rem 1.25rem; }
   .brochureFileInfo { font-size: 0.78rem; }
-  .brochureCollegeText { font-size: 0.6rem; }
-  .brochureGlowOrb { width: 120px; height: 120px; }
+  .brochureCollegeText { font-size: 0.68rem; }
+  .brochureGlowOrb { width: 130px; height: 130px; }
 }
 @media (max-width: 420px) {
+  .brochureVisual { padding: 3rem 1rem; }
   .brochureHeading { font-size: 1.2rem; }
   .brochureDesc { font-size: 0.85rem; }
-  .brochureMockup { width: 130px; min-height: 170px; }
+  .brochureMockup { width: 175px; height: auto; min-height: 240px; padding: 1.5rem 0.9rem; }
   .brochureDownloadBtn { font-size: 0.85rem; }
   .brochureCard { border-radius: 1.25rem; }
   .brochureOfficialTag { font-size: 0.68rem; margin-bottom: 1rem; }
+  .brochureCollegeText { font-size: 0.65rem; }
 }
 @media (max-width: 380px) {
+  .brochureVisual { padding: 2.75rem 0.85rem; }
   .brochureHeading { font-size: 1.1rem; }
-  .brochureMockup { width: 120px; min-height: 155px; padding: 0.85rem 0.65rem; }
-  .brochureVisual { padding: 1.25rem 0.75rem; }
+  .brochureMockup { width: 165px; height: auto; min-height: 230px; padding: 1.4rem 0.85rem; }
   .brochureText { padding: 1.25rem 1rem; }
-  .brochureMockupTitle { font-size: 0.82rem; }
-  .brochureGlowOrb { width: 100px; height: 100px; }
+  .brochureMockupTitle { font-size: 0.88rem; }
+  .brochureGlowOrb { width: 110px; height: 110px; }
+  .brochureCollegeText { font-size: 0.62rem; }
 }
 @media (max-width: 360px) {
+  .brochureVisual { padding: 2.5rem 0.75rem; }
   .brochureHeading { font-size: 1rem; }
   .brochureDesc { font-size: 0.82rem; }
-  .brochureMockup { width: 110px; min-height: 145px; padding: 0.75rem 0.6rem; }
-  .brochureMockupTitle { font-size: 0.78rem; }
+  .brochureMockup { width: 155px; height: auto; min-height: 220px; padding: 1.3rem 0.8rem; }
+  .brochureMockupTitle { font-size: 0.82rem; }
   .brochureDownloadBtn { font-size: 0.8rem; padding: 0.7rem 1rem; }
-  .brochureYearBadge { font-size: 0.6rem; padding: 0.1rem 0.5rem; margin-bottom: 0.75rem; }
-  .brochureCollegeText { font-size: 0.55rem; }
-  .brochureSeparator { width: 20px; margin-bottom: 0.6rem; }
+  .brochureYearBadge { font-size: 0.65rem; padding: 0.12rem 0.55rem; margin-bottom: 0.85rem; }
+  .brochureCollegeText { font-size: 0.6rem; }
+  .brochureSeparator { width: 22px; margin-bottom: 0.65rem; }
 }
 
 /* ===== AWARDS & ACHIEVEMENTS ===== */
