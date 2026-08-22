@@ -174,7 +174,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className={styles.footerBottom}>
           <div className={styles.bottomLeft}>
-            Copyright © 2026 Nandkunvarba Mahila College. All Rights Reserved.
+            Copyright © 2026 Nandkunvarba Mahila College. All Rights Reserved by <a href="https://themidnight.in/" target="_blank" rel="noopener noreferrer" className={styles.midnightLink}>Midnight</a>.
           </div>
           
           <div className={styles.bottomRight}>

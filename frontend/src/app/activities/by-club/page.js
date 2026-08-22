@@ -399,6 +399,7 @@ export default function ByClubPage() {
                         categoryId: "club",
                         subCategoryId: evt.clubSlug
                       }}
+                      disableLink={true}
                     />
                   </motion.div>
                 ))}

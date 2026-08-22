@@ -117,6 +117,7 @@ export default function OrientationPage() {
                         categoryId: 'orientation',
                         subCategoryId: evt.deptSlug,
                       }}
+                      disableLink={true}
                     />
                   </motion.div>
                 ))}
