@@ -9388,6 +9388,91 @@ select.form-control {
     gap: 4rem;
 }
 
+.chairman-message-card {
+    background: linear-gradient(135deg, #ffffff 0%, #fffdfa 100%);
+    border-radius: 2.5rem;
+    padding: 3.75rem;
+    box-shadow: 0 30px 70px rgba(138, 0, 0, 0.05), 0 10px 30px rgba(245, 158, 11, 0.03);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    align-items: center;
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    outline: 1px solid rgba(245, 158, 11, 0.2);
+    outline-offset: -12px;
+    position: relative;
+}
+
+.chairman-quote-block {
+    font-size: 1rem;
+    line-height: 1.85;
+    color: var(--gray-800);
+    font-style: italic;
+    padding: 1.5rem 1.75rem;
+    background: linear-gradient(135deg, #fffcf8 0%, #fffbf2 100%);
+    border: 1px solid rgba(245, 158, 11, 0.2);
+    border-left: 4px solid #8a0000;
+    border-radius: 1rem;
+    box-shadow: inset 0 2px 8px rgba(245, 158, 11, 0.02);
+    margin-bottom: 2rem;
+}
+
+.chairman-watermark-quote {
+    position: absolute;
+    top: 15px;
+    right: 35px;
+    opacity: 0.08;
+    color: #8a0000;
+    font-size: 11rem;
+    font-family: Georgia, serif;
+    font-weight: 900;
+    pointer-events: none;
+    line-height: 1;
+}
+
+.chairman-signature-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.chairman-signature-name {
+    font-family: 'Brush Script MT', cursive, serif;
+    font-size: 2rem;
+    color: #8a0000;
+    font-weight: bold;
+}
+
+.vm-header-left {
+    text-align: left;
+    align-items: flex-start;
+    max-width: 100%;
+}
+
+.vm-header-center {
+    text-align: center;
+    align-items: center;
+    max-width: 800px;
+    margin: 0 auto 2rem auto;
+}
+
+.vm-header-center-lg {
+    margin-bottom: 4rem;
+}
+
+.song-flex-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: center;
+    gap: 0;
+}
+
+#affiliation .affil-cards-container {
+    padding: 0 !important;
+}
+
 main section {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
@@ -10002,7 +10087,6 @@ main section {
 }
 
 @media (min-width: 768px) {
-
     .vm-duo-grid {
         grid-template-columns: 1fr 1fr;
         gap: 2.25rem;
@@ -10086,6 +10170,40 @@ main section {
 }
 
 @media (max-width: 1024px) {
+
+    .vm-content-grid {
+        grid-template-columns: 1fr;
+        margin-top: 2rem;
+    }
+
+    .affil-icon-box {
+        width: 65px;
+        height: 65px;
+    }
+
+    .affil-card {
+        padding: 1rem;
+    }
+
+    .vm-main-title {
+        font-size: 34px;
+    }
+
+    .chairman-watermark-quote {
+        font-size: 6rem;
+    }
+
+    .chairman-quote-block {
+        font-size: 0.9rem;
+        padding: 1rem;
+        margin-bottom: 1rem;
+
+    }
+
+    .chairman-message-card {
+        gap: 0.5rem;
+        padding: 2rem;
+    }
 
     .stats-premium-grid {
         grid-template-columns: repeat(2, 1fr);
@@ -10278,9 +10396,19 @@ main section {
         padding: 3rem 0;
     }
 
-    .vm-header-wrap {
-        margin-bottom: 2rem;
+    .chairman-message-card {
+        text-align: center;
     }
+
+    .chairman-message-card .vm-main-title {
+        text-align: center !important;
+    }
+
+    .vm-content-grid h3 {
+        font-size: 1.5rem !important;
+        line-height: 1.2;
+    }
+
 
     .founder-card-body {
         padding: 1rem;
@@ -10415,7 +10543,7 @@ main section {
     }
 
     .vm-main-title {
-        font-size: 2rem !important;
+        font-size: 28 !important;
     }
 }
 
@@ -10428,6 +10556,12 @@ main section {
 @media (max-width: 640px) {
     .founder-avatar-wrap {
         transform: scale(0.75);
+    }
+
+    .affil-icon-box {
+        width: 58px;
+        height: 58px;
+        margin-bottom: 1rem;
     }
 
     .about-features-grid {
@@ -10720,10 +10854,17 @@ main section {
     .gallery-grid {
         grid-template-columns: 1fr;
     }
+
+    .chairman-message-card {
+        padding: 1rem;
+    }
+
+    .vm-main-title {
+        font-size: 26px !important;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {
-
 
     .reveal,
     .reveal-left,
@@ -10743,4 +10884,178 @@ main section {
     .vm-float-ring {
         animation: none !important;
     }
+}
+.song-player-card {
+    flex: 1 1 300px;
+    background: var(--red-900);
+    color: var(--white);
+    border-radius: 2rem 0 0 2rem;
+    padding: 4rem 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.1);
+    z-index: 2;
+}
+
+.song-note-bg {
+    position: absolute;
+    right: -50px;
+    top: -50px;
+    opacity: 0.1;
+}
+
+.song-player-heading {
+    font-family: var(--font-heading);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+.song-player-heading span {
+    color: var(--gold-500);
+}
+
+.song-player-desc {
+    color: var(--sky-100);
+    font-size: 1rem;
+    margin-bottom: 3rem;
+    line-height: 1.6;
+}
+
+.song-controls {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.song-play-btn {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: var(--gold-500);
+    color: var(--gray-900);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 10px 20px rgba(251, 192, 45, 0.4);
+    transition: transform 0.3s ease;
+}
+
+.song-play-icon {
+    margin-left: 4px;
+}
+
+.song-progress-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.song-progress-bar {
+    height: 4px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    position: relative;
+}
+
+.song-progress-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 35%;
+    background: var(--gold-500);
+    border-radius: 2px;
+}
+
+.song-progress-knob {
+    position: absolute;
+    left: 35%;
+    top: -4px;
+    width: 12px;
+    height: 12px;
+    background: var(--white);
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.song-time-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: var(--sky-200);
+}
+
+.song-lyrics-card {
+    flex: 2 1 400px;
+    background: var(--white);
+    border-radius: 0 2rem 2rem 0;
+    padding: 4rem;
+    position: relative;
+    box-shadow: 15px 15px 40px rgba(0, 0, 0, 0.06);
+    border: 1px solid var(--gray-200);
+    border-left: none;
+    display: flex;
+    align-items: center;
+}
+
+.song-quote-mark {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 150px;
+    color: var(--gray-100);
+    font-family: serif;
+    line-height: 1;
+    user-select: none;
+}
+
+.song-lyrics-inner {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+}
+
+.song-lyrics-text {
+    font-size: 1.25rem;
+    line-height: 2.2;
+    color: var(--gray-800);
+    font-style: italic;
+    font-family: 'Times New Roman', serif;
+    margin-bottom: 2rem;
+}
+
+.song-lyrics-para {
+    margin-bottom: 1.5rem;
+}
+
+.song-dropcap {
+    color: var(--sky-700);
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.song-anthem-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.song-anthem-line {
+    height: 2px;
+    width: 40px;
+    background: var(--gold-warm);
+}
+
+.song-anthem-label {
+    font-size: 0.85rem;
+    color: var(--gray-500);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    font-weight: 700;
 }
