@@ -203,6 +203,15 @@ export default function CoursesPage() {
   const pgCount = COURSES_DATA.filter(c => c.category === 'pg').length;
   const diplomaCount = COURSES_DATA.filter(c => c.category === 'diploma').length;
 
+  const [filterOpen, setFilterOpen] = useState(false);
+  const FILTER_OPTIONS = [
+    { value: 'all', label: 'All Programs', count: allCount },
+    { value: 'ug', label: 'Undergraduate (UG)', count: ugCount },
+    { value: 'pg', label: 'Postgraduate (PG)', count: pgCount },
+    { value: 'diploma', label: 'Diploma & Vocational', count: diplomaCount },
+  ];
+  const activeOption = FILTER_OPTIONS.find(o => o.value === activeFilter) || FILTER_OPTIONS[0];
+
   return (
     <>
       <Header />
@@ -227,6 +236,41 @@ export default function CoursesPage() {
               <div className="section-subtitle">Comprehensive Curriculum</div>
               <h2 className="section-title">Academic Programs <span>Offered at NMC</span></h2>
               <p className="section-description">Career-oriented Undergraduate, Postgraduate, and Professional Diploma programs affiliated with M.K. Bhavnagar University.</p>
+            </div>
+
+            {/* Mobile Custom Dropdown Filter (<= 768px) */}
+            <div className={`program-filter-dropdown ${filterOpen ? 'open' : ''}`}>
+              <button
+                type="button"
+                className="pfd-toggle"
+                onClick={() => setFilterOpen(o => !o)}
+                aria-haspopup="listbox"
+                aria-expanded={filterOpen}
+              >
+                <span>{activeOption.label} ({activeOption.count})</span>
+                <svg className="pfd-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              {filterOpen && (
+                <>
+                  <div className="pfd-overlay" onClick={() => setFilterOpen(false)}></div>
+                  <ul className="pfd-menu" role="listbox">
+                    {FILTER_OPTIONS.map(opt => (
+                      <li
+                        key={opt.value}
+                        role="option"
+                        aria-selected={activeFilter === opt.value}
+                        className={`pfd-option ${activeFilter === opt.value ? 'active' : ''}`}
+                        onClick={() => { setActiveFilter(opt.value); setFilterOpen(false); }}
+                      >
+                        <span className="pfd-option-label">{opt.label} <span className="pfd-option-count">({opt.count})</span></span>
+                        {activeFilter === opt.value && (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
             </div>
 
             {/* Enhanced Category Filter Bar */}

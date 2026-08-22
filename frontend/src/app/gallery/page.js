@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
+import styles from './GalleryCatalog.module.css';
 
 // 16 premium gallery media items for a perfect 4x4 grid layout
 const GALLERY_ITEMS = [
@@ -178,6 +179,14 @@ const GALLERY_ITEMS = [
 export default function GalleryPage() {
   const [activeFilter, setActiveFilter] = useState('all');
   const [lightboxIndex, setLightboxIndex] = useState(null);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const FILTER_OPTIONS = [
+    { value: 'all', label: 'All Media' },
+    { value: 'campus', label: 'Campus & Labs' },
+    { value: 'events', label: 'Events & Culture' },
+    { value: 'videos', label: 'Video Highlights' },
+  ];
+  const activeOption = FILTER_OPTIONS.find(o => o.value === activeFilter) || FILTER_OPTIONS[0];
 
   // Filter items based on active tab select
   const filteredItems = activeFilter === 'all'
@@ -225,7 +234,7 @@ export default function GalleryPage() {
         </section>
 
         {/* PHOTO & VIDEO GALLERY */}
-        <section className="section-padding gallery-section" id="gallery">
+        <section className={`section-padding ${styles.gallerySection}`} id="gallery">
           <div className="container">
             <div className="section-header">
               <div className="section-subtitle">Visual Experience</div>
@@ -233,31 +242,66 @@ export default function GalleryPage() {
               <p className="section-description">A vibrant showcase of campus life, state-of-the-art labs, cultural festivals, and student activities.</p>
             </div>
 
-            {/* Gallery Filter Tabs */}
-            <div className="gallery-filter-bar">
+            {/* Mobile Custom Dropdown Filter (<= 768px) */}
+            <div className={`${styles.galleryFilterDropdown} ${filterOpen ? styles.open : ''}`}>
               <button
-                className={`gfilter-btn ${activeFilter === 'all' ? 'active' : ''}`}
+                type="button"
+                className={styles.gfdToggle}
+                onClick={() => setFilterOpen(o => !o)}
+                aria-haspopup="listbox"
+                aria-expanded={filterOpen}
+              >
+                <span>{activeOption.label}</span>
+                <svg className={styles.gfdChevron} width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+              </button>
+              {filterOpen && (
+                <>
+                  <div className={styles.gfdOverlay} onClick={() => setFilterOpen(false)}></div>
+                  <ul className={styles.gfdMenu} role="listbox">
+                    {FILTER_OPTIONS.map(opt => (
+                      <li
+                        key={opt.value}
+                        role="option"
+                        aria-selected={activeFilter === opt.value}
+                        className={`${styles.gfdOption} ${activeFilter === opt.value ? styles.active : ''}`}
+                        onClick={() => { setActiveFilter(opt.value); setLightboxIndex(null); setFilterOpen(false); }}
+                      >
+                        <span>{opt.label}</span>
+                        {activeFilter === opt.value && (
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12"/></svg>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+            </div>
+
+            {/* Gallery Filter Tabs */}
+            <div className={styles.galleryFilterBar}>
+              <button
+                className={`${styles.gfilterBtn} ${activeFilter === 'all' ? styles.active : ''}`}
                 onClick={() => { setActiveFilter('all'); setLightboxIndex(null); }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" /></svg>
                 All Media
               </button>
               <button
-                className={`gfilter-btn ${activeFilter === 'campus' ? 'active' : ''}`}
+                className={`${styles.gfilterBtn} ${activeFilter === 'campus' ? styles.active : ''}`}
                 onClick={() => { setActiveFilter('campus'); setLightboxIndex(null); }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /><polyline points="9 22 9 12 15 12 15 22" /></svg>
                 Campus &amp; Labs
               </button>
               <button
-                className={`gfilter-btn ${activeFilter === 'events' ? 'active' : ''}`}
+                className={`${styles.gfilterBtn} ${activeFilter === 'events' ? styles.active : ''}`}
                 onClick={() => { setActiveFilter('events'); setLightboxIndex(null); }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
                 Events &amp; Culture
               </button>
               <button
-                className={`gfilter-btn ${activeFilter === 'videos' ? 'active' : ''}`}
+                className={`${styles.gfilterBtn} ${activeFilter === 'videos' ? styles.active : ''}`}
                 onClick={() => { setActiveFilter('videos'); setLightboxIndex(null); }}
               >
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="23 7 16 12 23 17 23 7" /><rect x="1" y="5" width="15" height="14" rx="2" ry="2" /></svg>
@@ -266,14 +310,14 @@ export default function GalleryPage() {
             </div>
 
             {/* Modern Interactive Gallery Grid */}
-            <div className="gallery-interactive-grid" id="galleryGrid">
+            <div className={styles.galleryInteractiveGrid} id="galleryGrid">
               {filteredItems.map((item, index) => (
                 <div
                   key={item.id}
-                  className={`gcard-item ${item.type === 'video' ? 'gcard-video-card' : ''}`}
+                  className={styles.gcardItem}
                   onClick={() => openLightbox(index)}
                 >
-                  <div className="gcard-media">
+                  <div className={styles.gcardMedia}>
                     <Image
                       src={item.type === 'video' ? item.thumbnail : item.src}
                       alt={item.title}
@@ -284,28 +328,28 @@ export default function GalleryPage() {
 
                     {item.type === 'video' ? (
                       <>
-                        <span className="gcard-badge gbadge-video">
+                        <span className={`${styles.gcardBadge} ${styles.gbadgeVideo}`}>
                           <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3" /></svg>
                           Video &bull; {item.duration}
                         </span>
-                        <div className="gcard-play-pulse">
-                          <span className="play-pulse-ring"></span>
-                          <span className="play-pulse-btn">
+                        <div className={styles.gcardPlayPulse}>
+                          <span className={styles.playPulseRing}></span>
+                          <span className={styles.playPulseBtn}>
                             <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4" /></svg>
                           </span>
                         </div>
                       </>
                     ) : (
-                      <span className="gcard-badge gbadge-campus">{item.badge}</span>
+                      <span className={`${styles.gcardBadge} ${styles.gbadgeCampus}`}>{item.badge}</span>
                     )}
 
-                    <div className="gcard-overlay">
-                      <div className="gcard-info">
-                        <span className="gcard-tag">{item.tag}</span>
-                        <h4 className="gcard-title">{item.title}</h4>
-                        <p className="gcard-text">{item.desc}</p>
+                    <div className={styles.gcardOverlay}>
+                      <div className={styles.gcardInfo}>
+                        <span className={styles.gcardTag}>{item.tag}</span>
+                        <h4 className={styles.gcardTitle}>{item.title}</h4>
+                        <p className={styles.gcardText}>{item.desc}</p>
                       </div>
-                      <button className="gcard-action-btn" aria-label={item.type === 'video' ? 'Play video' : 'View photo'}>
+                      <button className={styles.gcardActionBtn} aria-label={item.type === 'video' ? 'Play video' : 'View photo'}>
                         {item.type === 'video' ? (
                           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20 6 4" /></svg>
                         ) : (
@@ -322,19 +366,19 @@ export default function GalleryPage() {
 
         {/* GALLERY LIGHTBOX MODAL (PHOTO & VIDEO) */}
         {lightboxIndex !== null && activeMediaItem && (
-          <div className="gallery-lightbox active" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Media Lightbox" onClick={closeLightbox}>
-            <div className="lightbox-backdrop" id="lightboxBackdrop"></div>
-            <div className="lightbox-modal-content" onClick={(e) => e.stopPropagation()}>
-              <button className="lightbox-close-btn" id="lightboxClose" aria-label="Close Lightbox" onClick={closeLightbox}>
+          <div className={`${styles.galleryLightbox} ${styles.active}`} id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Media Lightbox" onClick={closeLightbox}>
+            <div className={styles.lightboxBackdrop} id="lightboxBackdrop"></div>
+            <div className={styles.lightboxModalContent} onClick={(e) => e.stopPropagation()}>
+              <button className={styles.lightboxCloseBtn} id="lightboxClose" aria-label="Close Lightbox" onClick={closeLightbox}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></svg>
               </button>
 
-              <button className="lightbox-nav-btn lightbox-prev-btn" id="lightboxPrev" aria-label="Previous Media" onClick={showPrevMedia}>
+              <button className={`${styles.lightboxNavBtn} ${styles.lightboxPrevBtn}`} id="lightboxPrev" aria-label="Previous Media" onClick={showPrevMedia}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="15 18 9 12 15 6" /></svg>
               </button>
 
-              <div className="lightbox-stage">
-                <div className="lightbox-media-container" id="lightboxMediaContainer">
+              <div className={styles.lightboxStage}>
+                <div className={styles.lightboxMediaContainer} id="lightboxMediaContainer">
                   {activeMediaItem.type === 'video' ? (
                     <iframe
                       src={activeMediaItem.src}
@@ -352,16 +396,9 @@ export default function GalleryPage() {
                     />
                   )}
                 </div>
-                <div className="lightbox-info-bar">
-                  <div className="lightbox-meta">
-                    <span className="lightbox-counter" id="lightboxCounter">{lightboxIndex + 1} / {filteredItems.length}</span>
-                    <h4 className="lightbox-title" id="lightboxTitle">{activeMediaItem.title}</h4>
-                  </div>
-                  <p className="lightbox-desc" id="lightboxDesc">{activeMediaItem.desc}</p>
-                </div>
               </div>
 
-              <button className="lightbox-nav-btn lightbox-next-btn" id="lightboxNext" aria-label="Next Media" onClick={showNextMedia}>
+              <button className={`${styles.lightboxNavBtn} ${styles.lightboxNextBtn}`} id="lightboxNext" aria-label="Next Media" onClick={showNextMedia}>
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
               </button>
             </div>

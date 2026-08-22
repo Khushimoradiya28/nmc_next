@@ -2,7 +2,6 @@ import SmoothScrollProvider from "@/components/providers/SmoothScrollProvider";
 import "@/styles/variables.css";
 import "lenis/dist/lenis.css";
 import "@/styles/designer.css";
-import "@/styles/gallery.css";
 import "@/styles/courses.css";
 // import "@/styles/globals.css";
 // import "@/styles/typography.css";

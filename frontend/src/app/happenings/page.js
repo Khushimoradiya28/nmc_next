@@ -69,7 +69,6 @@ export default function HappeningsPage() {
         {/* ── HERO BANNER ── */}
         <ActivityHero
           title="Happenings"
-          subtitle="Latest news, events, and campus updates at NMC"
           bgImage="/assets/banners/happenings_banner_desi.jpg"
           height="52vh"
           decorative={true}
