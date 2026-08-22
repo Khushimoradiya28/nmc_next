@@ -295,19 +295,97 @@
 }
 
 /* Responsive */
+@media (max-width: 1799px) {
+  .infoLayout { gap: 3.5rem; }
+  .eligibilityGrid { gap: 1.15rem; }
+}
+
+@media (max-width: 1599px) {
+  .infoVisual { padding: 2.5rem; }
+  .eligibilityCard { padding: 1.35rem; }
+}
+
+@media (max-width: 1408px) {
+  .infoTitle { font-size: clamp(1.5rem, 2.8vw, 2.1rem); }
+  .eligibilityTitle { font-size: clamp(1.4rem, 2.3vw, 1.85rem); }
+}
+
+@media (max-width: 1216px) {
+  .container { padding: 0 1.75rem; }
+  .infoTitle { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
+  .infoLayout { gap: 3rem; }
+  .eligibilityGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 1024px) {
+  .infoLayout { grid-template-columns: 1fr; gap: 2.5rem; }
+  .infoSection { padding: 4rem 0; }
+  .eligibilitySection { padding: 4rem 0; }
+  .eligibilityGrid { grid-template-columns: repeat(2, 1fr); }
+  .infoTitle { font-size: clamp(1.35rem, 2.5vw, 1.8rem); }
+}
+
 @media (max-width: 768px) {
   .heroSection { min-height: 40vh; height: 40vh; }
   .heroContent { padding-bottom: 50px; }
   .infoSection { padding: 3.5rem 0; }
-  .infoLayout { grid-template-columns: 1fr; gap: 2.5rem; }
   .eligibilitySection { padding: 3.5rem 0; }
   .eligibilityGrid { grid-template-columns: 1fr; }
   .applyCta { flex-direction: column; align-items: flex-start; }
+  .infoVisual { padding: 2rem; }
+}
+
+@media (max-width: 575px) {
+  .heroSection { min-height: 38vh; height: 38vh; }
+  .container { padding: 0 1.25rem; }
+  .infoTitle { font-size: 1.35rem; }
+  .infoDesc { font-size: 0.9rem; }
+  .infoSection { padding: 3rem 0; }
+  .eligibilitySection { padding: 3rem 0; }
+  .eligibilityCard { padding: 1.25rem; }
+  .applyCta { padding: 1.25rem 2rem; }
 }
 
 @media (max-width: 480px) {
   .heroSection { min-height: 35vh; height: 35vh; }
   .heroContent { padding: 0 1rem 40px 1rem; }
-  .infoVisual { padding: 2rem; }
+  .container { padding: 0 1rem; }
+  .infoTitle { font-size: 1.25rem; }
+  .infoVisual { padding: 1.75rem; }
   .visualStats { grid-template-columns: 1fr; }
+  .applyCta { padding: 1.25rem 1.5rem; }
+  .applyCtaBtn { font-size: 0.78rem; padding: 0.6rem 1.25rem; }
+}
+
+@media (max-width: 420px) {
+  .heroContent { padding: 0 0.85rem 35px 0.85rem; }
+  .infoSection { padding: 2.5rem 0; }
+  .eligibilitySection { padding: 2.5rem 0; }
+  .infoVisual { padding: 1.5rem; }
+  .visualIcon { width: 64px; height: 64px; }
+  .visualTitle { font-size: 1.15rem; }
+  .eligibilityCard { padding: 1.15rem; }
+  .eligibilityText { font-size: 0.84rem; }
+}
+
+@media (max-width: 380px) {
+  .container { padding: 0 0.85rem; }
+  .infoTitle { font-size: 1.15rem; }
+  .eligibilityTitle { font-size: 1.2rem; }
+  .infoVisual { padding: 1.25rem; border-radius: 1rem; }
+  .highlightText { font-size: 0.85rem; }
+  .applyCta { padding: 1rem 1.25rem; border-radius: 0.75rem; }
+  .applyCtaText { font-size: 0.9rem; }
+}
+
+@media (max-width: 360px) {
+  .heroSection { min-height: 32vh; height: 32vh; }
+  .heroContent { padding: 0 0.75rem 30px 0.75rem; }
+  .infoSection { padding: 2rem 0; }
+  .eligibilitySection { padding: 2rem 0; }
+  .infoTitle { font-size: 1.1rem; }
+  .eligibilityTitle { font-size: 1.1rem; }
+  .infoDesc { font-size: 0.85rem; }
+  .eligibilityCard { padding: 1rem; border-radius: 0.75rem; }
+  .visualStatNum { font-size: 1.25rem; }
 }

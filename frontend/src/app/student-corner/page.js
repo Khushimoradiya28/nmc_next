@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
 import CounterAnimation from './CounterAnimation';
+import styles from './page.module.css';
 
 export const metadata = {
   title: 'Student Corner | Nandkunvarba Mahila College',
@@ -156,7 +157,7 @@ export default function Page() {
         </section>
 
         {/* STUDENTS ON CAMPUS / TOTAL STRENGTH */}
-        <section className="section-padding campus-strength-section" id="campus-strength">
+        <section className={`section-padding ${styles.campusStrengthSection}`} id="campus-strength">
           <div className="container">
             <div className="section-header">
               <div className="section-subtitle">Real-Time Campus Analytics</div>
@@ -165,118 +166,118 @@ export default function Page() {
             </div>
 
             {/* Top Live Status Bar */}
-            <div className="strength-live-banner">
-              <div className="strength-live-badge">
-                <span className="strength-live-dot"></span>
+            <div className={styles.strengthLiveBanner}>
+              <div className={styles.strengthLiveBadge}>
+                <span className={styles.strengthLiveDot}></span>
                 <span>LIVE ATTENDANCE OVERVIEW</span>
               </div>
-              <div className="strength-live-ratio">
+              <div className={styles.strengthLiveRatio}>
                 <span>Overall Daily Presence: <strong><span className="strength-counter" data-target="86">0</span>% Active</strong></span>
               </div>
             </div>
 
             {/* 2 Balanced Hub Cards Grid */}
-            <div className="strength-dual-hubs">
+            <div className={styles.strengthDualHubs}>
 
               {/* Hub 1: Real-Time Presence Today */}
-              <div className="strength-hub-card spotlight-active">
-                <div className="strength-hub-header">
-                  <div className="strength-hub-icon">
+              <div className={`${styles.strengthHubCard} spotlight-active`}>
+                <div className={styles.strengthHubHeader}>
+                  <div className={styles.strengthHubIcon}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg>
                   </div>
                   <div>
-                    <span className="strength-hub-tag">Daily Presence</span>
-                    <h3 className="strength-hub-title">Students on Campus Today</h3>
+                    <span className={styles.strengthHubTag}>Daily Presence</span>
+                    <h3 className={styles.strengthHubTitle}>Students on Campus Today</h3>
                   </div>
                 </div>
 
-                <div className="strength-hub-stat">
-                  <div className="strength-hub-number">
+                <div className={styles.strengthHubStat}>
+                  <div className={styles.strengthHubNumber}>
                     <span className="strength-counter" data-target="4280">0</span>
-                    <span className="strength-hub-sub">/ 5,000</span>
+                    <span className={styles.strengthHubSub}>/ 5,000</span>
                   </div>
-                  <p className="strength-hub-desc">Verified daily student presence across morning and afternoon lecture sessions.</p>
+                  <p className={styles.strengthHubDesc}>Verified daily student presence across morning and afternoon lecture sessions.</p>
                 </div>
 
-                <div className="strength-stream-meters">
-                  <div className="strength-smeter-row">
-                    <div className="strength-smeter-label">
+                <div className={styles.strengthStreamMeters}>
+                  <div className={styles.strengthSmeterRow}>
+                    <div className={styles.strengthSmeterLabel}>
                       <span>Undergraduate (BBA, BCA, BA, B.Com)</span>
                       <strong>2,850 / 3,200 (89%)</strong>
                     </div>
-                    <div className="strength-smeter-bar">
-                      <div className="strength-smeter-fill" style={{ width: "89%" }}></div>
+                    <div className={styles.strengthSmeterBar}>
+                      <div className={styles.strengthSmeterFill} style={{ width: "89%" }}></div>
                     </div>
                   </div>
 
-                  <div className="strength-smeter-row">
-                    <div className="strength-smeter-label">
+                  <div className={styles.strengthSmeterRow}>
+                    <div className={styles.strengthSmeterLabel}>
                       <span>Postgraduate (MA, M.Com, MSW)</span>
                       <strong>980 / 1,150 (85%)</strong>
                     </div>
-                    <div className="strength-smeter-bar">
-                      <div className="strength-smeter-fill" style={{ width: "85%" }}></div>
+                    <div className={styles.strengthSmeterBar}>
+                      <div className={styles.strengthSmeterFill} style={{ width: "85%" }}></div>
                     </div>
                   </div>
 
-                  <div className="strength-smeter-row">
-                    <div className="strength-smeter-label">
+                  <div className={styles.strengthSmeterRow}>
+                    <div className={styles.strengthSmeterLabel}>
                       <span>Diploma &amp; Skill Courses (DFD, CFD, DNYS)</span>
                       <strong>450 / 650 (69%)</strong>
                     </div>
-                    <div className="strength-smeter-bar">
-                      <div className="strength-smeter-fill" style={{ width: "69%" }}></div>
+                    <div className={styles.strengthSmeterBar}>
+                      <div className={styles.strengthSmeterFill} style={{ width: "69%" }}></div>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Hub 2: Total Enrolled Institutional Strength */}
-              <div className="strength-hub-card spotlight-active">
-                <div className="strength-hub-header">
-                  <div className="strength-hub-icon">
+              <div className={`${styles.strengthHubCard} spotlight-active`}>
+                <div className={styles.strengthHubHeader}>
+                  <div className={styles.strengthHubIcon}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M23 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg>
                   </div>
                   <div>
-                    <span className="strength-hub-tag">Total Capacity</span>
-                    <h3 className="strength-hub-title">Total Enrolled Strength</h3>
+                    <span className={styles.strengthHubTag}>Total Capacity</span>
+                    <h3 className={styles.strengthHubTitle}>Total Enrolled Strength</h3>
                   </div>
                 </div>
 
-                <div className="strength-hub-stat">
-                  <div className="strength-hub-number">
-                    <span className="strength-counter" data-target="5000">0</span><span className="strength-hub-plus">+</span>
-                    <span className="strength-hub-sub">Women</span>
+                <div className={styles.strengthHubStat}>
+                  <div className={styles.strengthHubNumber}>
+                    <span className="strength-counter" data-target="5000">0</span><span className={styles.strengthHubPlus}>+</span>
+                    <span className={styles.strengthHubSub}>Women</span>
                   </div>
-                  <p className="strength-hub-desc">100% dedicated female empowerment through higher education and practical job skills.</p>
+                  <p className={styles.strengthHubDesc}>100% dedicated female empowerment through higher education and practical job skills.</p>
                 </div>
 
-                <div className="strength-insights-list">
-                  <div className="strength-insight-item">
-                    <div className="strength-insight-icon">
+                <div className={styles.strengthInsightsList}>
+                  <div className={styles.strengthInsightItem}>
+                    <div className={styles.strengthInsightIcon}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="3" y="3" width="18" height="15" rx="2" /><circle cx="7" cy="18" r="2" /><circle cx="17" cy="18" r="2" /><line x1="3" y1="9" x2="21" y2="9" /></svg>
                     </div>
-                    <div className="strength-insight-text">
+                    <div className={styles.strengthInsightText}>
                       <strong><span className="strength-counter" data-target="3200">0</span>+ Free Bus Commuters</strong>
                       <span>100% free transportation fleet connecting 15+ rural villages daily</span>
                     </div>
                   </div>
 
-                  <div className="strength-insight-item">
-                    <div className="strength-insight-icon">
+                  <div className={styles.strengthInsightItem}>
+                    <div className={styles.strengthInsightIcon}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="8" r="7" /><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" /></svg>
                     </div>
-                    <div className="strength-insight-text">
+                    <div className={styles.strengthInsightText}>
                       <strong>9 Academic Degrees &amp; Diplomas</strong>
                       <span>Recognized by M.K. Bhavnagar University &amp; Govt. of Gujarat</span>
                     </div>
                   </div>
 
-                  <div className="strength-insight-item">
-                    <div className="strength-insight-icon">
+                  <div className={styles.strengthInsightItem}>
+                    <div className={styles.strengthInsightIcon}>
                       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg>
                     </div>
-                    <div className="strength-insight-text">
+                    <div className={styles.strengthInsightText}>
                       <strong>52 Smart Labs &amp; Creative Studios</strong>
                       <span>Equipped for high-speed IT labs, fashion design studios &amp; libraries</span>
                     </div>
@@ -289,7 +290,7 @@ export default function Page() {
         </section>
 
         {/* PLACEMENT, TRAINING & CAREER DEVELOPMENT */}
-        <section className="section-padding placement-career-section" id="placements">
+        <section className={`section-padding ${styles.placementCareerSection}`} id="placements">
           <div className="container">
             <div className="section-header">
               <div className="section-subtitle">Career Growth &amp; Corporate Readiness</div>
@@ -298,72 +299,71 @@ export default function Page() {
             </div>
 
             {/* Interactive 4-Stage Career Progression Runway */}
-            <div className="career-runway-container spotlight-active">
-              <div className="runway-header">
-                <div className="runway-header-left">
-                  <div className="runway-icon-box">
+            <div className={`${styles.careerRunwayContainer} spotlight-active`}>
+              <div className={styles.runwayHeader}>
+                <div className={styles.runwayHeaderLeft}>
+                  <div className={styles.runwayIconBox}>
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg>
                   </div>
                   <div>
-                    <span className="runway-badge">Progression Model</span>
-                    <h3 className="runway-title">4-Stage Career Readiness Runway</h3>
+                    <span className={styles.runwayBadge}>Progression Model</span>
+                    <h3 className={styles.runwayTitle}>4-Stage Career Readiness Runway</h3>
                   </div>
                 </div>
-                <span className="runway-note">Sem 1 to Sem 6 Complete Pathway</span>
+                <span className={styles.runwayNote}>Sem 1 to Sem 6 Complete Pathway</span>
               </div>
 
-              <div className="runway-stations-grid">
-                <div className="runway-track-rail"></div>
+              <div className={styles.runwayStationsGrid}>
 
                 {/* Station 01 */}
-                <div className="runway-station">
-                  <div className="station-top">
-                    <span className="station-number">01</span>
+                <div className={styles.runwayStation}>
+                  <div className={styles.stationTop}>
+                    <span className={styles.stationNumber}>01</span>
                   </div>
-                  <div className="station-card">
-                    <span className="station-sem">Semesters 1 &amp; 2</span>
-                    <h4 className="station-heading">Foundation &amp; Executive Voice</h4>
-                    <p className="station-desc">English fluency labs, executive public presentation, confidence coaching &amp; business communication.</p>
-                    <div className="station-pill">Communication Lab</div>
+                  <div className={styles.stationCard}>
+                    <span className={styles.stationSem}>Semesters 1 &amp; 2</span>
+                    <h4 className={styles.stationHeading}>Foundation &amp; Executive Voice</h4>
+                    <p className={styles.stationDesc}>English fluency labs, executive public presentation, confidence coaching &amp; business communication.</p>
+                    <div className={styles.stationPill}>Communication Lab</div>
                   </div>
                 </div>
 
                 {/* Station 02 */}
-                <div className="runway-station">
-                  <div className="station-top">
-                    <span className="station-number">02</span>
+                <div className={styles.runwayStation}>
+                  <div className={styles.stationTop}>
+                    <span className={styles.stationNumber}>02</span>
                   </div>
-                  <div className="station-card">
-                    <span className="station-sem">Semesters 3 &amp; 4</span>
-                    <h4 className="station-heading">Technical &amp; ERP Tool Mastery</h4>
-                    <p className="station-desc">Hands-on corporate tools: Tally Prime ERP, Python coding, MS Excel analytics &amp; digital marketing.</p>
-                    <div className="station-pill">Applied Skills</div>
+                  <div className={styles.stationCard}>
+                    <span className={styles.stationSem}>Semesters 3 &amp; 4</span>
+                    <h4 className={styles.stationHeading}>Technical &amp; ERP Tool Mastery</h4>
+                    <p className={styles.stationDesc}>Hands-on corporate tools: Tally Prime ERP, Python coding, MS Excel analytics &amp; digital marketing.</p>
+                    <div className={styles.stationPill}>Applied Skills</div>
                   </div>
                 </div>
 
                 {/* Station 03 */}
-                <div className="runway-station">
-                  <div className="station-top">
-                    <span className="station-number">03</span>
+                <div className={styles.runwayStation}>
+                  <div className={styles.stationTop}>
+                    <span className={styles.stationNumber}>03</span>
                   </div>
-                  <div className="station-card">
-                    <span className="station-sem">Semester 5</span>
-                    <h4 className="station-heading">Interview Grooming &amp; Mock Drives</h4>
-                    <p className="station-desc">GD simulations, corporate dress etiquette, aptitude tests &amp; 1-on-1 mock HR interviews.</p>
-                    <div className="station-pill">Corporate GDs</div>
+                  <div className={styles.stationCard}>
+                    <span className={styles.stationSem}>Semester 5</span>
+                    <h4 className={styles.stationHeading}>Interview Grooming &amp; Mock Drives</h4>
+                    <p className={styles.stationDesc}>GD simulations, corporate dress etiquette, aptitude tests &amp; 1-on-1 mock HR interviews.</p>
+                    <div className={styles.stationPill}>Corporate GDs</div>
                   </div>
                 </div>
 
                 {/* Station 04 */}
-                <div className="runway-station">
-                  <div className="station-top">
-                    <span className="station-number">04</span>
+                <div className={styles.runwayStation}>
+                  <div className={styles.stationTop}>
+                    <span className={styles.stationNumber}>04</span>
                   </div>
-                  <div className="station-card station-card-highlight">
-                    <span className="station-sem">Semester 6</span>
-                    <h4 className="station-heading">Campus Placement &amp; Offers</h4>
-                    <p className="station-desc">Direct campus recruitment drives, paid internship conversions &amp; official appointment letters.</p>
-                    <div className="station-pill pill-ruby">Offer Letters</div>
+                  <div className={`${styles.stationCard} ${styles.stationCardHighlight}`}>
+                    <span className={styles.stationSem}>Semester 6</span>
+                    <h4 className={styles.stationHeading}>Campus Placement &amp; Offers</h4>
+                    <p className={styles.stationDesc}>Direct campus recruitment drives, paid internship conversions &amp; official appointment letters.</p>
+                    <div className={`${styles.stationPill} ${styles.pillRuby}`}>Offer Letters</div>
                   </div>
                 </div>
 
@@ -371,59 +371,59 @@ export default function Page() {
             </div>
 
             {/* Sector Badges & MoU Assurance Strip */}
-            <div className="recruitment-spectrum-grid">
+            <div className={styles.recruitmentSpectrumGrid}>
 
               {/* Left: Sector Badges Showcase */}
-              <div className="sector-spectrum-card spotlight-active">
-                <div className="spectrum-card-header">
-                  <span className="spectrum-tag">Industry Ecosystem</span>
-                  <h3 className="spectrum-title">Prominent Recruiting Sectors</h3>
+              <div className={`${styles.sectorSpectrumCard} spotlight-active`}>
+                <div className={styles.spectrumCardHeader}>
+                  <span className={styles.spectrumTag}>Industry Ecosystem</span>
+                  <h3 className={styles.spectrumTitle}>Prominent Recruiting Sectors</h3>
                 </div>
 
-                <div className="spectrum-pills-wrap">
-                  <div className="spectrum-item">
-                    <span className="spec-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" /></svg></span>
-                    <div className="spec-data">
+                <div className={styles.spectrumPillsWrap}>
+                  <div className={styles.spectrumItem}>
+                    <span className={styles.specIcon}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2" /><path d="M3 9h18M9 21V9" /></svg></span>
+                    <div className={styles.specData}>
                       <strong>Banking &amp; Finance</strong>
                       <span>HDFC, Axis, ICICI &amp; State Banks</span>
                     </div>
                   </div>
 
-                  <div className="spectrum-item">
-                    <span className="spec-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg></span>
-                    <div className="spec-data">
+                  <div className={styles.spectrumItem}>
+                    <span className={styles.specIcon}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></svg></span>
+                    <div className={styles.specData}>
                       <strong>IT &amp; Software</strong>
                       <span>Web developers &amp; digital studios</span>
                     </div>
                   </div>
 
-                  <div className="spectrum-item">
-                    <span className="spec-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg></span>
-                    <div className="spec-data">
+                  <div className={styles.spectrumItem}>
+                    <span className={styles.specIcon}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 12h-4l-3 9L9 3l-3 9H2" /></svg></span>
+                    <div className={styles.specData}>
                       <strong>Healthcare &amp; Social</strong>
                       <span>Civil Hospital &amp; NGO bodies</span>
                     </div>
                   </div>
 
-                  <div className="spectrum-item">
-                    <span className="spec-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3c0 0 1 1 4 1s4-1 4-1" /><path d="M8 3c-1 1.5-2 3-3 5 1.5 0.5 3 1 3 1s-2 4-5 12h18c-3-8-5-12-5-12s1.5-0.5 3-1c-1-2-2-3.5-3-5" /></svg></span>
-                    <div className="spec-data">
+                  <div className={styles.spectrumItem}>
+                    <span className={styles.specIcon}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M8 3c0 0 1 1 4 1s4-1 4-1" /><path d="M8 3c-1 1.5-2 3-3 5 1.5 0.5 3 1 3 1s-2 4-5 12h18c-3-8-5-12-5-12s1.5-0.5 3-1c-1-2-2-3.5-3-5" /></svg></span>
+                    <div className={styles.specData}>
                       <strong>Apparel &amp; Fashion</strong>
                       <span>Garment export units &amp; boutiques</span>
                     </div>
                   </div>
 
-                  <div className="spectrum-item">
-                    <span className="spec-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg></span>
-                    <div className="spec-data">
+                  <div className={styles.spectrumItem}>
+                    <span className={styles.specIcon}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="18" y1="20" x2="18" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="6" y1="20" x2="6" y2="14" /></svg></span>
+                    <div className={styles.specData}>
                       <strong>Accounting &amp; GST</strong>
                       <span>Chartered accountant consultancies</span>
                     </div>
                   </div>
 
-                  <div className="spectrum-item">
-                    <span className="spec-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg></span>
-                    <div className="spec-data">
+                  <div className={styles.spectrumItem}>
+                    <span className={styles.specIcon}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M22 10v6M2 10l10-5 10 5-10 5z" /><path d="M6 12v5c3 3 9 3 12 0v-5" /></svg></span>
+                    <div className={styles.specData}>
                       <strong>Education &amp; K-12</strong>
                       <span>Higher secondary schools &amp; academies</span>
                     </div>
@@ -432,32 +432,32 @@ export default function Page() {
               </div>
 
               {/* Right: MoU Assurance & Placement Cell Connect */}
-              <div className="mou-connect-card spotlight-active">
-                <div className="mou-seal-badge">
+              <div className={`${styles.mouConnectCard} spotlight-active`}>
+                <div className={styles.mouSealBadge}>
                   <span className="mou-seal-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z" /><path d="M12 5.36L8.87 8.5a2.13 2.13 0 0 0 0 3l.51.51a2.13 2.13 0 0 0 3 0L15 9.38" /><path d="M18 15l-3-3" /><path d="M6 15l3-3" /></svg></span>
                   <span className="mou-seal-text">Official Industry Collaboration</span>
                 </div>
 
-                <h3 className="mou-connect-title">10+ Active Institutional MoUs Guaranteeing Practical Exposure</h3>
-                <p className="mou-connect-desc">Our corporate agreements guarantee mandatory live internship projects, on-site industrial visits, and prioritized hiring windows for NMC female graduates.</p>
+                <h3 className={styles.mouConnectTitle}>10+ Active Institutional MoUs Guaranteeing Practical Exposure</h3>
+                <p className={styles.mouConnectDesc}>Our corporate agreements guarantee mandatory live internship projects, on-site industrial visits, and prioritized hiring windows for NMC female graduates.</p>
 
-                <div className="mou-perks-list">
-                  <div className="mou-perk-item">
-                    <span className="mou-check">&#10004;</span>
+                <div className={styles.mouPerksList}>
+                  <div className={styles.mouPerkItem}>
+                    <span className={styles.mouCheck}>&#10004;</span>
                     <span>100% stipend eligibility for select internships</span>
                   </div>
-                  <div className="mou-perk-item">
-                    <span className="mou-check">&#10004;</span>
+                  <div className={styles.mouPerkItem}>
+                    <span className={styles.mouCheck}>&#10004;</span>
                     <span>Dedicated On-Campus Training &amp; Placement Cell</span>
                   </div>
-                  <div className="mou-perk-item">
-                    <span className="mou-check">&#10004;</span>
+                  <div className={styles.mouPerkItem}>
+                    <span className={styles.mouCheck}>&#10004;</span>
                     <span>Lifelong Alumni Career Network Support</span>
                   </div>
                 </div>
 
                 <div className="mou-actions-bar">
-                  <a href="#" className="btn-mou-primary">
+                  <a href="#" className={styles.btnMouPrimary}>
                     <span>Contact Placement Cell</span>
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
                   </a>
@@ -470,7 +470,7 @@ export default function Page() {
         </section>
 
         {/* 14F. EXECUTIVE QUICK LINKS & E-RESOURCES ENTERPRISE HUB */}
-        <section className="section-padding quicklinks-section" id="quicklinks">
+        <section className={`section-padding ${styles.quicklinksSection}`} id="quicklinks">
           <div className="container">
             <div className="section-header">
               <div className="section-subtitle">Digital Gateway &amp; Official Repositories</div>
@@ -1068,5 +1068,9 @@ export default function Page() {
     </>
   );
 }
+
+
+
+
 
 

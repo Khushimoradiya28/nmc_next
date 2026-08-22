@@ -192,17 +192,87 @@
 }
 
 /* Responsive */
+@media (max-width: 1799px) {
+  .deptGrid { gap: 1.75rem; }
+}
+
+@media (max-width: 1599px) {
+  .lectureRow { padding: 0.95rem 1.75rem; }
+}
+
+@media (max-width: 1408px) {
+  .scheduleTitle { font-size: clamp(1.5rem, 2.8vw, 2.1rem); }
+}
+
+@media (max-width: 1216px) {
+  .container { padding: 0 1.75rem; }
+  .scheduleTitle { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
+  .lectureRow { grid-template-columns: 90px 1fr 130px 90px; gap: 1.25rem; }
+}
+
+@media (max-width: 1024px) {
+  .scheduleSection { padding: 4rem 0; }
+  .scheduleTitle { font-size: clamp(1.35rem, 2.5vw, 1.8rem); }
+  .lectureRow { grid-template-columns: 85px 1fr 120px 90px; gap: 1rem; padding: 0.9rem 1.5rem; }
+}
+
 @media (max-width: 768px) {
   .heroSection { min-height: 40vh; height: 40vh; }
   .heroContent { padding-bottom: 50px; }
   .scheduleSection { padding: 3.5rem 0; }
   .lectureRow { grid-template-columns: 80px 1fr; gap: 0.75rem; padding: 0.85rem 1.5rem; }
   .lectureTime, .lecturePlatform { display: none; }
+  .scheduleHeader { margin-bottom: 2.5rem; }
+}
+
+@media (max-width: 575px) {
+  .heroSection { min-height: 38vh; height: 38vh; }
+  .container { padding: 0 1.25rem; }
+  .scheduleTitle { font-size: 1.35rem; }
+  .scheduleDesc { font-size: 0.9rem; }
+  .scheduleSection { padding: 3rem 0; }
+  .deptHeader { padding: 1rem 1.5rem; }
+  .lectureRow { padding: 0.8rem 1.25rem; }
 }
 
 @media (max-width: 480px) {
   .heroSection { min-height: 35vh; height: 35vh; }
   .heroContent { padding: 0 1rem 40px 1rem; }
-  .deptHeader { padding: 1rem 1.5rem; }
+  .container { padding: 0 1rem; }
+  .scheduleTitle { font-size: 1.25rem; }
+  .deptHeader { padding: 1rem 1.25rem; }
   .lectureRow { padding: 0.75rem 1.25rem; }
+  .deptName { font-size: 0.92rem; }
+}
+
+@media (max-width: 420px) {
+  .heroContent { padding: 0 0.85rem 35px 0.85rem; }
+  .scheduleSection { padding: 2.5rem 0; }
+  .deptHeader { padding: 0.85rem 1rem; }
+  .lectureRow { grid-template-columns: 70px 1fr; padding: 0.7rem 1rem; }
+  .deptName { font-size: 0.88rem; }
+  .lectureDay { font-size: 0.78rem; }
+  .lectureSubject { font-size: 0.82rem; }
+  .noteBox { padding: 1rem 1.25rem; font-size: 0.82rem; }
+}
+
+@media (max-width: 380px) {
+  .container { padding: 0 0.85rem; }
+  .scheduleTitle { font-size: 1.15rem; }
+  .deptBlock { border-radius: 1rem; }
+  .lectureRow { grid-template-columns: 60px 1fr; gap: 0.6rem; padding: 0.65rem 0.85rem; }
+  .deptBadge { font-size: 0.62rem; padding: 0.2rem 0.5rem; }
+  .noteBox { padding: 0.85rem 1rem; font-size: 0.8rem; }
+}
+
+@media (max-width: 360px) {
+  .heroSection { min-height: 32vh; height: 32vh; }
+  .heroContent { padding: 0 0.75rem 30px 0.75rem; }
+  .scheduleSection { padding: 2rem 0; }
+  .scheduleTitle { font-size: 1.1rem; }
+  .scheduleDesc { font-size: 0.85rem; }
+  .deptGrid { gap: 1.25rem; }
+  .lectureDay { font-size: 0.75rem; }
+  .lectureSubject { font-size: 0.8rem; }
+  .deptName { font-size: 0.85rem; }
 }

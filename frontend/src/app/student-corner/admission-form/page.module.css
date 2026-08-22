@@ -290,16 +290,101 @@
 }
 
 /* Responsive */
+@media (max-width: 1799px) {
+  .admissionLayout { gap: 3.5rem; }
+}
+
+@media (max-width: 1599px) {
+  .admissionLayout { gap: 3rem; }
+  .formCard { padding: 2.25rem; }
+}
+
+@media (max-width: 1408px) {
+  .admissionLayout { gap: 2.75rem; }
+  .admissionTitle { font-size: 2rem; }
+}
+
+@media (max-width: 1216px) {
+  .admissionLayout { gap: 2.5rem; }
+  .admissionTitle { font-size: 1.85rem; }
+  .formCard { padding: 2rem; }
+  .container { padding: 0 1.75rem; }
+}
+
+@media (max-width: 1024px) {
+  .admissionLayout { grid-template-columns: 1fr; gap: 2.5rem; }
+  .admissionTitle { font-size: 1.7rem; }
+  .admissionDesc { font-size: 0.9rem; }
+  .formCard { padding: 2rem; }
+}
+
 @media (max-width: 768px) {
   .heroSection { min-height: 40vh; height: 40vh; }
   .heroContent { padding-bottom: 50px; }
   .admissionSection { padding: 3.5rem 0; }
-  .admissionLayout { grid-template-columns: 1fr; gap: 2.5rem; }
+  .admissionLayout { grid-template-columns: 1fr; gap: 2rem; }
+  .admissionTitle { font-size: 1.5rem; }
+  .admissionDesc { font-size: 0.88rem; margin-bottom: 1.5rem; }
   .formGrid { grid-template-columns: 1fr; }
+  .formCard { padding: 1.75rem; border-radius: 1.25rem; }
+  .formCardTitle { font-size: 1.15rem; }
+  .datesBox { padding: 1.25rem; }
+  .stepNum { width: 32px; height: 32px; font-size: 0.75rem; }
+  .stepTitle { font-size: 0.88rem; }
+  .stepDesc { font-size: 0.78rem; }
+}
+
+@media (max-width: 575px) {
+  .heroSection { min-height: 38vh; height: 38vh; }
+  .admissionSection { padding: 3rem 0; }
+  .admissionTitle { font-size: 1.35rem; }
+  .formCard { padding: 20px; }
+  .formCardTitle { font-size: 1.05rem; }
+  .formInput, .formSelect { padding: 0.7rem 0.85rem; font-size: 0.82rem; }
+  .submitBtn { padding: 0.8rem 1.5rem; font-size: 0.82rem; }
+  .admissionSteps { gap: 1rem; }
+  .container { padding: 0 1.25rem; }
 }
 
 @media (max-width: 480px) {
   .heroSection { min-height: 35vh; height: 35vh; }
   .heroContent { padding: 0 1rem 40px 1rem; }
-  .formCard { padding: 1.75rem; }
+  .admissionSection { padding: 2.5rem 0; }
+  .admissionTitle { font-size: 1.25rem; }
+  .admissionDesc { font-size: 0.85rem; }
+  .formCard { padding: 1.25rem; border-radius: 1rem; }
+  .formCardTitle { font-size: 1rem; }
+  .formCardSub { font-size: 0.78rem; }
+  .dateRow { font-size: 0.8rem; }
+  .container { padding: 0 1rem; }
+}
+
+@media (max-width: 420px) {
+  .admissionTitle { font-size: 1.15rem; }
+  .formCard { padding: 1.1rem; }
+  .formInput, .formSelect { padding: 0.65rem 0.75rem; font-size: 0.8rem; }
+  .stepNum { width: 28px; height: 28px; font-size: 0.7rem; }
+  .stepTitle { font-size: 0.82rem; }
+  .stepDesc { font-size: 0.72rem; }
+  .datesBox { padding: 1rem; }
+}
+
+@media (max-width: 380px) {
+  .admissionTitle { font-size: 1.08rem; }
+  .formCard { padding: 1rem; }
+  .formLabel { font-size: 0.75rem; }
+  .submitBtn { font-size: 0.78rem; padding: 0.75rem 1.25rem; }
+}
+
+@media (max-width: 360px) {
+  .heroSection { min-height: 32vh; height: 32vh; }
+  .admissionSection { padding: 2rem 0; }
+  .admissionTitle { font-size: 1rem; }
+  .admissionDesc { font-size: 0.8rem; }
+  .formCard { padding: 0.85rem; border-radius: 0.85rem; }
+  .formCardTitle { font-size: 0.92rem; }
+  .formInput, .formSelect { padding: 0.6rem 0.7rem; font-size: 0.78rem; border-radius: 0.5rem; }
+  .submitBtn { font-size: 0.75rem; padding: 0.7rem 1rem; }
+  .dateRow { font-size: 0.75rem; padding: 0.5rem 0; }
+  .container { padding: 0 0.85rem; }
 }

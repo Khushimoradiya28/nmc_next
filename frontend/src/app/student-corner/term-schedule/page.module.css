@@ -172,16 +172,95 @@
 }
 
 /* Responsive */
+@media (max-width: 1799px) {
+  .termGrid { gap: 1.75rem; }
+}
+
+@media (max-width: 1599px) {
+  .termCardBody { padding: 1.5rem 1.75rem; }
+}
+
+@media (max-width: 1408px) {
+  .scheduleTitle { font-size: 2rem; }
+  .termCardHeader { padding: 1.25rem 1.75rem; }
+}
+
+@media (max-width: 1216px) {
+  .termGrid { gap: 1.5rem; }
+  .scheduleTitle { font-size: 1.85rem; }
+  .container { padding: 0 1.75rem; }
+}
+
+@media (max-width: 1024px) {
+  .termGrid { grid-template-columns: 1fr; gap: 1.5rem; }
+  .scheduleTitle { font-size: 1.7rem; }
+  .scheduleDesc { font-size: 0.9rem; }
+}
+
 @media (max-width: 768px) {
   .heroSection { min-height: 40vh; height: 40vh; }
   .heroContent { padding-bottom: 50px; }
   .scheduleSection { padding: 3.5rem 0; }
   .termGrid { grid-template-columns: 1fr; }
+  .scheduleTitle { font-size: 1.5rem; }
+  .scheduleDesc { font-size: 0.88rem; }
+  .scheduleHeader { margin-bottom: 2rem; }
+  .termCardHeader { padding: 1.15rem 1.5rem; }
+  .termCardSem { font-size: 1rem; }
+  .termCardBody { padding: 1.25rem 1.5rem; }
+  .termEventName { font-size: 0.82rem; }
+  .termEventDate { font-size: 0.7rem; min-width: 65px; }
+}
+
+@media (max-width: 575px) {
+  .heroSection { min-height: 38vh; height: 38vh; }
+  .scheduleSection { padding: 3rem 0; }
+  .scheduleTitle { font-size: 1.35rem; }
+  .termCardHeader { padding: 1rem 1.25rem; }
+  .termCardSem { font-size: 0.95rem; }
+  .termCardPeriod { font-size: 0.72rem; }
+  .termCardBody { padding: 1.1rem 1.25rem; }
+  .termEventName { font-size: 0.8rem; }
+  .termEventTag { font-size: 0.6rem; }
+  .container { padding: 0 1.25rem; }
 }
 
 @media (max-width: 480px) {
   .heroSection { min-height: 35vh; height: 35vh; }
   .heroContent { padding: 0 1rem 40px 1rem; }
-  .termCardBody { padding: 1.25rem 1.5rem; }
+  .scheduleSection { padding: 2.5rem 0; }
+  .scheduleTitle { font-size: 1.25rem; }
+  .termCardBody { padding: 1rem 1.1rem; }
   .termEvent { flex-wrap: wrap; gap: 0.5rem; }
+  .termEventDate { min-width: unset; }
+  .container { padding: 0 1rem; }
+}
+
+@media (max-width: 420px) {
+  .scheduleTitle { font-size: 1.15rem; }
+  .termCardHeader { padding: 0.85rem 1rem; flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+  .termCardSem { font-size: 0.88rem; }
+  .termCardBody { padding: 0.85rem 1rem; }
+  .termEventName { font-size: 0.78rem; }
+  .termEventDate { font-size: 0.65rem; }
+  .termEvent { padding: 0.6rem 0; }
+}
+
+@media (max-width: 380px) {
+  .scheduleTitle { font-size: 1.08rem; }
+  .termCardHeader { padding: 0.75rem 0.85rem; }
+  .termCardBody { padding: 0.75rem 0.85rem; }
+  .termEventTag { font-size: 0.58rem; padding: 0.15rem 0.4rem; }
+}
+
+@media (max-width: 360px) {
+  .heroSection { min-height: 32vh; height: 32vh; }
+  .scheduleSection { padding: 2rem 0; }
+  .scheduleTitle { font-size: 1rem; }
+  .scheduleDesc { font-size: 0.8rem; }
+  .termCardSem { font-size: 0.82rem; }
+  .termCardPeriod { font-size: 0.65rem; }
+  .termCardBody { padding: 0.7rem 0.75rem; }
+  .termEventName { font-size: 0.75rem; }
+  .container { padding: 0 0.85rem; }
 }

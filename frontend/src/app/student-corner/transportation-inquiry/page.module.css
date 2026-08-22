@@ -356,18 +356,100 @@
 }
 
 /* Responsive */
+@media (max-width: 1799px) {
+  .routeList { gap: 1.15rem; }
+  .inquiryLayout { gap: 3.5rem; }
+}
+
+@media (max-width: 1599px) {
+  .routeCard { padding: 1.35rem 1.5rem; }
+  .inquiryForm { padding: 2.25rem; }
+}
+
+@media (max-width: 1408px) {
+  .routesTitle { font-size: clamp(1.5rem, 2.8vw, 2.1rem); }
+  .bannerTitle { font-size: 1.35rem; }
+}
+
+@media (max-width: 1216px) {
+  .container { padding: 0 1.75rem; }
+  .routesTitle { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
+  .inquiryLayout { grid-template-columns: 1fr 1.1fr; gap: 3rem; }
+}
+
+@media (max-width: 1024px) {
+  .inquiryLayout { grid-template-columns: 1fr; gap: 2.5rem; }
+  .routeList { grid-template-columns: repeat(2, 1fr); }
+  .routesSection { padding: 4rem 0; }
+  .inquirySection { padding: 4rem 0; }
+  .routesTitle { font-size: clamp(1.35rem, 2.5vw, 1.8rem); }
+}
+
 @media (max-width: 768px) {
   .heroSection { min-height: 40vh; height: 40vh; }
   .heroContent { padding-bottom: 50px; }
   .routeList { grid-template-columns: 1fr; }
-  .inquiryLayout { grid-template-columns: 1fr; gap: 2.5rem; }
   .bannerCard { flex-direction: column; align-items: flex-start; }
   .formGrid { grid-template-columns: 1fr; }
+  .routesSection { padding: 3.5rem 0; }
+  .inquirySection { padding: 3.5rem 0; }
+}
+
+@media (max-width: 575px) {
+  .heroSection { min-height: 38vh; height: 38vh; }
+  .container { padding: 0 1.25rem; }
+  .routesTitle { font-size: 1.35rem; }
+  .routesDesc { font-size: 0.9rem; }
+  .routesSection { padding: 3rem 0; }
+  .inquirySection { padding: 3rem 0; }
+  .bannerCard { padding: 2.25rem; }
+  .inquiryForm { padding: 1.75rem; }
+  .inquiryTitle { font-size: 1.3rem; }
 }
 
 @media (max-width: 480px) {
   .heroSection { min-height: 35vh; height: 35vh; }
   .heroContent { padding: 0 1rem 40px 1rem; }
+  .container { padding: 0 1rem; }
+  .routesTitle { font-size: 1.25rem; }
   .bannerCard { padding: 2rem; }
-  .inquiryForm { padding: 1.75rem; }
+  .inquiryForm { padding: 1.5rem; }
+  .bannerTitle { font-size: 1.2rem; }
+  .routeCard { padding: 1.25rem 1.35rem; }
+}
+
+@media (max-width: 420px) {
+  .heroContent { padding: 0 0.85rem 35px 0.85rem; }
+  .routesSection { padding: 2.5rem 0; }
+  .inquirySection { padding: 2.5rem 0; }
+  .bannerCard { padding: 1.75rem; border-radius: 1.25rem; }
+  .bannerIcon { width: 52px; height: 52px; }
+  .bannerTitle { font-size: 1.1rem; }
+  .routeCard { padding: 1.15rem 1.25rem; }
+  .routeNum { width: 34px; height: 34px; font-size: 0.78rem; }
+  .inquiryForm { padding: 1.35rem; }
+}
+
+@media (max-width: 380px) {
+  .container { padding: 0 0.85rem; }
+  .routesTitle { font-size: 1.15rem; }
+  .inquiryTitle { font-size: 1.15rem; }
+  .bannerCard { padding: 1.5rem; border-radius: 1rem; }
+  .routeCard { border-radius: 0.75rem; }
+  .routeName { font-size: 0.88rem; }
+  .submitBtn { font-size: 0.82rem; padding: 0.8rem; }
+}
+
+@media (max-width: 360px) {
+  .heroSection { min-height: 32vh; height: 32vh; }
+  .heroContent { padding: 0 0.75rem 30px 0.75rem; }
+  .routesSection { padding: 2rem 0; }
+  .inquirySection { padding: 2rem 0; }
+  .routesTitle { font-size: 1.1rem; }
+  .routesDesc { font-size: 0.85rem; }
+  .bannerTitle { font-size: 1rem; }
+  .bannerSub { font-size: 0.82rem; }
+  .routeCard { padding: 1rem 1.1rem; gap: 1rem; }
+  .inquiryForm { padding: 1.15rem; border-radius: 1rem; }
+  .inquiryTitle { font-size: 1.1rem; }
 }

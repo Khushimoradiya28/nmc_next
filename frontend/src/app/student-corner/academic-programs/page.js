@@ -21,7 +21,7 @@ export default function AcademicProgramsPage() {
           </div>
           <div className={styles.heroOverlay}></div>
           <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}><em>Academic Programs</em></h1>
+            <h1 className="section-title"><em>Academic Programs</em></h1>
           </div>
         </section>
 

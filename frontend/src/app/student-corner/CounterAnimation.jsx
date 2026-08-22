@@ -6,10 +6,9 @@ export default function CounterAnimation() {
   const triggered = useRef(false);
 
   useEffect(() => {
-    const section = document.getElementById('campus-strength');
-    if (!section) return;
-
     const animateCounters = () => {
+      if (triggered.current) return;
+      triggered.current = true;
       const counters = document.querySelectorAll('.strength-counter');
       counters.forEach((el, idx) => {
         const target = parseInt(el.getAttribute('data-target') || '0', 10);
@@ -20,7 +19,6 @@ export default function CounterAnimation() {
         const update = (currentTime) => {
           const elapsed = currentTime - startTime;
           const progress = Math.min(elapsed / duration, 1);
-          // easeOutExpo
           const eased = progress === 1 ? 1 : 1 - Math.pow(2, -10 * progress);
           el.textContent = Math.floor(eased * target).toLocaleString();
           if (progress < 1) {
@@ -34,16 +32,26 @@ export default function CounterAnimation() {
       });
     };
 
+    const sections = document.querySelectorAll('#campus-strength, #alumni');
+    if (sections.length === 0) return;
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting && !triggered.current) {
-          triggered.current = true;
           animateCounters();
         }
       });
     }, { threshold: 0.15 });
 
-    observer.observe(section);
+    sections.forEach(section => observer.observe(section));
+
+    // Also check if already in view
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top < window.innerHeight && rect.bottom > 0 && !triggered.current) {
+        setTimeout(animateCounters, 300);
+      }
+    });
 
     return () => observer.disconnect();
   }, []);
