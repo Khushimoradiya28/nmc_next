@@ -215,7 +215,7 @@ export default function CoursesPage() {
           <div className="hero-overlay" style={{background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))"}}></div>
           <div className="hero-content" style={{paddingTop: "100px", display: "flex", alignItems: "flex-end", height: "100%", paddingBottom: "80px", width: "100%"}}>
             <div className="container" style={{ width: "100%", display: "flex", justifyContent: "flex-start", padding: "0 2rem" }}>
-              <h1 className="hero-main-title" style={{fontSize: "60px", fontWeight: "600", margin: 0}}><em>Courses &amp; Programs</em></h1>
+              <h1 className="hero-main-title" style={{ margin: 0 }}><em>Courses &amp; Programs</em></h1>
             </div>
           </div>
         </section>

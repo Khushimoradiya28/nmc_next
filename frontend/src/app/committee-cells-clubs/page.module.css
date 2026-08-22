@@ -43,7 +43,7 @@
 
 .heroTitle {
   font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-size: clamp(2.6rem, 5.8vw, 4.5rem);
   font-weight: 700;
   color: var(--white, #ffffff);
   line-height: 1.15;

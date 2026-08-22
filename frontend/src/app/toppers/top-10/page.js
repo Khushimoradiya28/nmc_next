@@ -90,8 +90,8 @@ export default function Top10Page() {
           </div>
           <div className="hero-overlay" style={{ background: "linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.45))" }}></div>
           
-          <div className="hero-content" style={{ paddingTop: "100px", display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", paddingBottom: "80px" }}>
-            <h1 className="hero-main-title" style={{ fontSize: "60px", fontWeight: "600", paddingRight: "15px", color: "#fff", margin: "0 0 1rem 0" }}>
+          <div className="hero-content container" style={{ paddingTop: "100px", display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", paddingBottom: "80px" }}>
+            <h1 className="hero-main-title" style={{ paddingRight: "15px", color: "#fff", margin: "0 0 1rem 0" }}>
               <em>Top-10</em>
             </h1>
             

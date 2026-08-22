@@ -219,8 +219,8 @@ export default function GalleryPage() {
             <Image src="/assets/home/hero/2.jpg" alt="Gallery Banner" width={1400} height={700} className="hero-bg-img" priority />
           </div>
           <div className="hero-overlay" style={{ background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))" }}></div>
-          <div className="hero-content" style={{ paddingTop: "100px", display: "flex", alignItems: "flex-end", height: "100%", paddingBottom: "80px" }}>
-            <h1 className="hero-main-title" style={{ fontSize: "60px", fontWeight: "600" }}><em>Photo &amp; Video Gallery</em></h1>
+          <div className="hero-content container" style={{ paddingTop: "100px", display: "flex", alignItems: "flex-end", height: "100%", paddingBottom: "80px" }}>
+            <h1 className="hero-main-title"><em>Photo &amp; Video Gallery</em></h1>
           </div>
         </section>
 

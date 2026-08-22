@@ -40,7 +40,7 @@
 
 .heroTitle {
   font-family: var(--font-heading);
-  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-size: clamp(2.6rem, 5.8vw, 4.5rem);
   font-weight: 600;
   color: var(--white);
   line-height: 1.2;

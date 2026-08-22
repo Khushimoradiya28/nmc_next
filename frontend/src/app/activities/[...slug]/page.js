@@ -91,7 +91,7 @@ export default async function ActivitiesSubPage({ params }) {
 
           <div className="container" style={{ paddingTop: "110px", display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", paddingBottom: "40px", zIndex: 1, position: "relative" }}>
 
-            <h1 className="hero-main-title" style={{ fontSize: "60px", fontWeight: "600", paddingRight: "15px", color: "#fff", margin: "0 0 1rem 0" }}>
+            <h1 className="hero-main-title" style={{ paddingRight: "15px", color: "#fff", margin: "0 0 1rem 0" }}>
               <em>{pageTitle}</em>
             </h1>
 
