@@ -39,7 +39,7 @@ export default function Page() {
                   <span className="about-tag-dot"></span>
                   <span>NMC Overview</span>
                 </div>
-                <h2 className="vm-main-title" style={{ marginBottom: "1.25rem", fontSize: "2.5rem" }}>
+                <h2 className="vm-main-title" style={{ marginBottom: "1.25rem" }}>
                   College <span>Overview</span>
                 </h2>
                 <p className="about-overview-lead">
@@ -184,7 +184,7 @@ export default function Page() {
         {/* 1. HISTORY & LEGACY */}
         <section className="section-padding bg-light" id="history">
           <div className="container">
-            <div className="vm-header-wrap" style={{ textAlign: "left", alignItems: "flex-start", maxWidth: "100%" }}>
+            <div className="vm-header-wrap vm-header-left">
               <div className="about-premium-tag">
                 <span className="about-tag-dot"></span>
                 <span>Our Journey</span>
@@ -248,12 +248,12 @@ export default function Page() {
           <div className="container" style={{ position:"relative", zIndex:2 }}>
 
             {/* Section Header — consistent with site */}
-            <div data-aos="fade-up" style={{ textAlign:"center", maxWidth:"650px", margin:"0 auto 3rem auto" }}>
+            <div data-aos="fade-up" style={{ textAlign:"center", maxWidth:"650px", margin:"0 auto 2rem auto" }}>
               <div className="about-premium-tag" style={{ marginBottom:"0.75rem", justifyContent:"center" }}>
                 <span className="about-tag-dot"></span>
                 <span>The Pioneers</span>
               </div>
-              <h2 className="vm-main-title" style={{ fontSize:"40px", marginBottom:"0.75rem" }}>
+              <h2 className="vm-main-title" style={{ marginBottom:"0.75rem" }}>
                 Founding <span>Fathers</span>
               </h2>
               <p style={{ fontSize:"0.95rem", color:"var(--gray-500)", lineHeight:"1.7", margin:0 }}>
@@ -363,22 +363,9 @@ export default function Page() {
         {/* 3. CHAIRMAN'S MESSAGE */}
         <section className="section-padding" id="chairman" style={{ position: "relative", overflow: "hidden", background: "#ffffff" }}>
           <div className="container" style={{ position: "relative", zIndex: "2" }}>
-            <div style={{
-              background: "linear-gradient(135deg, #ffffff 0%, #fffdfa 100%)",
-              borderRadius: "2.5rem",
-              padding: "3.75rem",
-              boxShadow: "0 30px 70px rgba(138, 0, 0, 0.05), 0 10px 30px rgba(245, 158, 11, 0.03)",
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "4rem",
-              alignItems: "center",
-              border: "1px solid rgba(245, 158, 11, 0.25)",
-              outline: "1px solid rgba(245, 158, 11, 0.2)",
-              outlineOffset: "-12px", /* Classic picture frame outline inset */
-              position: "relative"
-            }}>
+            <div className="chairman-message-card">
               {/* Decorative watermark quotes */}
-              <div style={{ position: "absolute", top: "15px", right: "35px", opacity: 0.08, color: "#8a0000", fontSize: "11rem", fontFamily: "Georgia, serif", fontWeight: "900", pointerEvents: "none", lineHeight: 1 }}>
+              <div className="chairman-watermark-quote">
                 “
               </div>
 
@@ -447,26 +434,12 @@ export default function Page() {
                   leadership message
                 </span>
 
-                <h2 className="vm-main-title" style={{ marginBottom: "1.75rem", textAlign: "left", fontSize: "2.2rem" }}>
+                <h2 className="vm-main-title" style={{ marginBottom: "1.75rem", textAlign: "left" }}>
                   Message from the <span style={{ color: "#8a0000" }}>Chairman</span>
                 </h2>
 
                 {/* Premium cream-tinted message block */}
-                <div style={{
-                  fontSize: "1rem",
-                  lineHeight: "1.85",
-                  color: "var(--gray-800)",
-                  fontStyle: "italic",
-                  borderLeft: "4px solid #8a0000",
-                  padding: "1.5rem 1.75rem",
-                  background: "linear-gradient(135deg, #fffcf8 0%, #fffbf2 100%)",
-                  border: "1px solid rgba(245, 158, 11, 0.2)",
-                  borderLeftWidth: "4px",
-                  borderLeftColor: "#8a0000",
-                  borderRadius: "1rem",
-                  boxShadow: "inset 0 2px 8px rgba(245, 158, 11, 0.02)",
-                  marginBottom: "2rem"
-                }}>
+                <div className="chairman-quote-block">
                   <p style={{ marginBottom: "1rem" }}>"Welcome to Nandkunvarba Mahila College.</p>
                   <p style={{ marginBottom: "1rem" }}>It gives me immense pride to see our institution grow into a temple of
                     learning where young women are shaped into leaders of tomorrow. Our philosophy is simple: provide
@@ -477,9 +450,9 @@ export default function Page() {
                     transformative journey."</p>
                 </div>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+                <div className="chairman-signature-row">
                   <div style={{ width: "40px", height: "1px", background: "var(--gray-300)" }} />
-                  <div style={{ fontFamily: '\'Brush Script MT\', cursive, serif', fontSize: '2.4rem', color: '#8a0000', fontWeight: "bold" }}>
+                  <div className="chairman-signature-name">
                     Dipak
                   </div>
                 </div>
@@ -491,8 +464,7 @@ export default function Page() {
         {/* 4. AFFILIATION & RECOGNITION */}
         <section className="section-padding" id="affiliation" style={{ background: "linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%)", position: "relative", overflow: "hidden" }}>
           <div className="container" style={{ position: "relative", zIndex: 2 }}>
-            <div className="vm-header-wrap"
-              style={{ textAlign: "center", alignItems: "center", maxWidth: "800px", margin: "0 auto 3rem auto" }}>
+            <div className="vm-header-wrap vm-header-center">
               <div className="about-premium-tag">
                 <span className="about-tag-dot"></span>
                 <span>Accreditation</span>
@@ -559,7 +531,7 @@ export default function Page() {
           <div style={{ position: "absolute", bottom: "-10%", right: "-5%", width: "500px", height: "500px", background: "radial-gradient(circle, rgba(251, 192, 45, 0.05) 0%, transparent 70%)", borderRadius: "50%" }}></div>
 
           <div className="container" style={{ position: "relative", zIndex: "2" }}>
-            <div className="vm-header-wrap" style={{ textAlign: "center", alignItems: "center", maxWidth: "800px", margin: "0 auto 4rem auto" }}>
+            <div className="vm-header-wrap vm-header-center vm-header-center-lg">
               <div className="about-premium-tag" style={{ gap: "0.5rem", display: "inline-flex", alignItems: "center", borderColor: "rgba(197, 48, 48, 0.2)", background: "rgba(197, 48, 48, 0.05)", padding: "0.4rem 1.2rem" }}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="var(--red-800)"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" /></svg>
                 <span style={{ color: "var(--red-800)", fontWeight: "800", letterSpacing: "0.05em", textTransform: "uppercase", fontSize: "0.8rem" }}>Anthem</span>
@@ -567,27 +539,27 @@ export default function Page() {
               <h2 className="vm-main-title">NMC <span>Song</span></h2>
             </div>
 
-            <div style={{ display: "flex", flexWrap: "wrap", alignItems: "stretch", justifyContent: "center", gap: "0" }}>
+            <div className="song-flex-wrap">
 
               {/* Interactive Player Card (Dark Red Accent) */}
-              <div style={{ flex: "1 1 300px", background: "var(--red-900)", color: "var(--white)", borderRadius: "2rem 0 0 2rem", padding: "4rem 3rem", display: "flex", flexDirection: "column", justifyContent: "center", position: "relative", overflow: "hidden", boxShadow: "10px 0 30px rgba(0,0,0,0.1)", zIndex: "2" }}>
-                <div style={{ position: "absolute", right: "-50px", top: "-50px", opacity: "0.1" }}>
+              <div className="song-player-card">
+                <div className="song-note-bg">
                   <svg width="200" height="200" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z" /></svg>
                 </div>
 
-                <h3 style={{ fontFamily: "var(--font-heading)", fontSize: "2rem", marginBottom: "1rem" }}>Listen to our<br /><span style={{ color: "var(--gold-500)" }}>Guiding Star</span></h3>
-                <p style={{ color: "var(--sky-100)", fontSize: "1rem", marginBottom: "3rem", lineHeight: "1.6" }}>The official anthem of Nandkunvarba Mahila College, echoing our values of truth, love, and empowerment.</p>
+                <h3 className="song-player-heading">Listen to our<br /><span>Guiding Star</span></h3>
+                <p className="song-player-desc">The official anthem of Nandkunvarba Mahila College, echoing our values of truth, love, and empowerment.</p>
 
-                <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
-                  <button style={{ width: "70px", height: "70px", borderRadius: "50%", background: "var(--gold-500)", color: "var(--gray-900)", border: "none", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: "0 10px 20px rgba(251, 192, 45, 0.4)", transition: "transform 0.3s ease" }}>
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: "4px" }}><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                <div className="song-controls">
+                  <button className="song-play-btn">
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className="song-play-icon"><polygon points="5 3 19 12 5 21 5 3" /></svg>
                   </button>
-                  <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem", flex: "1" }}>
-                    <div style={{ height: "4px", background: "rgba(255,255,255,0.2)", borderRadius: "2px", position: "relative" }}>
-                      <div style={{ position: "absolute", left: "0", top: "0", height: "100%", width: "35%", background: "var(--gold-500)", borderRadius: "2px" }}></div>
-                      <div style={{ position: "absolute", left: "35%", top: "-4px", width: "12px", height: "12px", background: "var(--white)", borderRadius: "50%", boxShadow: "0 0 10px rgba(0,0,0,0.5)" }}></div>
+                  <div className="song-progress-wrap">
+                    <div className="song-progress-bar">
+                      <div className="song-progress-fill"></div>
+                      <div className="song-progress-knob"></div>
                     </div>
-                    <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.8rem", color: "var(--sky-200)" }}>
+                    <div className="song-time-row">
                       <span>01:15</span>
                       <span>03:42</span>
                     </div>
@@ -596,29 +568,29 @@ export default function Page() {
               </div>
 
               {/* Lyrics Card (White/Light Accent) */}
-              <div style={{ flex: "2 1 400px", background: "var(--white)", borderRadius: "0 2rem 2rem 0", padding: "4rem", position: "relative", boxShadow: "15px 15px 40px rgba(0,0,0,0.06)", border: "1px solid var(--gray-200)", borderLeft: "none", display: "flex", alignItems: "center" }}>
+              <div className="song-lyrics-card">
 
-                <div style={{ position: "absolute", top: "20px", right: "30px", fontSize: "150px", color: "var(--gray-100)", fontFamily: "serif", lineHeight: "1", userSelect: "none" }}>"</div>
+                <div className="song-quote-mark">"</div>
 
-                <div style={{ position: "relative", zIndex: "2", width: "100%" }}>
-                  <div style={{ fontSize: '1.25rem', lineHeight: '2.2', color: 'var(--gray-800)', fontStyle: 'italic', fontFamily: '\'Times New Roman\', serif', marginBottom: '2rem' }}>
-                    <p style={{ marginBottom: "1.5rem" }}>
-                      <span style={{ color: "var(--sky-700)", fontSize: "1.5rem", fontWeight: "bold" }}>O</span>de to knowledge, ode to light,<br />
+                <div className="song-lyrics-inner">
+                  <div className="song-lyrics-text">
+                    <p className="song-lyrics-para">
+                      <span className="song-dropcap">O</span>de to knowledge, ode to light,<br />
                       We march ahead, futures bright.<br />
                       Nandkunvarba, our guiding star,<br />
                       Empowering women, near and far.
                     </p>
                     <p>
-                      <span style={{ color: "var(--sky-700)", fontSize: "1.5rem", fontWeight: "bold" }}>W</span>ith courage in our hearts we stand,<br />
+                      <span className="song-dropcap">W</span>ith courage in our hearts we stand,<br />
                       To serve our people and our land.<br />
                       Through wisdom's grace, we rise above,<br />
                       Bound together by truth and love.
                     </p>
                   </div>
 
-                  <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                    <div style={{ height: "2px", width: "40px", background: "var(--gold-warm)" }}></div>
-                    <p style={{ fontSize: "0.85rem", color: "var(--gray-500)", textTransform: "uppercase", letterSpacing: "0.15em", fontWeight: "700" }}>Official College Anthem</p>
+                  <div className="song-anthem-row">
+                    <div className="song-anthem-line"></div>
+                    <p className="song-anthem-label">Official College Anthem</p>
                   </div>
                 </div>
               </div>
@@ -695,8 +667,7 @@ export default function Page() {
         {/* 7. AWARDS & ACHIEVEMENTS */}
         <section className="section-padding bg-light" id="awards">
           <div className="container">
-            <div className="vm-header-wrap"
-              style={{ textAlign: "center", alignItems: "center", maxWidth: "800px", margin: "0 auto 3rem auto" }}>
+            <div className="vm-header-wrap vm-header-center">
               <div className="about-premium-tag">
                 <span className="about-tag-dot"></span>
                 <span>Excellence</span>
