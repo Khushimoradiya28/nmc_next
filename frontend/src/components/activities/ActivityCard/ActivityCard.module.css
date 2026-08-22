@@ -119,6 +119,12 @@
   transition: color 0.2s ease;
 }
 
+.arrowCtaDisabled {
+  opacity: 0.4;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
 .arrowCta svg {
   transition: transform 0.2s ease;
 }

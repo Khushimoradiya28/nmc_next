@@ -259,6 +259,17 @@
     font-size: 0.82rem;
 }
 
+.midnightLink {
+    color: var(--color-secondary, #F4B000);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s ease;
+}
+
+.midnightLink:hover {
+    color: #ffffff;
+}
+
 .bottomRight {
     display: flex;
     align-items: center;

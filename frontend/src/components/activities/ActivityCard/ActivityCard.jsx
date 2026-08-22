@@ -6,11 +6,14 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import styles from './ActivityCard.module.css';
 
-export default function ActivityCard({ event, basePath }) {
+export default function ActivityCard({ event, basePath, disableLink = false }) {
   const getEventPath = () => {
     if (basePath) return `${basePath}/${event.id}`;
     return `/activities/${event.categoryId}/${event.subCategoryId}/${event.id}`;
   };
+
+  const CardWrapper = disableLink ? 'div' : Link;
+  const wrapperProps = disableLink ? { className: styles.cardLink } : { href: getEventPath(), className: styles.cardLink };
 
   return (
     <motion.div 
@@ -18,7 +21,7 @@ export default function ActivityCard({ event, basePath }) {
       whileHover={{ y: -6 }}
       transition={{ type: 'spring', stiffness: 300 }}
     >
-      <Link href={getEventPath()} className={styles.cardLink}>
+      <CardWrapper {...wrapperProps}>
         <div className={styles.imageWrapper}>
           <div className={styles.dateTag}>
             <span className={styles.dateNum}>
@@ -43,7 +46,7 @@ export default function ActivityCard({ event, basePath }) {
             <span className={styles.deptTag}>
               {event.subCategoryId.replace(/-/g, ' ').toUpperCase()}
             </span>
-            <span className={styles.arrowCta}>
+            <span className={`${styles.arrowCta} ${disableLink ? styles.arrowCtaDisabled : ''}`}>
               Explore Activity
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -52,7 +55,7 @@ export default function ActivityCard({ event, basePath }) {
             </span>
           </div>
         </div>
-      </Link>
+      </CardWrapper>
     </motion.div>
   );
 }

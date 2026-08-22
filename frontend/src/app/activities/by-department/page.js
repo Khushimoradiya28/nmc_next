@@ -123,6 +123,7 @@ export default function ByDepartmentPage() {
                         categoryId: 'department',
                         subCategoryId: evt.deptSlug,
                       }}
+                      disableLink={true}
                     />
                   </motion.div>
                 ))}
