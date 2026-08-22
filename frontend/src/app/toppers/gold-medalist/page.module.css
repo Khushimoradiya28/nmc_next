@@ -299,18 +299,268 @@
   font-size: 0.95rem;
 }
 
-@media (max-width: 768px) {
+.contentSection {
+  padding: 5rem 0;
+}
+
+.dropdownsGroup {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.paginationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  width: 100%;
+}
+
+.mobilePageIndicator {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--gray-700, #4b5563);
+  background: var(--gray-100, #f3f4f6);
+  padding: 6px 16px;
+  border-radius: 20px;
+  min-width: 100px;
+  text-align: center;
+  user-select: none;
+}
+
+.pageNavBtn {
+  background: #8a0000;
+  border: none;
+  color: #ffffff;
+  height: 38px;
+  padding: 0 1.1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  box-shadow: 0 4px 10px rgba(138, 0, 0, 0.2);
+  transition: all 0.2s ease;
+  letter-spacing: 0.3px;
+}
+
+.pageNavBtn:hover:not(:disabled) {
+  background: #b30000;
+  box-shadow: 0 6px 14px rgba(138, 0, 0, 0.3);
+}
+
+.pageNavBtn:active {
+  background: #6b0000;
+}
+
+.pageIndicator {
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--gray-600, #4b5563);
+  background: #f3f4f6;
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  padding: 0.3rem 1rem;
+  border-radius: 20px;
+  min-width: 72px;
+  text-align: center;
+  user-select: none;
+}
+
+.pageNavDisabled {
+  opacity: 0.35;
+  background: var(--gray-200, #e5e7eb);
+  color: var(--gray-400, #9ca3af);
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* Desktop numbered page buttons */
+.pageNumbersRow {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.pageNumBtn {
+  min-width: 36px;
+  height: 36px;
+  padding: 0 0.5rem;
+  border: 1.5px solid var(--gray-200, #e5e7eb);
+  background: #ffffff;
+  color: var(--gray-700, #4b5563);
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-family: var(--font-body, 'Inter', sans-serif);
+}
+
+.pageNumBtn:hover {
+  border-color: #8a0000;
+  color: #8a0000;
+  background: rgba(138, 0, 0, 0.04);
+}
+
+.pageNumActive {
+  background: #8a0000 !important;
+  color: #ffffff !important;
+  border-color: #8a0000 !important;
+  box-shadow: 0 4px 10px rgba(138, 0, 0, 0.25);
+}
+
+/* ==========================================================================
+   TABLETS (768px to 1023px)
+   ========================================================================== */
+@media screen and (max-width: 1023px) {
+  .medalistGrid {
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   MOBILE (767px and below)
+   ========================================================================== */
+@media screen and (max-width: 767px) {
   .headerRow {
     flex-direction: column;
-    align-items: stretch;
-    gap: 1.25rem;
-    padding: 1.5rem;
+    align-items: flex-start !important;
+    gap: 0.9rem !important;
+    padding: 1.2rem !important;
+    border-radius: 14px !important;
+    box-shadow: none !important;
+    margin-bottom: 1.5rem !important;
+    border-left-width: 4px !important;
   }
+  .sectionTitle {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.2rem !important;
+  }
+  .sectionSubtitle {
+    font-size: 0.78rem !important;
+    line-height: 1.45 !important;
+  }
+  
+  /* Normal state: everything on one row */
   .filterControls {
-    justify-content: stretch;
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    flex-wrap: nowrap !important;
+  }
+  .searchWrapper {
+    width: auto !important;
+    display: flex !important;
+    align-items: center;
+  }
+  .searchButton {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  .searchInput {
+    display: none !important; /* Hide search input in normal one-row flow */
+  }
+  .dropdownsGroup {
+    display: flex !important;
+    flex: 1 !important;
+    gap: 0.5rem !important;
+    align-items: center;
+    width: auto !important;
   }
   .filterSelect {
-    flex: 1;
-    min-width: 110px;
+    flex: 1 !important;
+    min-width: 0 !important;
+    padding: 0.58rem 1.8rem 0.58rem 0.75rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 8px !important;
+    background-position: right 0.75rem center !important;
+  }
+
+  /* Active search state: search bar full-width on row 1, dropdowns split on row 2 */
+  .filterControls.searchActive {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 0.75rem !important;
+  }
+  .filterControls.searchActive .searchWrapper {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+  .filterControls.searchActive .searchInput {
+    display: block !important;
+    flex: 1 !important;
+    padding: 0.45rem 0.75rem !important;
+    font-size: 0.78rem !important;
+    border-radius: 8px !important;
+    width: auto !important;
+    margin-right: 0.5rem !important;
+  }
+  .filterControls.searchActive .dropdownsGroup {
+    width: 100% !important;
+    flex: none !important;
+  }
+  .filterControls.searchActive .filterSelect {
+    width: 50% !important;
+  }
+  .contentSection {
+    padding: 1.5rem 0 !important;
+  }
+  .medalistGrid {
+    gap: 1.25rem !important;
+  }
+  .medalistCard {
+    border-radius: 14px !important;
+    box-shadow: none !important;
+    border-color: var(--gray-200) !important;
+  }
+  .medalistCard::before {
+    display: none !important;
+  }
+  .imageContainer {
+    height: 180px !important;
+    border-radius: 14px 14px 0 0 !important;
+  }
+  .cardContent {
+    padding: 1rem 0.85rem !important;
+  }
+  .name {
+    font-size: 1.05rem !important;
+    margin-bottom: 0.15rem !important;
+  }
+  .metaInfo {
+    font-size: 0.7rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+  .scoreBadge {
+    padding: 0.4rem 0.75rem !important;
+    border-radius: 6px !important;
+    border-style: solid !important;
+    border-color: rgba(138, 0, 0, 0.15) !important;
+  }
+  .scoreLabel {
+    font-size: 0.7rem !important;
+  }
+  .scoreValue {
+    font-size: 0.9rem !important;
+  }
+  .ribbon {
+    top: 12px !important;
+    left: -35px !important;
+    font-size: 0.55rem !important;
+    padding: 0.2rem 0 !important;
   }
 }

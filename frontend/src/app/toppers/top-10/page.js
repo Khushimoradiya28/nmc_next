@@ -65,11 +65,19 @@ export default function Top10Page() {
     return styles.rankOther;
   };
 
+  const [activeCard, setActiveCard] = useState(null);
+
+  const photoNames = ['anjali', 'priya', 'meera', 'anjali', 'priya', 'meera', 'anjali', 'priya', 'meera', 'anjali'];
+
   const handleToggleSearch = () => {
     if (isSearchOpen) {
       setSearchQuery(''); // Clear search query when closing
     }
     setIsSearchOpen(!isSearchOpen);
+  };
+
+  const handleAvatarClick = (idx, row) => {
+    setActiveCard(activeCard === idx ? null : { idx, row });
   };
 
   return (
@@ -109,7 +117,7 @@ export default function Top10Page() {
         </section>
 
         {/* Content Section */}
-        <section className="section-padding" style={{ padding: "5rem 0" }}>
+        <section className={`section-padding ${styles.contentSection}`}>
           <div className="container" style={{ maxWidth: "1000px" }}>
 
             {/* Selection Row: Title on Left, Filter Dropdowns on Right Corner */}
@@ -123,7 +131,7 @@ export default function Top10Page() {
                 </p>
               </div>
               
-              <div className={styles.filterControls}>
+              <div className={`${styles.filterControls} ${isSearchOpen ? styles.searchActive : ''}`}>
                 {/* Search Toggle Icon */}
                 <div className={styles.searchWrapper}>
                   {isSearchOpen && (
@@ -145,62 +153,112 @@ export default function Top10Page() {
                   </button>
                 </div>
 
-                {/* Department Dropdown */}
-                <select 
-                  className={styles.filterSelect}
-                  value={selectedDept}
-                  onChange={(e) => setSelectedDept(e.target.value)}
-                >
-                  {departments.map((dept) => (
-                    <option key={dept} value={dept}>{dept}</option>
-                  ))}
-                </select>
+                {/* Dropdowns grouped */}
+                <div className={styles.dropdownsGroup}>
+                  {/* Department Dropdown */}
+                  <select 
+                    className={styles.filterSelect}
+                    value={selectedDept}
+                    onChange={(e) => setSelectedDept(e.target.value)}
+                  >
+                    {departments.map((dept) => (
+                      <option key={dept} value={dept}>{dept}</option>
+                    ))}
+                  </select>
 
-                {/* Year Dropdown */}
-                <select 
-                  className={styles.filterSelect}
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                >
-                  {years.map((yr) => (
-                    <option key={yr} value={yr}>{yr}</option>
-                  ))}
-                </select>
+                  {/* Year Dropdown */}
+                  <select 
+                    className={styles.filterSelect}
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                  >
+                    {years.map((yr) => (
+                      <option key={yr} value={yr}>{yr}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 
             {/* Leaderboard Single Card Container */}
             {filteredRankings.length > 0 ? (
-              <div className={styles.leaderboardCard}>
-                {filteredRankings.map((row, idx) => (
-                  <div key={idx} className={styles.leaderboardRow}>
-                    
-                    {/* Rank Circle Badge */}
-                    <div className={styles.rankBadgeWrap}>
-                      <span className={`${styles.rankBadge} ${getRankClass(row.rank)}`}>
-                        {row.rank.replace(/(st|nd|rd|th)/, '')}
-                      </span>
-                    </div>
-
-                    {/* Student Name */}
-                    <span className={styles.studentName}>{row.name}</span>
-
-                    {/* Creative Dot Connector Bridge (takes up all the white space) */}
-                    <div className={styles.connectorLine}>
-                      <div className={styles.hoverImage}>
-                        <Image src={`/assets/toppers/${['anjali', 'priya', 'meera', 'anjali', 'priya', 'meera', 'anjali', 'priya', 'meera', 'anjali'][idx]}.jpg`} alt={row.name} width={120} height={140} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+              <>
+                <div className={styles.leaderboardCard}>
+                  {filteredRankings.map((row, idx) => (
+                    <div
+                      key={idx}
+                      className={`${styles.leaderboardRow} ${styles.mobileClickable}`}
+                      onClick={() => handleAvatarClick(idx, row)}
+                    >
+                      
+                      {/* Rank Circle Badge */}
+                      <div className={styles.rankBadgeWrap}>
+                        <span className={`${styles.rankBadge} ${getRankClass(row.rank)}`}>
+                          {row.rank.replace(/(st|nd|rd|th)/, '')}
+                        </span>
                       </div>
+
+                      {/* Mobile Avatar — decorative, row click triggers popup */}
+                      <div className={styles.mobileAvatar}>
+                        <Image
+                          src={`/assets/toppers/${photoNames[idx]}.jpg`}
+                          alt={row.name}
+                          width={34}
+                          height={34}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                      </div>
+
+                      {/* Student Name */}
+                      <span className={styles.studentName}>{row.name}</span>
+
+                      {/* Creative Dot Connector Bridge (desktop hover) */}
+                      <div className={styles.connectorLine}>
+                        <div className={styles.hoverImage}>
+                          <Image src={`/assets/toppers/${photoNames[idx]}.jpg`} alt={row.name} width={120} height={140} style={{ width:"100%", height:"100%", objectFit:"cover" }} />
+                        </div>
+                      </div>
+
+                      {/* Department Badge */}
+                      <span className={styles.deptBadge}>{row.dept}</span>
+
+                      {/* CGPA Score */}
+                      <span className={styles.cgpaValue}>{row.score}</span>
+                      
                     </div>
+                  ))}
+                </div>
 
-                    {/* Department Badge */}
-                    <span className={styles.deptBadge}>{row.dept}</span>
-
-                    {/* CGPA Score */}
-                    <span className={styles.cgpaValue}>{row.score}</span>
-                    
-                  </div>
-                ))}
-              </div>
+                {/* Mobile Photo Popup — shows on avatar click */}
+                {activeCard !== null && (
+                  <>
+                    {/* Backdrop */}
+                    <div
+                      className={styles.mobilePopupBackdrop}
+                      onClick={() => setActiveCard(null)}
+                    />
+                    {/* Popup Card */}
+                    <div className={styles.mobilePopup}>
+                      <div className={styles.mobilePopupImg}>
+                        <Image
+                          src={`/assets/toppers/${photoNames[activeCard.idx]}.jpg`}
+                          alt={activeCard.row.name}
+                          fill
+                          style={{ objectFit: 'cover' }}
+                        />
+                      </div>
+                      <div className={styles.mobilePopupInfo}>
+                        <p className={styles.mobilePopupName}>{activeCard.row.name}</p>
+                        <p className={styles.mobilePopupMeta}>{activeCard.row.dept} &bull; {activeCard.row.year}</p>
+                        <span className={styles.mobilePopupScore}>{activeCard.row.score}</span>
+                      </div>
+                      <button className={styles.mobilePopupClose} onClick={() => setActiveCard(null)} aria-label="Close">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                      </button>
+                    </div>
+                  </>
+                )}
+              </>
             ) : (
               <div className={styles.noResults}>
                 <h3 className={styles.noResultsTitle}>No Rankers Found</h3>
