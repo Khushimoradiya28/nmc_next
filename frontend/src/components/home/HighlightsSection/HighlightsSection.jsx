@@ -77,7 +77,7 @@ export default function HighlightsSection() {
               <li><span className={`${styles.pillarCheck} pillar-check`}>âœ“</span> Simple and Transparent Admission Process</li>
               <li><span className={`${styles.pillarCheck} pillar-check`}>âœ“</span> Evaluating each applicant considering factors like personal
                 background, qualities & opportunities available in the niche</li>
-              <li><span className={`${styles.pillarCheck} pillar-check`}>âœ“</span> Admission process open â€“ Monday to Sunday 9 AM to 5 PM</li>
+              <li><span className={`${styles.pillarCheck} pillar-check`}>âœ“</span> Admission process open Monday to Sunday 9 AM to 5 PM</li>
             </ul>
             <a href="#contact" className={`${styles.pillarCta} ${styles.btn} ${styles.btnCrimson} pillar-cta btn btn-crimson`}>
               <span>Get Enrolled!</span>

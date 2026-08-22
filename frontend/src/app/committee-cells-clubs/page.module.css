@@ -335,8 +335,8 @@
     gap: 1.5rem;
   }
 
-  .introBigText { font-size: 1.3rem; }
-  .introMeta { max-width: 100%; }
+  .introBigText { font-size: 1.3rem; flex: unset; width: 100%; }
+  .introMeta { max-width: 100%; flex: unset; width: 100%; }
 
   .gridSection { padding: 1rem 0 3rem; }
   .bentoGrid {
@@ -365,4 +365,31 @@
   .cell { padding: 1.25rem; }
   .cellTitle { font-size: 1.05rem; }
   .cellDesc { font-size: 0.78rem; }
+  .introBigText { font-size: 1.15rem; }
+  .introMeta { font-size: 0.82rem; padding-left: 1rem; }
+}
+
+@media (max-width: 420px) {
+  .introSection { padding: 2rem 0 1.25rem; }
+  .introBigText { font-size: 1.05rem; }
+  .introMeta { font-size: 0.78rem; }
+  .heroTitle { font-size: 1.5rem; }
+  .cellTitle { font-size: 1rem; }
+  .cellDesc { font-size: 0.75rem; }
+}
+
+@media (max-width: 380px) {
+  .introBigText { font-size: 1rem; }
+  .introMeta { font-size: 0.75rem; border-left-width: 2px; padding-left: 0.85rem; }
+  .cell { padding: 1.1rem; }
+}
+
+@media (max-width: 360px) {
+  .introSection { padding: 1.75rem 0 1rem; }
+  .introLayout { gap: 1rem; }
+  .introBigText { font-size: 0.95rem; }
+  .introMeta { font-size: 0.72rem; }
+  .heroTitle { font-size: 1.35rem; }
+  .cell { padding: 1rem; border-radius: 0.75rem; }
+  .cellTitle { font-size: 0.95rem; }
 }

@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
+import styles from './page.module.css';
 
 export const metadata = {
   title: 'About Us | Nandkunvarba Mahila College',
@@ -552,7 +553,7 @@ export default function Page() {
 
                 <div className="song-controls">
                   <button className="song-play-btn">
-                    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" className="song-play-icon"><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="song-play-icon"><polygon points="6 4 20 12 6 20 6 4" fill="currentColor" stroke="none" /></svg>
                   </button>
                   <div className="song-progress-wrap">
                     <div className="song-progress-bar">
@@ -600,51 +601,41 @@ export default function Page() {
         </section>
 
         {/* 6. NMC BROCHURE - CREATIVE REDESIGN */}
-        <section className="section-padding" id="brochure" style={{ position: "relative", overflow: "hidden", background: "var(--gray-50)" }}>
-          {/* Decorative background elements */}
-          <div style={{ position: "absolute", top: "-50px", left: "-50px", width: "200px", height: "200px", background: "rgba(220, 38, 38, 0.05)", borderRadius: "50%", filter: "blur(40px)" }}></div>
-          <div style={{ position: "absolute", bottom: "-50px", right: "-50px", width: "300px", height: "300px", background: "rgba(245, 158, 11, 0.08)", borderRadius: "50%", filter: "blur(60px)" }}></div>
+        <section className={`section-padding brochure-section ${styles.brochureSection}`} id="brochure">
+          <div className={styles.brochureOrbRed}></div>
+          <div className={styles.brochureOrbGold}></div>
 
-          <div className="container" style={{ position: "relative", zIndex: "2" }}>
-            <div style={{ background: "var(--red-50)", borderRadius: "2rem", padding: "0", display: "flex", flexWrap: "wrap", boxShadow: "0 25px 50px -12px rgba(127, 0, 0, 0.15)", position: "relative", overflow: "hidden" }}>
+          <div className={`container ${styles.brochureContainer}`}>
+            <div className={`brochure-card ${styles.brochureCard}`}>
 
-              {/* Large watermark logo in background */}
-              <div style={{ position: "absolute", right: "-5%", top: "-10%", opacity: "0.04", pointerEvents: "none" }}>
+              <div className={styles.brochureWatermark}>
                 <Image src="/assets/shared/logo/1.png" alt="Watermark" width={200} height={80} />
               </div>
 
-              {/* Visual / Mockup side */}
-              <div style={{ flex: "1 1 350px", padding: "4rem 2rem", display: "flex", justifyContent: "center", alignItems: "center", position: "relative" }}>
-                {/* Glowing orb behind brochure */}
-                <div style={{ position: "absolute", width: "200px", height: "200px", background: "var(--gold-500)", borderRadius: "50%", filter: "blur(50px)", opacity: "0.3", zIndex: "1" }}></div>
+              <div className={`brochure-visual ${styles.brochureVisual}`}>
+                <div className={styles.brochureGlowOrb}></div>
 
-                {/* Brochure Mockup */}
-                <div style={{ position: "relative", zIndex: "2", width: "260px", height: "360px", background: "var(--white)", borderRadius: "12px", boxShadow: "-20px 20px 40px rgba(0,0,0,0.4), inset 0 0 0 1px rgba(0,0,0,0.05)", padding: "2rem 1.5rem", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", transform: "perspective(1000px) rotateY(15deg) rotateX(5deg) rotateZ(-2deg)", transition: "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)" }}>
-                  {/* Mockup binding edge */}
-                  <div style={{ position: "absolute", left: "0", top: "0", width: "12px", height: "100%", background: "linear-gradient(to right, #e0e0e0, #ffffff)", borderRadius: "12px 0 0 12px", boxShadow: "inset -1px 0 2px rgba(0,0,0,0.1)" }}></div>
-
+                <div className={`brochure-mockup ${styles.brochureMockup}`}>
+                  <div className={styles.brochureBinding}></div>
                   <Image src="/assets/shared/logo/1.png" alt="NMC Logo" width={200} height={80} />
-                  <h3 style={{ color: "var(--red-900)", fontFamily: "var(--font-heading)", fontSize: "1.3rem", fontWeight: "800", textAlign: "center", marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: "0.05em" }}>Prospectus</h3>
-                  <div style={{ background: "var(--gold-500)", color: "var(--white)", padding: "0.2rem 1rem", borderRadius: "20px", fontSize: "0.8rem", fontWeight: "700", marginBottom: "1.5rem", boxShadow: "0 4px 10px rgba(245, 158, 11, 0.3)" }}>2026 - 27</div>
-                  <div style={{ width: "30px", height: "3px", background: "var(--gray-300)", marginBottom: "1rem" }}></div>
-                  <p style={{ color: "var(--gray-600)", fontSize: "0.75rem", textAlign: "center", fontWeight: "600" }}>Nandkunvarba Mahila College<br />Bhavnagar</p>
+                  <h3 className={`brochure-mockup-title ${styles.brochureMockupTitle}`}>Prospectus</h3>
+                  <div className={styles.brochureYearBadge}>2026 - 27</div>
+                  <div className={styles.brochureSeparator}></div>
+                  <p className={styles.brochureCollegeText}>Nandkunvarba Mahila College<br />Bhavnagar</p>
                 </div>
               </div>
 
-              {/* Text / CTA side */}
-              <div style={{ flex: "1.2 1 400px", padding: "4rem 4rem 4rem 2rem", display: "flex", flexDirection: "column", justifyContent: "center", color: "var(--gray-900)", position: "relative", zIndex: "2" }}>
-                <div style={{ display: "inline-block", padding: "0.4rem 1rem", background: "rgba(138, 0, 0, 0.05)", border: "1px solid rgba(138, 0, 0, 0.15)", color: "var(--red-800)", borderRadius: "30px", fontSize: "0.8rem", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.1em", marginBottom: "1.5rem", alignSelf: "flex-start" }}>
-                  Official Guide
-                </div>
-                <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "2.8rem", fontWeight: "800", marginBottom: "1.5rem", lineHeight: "1.2" }}>
-                  Download Our <span style={{ color: "var(--gold-500)" }}>Brochure</span>
+              <div className={`brochure-text ${styles.brochureText}`}>
+                <div className={styles.brochureOfficialTag}>Official Guide</div>
+                <h2 className={`brochure-heading ${styles.brochureHeading}`}>
+                  Download Our <span className={styles.brochureHeadingAccent}>Brochure</span>
                 </h2>
-                <p style={{ fontSize: "1.1rem", lineHeight: "1.8", marginBottom: "2.5rem", color: "var(--gray-700)" }}>
+                <p className={`brochure-desc ${styles.brochureDesc}`}>
                   Explore our comprehensive prospectus to learn everything about our academic programs, campus facilities, placement records, and the vibrant student life at Nandkunvarba Mahila College.
                 </p>
 
-                <div style={{ display: "flex", gap: "1.5rem", alignItems: "center" }}>
-                  <a href="#" style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: "0.75rem", padding: "1rem 2.5rem", fontSize: "1.1rem", fontWeight: "700", background: "var(--gold-500)", color: "var(--gray-900)", borderRadius: "8px", textDecoration: "none", boxShadow: "0 10px 20px rgba(245, 158, 11, 0.3)", transition: "transform 0.3s ease, box-shadow 0.3s ease" }}>
+                <div className={`brochure-cta-row ${styles.brochureCtaRow}`}>
+                  <a href="#" className={`brochure-download-btn ${styles.brochureDownloadBtn}`}>
                     <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                       <polyline points="7 10 12 15 17 10" />
@@ -653,7 +644,7 @@ export default function Page() {
                     Download PDF
                   </a>
 
-                  <div style={{ fontSize: "0.85rem", color: "var(--gray-600)", display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+                  <div className={`brochure-file-info ${styles.brochureFileInfo}`}>
                     <span><strong>Size:</strong> 4.2 MB</span>
                     <span><strong>Updated:</strong> 2026 Edition</span>
                   </div>
@@ -677,12 +668,10 @@ export default function Page() {
                 excellence.</p>
             </div>
 
-            <div className="vm-content-grid">
-              <div
-                style={{ background: "var(--white)", borderRadius: "1rem", padding: "2rem", borderBottom: "4px solid var(--gold-warm)", boxShadow: "0 4px 15px rgba(0,0,0,0.05)", transition: "transform 0.3s ease" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
-                  <div
-                    style={{ width: "50px", height: "50px", borderRadius: "50%", background: "rgba(251, 192, 45, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--gold-warm)" }}>
+            <div className={styles.awardsGrid}>
+              <div className={`${styles.awardCard} ${styles.awardCardGold}`}>
+                <div className={styles.awardCardHeader}>
+                  <div className={`${styles.awardIcon} ${styles.awardIconGold}`}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
                       <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
@@ -692,47 +681,37 @@ export default function Page() {
                       <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
                     </svg>
                   </div>
-                  <h4 style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem", color: "var(--gray-900)" }}>Best Women's
-                    College</h4>
+                  <h4 className={styles.awardCardTitle}>Best Women&apos;s College</h4>
                 </div>
-                <p style={{ fontSize: "0.95rem", color: "var(--gray-600)", lineHeight: "1.6" }}>Awarded by regional educational
-                  authorities for outstanding contribution to female literacy and empowerment in Saurashtra.</p>
-                <div style={{ marginTop: "1rem", fontSize: "0.8rem", fontWeight: "700", color: "var(--gray-400)" }}>Year: 2023</div>
+                <p className={styles.awardCardDesc}>Awarded by regional educational authorities for outstanding contribution to female literacy and empowerment in Saurashtra.</p>
+                <div className={styles.awardCardYear}>Year: 2023</div>
               </div>
 
-              <div
-                style={{ background: "var(--white)", borderRadius: "1rem", padding: "2rem", borderBottom: "4px solid var(--sky-700)", boxShadow: "0 4px 15px rgba(0,0,0,0.05)", transition: "transform 0.3s ease" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
-                  <div
-                    style={{ width: "50px", height: "50px", borderRadius: "50%", background: "rgba(0, 95, 153, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--sky-700)" }}>
+              <div className={`${styles.awardCard} ${styles.awardCardSky}`}>
+                <div className={styles.awardCardHeader}>
+                  <div className={`${styles.awardIcon} ${styles.awardIconSky}`}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <circle cx="12" cy="8" r="7" />
                       <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
                     </svg>
                   </div>
-                  <h4 style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem", color: "var(--gray-900)" }}>Excellence in
-                    Placements</h4>
+                  <h4 className={styles.awardCardTitle}>Excellence in Placements</h4>
                 </div>
-                <p style={{ fontSize: "0.95rem", color: "var(--gray-600)", lineHeight: "1.6" }}>Recognized for achieving 90%+
-                  placement records across all major IT, Management, and Commerce streams.</p>
-                <div style={{ marginTop: "1rem", fontSize: "0.8rem", fontWeight: "700", color: "var(--gray-400)" }}>Year: 2024</div>
+                <p className={styles.awardCardDesc}>Recognized for achieving 90%+ placement records across all major IT, Management, and Commerce streams.</p>
+                <div className={styles.awardCardYear}>Year: 2024</div>
               </div>
 
-              <div
-                style={{ background: "var(--white)", borderRadius: "1rem", padding: "2rem", borderBottom: "4px solid var(--red-800)", boxShadow: "0 4px 15px rgba(0,0,0,0.05)", transition: "transform 0.3s ease" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1rem" }}>
-                  <div
-                    style={{ width: "50px", height: "50px", borderRadius: "50%", background: "rgba(197, 48, 48, 0.1)", display: "flex", alignItems: "center", justifyContent: "center", color: "var(--red-800)" }}>
+              <div className={`${styles.awardCard} ${styles.awardCardRed}`}>
+                <div className={styles.awardCardHeader}>
+                  <div className={`${styles.awardIcon} ${styles.awardIconRed}`}>
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M12 15l-2 5l9-9h-7l2-5l-9 9h7z" />
                     </svg>
                   </div>
-                  <h4 style={{ fontFamily: "var(--font-heading)", fontSize: "1.1rem", color: "var(--gray-900)" }}>Green Campus
-                    Initiative</h4>
+                  <h4 className={styles.awardCardTitle}>Green Campus Initiative</h4>
                 </div>
-                <p style={{ fontSize: "0.95rem", color: "var(--gray-600)", lineHeight: "1.6" }}>Honored for implementing sustainable,
-                  eco-friendly practices and maintaining a lush, green, zero-waste campus environment.</p>
-                <div style={{ marginTop: "1rem", fontSize: "0.8rem", fontWeight: "700", color: "var(--gray-400)" }}>Year: 2022</div>
+                <p className={styles.awardCardDesc}>Honored for implementing sustainable, eco-friendly practices and maintaining a lush, green, zero-waste campus environment.</p>
+                <div className={styles.awardCardYear}>Year: 2022</div>
               </div>
             </div>
           </div>
@@ -741,49 +720,43 @@ export default function Page() {
         {/* 8. FUTURE VISION - PREMIUM THEME REDESIGN */}
         <section className="section-padding" id="future">
           <div className="container">
-            <div style={{ background: "var(--sky-50)", borderRadius: "2rem", padding: "5rem 4rem", color: "var(--gray-900)", textAlign: "center", position: "relative", overflow: "hidden", boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.05)", border: "1px solid rgba(0, 0, 0, 0.05)" }}>
+            <div className={styles.futureCard}>
 
-              {/* Glowing Orbs Background */}
-              <div style={{ position: "absolute", top: "-20%", left: "-10%", width: "500px", height: "500px", background: "radial-gradient(circle, rgba(245, 158, 11, 0.1) 0%, transparent 60%)", borderRadius: "50%", filter: "blur(50px)" }}></div>
-              <div style={{ position: "absolute", bottom: "-20%", right: "-10%", width: "400px", height: "400px", background: "radial-gradient(circle, rgba(220, 38, 38, 0.05) 0%, transparent 60%)", borderRadius: "50%", filter: "blur(40px)" }}></div>
+              <div className={styles.futureOrbGold}></div>
+              <div className={styles.futureOrbRed}></div>
 
-              <div style={{ position: "relative", zIndex: "2" }}>
-                <div className="about-premium-tag" style={{ margin: "0 auto 1.5rem auto" }}>
+              <div className={styles.futureContent}>
+                <div className={`about-premium-tag ${styles.futureTag}`}>
                   <span className="about-tag-dot"></span>
-                  <span style={{ fontWeight: "700", letterSpacing: "0.1em" }}>Looking Ahead</span>
+                  <span className={styles.futureTagText}>Looking Ahead</span>
                 </div>
 
-                <h2 style={{ fontFamily: "var(--font-heading)", fontSize: "3rem", fontWeight: "900", marginBottom: "1.5rem", textTransform: "capitalize", color: "var(--gray-900)" }}>
-                  Our Future <span style={{ color: "var(--red-800)" }}>Vision</span>
+                <h2 className={styles.futureHeading}>
+                  Our Future <span className={styles.futureHeadingAccent}>Vision</span>
                 </h2>
 
-                <p style={{ fontSize: "1.2rem", lineHeight: "1.8", color: "var(--gray-700)", maxWidth: "900px", margin: "0 auto 4rem auto", fontWeight: "400" }}>
+                <p className={styles.futureDesc}>
                   As we step into the next decade, NMC aims to integrate cutting-edge AI and tech-driven pedagogies across all disciplines. Our vision is to expand our global university tie-ups, foster high-impact research, and launch startup incubation centers tailored for female entrepreneurs. We are committed to evolving continuously, ensuring our students are not just ready for the future, but are the ones shaping it.
                 </p>
 
-                <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "2.5rem" }}>
-
-                  {/* Stat 1 */}
-                  <div style={{ background: "var(--white)", padding: "2.5rem 3rem", borderRadius: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 15px 30px rgba(0, 0, 0, 0.05)", minWidth: "250px" }}>
-                    <h4 style={{ fontSize: "2.5rem", fontFamily: "var(--font-heading)", color: "var(--red-800)", marginBottom: "0.5rem", fontWeight: "800" }}>50+</h4>
-                    <div style={{ height: "2px", width: "40px", background: "var(--gray-200)", margin: "0 auto 1rem auto" }}></div>
-                    <p style={{ fontSize: "0.9rem", color: "var(--gray-600)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: "600" }}>New Global Tie-ups</p>
+                <div className={styles.futureStatsRow}>
+                  <div className={styles.futureStatCard}>
+                    <h4 className={`${styles.futureStatNum} ${styles.futureStatRed}`}>50+</h4>
+                    <div className={styles.futureStatSep}></div>
+                    <p className={styles.futureStatLabel}>New Global Tie-ups</p>
                   </div>
 
-                  {/* Stat 2 */}
-                  <div style={{ background: "var(--white)", padding: "2.5rem 3rem", borderRadius: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 15px 30px rgba(0, 0, 0, 0.05)", minWidth: "250px" }}>
-                    <h4 style={{ fontSize: "2.5rem", fontFamily: "var(--font-heading)", color: "var(--gray-900)", marginBottom: "0.5rem", fontWeight: "800" }}>100%</h4>
-                    <div style={{ height: "2px", width: "40px", background: "var(--gray-200)", margin: "0 auto 1rem auto" }}></div>
-                    <p style={{ fontSize: "0.9rem", color: "var(--gray-600)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: "600" }}>Digital Campus</p>
+                  <div className={styles.futureStatCard}>
+                    <h4 className={`${styles.futureStatNum} ${styles.futureStatDark}`}>100%</h4>
+                    <div className={styles.futureStatSep}></div>
+                    <p className={styles.futureStatLabel}>Digital Campus</p>
                   </div>
 
-                  {/* Stat 3 */}
-                  <div style={{ background: "var(--white)", padding: "2.5rem 3rem", borderRadius: "1.5rem", border: "1px solid rgba(0,0,0,0.05)", boxShadow: "0 15px 30px rgba(0, 0, 0, 0.05)", minWidth: "250px" }}>
-                    <h4 style={{ fontSize: "2.5rem", fontFamily: "var(--font-heading)", color: "var(--red-800)", marginBottom: "0.5rem", fontWeight: "800" }}>₹5Cr</h4>
-                    <div style={{ height: "2px", width: "40px", background: "var(--gray-200)", margin: "0 auto 1rem auto" }}></div>
-                    <p style={{ fontSize: "0.9rem", color: "var(--gray-600)", textTransform: "uppercase", letterSpacing: "0.1em", fontWeight: "600" }}>Incubation Fund</p>
+                  <div className={styles.futureStatCard}>
+                    <h4 className={`${styles.futureStatNum} ${styles.futureStatRed}`}>₹5Cr</h4>
+                    <div className={styles.futureStatSep}></div>
+                    <p className={styles.futureStatLabel}>Incubation Fund</p>
                   </div>
-
                 </div>
               </div>
             </div>

@@ -1,6 +1,6 @@
 /* =========== INFO PILLARS - OUR COURSES / TEACHERS / ADMISSION =========== */
 .infoPillarsSection {
-  background: var(--color-background, #FFFFFF);
+  background: linear-gradient(160deg, #f0f9ff 0%, #fff5f5 50%, #fffbeb 100%);
   position: relative;
   overflow: hidden;
 }
@@ -13,7 +13,11 @@
   width: 380px;
   height: 380px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(2, 132, 199, .06) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(2, 132, 199, 0.06) 0%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 
@@ -25,14 +29,18 @@
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(138, 0, 0, .04) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(138, 0, 0, 0.04) 0%,
+    transparent 70%
+  );
   pointer-events: none;
 }
 
 .infoPillarsGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.25rem;
 }
 
 .infoPillarCard {
@@ -144,7 +152,7 @@
 
 /* Description */
 .pillarDescription {
-  font-size: .95rem;
+  font-size: 0.95rem;
   color: var(--gray-600);
   line-height: 1.65;
 }
@@ -154,15 +162,15 @@
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: .7rem;
-  margin-top: .5rem;
+  gap: 0.7rem;
+  margin-top: 0.5rem;
 }
 
 .pillarFeatures li {
   display: flex;
   align-items: flex-start;
-  gap: .6rem;
-  font-size: .9rem;
+  gap: 0.6rem;
+  font-size: 0.9rem;
   color: var(--gray-700);
   line-height: 1.55;
 }
@@ -183,7 +191,7 @@
 
 .pillarCheck::after {
   content: "\2714";
-  font-size: .7rem;
+  font-size: 0.7rem;
   font-weight: 900;
 }
 
@@ -206,8 +214,8 @@
 .pillarCta {
   margin-top: auto;
   align-self: flex-start;
-  padding: .75rem 1.8rem;
-  font-size: .95rem;
+  padding: 0.75rem 1.8rem;
+  font-size: 0.95rem;
 }
 
 /* Background glow orbs */
@@ -218,7 +226,7 @@
   border-radius: 50%;
   filter: blur(80px);
   opacity: 0;
-  transition: opacity .5s ease;
+  transition: opacity 0.5s ease;
   pointer-events: none;
 }
 
@@ -227,62 +235,22 @@
 }
 
 .pillarGlowSky {
-  background: rgba(2, 132, 199, .12);
+  background: rgba(2, 132, 199, 0.12);
   top: -40px;
   right: -40px;
 }
 
 .pillarGlowGold {
-  background: rgba(244, 199, 73, .15);
+  background: rgba(244, 199, 73, 0.15);
   bottom: -40px;
   left: -40px;
 }
 
 .pillarGlowRed {
-  background: rgba(138, 0, 0, .08);
+  background: rgba(138, 0, 0, 0.08);
   top: -30px;
   right: -30px;
 }
-
-/* Responsive breakpoints for info pillars */
-@media(min-width:640px) {
-  .infoPillarsGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-  }
-
-  .infoPillarCard:last-child {
-    grid-column: 1 / -1;
-    max-width: 540px;
-    margin: 0 auto;
-    width: 100%;
-  }
-}
-
-@media(min-width:1024px) {
-  .infoPillarsGrid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.25rem;
-  }
-
-  .infoPillarCard:last-child {
-    grid-column: auto;
-    max-width: none;
-    margin: 0;
-  }
-}
-
-@media(min-width:1260px) {
-  .infoPillarsGrid {
-    gap: 2.75rem;
-  }
-
-  .infoPillarCard {
-    padding: 3rem 2.5rem;
-  }
-}
-
-
 /* =========== VISION & MISSION - CLEAN LIGHT SECTION =========== */
 /* =========== VISION & MISSION - LUXURY CREATIVE SECTION =========== */
 .visionMissionSection {
@@ -314,7 +282,11 @@
   height: 400px;
   top: -100px;
   left: -100px;
-  background: radial-gradient(circle, rgba(2, 132, 199, 0.25) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(2, 132, 199, 0.25) 0%,
+    transparent 70%
+  );
   animation: vmOrbFloat 14s ease-in-out infinite alternate;
 }
 
@@ -323,7 +295,11 @@
   height: 450px;
   bottom: -120px;
   right: -80px;
-  background: radial-gradient(circle, rgba(245, 158, 11, 0.22) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(245, 158, 11, 0.22) 0%,
+    transparent 70%
+  );
   animation: vmOrbFloat 16s ease-in-out infinite alternate-reverse;
 }
 
@@ -332,14 +308,21 @@
   height: 300px;
   top: 40%;
   left: 45%;
-  background: radial-gradient(circle, rgba(138, 0, 0, 0.12) 0%, transparent 70%);
+  background: radial-gradient(
+    circle,
+    rgba(138, 0, 0, 0.12) 0%,
+    transparent 70%
+  );
   animation: vmOrbFloat 12s ease-in-out infinite alternate;
 }
 
 .vmGridPattern {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(rgba(17, 24, 39, 0.06) 1px, transparent 1px);
+  background-image: radial-gradient(
+    rgba(17, 24, 39, 0.06) 1px,
+    transparent 1px
+  );
   background-size: 32px 32px;
   opacity: 0.6;
 }
@@ -429,7 +412,9 @@
   border: 1px solid rgba(229, 231, 235, 0.9);
   border-radius: 1.5rem;
   padding: 2.5rem 2.25rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.02);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.04),
+    0 1px 3px rgba(0, 0, 0, 0.02);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -438,7 +423,7 @@
 }
 
 .vmCardLuxury::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -457,7 +442,9 @@
 
 .vmCardLuxury:hover {
   transform: translateY(-6px);
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.03);
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, 0.08),
+    0 4px 12px rgba(0, 0, 0, 0.03);
 }
 
 .vmCardVision:hover {
@@ -579,66 +566,193 @@
   color: #78350f;
 }
 
-
-
 /* ===== SECTION TITLE & DESCRIPTION RESPONSIVE ===== */
 @media (max-width: 1216px) {
-  .sectionTitle { font-size: 30px; }
-  .vmMainTitle { font-size: 34px; }
-  .pillarTitle { font-size: 1.3rem; }
+  .infoPillarsGrid {
+    gap: 2rem;
+  }
+
+  .infoPillarCard {
+    padding: 2rem 1.75rem;
+  }
+  .sectionTitle {
+    font-size: 30px;
+  }
+  .vmMainTitle {
+    font-size: 34px;
+  }
+  .pillarTitle {
+    font-size: 1.3rem;
+  }
+  .pillarIconWrap {
+    width: 54px;
+    height: 54px;
+  }
 }
 @media (max-width: 1024px) {
-  .sectionTitle { font-size: 28px; }
-  .sectionDescription { font-size: 14px; }
-  .vmMainTitle { font-size: 30px; }
-  .vmMainSubtitle { font-size: 0.95rem; }
-  .vmCardTitle { font-size: 1.3rem; }
-  .pillarTitle { font-size: 1.2rem; }
-  .pillarDescription { font-size: 0.88rem; }
+  .infoPillarsGrid {
+    grid-template-columns: auto;
+    gap: 1rem;
+  }
+  .infoPillarCard {
+    padding: 1.75rem 1.5rem;
+  }
+  .sectionTitle {
+    font-size: 28px;
+  }
+  .sectionDescription {
+    font-size: 14px;
+  }
+  .vmMainTitle {
+    font-size: 30px;
+  }
+  .vmMainSubtitle {
+    font-size: 0.95rem;
+  }
+  .vmCardTitle {
+    font-size: 1.3rem;
+  }
+  .pillarTitle {
+    font-size: 1.2rem;
+  }
+  .pillarDescription {
+    font-size: 0.88rem;
+  }
 }
 @media (max-width: 768px) {
-  .sectionTitle { font-size: 26px; }
-  .sectionDescription { font-size: 13px; line-height: 22px; }
-  .sectionHeader { margin-bottom: 1.5rem; }
-  .vmMainTitle { font-size: 26px; }
-  .vmMainSubtitle { font-size: 0.9rem; }
-  .vmLuxuryGrid { grid-template-columns: 1fr; gap: 1.5rem; }
-  .vmCardLuxury { padding: 2rem 1.75rem; }
-  .vmCardTitle { font-size: 1.2rem; }
-  .pillarTitle { font-size: 1.15rem; }
-  .infoPillarCard { padding: 2rem 1.5rem; }
+  .sectionTitle {
+    font-size: 26px;
+  }
+  .sectionDescription {
+    font-size: 13px;
+    line-height: 22px;
+  }
+  .sectionHeader {
+    margin-bottom: 1.5rem;
+  }
+  .vmMainTitle {
+    font-size: 26px;
+  }
+  .vmMainSubtitle {
+    font-size: 0.9rem;
+  }
+  .vmLuxuryGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .vmCardLuxury {
+    padding: 2rem 1.75rem;
+  }
+  .vmCardTitle {
+    font-size: 1.2rem;
+  }
+  .pillarTitle {
+    font-size: 1.15rem;
+  }
+  .infoPillarCard {
+    padding: 2rem 1.5rem;
+  }
 }
 @media (max-width: 575px) {
-  .sectionTitle { font-size: 24px; }
-  .vmMainTitle { font-size: 23px; }
-  .vmMainSubtitle { font-size: 0.85rem; }
-  .vmCardLuxury { padding: 1.75rem 1.5rem; }
-  .vmCardTitle { font-size: 1.1rem; }
-  .vmQuoteBox { font-size: 0.88rem; padding: 1rem 1.15rem; }
-  .pillarTitle { font-size: 1.1rem; }
-  .pillarDescription { font-size: 0.85rem; }
+  .infoPillarsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .infoPillarCard:last-child {
+    grid-column: auto;
+    max-width: none;
+    margin: 0;
+  }
+  .sectionTitle {
+    font-size: 24px;
+  }
+  .vmMainTitle {
+    font-size: 23px;
+  }
+  .vmMainSubtitle {
+    font-size: 0.85rem;
+  }
+  .vmCardLuxury {
+    padding: 1.75rem 1.5rem;
+  }
+  .vmCardTitle {
+    font-size: 1.1rem;
+  }
+  .vmQuoteBox {
+    font-size: 0.88rem;
+    padding: 1rem 1.15rem;
+  }
+  .pillarTitle {
+    font-size: 1.1rem;
+  }
+  .pillarDescription {
+    font-size: 0.85rem;
+  }
 }
 @media (max-width: 480px) {
-  .sectionTitle { font-size: 22px; }
-  .vmMainTitle { font-size: 21px; }
-  .vmHeaderPill { font-size: 0.72rem; padding: 0.3rem 0.9rem; }
-  .vmCardTitle { font-size: 1.05rem; }
-  .vmIconBubble { width: 48px; height: 48px; min-width: 48px; }
-  .pillarIconWrap { width: 52px; height: 52px; }
-  .infoPillarCard { padding: 1.75rem 1.25rem; }
+  .sectionTitle {
+    font-size: 22px;
+  }
+  .vmMainTitle {
+    font-size: 21px;
+  }
+  .vmHeaderPill {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.9rem;
+  }
+  .vmCardTitle {
+    font-size: 1.05rem;
+  }
+  .vmIconBubble {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+  }
+  .pillarIconWrap {
+    width: 52px;
+    height: 52px;
+  }
+  .infoPillarCard {
+    padding: 1.75rem 1.25rem;
+  }
 }
 @media (max-width: 420px) {
-  .sectionTitle { font-size: 20px; }
-  .vmMainTitle { font-size: 19px; }
-  .vmCardLuxury { padding: 1.5rem 1.25rem; border-radius: 1.15rem; }
-  .vmQuoteBox { font-size: 0.84rem; }
-  .pillarTitle { font-size: 1.05rem; }
+  .sectionTitle {
+    font-size: 20px;
+  }
+  .vmMainTitle {
+    font-size: 19px;
+  }
+  .vmCardLuxury {
+    padding: 1.5rem 1.25rem;
+    border-radius: 1.15rem;
+  }
+  .vmQuoteBox {
+    font-size: 0.84rem;
+  }
+  .pillarTitle {
+    font-size: 1.05rem;
+  }
 }
 @media (max-width: 360px) {
-  .sectionTitle { font-size: 18px; }
-  .vmMainTitle { font-size: 17px; }
-  .vmMainSubtitle { font-size: 0.8rem; }
-  .vmCardTitle { font-size: 1rem; }
-  .pillarTitle { font-size: 1rem; }
-  .pillarDescription { font-size: 0.8rem; }
+  .sectionTitle {
+    font-size: 18px;
+  }
+  .vmMainTitle {
+    font-size: 17px;
+  }
+  .vmMainSubtitle {
+    font-size: 0.8rem;
+  }
+  .vmCardTitle {
+    font-size: 1rem;
+  }
+  .pillarTitle {
+    font-size: 1rem;
+  }
+  .pillarDescription {
+    font-size: 0.8rem;
+  }
+}
+@media (min-width: 640px) {
 }
