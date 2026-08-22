@@ -206,7 +206,6 @@ export default function Header() {
                 HAPPENINGS
               </Link>
             </li>
-{/*             
             <li className={`${styles.heroNavDropdown} ${openDropdown === 'iqac' ? styles.dropdownOpen : ''}`}>
               <span 
                 className={`${styles.heroNavLink} ${pathname.startsWith('/iqac') ? styles.activeLink : ''}`}
@@ -226,7 +225,7 @@ export default function Header() {
                 <li><Link href="/iqac/naac" onClick={closeMobileNav}>NAAC</Link></li>
                 <li><Link href="/iqac/nirf" onClick={closeMobileNav}>NIRF</Link></li>
               </ul>
-            </li> */}
+            </li>
 
             <li className={`${styles.heroNavDropdown} ${openDropdown === 'contact' ? styles.dropdownOpen : ''}`}>
               <span 
