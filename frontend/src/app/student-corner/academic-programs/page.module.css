@@ -1,478 +1,528 @@
 /* Academic Programs Page */
 .heroSection {
-  position: relative;
-  min-height: 50vh;
-  height: 50vh;
-  display: flex;
-  align-items: flex-end;
-  overflow: hidden;
+    position: relative;
+    min-height: 50vh;
+    height: 50vh;
+    display: flex;
+    align-items: flex-end;
+    overflow: hidden;
 }
+
 .heroBgImage {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
 }
+
 .heroBgImg {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
+
 .heroOverlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to right,
-    rgba(0, 0, 0, 0.82),
-    rgba(0, 0, 0, 0.4)
-  );
-  z-index: 1;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to right,
+            rgba(0, 0, 0, 0.82),
+            rgba(0, 0, 0, 0.4));
+    z-index: 1;
 }
+
 .heroContent {
-  position: relative;
-  z-index: 2;
-  width: 100%;
-  max-width: 1380px;
-  margin: 0 auto;
-  padding: 0 2rem 80px 2rem;
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 2rem 80px 2rem;
 }
+
 .heroTitle {
-  font-family: var(--font-heading, "Outfit", sans-serif);
-  font-size: clamp(2.6rem, 5.8vw, 4.5rem);
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.15;
-  margin: 0;
+    font-family: var(--font-heading, "Outfit", sans-serif);
+    font-size: clamp(2.6rem, 5.8vw, 4.5rem);
+    font-weight: 700;
+    color: #fff;
+    line-height: 1.15;
+    margin: 0;
+    letter-spacing: -0.01em;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
+
 .heroTitle em {
-  font-style: italic;
-  font-weight: 700;
-  display: inline-block;
-  padding-right: 0.15em;
-  padding-bottom: 0.05em;
-  overflow: visible;
-  background: linear-gradient(
-    135deg,
-    #ffffff 60%,
-    var(--gold-300, #f59e0b) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+    font-style: italic;
+    font-weight: 700;
+    display: inline-block;
+    padding-right: 0.15em;
+    padding-bottom: 0.05em;
+    overflow: visible;
+    background: linear-gradient(135deg,
+            #ffffff 60%,
+            var(--gold-300, #f59e0b) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .container {
-  width: 100%;
-  max-width: 1380px;
-  margin: 0 auto;
-  padding: 0 2rem;
+    width: 100%;
+    max-width: 1380px;
+    margin: 0 auto;
+    padding: 0 2rem;
 }
 
 /* Programs Section */
 .programsSection {
-  padding: 5rem 0;
-  background: var(--sky-50, #fffdf5);
+    padding: 5rem 0;
+    background: var(--sky-50, #fffdf5);
 }
 
 .programsHeader {
-  margin-bottom: 3rem;
+    margin-bottom: 3rem;
 }
 
 .programsLabel {
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--red-800, #8a0000);
-  margin-bottom: 0.75rem;
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--red-800, #8a0000);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
 }
 
 .programsLabelLine {
-  width: 24px;
-  height: 2px;
-  background: var(--red-800, #8a0000);
+    width: 24px;
+    height: 2px;
+    background: var(--red-800, #8a0000);
 }
 
 .programsTitle {
-  font-family: var(--font-heading, "Outfit", sans-serif);
-  font-size: clamp(1.7rem, 3vw, 2.4rem);
-  font-weight: 800;
-  color: var(--gray-900, #111827);
-  margin: 0 0 0.5rem 0;
-  line-height: 1.2;
+    font-family: var(--font-heading, "Outfit", sans-serif);
+    font-size: clamp(1.7rem, 3vw, 2.4rem);
+    font-weight: 800;
+    color: var(--gray-900, #111827);
+    margin: 0 0 0.5rem 0;
+    line-height: 1.2;
 }
 
 .programsTitle span {
-  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+    background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .programsDesc {
-  font-size: 0.95rem;
-  color: var(--gray-600, #4b5563);
-  line-height: 1.7;
-  max-width: 650px;
+    font-size: 0.95rem;
+    color: var(--gray-600, #4b5563);
+    line-height: 1.7;
+    max-width: 650px;
 }
 
 /* Category Tabs */
 .categoryTabs {
-  display: flex;
-  gap: 0.5rem;
-  margin-bottom: 2.5rem;
-  flex-wrap: wrap;
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 2.5rem;
+    flex-wrap: wrap;
 }
 
 .categoryTab {
-  padding: 0.5rem 1.25rem;
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  border: 1px solid var(--gray-200, #e5e7eb);
-  background: var(--white, #ffffff);
-  color: var(--gray-700, #374151);
-  cursor: pointer;
-  transition: all 0.25s ease;
-  font-family: var(--font-body, "Plus Jakarta Sans", sans-serif);
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border: 1px solid var(--gray-200, #e5e7eb);
+    background: var(--white, #ffffff);
+    color: var(--gray-700, #374151);
+    cursor: pointer;
+    transition: all 0.25s ease;
+    font-family: var(--font-body, "Plus Jakarta Sans", sans-serif);
 }
 
 .categoryTab:hover {
-  border-color: var(--red-800, #8a0000);
-  color: var(--red-800, #8a0000);
-  background: var(--red-50, #fef2f2);
+    border-color: var(--red-800, #8a0000);
+    color: var(--red-800, #8a0000);
+    background: var(--red-50, #fef2f2);
 }
 
 .categoryTabActive {
-  background: var(--red-800, #8a0000);
-  color: var(--white, #ffffff);
-  border-color: var(--red-800, #8a0000);
+    background: var(--red-800, #8a0000);
+    color: var(--white, #ffffff);
+    border-color: var(--red-800, #8a0000);
 }
 
 .categoryTabActive:hover {
-  background: var(--red-900, #7f0000);
-  border-color: var(--red-900, #7f0000);
-  color: var(--white, #ffffff);
+    background: var(--red-900, #7f0000);
+    border-color: var(--red-900, #7f0000);
+    color: var(--white, #ffffff);
 }
 
 /* Programs Grid */
 .programsGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
 }
 
 .programCard {
-  background: var(--white, #ffffff);
-  border: 1px solid var(--gray-200, #e5e7eb);
-  border-radius: 1.25rem;
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background: var(--white, #ffffff);
+    border: 1px solid var(--gray-200, #e5e7eb);
+    border-radius: 1.25rem;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .programCard::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
-  transform: scaleX(0);
-  transform-origin: left;
-  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .programCard:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 16px 40px rgba(138, 0, 0, 0.06);
-  border-color: rgba(138, 0, 0, 0.15);
+    transform: translateY(-5px);
+    box-shadow: 0 16px 40px rgba(138, 0, 0, 0.06);
+    border-color: rgba(138, 0, 0, 0.15);
 }
 
 .programCard:hover::before {
-  transform: scaleX(1);
+    transform: scaleX(1);
 }
 
 .programCardHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
 }
 
 .programCardType {
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  padding: 0.25rem 0.6rem;
-  border-radius: 4px;
+    font-size: 0.65rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.25rem 0.6rem;
+    border-radius: 4px;
 }
 
 .typeUG {
-  background: var(--red-50, #fef2f2);
-  color: var(--red-800, #8a0000);
-  border: 1px solid var(--red-200, #fecaca);
+    background: var(--red-50, #fef2f2);
+    color: var(--red-800, #8a0000);
+    border: 1px solid var(--red-200, #fecaca);
 }
 
 .typePG {
-  background: var(--gold-100, #fef9c3);
-  color: var(--gold-700, #b45309);
-  border: 1px solid var(--gold-200, #fde68a);
+    background: var(--gold-100, #fef9c3);
+    color: var(--gold-700, #b45309);
+    border: 1px solid var(--gold-200, #fde68a);
 }
 
 .typeDiploma {
-  background: #ecfdf5;
-  color: #16a34a;
-  border: 1px solid #bbf7d0;
+    background: #ecfdf5;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
 }
 
 .typeCert {
-  background: #f0f9ff;
-  color: #0369a1;
-  border: 1px solid #bae6fd;
+    background: #f0f9ff;
+    color: #0369a1;
+    border: 1px solid #bae6fd;
 }
 
 .programCardFee {
-  font-family: var(--font-heading, "Outfit", sans-serif);
-  font-size: 0.85rem;
-  font-weight: 800;
-  color: var(--gray-900, #111827);
+    font-family: var(--font-heading, "Outfit", sans-serif);
+    font-size: 0.85rem;
+    font-weight: 800;
+    color: var(--gray-900, #111827);
 }
 
 .programCardName {
-  font-family: var(--font-heading, "Outfit", sans-serif);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--gray-900, #111827);
-  line-height: 1.35;
-  margin: 0 0 0.75rem 0;
+    font-family: var(--font-heading, "Outfit", sans-serif);
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--gray-900, #111827);
+    line-height: 1.35;
+    margin: 0 0 0.75rem 0;
 }
 
 .programCardMeta {
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  margin-bottom: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    margin-bottom: 1.25rem;
 }
 
 .programCardMetaItem {
-  font-size: 0.82rem;
-  color: var(--gray-600, #4b5563);
+    font-size: 0.82rem;
+    color: var(--gray-600, #4b5563);
 }
 
 .programCardMetaItem strong {
-  color: var(--gray-800, #1f2937);
+    color: var(--gray-800, #1f2937);
 }
 
 .programCardDesc {
-  font-size: 0.85rem;
-  color: var(--gray-500, #6b7280);
-  line-height: 1.6;
-  margin: 0;
+    font-size: 0.85rem;
+    color: var(--gray-500, #6b7280);
+    line-height: 1.6;
+    margin: 0;
 }
 
 /* Responsive */
 @media (max-width: 1216px) {
-  .programsGrid {
-    gap: 1.25rem;
-  }
-  .programCard {
-    padding: 1.75rem;
-  }
-  .programsTitle {
-    font-size: 2rem;
-  }
+    .programsGrid {
+        gap: 1.25rem;
+    }
+
+    .programCard {
+        padding: 1.75rem;
+    }
+
+    .programsTitle {
+        font-size: 2rem;
+    }
 }
 
 @media (max-width: 1024px) {
-  .programsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-  .programsTitle {
-    font-size: 1.8rem;
-  }
-  .programsDesc {
-    font-size: 0.9rem;
-  }
+    .programsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .programsTitle {
+        font-size: 1.8rem;
+    }
+
+    .programsDesc {
+        font-size: 0.9rem;
+    }
 }
 
 @media (max-width: 768px) {
-  .heroSection {
-    min-height: 40vh;
-    height: 40vh;
-  }
-  .heroContent {
-    padding-bottom: 50px;
-  }
-  .programsSection {
-    padding: 3.5rem 0;
-  }
-  .programsGrid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-  }
-  .programsTitle {
-    font-size: 1.6rem;
-  }
-  .programsDesc {
-    font-size: 0.88rem;
-  }
-  .programsHeader {
-    margin-bottom: 2rem;
-  }
-  .categoryTabs {
-    gap: 0.4rem;
-    margin-bottom: 2rem;
-  }
-  .categoryTab {
-    padding: 0.45rem 1rem;
-    font-size: 0.75rem;
-  }
-  .programCard {
-    padding: 1.5rem;
-  }
-  .programCardName {
-    font-size: 1rem;
-  }
+    .heroSection {
+        min-height: 40vh;
+        height: 40vh;
+    }
+
+    .heroContent {
+        padding-bottom: 50px;
+    }
+
+    .programsSection {
+        padding: 3.5rem 0;
+    }
+
+    .programsGrid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .programsTitle {
+        font-size: 1.6rem;
+    }
+
+    .programsDesc {
+        font-size: 0.88rem;
+    }
+
+    .programsHeader {
+        margin-bottom: 2rem;
+    }
+
+    .categoryTabs {
+        gap: 0.4rem;
+        margin-bottom: 2rem;
+    }
+
+    .categoryTab {
+        padding: 0.45rem 1rem;
+        font-size: 0.75rem;
+    }
+
+    .programCard {
+        padding: 1.5rem;
+    }
+
+    .programCardName {
+        font-size: 1rem;
+    }
 }
 
 @media (max-width: 575px) {
-  .heroSection {
-    min-height: 38vh;
-    height: 38vh;
-  }
-  .programsSection {
-    padding: 3rem 0;
-  }
-  .programsTitle {
-    font-size: 1.45rem;
-  }
-  .programCard {
-    padding: 1.35rem;
-    border-radius: 1rem;
-  }
-  .programCardName {
-    font-size: 0.95rem;
-  }
-  .programCardDesc {
-    font-size: 0.8rem;
-  }
-  .programCardMeta {
-    gap: 0.3rem;
-  }
-  .programCardMetaItem {
-    font-size: 0.78rem;
-  }
-  .categoryTab {
-    padding: 0.4rem 0.85rem;
-    font-size: 0.72rem;
-  }
+    .heroSection {
+        min-height: 38vh;
+        height: 38vh;
+    }
+
+    .programsSection {
+        padding: 3rem 0;
+    }
+
+    .programsTitle {
+        font-size: 1.45rem;
+    }
+
+    .programCard {
+        padding: 1.35rem;
+        border-radius: 1rem;
+    }
+
+    .programCardName {
+        font-size: 0.95rem;
+    }
+
+    .programCardDesc {
+        font-size: 0.8rem;
+    }
+
+    .programCardMeta {
+        gap: 0.3rem;
+    }
+
+    .programCardMetaItem {
+        font-size: 0.78rem;
+    }
+
+    .categoryTab {
+        padding: 0.4rem 0.85rem;
+        font-size: 0.72rem;
+    }
 }
 
 @media (max-width: 480px) {
-  .heroSection {
-    min-height: 35vh;
-    height: 35vh;
-  }
-  .heroContent {
-    padding: 0 1rem 40px 1rem;
-  }
-  .programsSection {
-    padding: 2.5rem 0;
-  }
-  .programsTitle {
-    font-size: 1.3rem;
-  }
-  .programsDesc {
-    font-size: 0.85rem;
-  }
-  .programCard {
-    padding: 1.25rem;
-  }
-  .programCardName {
-    font-size: 0.92rem;
-  }
-  .programCardFee {
-    font-size: 0.78rem;
-  }
-  .container {
-    padding: 0 1.25rem;
-  }
+    .heroSection {
+        min-height: 35vh;
+        height: 35vh;
+    }
+
+    .heroContent {
+        padding: 0 1rem 40px 1rem;
+    }
+
+    .programsSection {
+        padding: 2.5rem 0;
+    }
+
+    .programsTitle {
+        font-size: 1.3rem;
+    }
+
+    .programsDesc {
+        font-size: 0.85rem;
+    }
+
+    .programCard {
+        padding: 1.25rem;
+    }
+
+    .programCardName {
+        font-size: 0.92rem;
+    }
+
+    .programCardFee {
+        font-size: 0.78rem;
+    }
+
+    .container {
+        padding: 0 1.25rem;
+    }
 }
 
 @media (max-width: 420px) {
-  .programsTitle {
-    font-size: 1.2rem;
-  }
-  .programCard {
-    padding: 1.1rem;
-  }
-  .programCardName {
-    font-size: 0.88rem;
-  }
-  .programCardDesc {
-    font-size: 0.78rem;
-  }
-  .categoryTab {
-    padding: 0.35rem 0.75rem;
-    font-size: 0.68rem;
-  }
-  .programsHeader {
-    margin-bottom: 1.5rem;
-  }
+    .programsTitle {
+        font-size: 1.2rem;
+    }
+
+    .programCard {
+        padding: 1.1rem;
+    }
+
+    .programCardName {
+        font-size: 0.88rem;
+    }
+
+    .programCardDesc {
+        font-size: 0.78rem;
+    }
+
+    .categoryTab {
+        padding: 0.35rem 0.75rem;
+        font-size: 0.68rem;
+    }
+
+    .programsHeader {
+        margin-bottom: 1.5rem;
+    }
 }
 
 @media (max-width: 380px) {
-  .programsTitle {
-    font-size: 1.1rem;
-  }
-  .programCard {
-    padding: 1rem;
-    border-radius: 0.85rem;
-  }
-  .programCardName {
-    font-size: 0.85rem;
-  }
-  .container {
-    padding: 0 1rem;
-  }
+    .programsTitle {
+        font-size: 1.1rem;
+    }
+
+    .programCard {
+        padding: 1rem;
+        border-radius: 0.85rem;
+    }
+
+    .programCardName {
+        font-size: 0.85rem;
+    }
+
+    .container {
+        padding: 0 1rem;
+    }
 }
 
 @media (max-width: 360px) {
-  .heroSection {
-    min-height: 32vh;
-    height: 32vh;
-  }
-  .programsTitle {
-    font-size: 1.05rem;
-  }
-  .programsDesc {
-    font-size: 0.8rem;
-  }
-  .programCard {
-    padding: 0.9rem;
-  }
-  .programCardName {
-    font-size: 0.82rem;
-  }
-  .programCardDesc {
-    font-size: 0.75rem;
-    line-height: 1.5;
-  }
-  .programCardType {
-    font-size: 0.6rem;
-  }
-  .programCardFee {
-    font-size: 0.72rem;
-  }
-  .categoryTab {
-    padding: 0.3rem 0.65rem;
-    font-size: 0.65rem;
-  }
+    .heroSection {
+        min-height: 32vh;
+        height: 32vh;
+    }
+
+    .programsTitle {
+        font-size: 1.05rem;
+    }
+
+    .programsDesc {
+        font-size: 0.8rem;
+    }
+
+    .programCard {
+        padding: 0.9rem;
+    }
+
+    .programCardName {
+        font-size: 0.82rem;
+    }
+
+    .programCardDesc {
+        font-size: 0.75rem;
+        line-height: 1.5;
+    }
+
+    .programCardType {
+        font-size: 0.6rem;
+    }
+
+    .programCardFee {
+        font-size: 0.72rem;
+    }
+
+    .categoryTab {
+        padding: 0.3rem 0.65rem;
+        font-size: 0.65rem;
+    }
 }

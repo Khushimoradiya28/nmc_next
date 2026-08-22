@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import styles from './ActivityHero.module.css';
 
-export default function ActivityHero({ title, subtitle, bgImage = '/assets/home/hero/2.jpg', height = '45vh', breadcrumbs = [], decorative = false }) {
+export default function ActivityHero({ title, subtitle, bgImage = '/assets/home/hero/2.jpg', height = '50vh', breadcrumbs = [], decorative = false }) {
   return (
     <section className={styles.heroSection} style={{ height }}>
       <div className={styles.heroBgImage}>

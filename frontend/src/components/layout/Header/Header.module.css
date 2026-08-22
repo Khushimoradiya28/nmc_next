@@ -81,7 +81,7 @@
 }
 
 .activeLink {
-    color: var(--white, #ffffff);
+    color: var(--gold-500, #f59e0b);
 }
 
 .heroNavLink::after {
@@ -101,7 +101,12 @@
 }
 
 .activeLink::after {
-    width: 70%;
+    display: none;
+}
+
+.activeLink svg {
+    color: var(--gold-500, #f59e0b);
+    opacity: 1;
 }
 
 .heroNavLink svg {
