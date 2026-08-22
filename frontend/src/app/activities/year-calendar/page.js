@@ -297,7 +297,6 @@ export default function YearCalendarPage() {
       <main className={styles.mainWrapper}>
         <ActivityHero
           title="Year Calendar 2025-26"
-          subtitle="Complete academic schedule, examination timelines, important dates & holiday roster for the current session"
           bgImage="/assets/banners/college_year_calendar_banner.jpg"
           height="45vh"
           decorative={true}

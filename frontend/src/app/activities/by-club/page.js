@@ -327,7 +327,6 @@ export default function ByClubPage() {
         
         <ActivityHero 
           title="Activities by Club" 
-          subtitle="9 specialized clubs promoting experiential learning and stream-focused milestones"
           bgImage="/assets/banners/banner1.webp"
           breadcrumbs={[
             { label: 'Activities', link: '/activities' },
