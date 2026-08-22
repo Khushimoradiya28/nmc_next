@@ -198,14 +198,6 @@ function MobileSlider({ championships, TrophyIcon, styles }) {
 
   return (
     <div className={styles.mobileSliderContainer}>
-      <button 
-        className={`${styles.sliderArrow} ${styles.arrowLeft}`} 
-        onClick={() => scrollManual('left')}
-        aria-label="Previous Slide"
-      >
-        ‹
-      </button>
-
       <div 
         className={styles.mobileSliderTrack}
         ref={sliderRef}
@@ -228,13 +220,28 @@ function MobileSlider({ championships, TrophyIcon, styles }) {
         ))}
       </div>
 
-      <button 
-        className={`${styles.sliderArrow} ${styles.arrowRight}`} 
-        onClick={() => scrollManual('right')}
-        aria-label="Next Slide"
-      >
-        ›
-      </button>
+      {/* Manual arrows below the card */}
+      <div className={styles.sliderControls}>
+        <button 
+          className={styles.sliderArrowBtn} 
+          onClick={() => scrollManual('left')}
+          aria-label="Previous Slide"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <button 
+          className={styles.sliderArrowBtn} 
+          onClick={() => scrollManual('right')}
+          aria-label="Next Slide"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
     </div>
   );
 }

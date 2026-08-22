@@ -10306,45 +10306,48 @@ main section {
 /* ===== BROCHURE SECTION RESPONSIVE ===== */
 @media (max-width: 1024px) {
     .brochure-card { flex-direction: column; border-radius: 1.5rem; }
-    .brochure-visual { padding: 3rem 2rem; }
+    .brochure-visual { padding: 3.5rem 2rem !important; }
     .brochure-text { padding: 2.5rem 2rem; }
     .brochure-heading { font-size: 2.2rem !important; }
-    .brochure-mockup { transform: perspective(1000px) rotateY(8deg) rotateX(3deg) rotateZ(-1deg) !important; }
+    .brochure-mockup { transform: perspective(1000px) rotateY(8deg) rotateX(3deg) rotateZ(-1deg) !important; height: auto !important; min-height: 320px; }
 }
 @media (max-width: 768px) {
-    .brochure-visual { padding: 2.5rem 1.5rem; }
+    .brochure-visual { padding: 3.5rem 1.5rem !important; }
     .brochure-text { padding: 2rem 1.5rem; }
     .brochure-heading { font-size: 1.8rem !important; }
     .brochure-desc { font-size: 1rem !important; margin-bottom: 2rem !important; }
     .brochure-cta-row { flex-direction: column; gap: 1rem !important; }
     .brochure-download-btn { padding: 0.85rem 2rem !important; font-size: 1rem !important; width: 100%; justify-content: center; }
-    .brochure-mockup { width: 220px !important; height: 300px !important; }
+    .brochure-mockup { width: 220px !important; height: auto !important; min-height: 290px; padding: 2rem 1.25rem !important; }
 }
 @media (max-width: 575px) {
+    .brochure-visual { padding: 3.5rem 1.25rem !important; }
     .brochure-heading { font-size: 1.5rem !important; }
     .brochure-desc { font-size: 0.92rem !important; }
-    .brochure-mockup { width: 190px !important; height: 260px !important; padding: 1.5rem 1rem !important; }
+    .brochure-mockup { width: 200px !important; height: auto !important; min-height: 270px; padding: 1.75rem 1.15rem !important; }
     .brochure-mockup-title { font-size: 1.1rem !important; }
     .brochure-download-btn { font-size: 0.95rem !important; padding: 0.8rem 1.5rem !important; }
 }
 @media (max-width: 480px) {
-    .brochure-visual { padding: 2rem 1rem; }
+    .brochure-visual { padding: 3.25rem 1rem !important; }
     .brochure-text { padding: 1.5rem 1.25rem; }
     .brochure-heading { font-size: 1.35rem !important; }
     .brochure-desc { font-size: 0.88rem !important; margin-bottom: 1.5rem !important; }
-    .brochure-mockup { width: 170px !important; height: 240px !important; }
+    .brochure-mockup { width: 185px !important; height: auto !important; min-height: 250px; padding: 1.6rem 1rem !important; }
     .brochure-download-btn { font-size: 0.9rem !important; padding: 0.75rem 1.25rem !important; }
     .brochure-file-info { font-size: 0.78rem !important; }
 }
 @media (max-width: 420px) {
+    .brochure-visual { padding: 3rem 1rem !important; }
     .brochure-heading { font-size: 1.2rem !important; }
-    .brochure-mockup { width: 150px !important; height: 210px !important; transform: none !important; }
+    .brochure-mockup { width: 175px !important; height: auto !important; min-height: 240px; transform: none !important; padding: 1.5rem 0.9rem !important; }
     .brochure-download-btn { font-size: 0.85rem !important; }
 }
 @media (max-width: 360px) {
+    .brochure-visual { padding: 2.75rem 0.85rem !important; }
     .brochure-heading { font-size: 1.1rem !important; }
     .brochure-desc { font-size: 0.82rem !important; }
-    .brochure-mockup { width: 140px !important; height: 190px !important; }
+    .brochure-mockup { width: 165px !important; height: auto !important; min-height: 230px; padding: 1.4rem 0.85rem !important; }
     .brochure-download-btn { font-size: 0.8rem !important; padding: 0.7rem 1rem !important; }
     .brochure-mockup-title { font-size: 0.95rem !important; }
 }

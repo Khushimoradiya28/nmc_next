@@ -17,7 +17,29 @@ const allMedalists = [
   { name: "Pooja V. Rathod", course: "MA", year: "2024", cgpa: "8.98", photo: "/assets/toppers/priya.jpg" },
   { name: "Neha S. Gohil", course: "MSW", year: "2025", cgpa: "9.20", photo: "/assets/toppers/anjali.jpg" },
   { name: "Kinjal B. Parmar", course: "DFD & CFD", year: "2024", cgpa: "9.40", photo: "/assets/toppers/meera.jpg" },
-  { name: "Bhakti R. Dave", course: "DNYS", year: "2025", cgpa: "9.10", photo: "/assets/toppers/priya.jpg" }
+  { name: "Bhakti R. Dave", course: "DNYS", year: "2025", cgpa: "9.10", photo: "/assets/toppers/priya.jpg" },
+  // --- Repeat for pagination testing ---
+  { name: "Riya K. Patel", course: "BCA", year: "2025", cgpa: "9.55", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Shruti M. Shah", course: "BBA", year: "2024", cgpa: "9.22", photo: "/assets/toppers/meera.jpg" },
+  { name: "Nidhi V. Desai", course: "B.COM", year: "2025", cgpa: "9.38", photo: "/assets/toppers/priya.jpg" },
+  { name: "Foram S. Joshi", course: "M.COM", year: "2024", cgpa: "9.05", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Kavya R. Trivedi", course: "MA", year: "2025", cgpa: "9.12", photo: "/assets/toppers/meera.jpg" },
+  { name: "Hiral N. Patel", course: "BA", year: "2024", cgpa: "9.00", photo: "/assets/toppers/priya.jpg" },
+  { name: "Disha K. Mehta", course: "MSW", year: "2025", cgpa: "9.25", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Mansi P. Vora", course: "DFD & CFD", year: "2024", cgpa: "9.48", photo: "/assets/toppers/meera.jpg" },
+  { name: "Tanvi A. Rao", course: "DNYS", year: "2025", cgpa: "9.08", photo: "/assets/toppers/priya.jpg" },
+  { name: "Kruti J. Shah", course: "BCA", year: "2024", cgpa: "9.60", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Prachi D. Thakkar", course: "BBA", year: "2025", cgpa: "9.35", photo: "/assets/toppers/meera.jpg" },
+  { name: "Jalpa M. Gohil", course: "B.COM", year: "2024", cgpa: "9.42", photo: "/assets/toppers/priya.jpg" },
+  { name: "Swati N. Parmar", course: "M.COM", year: "2025", cgpa: "9.17", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Foram R. Patel", course: "BA", year: "2024", cgpa: "9.03", photo: "/assets/toppers/meera.jpg" },
+  { name: "Drashti K. Dave", course: "MA", year: "2025", cgpa: "9.28", photo: "/assets/toppers/priya.jpg" },
+  { name: "Muskan A. Shah", course: "MSW", year: "2024", cgpa: "9.14", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Pooja K. Raval", course: "DFD & CFD", year: "2025", cgpa: "9.50", photo: "/assets/toppers/meera.jpg" },
+  { name: "Khushi M. Modi", course: "DNYS", year: "2024", cgpa: "9.06", photo: "/assets/toppers/priya.jpg" },
+  { name: "Urvi S. Bhavsar", course: "BCA", year: "2025", cgpa: "9.72", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Riddhi N. Kapadia", course: "BBA", year: "2024", cgpa: "9.33", photo: "/assets/toppers/meera.jpg" },
+  { name: "Sonal R. Trivedi", course: "B.COM", year: "2025", cgpa: "9.46", photo: "/assets/toppers/priya.jpg" },
 ];
 
 const departments = ["All Departments", "BA", "MA", "B.COM", "M.COM", "BCA", "BBA", "MSW", "DFD & CFD", "DNYS"];
@@ -28,6 +50,41 @@ export default function GoldMedalistPage() {
   const [selectedYear, setSelectedYear] = useState('All Years');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
+
+  // Filter medalists first (needed before effects)
+  const filteredMedalists = allMedalists.filter(medalist => {
+    const matchDept = selectedDept === 'All Departments' || medalist.course === selectedDept;
+    const matchYear = selectedYear === 'All Years' || medalist.year === selectedYear;
+    const matchName = medalist.name.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchDept && matchYear && matchName;
+  });
+
+  React.useEffect(() => {
+    const handleResize = () => {
+      const width = window.innerWidth;
+      if (width < 640) {
+        setItemsPerPage(4);   // Small mobile: 4 per page (2x2)
+        setIsMobile(true);
+      } else if (width < 1024) {
+        setItemsPerPage(6);   // Tablet: 6 per page (3x2)
+        setIsMobile(true);
+      } else {
+        setItemsPerPage(21);  // Desktop: 21 per page (7 cols × 3 rows)
+        setIsMobile(false);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Reset to page 1 when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [selectedDept, selectedYear, searchQuery]);
 
   const handleReset = () => {
     setSelectedDept('All Departments');
@@ -37,18 +94,16 @@ export default function GoldMedalistPage() {
 
   const handleToggleSearch = () => {
     if (isSearchOpen) {
-      setSearchQuery(''); // Clear query when closing
+      setSearchQuery('');
     }
     setIsSearchOpen(!isSearchOpen);
   };
 
-  // Filter medalists based on dropdown selections and search query
-  const filteredMedalists = allMedalists.filter(medalist => {
-    const matchDept = selectedDept === 'All Departments' || medalist.course === selectedDept;
-    const matchYear = selectedYear === 'All Years' || medalist.year === selectedYear;
-    const matchName = medalist.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchDept && matchYear && matchName;
-  });
+  const totalPages = Math.ceil(filteredMedalists.length / itemsPerPage);
+  const paginatedMedalists = filteredMedalists.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
 
   return (
     <>
@@ -87,7 +142,7 @@ export default function GoldMedalistPage() {
         </section>
 
         {/* Content Section */}
-        <section className="section-padding" style={{ padding: "5rem 0" }}>
+        <section className={`section-padding ${styles.contentSection}`}>
           <div className="container" style={{ maxWidth: "1200px" }}>
 
             {/* Selection Row: Title on Left, Filter Dropdowns on Right Corner */}
@@ -101,7 +156,7 @@ export default function GoldMedalistPage() {
                 </p>
               </div>
               
-              <div className={styles.filterControls}>
+              <div className={`${styles.filterControls} ${isSearchOpen ? styles.searchActive : ''}`}>
                 {/* Search Toggle Icon */}
                 <div className={styles.searchWrapper}>
                   {isSearchOpen && (
@@ -123,65 +178,105 @@ export default function GoldMedalistPage() {
                   </button>
                 </div>
 
-                {/* Department Dropdown */}
-                <select 
-                  className={styles.filterSelect}
-                  value={selectedDept}
-                  onChange={(e) => setSelectedDept(e.target.value)}
-                >
-                  {departments.map((dept) => (
-                    <option key={dept} value={dept}>{dept}</option>
-                  ))}
-                </select>
+                <div className={styles.dropdownsGroup}>
+                  {/* Department Dropdown */}
+                  <select 
+                    className={styles.filterSelect}
+                    value={selectedDept}
+                    onChange={(e) => setSelectedDept(e.target.value)}
+                  >
+                    {departments.map((dept) => (
+                      <option key={dept} value={dept}>{dept}</option>
+                    ))}
+                  </select>
 
-                {/* Year Dropdown */}
-                <select 
-                  className={styles.filterSelect}
-                  value={selectedYear}
-                  onChange={(e) => setSelectedYear(e.target.value)}
-                >
-                  {years.map((yr) => (
-                    <option key={yr} value={yr}>{yr}</option>
-                  ))}
-                </select>
+                  {/* Year Dropdown */}
+                  <select 
+                    className={styles.filterSelect}
+                    value={selectedYear}
+                    onChange={(e) => setSelectedYear(e.target.value)}
+                  >
+                    {years.map((yr) => (
+                      <option key={yr} value={yr}>{yr}</option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 
             {/* Medalist Grid (Full Width, Compact styling) */}
             {filteredMedalists.length > 0 ? (
-              <div className={styles.medalistGrid}>
-                {filteredMedalists.map((medalist, idx) => (
-                  <div key={idx} className={styles.medalistCard}>
-                    <div className={styles.imageContainer}>
-                      <Image 
-                        src={medalist.photo} 
-                        alt={medalist.name} 
-                        fill 
-                        className={styles.cardImage}
-                        sizes="(max-width: 768px) 100vw, 33vw"
-                      />
+              <>
+                <div className={styles.medalistGrid}>
+                  {paginatedMedalists.map((medalist, idx) => (
+                    <div key={idx} className={styles.medalistCard}>
+                      <div className={styles.imageContainer}>
+                        <Image 
+                          src={medalist.photo} 
+                          alt={medalist.name} 
+                          fill 
+                          className={styles.cardImage}
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                        
+                        {/* Sleek Corner Ribbon to avoid overlapping face */}
+                        <div className={styles.ribbon}>
+                          Gold Medalist
+                        </div>
+                      </div>
                       
-                      {/* Sleek Corner Ribbon to avoid overlapping face */}
-                      <div className={styles.ribbon}>
-                        Gold Medalist
+                      <div className={styles.cardContent}>
+                        <div>
+                          <h4 className={styles.name}>{medalist.name}</h4>
+                          <p className={styles.metaInfo}>
+                            {medalist.course} &bull; Passing Year: {medalist.year}
+                          </p>
+                        </div>
+                        <div className={styles.scoreBadge}>
+                          <span className={styles.scoreLabel}>Academic score:</span>
+                          <strong className={styles.scoreValue}>{medalist.cgpa} CGPA</strong>
+                        </div>
                       </div>
                     </div>
-                    
-                    <div className={styles.cardContent}>
-                      <div>
-                        <h4 className={styles.name}>{medalist.name}</h4>
-                        <p className={styles.metaInfo}>
-                          {medalist.course} &bull; Passing Year: {medalist.year}
-                        </p>
-                      </div>
-                      <div className={styles.scoreBadge}>
-                        <span className={styles.scoreLabel}>Academic score:</span>
-                        <strong className={styles.scoreValue}>{medalist.cgpa} CGPA</strong>
-                      </div>
-                    </div>
+                  ))}
+                </div>
+
+                {/* Theme Pagination — all screen sizes (Prev / Page X of Y / Next) */}
+                {totalPages > 1 && (
+                  <div className={styles.paginationContainer}>
+                    {/* Prev Button */}
+                    <button
+                      className={`${styles.pageNavBtn} ${currentPage === 1 ? styles.pageNavDisabled : ''}`}
+                      onClick={() => { if (currentPage > 1) setCurrentPage(p => p - 1); }}
+                      disabled={currentPage === 1}
+                      aria-label="Previous page"
+                    >
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                      </svg>
+                      <span>Prev</span>
+                    </button>
+
+                    {/* Page indicator pill */}
+                    <span className={styles.pageIndicator}>
+                      {currentPage} / {totalPages}
+                    </span>
+
+                    {/* Next Button */}
+                    <button
+                      className={`${styles.pageNavBtn} ${currentPage === totalPages ? styles.pageNavDisabled : ''}`}
+                      onClick={() => { if (currentPage < totalPages) setCurrentPage(p => p + 1); }}
+                      disabled={currentPage === totalPages}
+                      aria-label="Next page"
+                    >
+                      <span>Next</span>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                      </svg>
+                    </button>
                   </div>
-                ))}
-              </div>
+                )}
+              </>
             ) : (
               <div className={styles.noResults}>
                 <h3 className={styles.noResultsTitle}>No Achievers Found</h3>

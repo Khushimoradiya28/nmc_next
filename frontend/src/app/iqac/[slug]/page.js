@@ -1038,15 +1038,411 @@ export default async function IQACSubPage({ params }) {
       case 'nirf':
         return {
           subtitle: "National Institutional Ranking Framework",
-          description: "Evaluating institutional data parameters across teaching quality, graduation outcomes, research outputs, and community outreach metrics for NIRF rankings.",
-          isCustomLayout: false,
+          description: "Evaluating institutional data parameters across teaching quality, graduation outcomes, research outputs, and community outreach metrics under Ministry of Education (MoE) NIRF mandate.",
+          isCustomLayout: true,
           details: (
-            <div className={styles.genericCard}>
-              <h3 className={styles.cardTitle}>NIRF Institutional Data Portal</h3>
-              <p className={styles.cardDesc}>
-                Institutional metrics across Teaching Learning Resources (TLR), Research &amp; Professional Practice (RPC), Graduation Outcomes (GO), and Outreach &amp; Inclusivity (OI).
-              </p>
-            </div>
+            <>
+              {/* Executive Overview Banner with Campus Image */}
+              <div className={styles.execBannerCard}>
+                <div className={styles.execBannerGrid}>
+                  <div className={styles.execBannerTextCol}>
+                    <div className={styles.execBadgeRow}>
+                      <div className={styles.execBadge}>
+                        <span className={styles.execBadgeDot}></span>
+                        <span>Ministry of Education (Govt. of India) Mandate</span>
+                      </div>
+                    </div>
+                    <h2 className={styles.execHeading}>
+                      National Institutional <span>Ranking Framework (NIRF)</span>
+                    </h2>
+                    <p className={styles.execDescription}>
+                      Nandkunvarba Mahila College actively participates in the National Institutional Ranking Framework (NIRF), established by the Ministry of Education, Government of India. Our IQAC ensures full institutional data transparency, authentic Data Capturing System (DCS) uploads, and continuous benchmark enhancement across all five core evaluation parameters.
+                    </p>
+                  </div>
+                  <div className={styles.execBannerImgWrap}>
+                    <Image
+                      src="/assets/dept/bcom_lecture.jpg"
+                      alt="NIRF Institutional Excellence at NMC"
+                      width={520}
+                      height={390}
+                      className={styles.execBannerImg}
+                    />
+                    <div className={styles.execImgFloatingBadge}>
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                      </svg>
+                      <span>MoE Verified Institutional Data Portal</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className={styles.execKpiRow}>
+                  <div className={styles.execKpiItem}>
+                    <strong className={styles.execKpiNum}>100%</strong>
+                    <span className={styles.execKpiLabel}>Public Data Disclosures</span>
+                  </div>
+                  <div className={styles.execKpiItem}>
+                    <strong className={styles.execKpiNum}>5 Core</strong>
+                    <span className={styles.execKpiLabel}>Weighted NIRF Pillars</span>
+                  </div>
+                  <div className={styles.execKpiItem}>
+                    <strong className={styles.execKpiNum}>Annual</strong>
+                    <span className={styles.execKpiLabel}>DCS Portal Submissions</span>
+                  </div>
+                  <div className={styles.execKpiItem}>
+                    <strong className={styles.execKpiNum}>College</strong>
+                    <span className={styles.execKpiLabel}>Category Participation</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* 1. FIVE CORE NIRF EVALUATION PARAMETERS */}
+              <div className={styles.sectionHeaderWrap}>
+                <span className={`${styles.sectionMiniTag} ${styles.sectionMiniTagGold}`}>Ranking Methodology</span>
+                <h3 className={styles.sectionMainHeading}>Five Core NIRF Evaluation Parameters</h3>
+                <p className={styles.sectionSubtext}>
+                  Comprehensive evaluation methodology defined by the National Institutional Ranking Framework (MoE, Govt. of India).
+                </p>
+              </div>
+
+              <div className={styles.nirfPillarsGrid}>
+                {/* Parameter 1: TLR */}
+                <div className={`${styles.nirfPillarCard} ${styles.nirfPillarRuby}`}>
+                  <div className={styles.nirfPillarHeader}>
+                    <div className={`${styles.nirfPillarIconBox} ${styles.iconRuby}`}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+                      </svg>
+                    </div>
+                    <span className={`${styles.nirfWeightBadge} ${styles.weightBadgeRed}`}>Weight: 30%</span>
+                  </div>
+                  <span className={styles.nirfPillarCode}>PARAMETER 01 — TLR</span>
+                  <h4 className={styles.nirfPillarTitle}>Teaching, Learning &amp; Resources</h4>
+                  <p className={styles.nirfPillarDesc}>
+                    Core academic infrastructure assessing student enrolment, qualified permanent faculty with doctoral degrees, and annual capital/operational expenditures.
+                  </p>
+                  <ul className={styles.nirfSubmetricsList}>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Student Strength &amp; Approved Intake (SS)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Faculty-Student Ratio &amp; Cadre (FSR)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Faculty with Ph.D. &amp; Experience (FQE)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Financial Resources Utilization (FRU)</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Parameter 2: RPC */}
+                <div className={`${styles.nirfPillarCard} ${styles.nirfPillarGold}`}>
+                  <div className={styles.nirfPillarHeader}>
+                    <div className={`${styles.nirfPillarIconBox} ${styles.iconGold}`}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="12" y1="8" x2="12" y2="12" />
+                        <line x1="12" y1="16" x2="12.01" y2="16" />
+                      </svg>
+                    </div>
+                    <span className={`${styles.nirfWeightBadge} ${styles.weightBadgeGold}`}>Weight: 30%</span>
+                  </div>
+                  <span className={styles.nirfPillarCode}>PARAMETER 02 — RPC</span>
+                  <h4 className={styles.nirfPillarTitle}>Research &amp; Professional Practice</h4>
+                  <p className={styles.nirfPillarDesc}>
+                    Scholastic productivity evaluating peer-reviewed publications, citation impact factor, intellectual property rights (IPR), and sponsored research grants.
+                  </p>
+                  <ul className={styles.nirfSubmetricsList}>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Combined Metric for Publications (PU)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Quality of Publications &amp; Citations (QP)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>IPR: Patents Published &amp; Granted (IPR)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Sponsored Research &amp; Consultancies (FPHP)</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Parameter 3: GO */}
+                <div className={`${styles.nirfPillarCard} ${styles.nirfPillarEmerald}`}>
+                  <div className={styles.nirfPillarHeader}>
+                    <div className={`${styles.nirfPillarIconBox} ${styles.iconEmerald}`}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                        <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                      </svg>
+                    </div>
+                    <span className={`${styles.nirfWeightBadge} ${styles.weightBadgeEmerald}`}>Weight: 20%</span>
+                  </div>
+                  <span className={styles.nirfPillarCode}>PARAMETER 03 — GO</span>
+                  <h4 className={styles.nirfPillarTitle}>Graduation Outcomes</h4>
+                  <p className={styles.nirfPillarDesc}>
+                    Success metrics evaluating examination pass percentages, campus placement packages, median salary, and student progression to premier PG/Ph.D. institutions.
+                  </p>
+                  <ul className={styles.nirfSubmetricsList}>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>University Examination Pass Rate (GUE)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Placements &amp; Median Salary (GPH)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Progression to Higher Education (GHE)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>University Gold Medals &amp; Top Ranks</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Parameter 4: OI */}
+                <div className={`${styles.nirfPillarCard} ${styles.nirfPillarAzure}`}>
+                  <div className={styles.nirfPillarHeader}>
+                    <div className={`${styles.nirfPillarIconBox} ${styles.iconAzure}`}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                        <circle cx="9" cy="7" r="4" />
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                      </svg>
+                    </div>
+                    <span className={`${styles.nirfWeightBadge} ${styles.weightBadgeAzure}`}>Weight: 10%</span>
+                  </div>
+                  <span className={styles.nirfPillarCode}>PARAMETER 04 — OI</span>
+                  <h4 className={styles.nirfPillarTitle}>Outreach &amp; Inclusivity</h4>
+                  <p className={styles.nirfPillarDesc}>
+                    Inclusiveness metrics measuring women student diversity, socio-economically challenged representation, and accessible infrastructure for Divyangjan.
+                  </p>
+                  <ul className={styles.nirfSubmetricsList}>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>100% Women Student Focus (WD)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Regional &amp; Geographic Diversity (RD)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Economically Challenged SC/ST/OBC (ESCS)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Barrier-Free Divyangjan Facilities (PCS)</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Parameter 5: PR */}
+                <div className={`${styles.nirfPillarCard} ${styles.nirfPillarAmber}`}>
+                  <div className={styles.nirfPillarHeader}>
+                    <div className={`${styles.nirfPillarIconBox} ${styles.iconGold}`}>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                      </svg>
+                    </div>
+                    <span className={`${styles.nirfWeightBadge} ${styles.weightBadgeAmber}`}>Weight: 10%</span>
+                  </div>
+                  <span className={styles.nirfPillarCode}>PARAMETER 05 — PR</span>
+                  <h4 className={styles.nirfPillarTitle}>Peer Perception</h4>
+                  <p className={styles.nirfPillarDesc}>
+                    Institutional stature in academic and industrial domains assessed through peer surveys, corporate recruiter reviews, and public reputation.
+                  </p>
+                  <ul className={styles.nirfSubmetricsList}>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Academic Peer Perception Surveys (PR)</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Corporate Recruiter &amp; Employer Feedback</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Alumni Goodwill &amp; Community Impact</span>
+                    </li>
+                    <li className={styles.nirfSubmetricItem}>
+                      <span className={styles.nirfSubmetricDot}></span>
+                      <span>Accredited Academic Stature in Gujarat</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              {/* 2. OFFICIAL NIRF DCS REPORT ARCHIVE */}
+              <div className={styles.sectionHeaderWrap}>
+                <span className={styles.sectionMiniTag}>Public Disclosures</span>
+                <h3 className={styles.sectionMainHeading}>Official NIRF Data Capturing System (DCS) Reports</h3>
+                <p className={styles.sectionSubtext}>
+                  Annual institutional data files submitted to the NIRF portal as per Ministry of Education disclosure compliance.
+                </p>
+              </div>
+
+              <div className={styles.nirfDcsGrid}>
+                {[
+                  {
+                    year: 'NIRF 2026',
+                    category: 'College Category',
+                    status: 'Verified & Submitted',
+                    desc: 'Full institutional data capturing report covering student demographics, faculty credentials, and expenditures for 2025-26.'
+                  },
+                  {
+                    year: 'NIRF 2025',
+                    category: 'College Category',
+                    status: 'Verified & Submitted',
+                    desc: 'Annual NIRF submission document with verified examination pass rates, placement statistics, and research outputs for 2024-25.'
+                  },
+                  {
+                    year: 'NIRF 2024',
+                    category: 'College Category',
+                    status: 'Verified & Submitted',
+                    desc: 'Comprehensive NIRF institutional report containing infrastructure audits, student progression, and scholarship data for 2023-24.'
+                  },
+                  {
+                    year: 'NIRF 2023',
+                    category: 'College Category',
+                    status: 'Verified & Submitted',
+                    desc: 'Archived institutional ranking dossier detailing TLR, RPC, GO, and OI parameter metrics submitted for NIRF 2023 cycle.'
+                  }
+                ].map((dcs, dIdx) => (
+                  <div className={styles.nirfDcsCard} key={dIdx}>
+                    <div className={styles.nirfDcsTopRow}>
+                      <div className={styles.nirfDcsDocIcon}>
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                          <polyline points="14 2 14 8 20 8" />
+                          <line x1="16" y1="13" x2="8" y2="13" />
+                          <line x1="16" y1="17" x2="8" y2="17" />
+                          <polyline points="10 9 9 9 8 9" />
+                        </svg>
+                      </div>
+                      <span className={styles.nirfDcsStatusBadge}>{dcs.status}</span>
+                    </div>
+
+                    <h4 className={styles.nirfDcsYear}>{dcs.year}</h4>
+                    <span className={styles.nirfDcsCategory}>{dcs.category}</span>
+                    <p className={styles.nirfDcsDesc}>{dcs.desc}</p>
+
+                    <a href={`#dcs-${dIdx}`} className={styles.nirfDcsDownloadBtn}>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                        <polyline points="7 10 12 15 17 10" />
+                        <line x1="12" y1="15" x2="12" y2="3" />
+                      </svg>
+                      <span>Download DCS (PDF)</span>
+                    </a>
+                  </div>
+                ))}
+              </div>
+
+              {/* 3. INSTITUTIONAL INCLUSION BENCHMARKS */}
+              <div className={styles.sectionHeaderWrap}>
+                <span className={`${styles.sectionMiniTag} ${styles.sectionMiniTagGold}`}>Quality Benchmarks</span>
+                <h3 className={styles.sectionMainHeading}>Key Institutional Highlights under NIRF</h3>
+                <p className={styles.sectionSubtext}>
+                  Measurable institutional parameters reflecting our commitment to women empowerment, academic rigor, and holistic student support.
+                </p>
+              </div>
+
+              <div className={styles.nirfHighlightsGrid}>
+                <div className={styles.nirfHighlightCard}>
+                  <span className={styles.nirfHighlightNum}>100%</span>
+                  <h4 className={styles.nirfHighlightHeading}>Women Empowerment Focus</h4>
+                  <p className={styles.nirfHighlightDesc}>Dedicated higher education sanctuary for young women across Bhavnagar &amp; Saurashtra.</p>
+                </div>
+
+                <div className={styles.nirfHighlightCard}>
+                  <span className={styles.nirfHighlightNum}>88%+</span>
+                  <h4 className={styles.nirfHighlightHeading}>Graduation Success Rate</h4>
+                  <p className={styles.nirfHighlightDesc}>Consistent top ranks and high graduation success in MKBU university examinations.</p>
+                </div>
+
+                <div className={styles.nirfHighlightCard}>
+                  <span className={styles.nirfHighlightNum}>100%</span>
+                  <h4 className={styles.nirfHighlightHeading}>Smart ICT Laboratories</h4>
+                  <p className={styles.nirfHighlightDesc}>Equipped with high-speed internet, smart boards, language lab, and modern computer labs.</p>
+                </div>
+
+                <div className={styles.nirfHighlightCard}>
+                  <span className={styles.nirfHighlightNum}>45%+</span>
+                  <h4 className={styles.nirfHighlightHeading}>Scholarship Beneficiaries</h4>
+                  <p className={styles.nirfHighlightDesc}>Government DBT freeships, trust concessions, and merit stipends awarded to students.</p>
+                </div>
+              </div>
+
+              {/* 4. NIRF NODAL OFFICER & STAKEHOLDER FEEDBACK */}
+              <div className={styles.nirfNodalCard}>
+                <div className={styles.nirfNodalTextWrap}>
+                  <div className={styles.execBadgeRow}>
+                    <div className={styles.execBadge}>
+                      <span className={styles.execBadgeDot}></span>
+                      <span>Transparency &amp; Governance</span>
+                    </div>
+                  </div>
+                  <h3 className={styles.nirfNodalHeading}>
+                    NIRF Nodal Cell &amp; Public Feedback Desk
+                  </h3>
+                  <p className={styles.nirfNodalDesc}>
+                    In compliance with the Ministry of Education guidelines, Nandkunvarba Mahila College invites comments and suggestions from all stakeholders (students, parents, alumni, educators) regarding the submitted NIRF DCS data.
+                  </p>
+                </div>
+
+                <div className={styles.nirfNodalContactBox}>
+                  <div className={styles.nirfContactRow}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                      <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    <div>
+                      <strong>Nodal Officer:</strong>
+                      <div>Dr. NIRF Nodal Coordinator</div>
+                    </div>
+                  </div>
+
+                  <div className={styles.nirfContactRow}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                      <polyline points="22,6 12,13 2,6" />
+                    </svg>
+                    <div>
+                      <strong>Official Email:</strong>
+                      <div><a href="mailto:nirf@nandkunvarbacollege.org">nirf@nandkunvarbacollege.org</a></div>
+                    </div>
+                  </div>
+
+                  <div className={styles.nirfContactRow}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    <div>
+                      <strong>Office Timings:</strong>
+                      <div>Mon – Sat: 08:00 AM to 04:00 PM</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </>
           )
         };
       default:

@@ -828,45 +828,6 @@ export default function Page() {
           </div>
         </div>
 
-        {/* GALLERY LIGHTBOX MODAL (PHOTO & VIDEO) */}
-        <div className="gallery-lightbox" id="galleryLightbox" role="dialog" aria-modal="true" aria-label="Media Lightbox">
-          <div className="lightbox-backdrop" id="lightboxBackdrop"></div>
-          <div className="lightbox-modal-content">
-            <button className="lightbox-close-btn" id="lightboxClose" aria-label="Close Lightbox">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
-
-            <button className="lightbox-nav-btn lightbox-prev-btn" id="lightboxPrev" aria-label="Previous Media">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <polyline points="15 18 9 12 15 6" />
-              </svg>
-            </button>
-
-            <div className="lightbox-stage">
-              <div className="lightbox-media-container" id="lightboxMediaContainer">
-                {/* Injected via JS */}
-              </div>
-              <div className="lightbox-info-bar">
-                <div className="lightbox-meta">
-                  <span className="lightbox-counter" id="lightboxCounter">1 / 8</span>
-                  <h4 className="lightbox-title" id="lightboxTitle">Campus Life</h4>
-                </div>
-                <p className="lightbox-desc" id="lightboxDesc">Nandkunvarba Mahila College</p>
-              </div>
-            </div>
-
-            <button className="lightbox-nav-btn lightbox-next-btn" id="lightboxNext" aria-label="Next Media">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Back to Top Button with Circular Scroll Progress */}
       </main>
       <Footer />
     </>

@@ -401,6 +401,8 @@
 .admCalculatorBox {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
+  width: 100%;
   gap: 1.15rem;
 }
 
@@ -410,31 +412,172 @@
   color: var(--gray-800);
 }
 
-.acalcSelect {
+/* Custom Themed Dropdown (Image style - Pill Width Full 1-Line) */
+.acalcDropdownContainer {
+  position: relative;
   width: 100%;
-  padding: 0.75rem 2.5rem 0.75rem 1rem;
-  border-radius: 0.85rem;
-  border: 1.5px solid var(--gray-200);
-  background: var(--white);
-  font-family: var(--font-heading);
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--gray-900);
-  outline: none;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23374151' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  background-size: 16px;
+  min-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.acalcSelect:focus {
-  border-color: var(--red-800);
-  box-shadow: 0 0 0 3px rgba(127, 0, 0, 0.08);
+.acalcDeptTrigger {
+  width: 100%;
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.8rem 1.25rem;
+  border-radius: 9999px;
+  border: 1.5px solid #8a0000;
+  background: #ffffff;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: left;
+  box-shadow: 0 2px 8px rgba(138, 0, 0, 0.04);
+  box-sizing: border-box;
+  margin: 0;
+}
+
+.acalcDeptTrigger:hover {
+  background: #fffdfd;
+  border-color: #8a0000;
+  box-shadow: 0 4px 14px rgba(138, 0, 0, 0.08);
+}
+
+.triggerActive {
+  border-color: #8a0000;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(138, 0, 0, 0.12), 0 4px 14px rgba(138, 0, 0, 0.08);
+}
+
+.acalcDeptLabelText {
+  display: block;
+  width: 100%;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #8a0000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1 1 auto;
+  line-height: 1.2;
+}
+
+.acalcArrowIcon {
+  color: #8a0000;
+  flex-shrink: 0;
+  transition: transform 0.25s ease;
+  margin-left: 0.25rem;
+}
+
+.arrowRotated {
+  transform: rotate(180deg);
+}
+
+/* Floating Custom Menu (Image 2 style - Full Width) */
+.customAcalcMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 0.45rem;
+  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.12);
+  z-index: 100;
+  max-height: 290px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+  animation: dropdownFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) both;
+  box-sizing: border-box;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.customAcalcMenu::-webkit-scrollbar {
+  width: 5px;
+}
+
+.customAcalcMenu::-webkit-scrollbar-thumb {
+  background-color: #cbd5e1;
+  border-radius: 9999px;
+}
+
+.acalcMenuList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.acalcMenuItem {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.7rem 0.95rem;
+  border-radius: 0.75rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.15s ease;
+  box-sizing: border-box;
+}
+
+.acalcMenuItem:hover {
+  background: #f8fafc;
+}
+
+.acalcMenuItemActive {
+  background: #fef2f2 !important;
+}
+
+.itemCourseName {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1 1 auto;
+}
+
+.itemCourseNameActive {
+  color: #8a0000;
+  font-weight: 800;
+}
+
+.activeCheckIcon {
+  color: #8a0000;
+  flex-shrink: 0;
+  margin-left: 0.5rem;
+}
+
+.activeCheckIcon {
+  color: #8a0000;
+  flex-shrink: 0;
 }
 
 .acalcDynamicResult {
@@ -819,9 +962,14 @@
   .acalcLabel {
     font-size: 0.78rem;
   }
-  .acalcSelect {
+  .acalcDeptTrigger {
+    padding: 0.65rem 1rem;
+  }
+  .acalcDeptLabelText {
     font-size: 0.82rem;
-    padding: 0.65rem 2rem 0.65rem 0.85rem;
+  }
+  .itemCourseName {
+    font-size: 0.82rem;
   }
   .acalcSeatsVal {
     font-size: 14px;
@@ -881,8 +1029,11 @@
   }
   .admIntakeCard,
   .admEstimatorCard {
-    padding: 1.25rem;
+    padding: 1.15rem 0.85rem;
     border-radius: 1.15rem;
+  }
+  .acalcDeptTrigger {
+    padding: 0.6rem 0.75rem;
   }
   .acalcSeatsVal {
     font-size: 13px;

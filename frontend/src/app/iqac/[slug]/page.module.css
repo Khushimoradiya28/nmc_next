@@ -42,16 +42,26 @@
 
 .heroTitle {
   font-family: var(--font-heading, 'Outfit', sans-serif);
-  font-size: clamp(2.4rem, 5.2vw, 4.2rem);
-  font-weight: 800;
+  font-size: clamp(2.6rem, 5.8vw, 4.5rem);
+  font-weight: 700;
   color: #ffffff;
   line-height: 1.15;
   margin: 0 0 0.5rem 0;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
 .heroTitle em {
-  font-style: normal;
+  font-style: italic;
+  font-weight: 700;
+  display: inline-block;
+  padding-right: 0.15em;
+  padding-bottom: 0.05em;
+  overflow: visible;
+  background: linear-gradient(135deg, #ffffff 60%, var(--gold-300, #f4c749) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 /* Breadcrumb Component */
@@ -841,15 +851,17 @@
 
 .eventMetaRow {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  align-items: flex-start;
+  gap: 0.55rem;
   font-size: 0.82rem;
   color: #64748b;
+  line-height: 1.5;
 }
 
 .eventMetaRow svg {
   color: #8a0000;
   flex-shrink: 0;
+  margin-top: 0.2rem;
 }
 
 .eventMetaRow strong {
@@ -1279,6 +1291,380 @@
 }
 
 /* ============================================
+   9. NIRF (NATIONAL INSTITUTIONAL RANKING FRAMEWORK)
+   ============================================ */
+
+/* 5 Core Parameters Grid */
+.nirfPillarsGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4.5rem;
+}
+
+.nirfPillarCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.35rem;
+  padding: 2.25rem 2rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.03);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.nirfPillarCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 35px rgba(15, 23, 42, 0.07);
+}
+
+.nirfPillarRuby { border-top: 4px solid #8a0000; }
+.nirfPillarGold { 
+  border-top: 4px solid #d97706;
+  background: #fffdf8;
+  border-color: #fde68a;
+}
+.nirfPillarEmerald { border-top: 4px solid #059669; }
+.nirfPillarAzure { border-top: 4px solid #0284c7; }
+.nirfPillarAmber { 
+  border-top: 4px solid #ea580c; 
+  background: #fffbf7;
+}
+
+.nirfPillarHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.nirfPillarIconBox {
+  width: 48px;
+  height: 48px;
+  border-radius: 0.95rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.nirfWeightBadge {
+  font-size: 0.72rem;
+  font-weight: 800;
+  padding: 0.3rem 0.75rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.weightBadgeRed { background: #fef2f2; color: #8a0000; border: 1px solid rgba(138,0,0,0.18); }
+.weightBadgeGold { background: #fef3c7; color: #92400e; border: 1px solid rgba(217,119,6,0.25); }
+.weightBadgeEmerald { background: #ecfdf5; color: #047857; border: 1px solid rgba(5,150,105,0.2); }
+.weightBadgeAzure { background: #f0f9ff; color: #0284c7; border: 1px solid rgba(2,132,199,0.2); }
+.weightBadgeAmber { background: #fff7ed; color: #c2410c; border: 1px solid rgba(234,88,12,0.2); }
+
+.nirfPillarCode {
+  font-family: var(--font-heading, monospace);
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #94a3b8;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.nirfPillarTitle {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.3;
+  margin: 0 0 0.65rem 0;
+}
+
+.nirfPillarDesc {
+  font-size: 0.88rem;
+  line-height: 1.65;
+  color: #64748b;
+  margin: 0 0 1.25rem 0;
+  flex-grow: 1;
+}
+
+.nirfSubmetricsList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #e2e8f0;
+}
+
+.nirfSubmetricItem {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+.nirfSubmetricDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #8a0000;
+  flex-shrink: 0;
+}
+
+.nirfPillarGold .nirfSubmetricDot { background: #d97706; }
+.nirfPillarEmerald .nirfSubmetricDot { background: #059669; }
+.nirfPillarAzure .nirfSubmetricDot { background: #0284c7; }
+.nirfPillarAmber .nirfSubmetricDot { background: #ea580c; }
+
+/* Official DCS Reports Repository */
+.nirfDcsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4.5rem;
+}
+
+.nirfDcsCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.35rem;
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 18px rgba(15, 23, 42, 0.03);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nirfDcsCard:hover {
+  transform: translateY(-5px);
+  border-color: rgba(138, 0, 0, 0.3);
+  box-shadow: 0 14px 35px rgba(138, 0, 0, 0.07);
+}
+
+.nirfDcsTopRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.25rem;
+}
+
+.nirfDcsDocIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 0.85rem;
+  background: #fef2f2;
+  color: #8a0000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(138, 0, 0, 0.15);
+}
+
+.nirfDcsStatusBadge {
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+  background: #ecfdf5;
+  color: #047857;
+  border: 1px solid rgba(5, 150, 105, 0.2);
+}
+
+.nirfDcsYear {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.35rem 0;
+}
+
+.nirfDcsCategory {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #8a0000;
+  margin: 0 0 0.85rem 0;
+}
+
+.nirfDcsDesc {
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: #64748b;
+  margin: 0 0 1.5rem 0;
+  flex-grow: 1;
+}
+
+.nirfDcsDownloadBtn {
+  background: #8a0000;
+  color: #ffffff;
+  border: 1px solid #8a0000;
+  padding: 0.6rem 1.15rem;
+  border-radius: 0.65rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.nirfDcsDownloadBtn:hover {
+  background: #700000;
+  border-color: #700000;
+  color: #ffffff;
+}
+
+/* Institutional Benchmarks Grid */
+.nirfHighlightsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  margin-bottom: 4.5rem;
+}
+
+.nirfHighlightCard {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 2rem 1.75rem;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.03);
+  transition: all 0.3s ease;
+}
+
+.nirfHighlightCard:hover {
+  transform: translateY(-4px);
+  border-color: #f59e0b;
+  box-shadow: 0 12px 30px rgba(217, 119, 6, 0.08);
+}
+
+.nirfHighlightCard:nth-child(even) {
+  background: #fffdf5;
+  border-color: #fef3c7;
+}
+
+.nirfHighlightNum {
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 2rem;
+  font-weight: 900;
+  color: #8a0000;
+  line-height: 1;
+  margin-bottom: 0.65rem;
+}
+
+.nirfHighlightCard:nth-child(even) .nirfHighlightNum {
+  color: #b45309;
+}
+
+.nirfHighlightHeading {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.08rem;
+  font-weight: 800;
+  color: #0f172a;
+  line-height: 1.35;
+  margin: 0 0 0.5rem 0;
+}
+
+.nirfHighlightDesc {
+  font-size: 0.85rem;
+  line-height: 1.6;
+  color: #64748b;
+  margin: 0;
+}
+
+/* Nodal Officer & Public Feedback Card */
+.nirfNodalCard {
+  background: linear-gradient(135deg, #ffffff 0%, #fffdfa 45%, #fdf6f6 100%);
+  border: 1.5px solid rgba(138, 0, 0, 0.15);
+  border-radius: 1.5rem;
+  padding: 3rem 3rem;
+  box-shadow: 0 12px 35px rgba(138, 0, 0, 0.05);
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 2.5rem;
+  align-items: center;
+  border-top: 4px solid #8a0000;
+}
+
+.nirfNodalTextWrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.nirfNodalHeading {
+  font-family: var(--font-heading, 'Outfit', serif);
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 0.65rem 0;
+  line-height: 1.25;
+}
+
+.nirfNodalDesc {
+  font-size: 0.94rem;
+  color: #475569;
+  line-height: 1.7;
+  margin: 0;
+}
+
+.nirfNodalContactBox {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 1.25rem;
+  padding: 1.75rem 1.75rem;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.03);
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.nirfContactRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  font-size: 0.88rem;
+  color: #334155;
+  line-height: 1.5;
+}
+
+.nirfContactRow svg {
+  color: #8a0000;
+  flex-shrink: 0;
+  margin-top: 0.18rem;
+}
+
+.nirfContactRow strong {
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.nirfContactRow a {
+  color: #8a0000;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.nirfContactRow a:hover {
+  text-decoration: underline;
+}
+
+/* ============================================
    Generic Subpage Card Styles (for other subpages)
    ============================================ */
 .genericCard {
@@ -1339,6 +1725,18 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1.25rem;
   }
+  .nirfPillarsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .nirfDcsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .nirfHighlightsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
   .execBannerCard {
     padding: 2.5rem 2.5rem;
   }
@@ -1396,6 +1794,23 @@
     grid-template-columns: repeat(2, 1fr);
     gap: 1.25rem;
   }
+  .nirfPillarsGrid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+  .nirfDcsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .nirfHighlightsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+  }
+  .nirfNodalCard {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    padding: 2.25rem 2rem;
+  }
   .qualityLoopCard {
     padding: 2.5rem 2rem;
   }
@@ -1447,17 +1862,23 @@
     margin-bottom: 1.75rem;
   }
   .execKpiRow {
-    grid-template-columns: 1fr;
-    gap: 0.9rem;
-    padding-top: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.15rem 0.85rem;
+    padding-top: 1.35rem;
   }
   .execKpiItem {
-    padding-bottom: 0.9rem;
-    border-bottom: 1px solid #fef3c7;
-  }
-  .execKpiItem:last-child {
-    border-bottom: none;
     padding-bottom: 0;
+    border-bottom: none;
+  }
+  .execKpiNum {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin-bottom: 0.25rem;
+  }
+  .execKpiLabel {
+    font-size: 0.72rem;
+    font-weight: 600;
+    line-height: 1.3;
   }
   .sectionMainHeading {
     font-size: 1.35rem;
@@ -1535,6 +1956,48 @@
     grid-template-columns: 1fr;
     gap: 1rem;
     margin-bottom: 3rem;
+  }
+  .nirfPillarsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .nirfPillarCard {
+    padding: 1.6rem 1.35rem;
+  }
+  .nirfPillarTitle {
+    font-size: 1.12rem;
+    font-weight: 700;
+  }
+  .nirfDcsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .nirfDcsCard {
+    padding: 1.6rem 1.35rem;
+  }
+  .nirfHighlightsGrid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    margin-bottom: 3rem;
+  }
+  .nirfHighlightCard {
+    padding: 1.6rem 1.35rem;
+  }
+  .nirfHighlightHeading {
+    font-size: 1.02rem;
+    font-weight: 700;
+  }
+  .nirfNodalCard {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    padding: 1.75rem 1.35rem;
+    border-radius: 1.25rem;
+  }
+  .nirfNodalHeading {
+    font-size: 1.35rem;
+    font-weight: 700;
   }
   .confArchiveCard {
     padding: 1.75rem 1.35rem;
@@ -1634,6 +2097,19 @@
     padding: 0.28rem 0.75rem;
     letter-spacing: 0.02em;
   }
+  .execKpiRow {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem 0.65rem;
+    padding-top: 1.15rem;
+  }
+  .execKpiNum {
+    font-size: 1.22rem;
+    font-weight: 800;
+  }
+  .execKpiLabel {
+    font-size: 0.67rem;
+    font-weight: 600;
+  }
   .strategyCard {
     padding: 1.35rem 1.1rem;
   }
@@ -1670,6 +2146,30 @@
   }
   .eventCardHeading {
     font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .nirfPillarCard {
+    padding: 1.35rem 1.1rem;
+  }
+  .nirfPillarTitle {
+    font-size: 1.05rem;
+    font-weight: 700;
+  }
+  .nirfDcsCard {
+    padding: 1.35rem 1.1rem;
+  }
+  .nirfHighlightCard {
+    padding: 1.35rem 1.1rem;
+  }
+  .nirfHighlightHeading {
+    font-size: 0.98rem;
+    font-weight: 700;
+  }
+  .nirfNodalCard {
+    padding: 1.4rem 1.1rem;
+  }
+  .nirfNodalHeading {
+    font-size: 1.2rem;
     font-weight: 700;
   }
   .confArchiveCard {
