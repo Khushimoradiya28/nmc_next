@@ -8688,7 +8688,7 @@ main section {
 [class*="gridWrapper"i],
 [class*="innerWrapper"i],
 [class*="facultyWrapper"i],
-[class*="container"i]:not([class*="sliderContainer"i]):not([class*="imageCardContainer"i]):not([class*="iconContainer"i]):not([class*="lightboxContent"i]):not([class*="mainImageContainer"i]):not([class*="secondaryImageContainer"i]):not([class*="heroHeaderContainer"i]) {
+[class*="container"i]:not([class*="stickyActions"i]):not([class*="StickyActions"i]):not([class*="sliderContainer"i]):not([class*="imageCardContainer"i]):not([class*="iconContainer"i]):not([class*="lightboxContent"i]):not([class*="mainImageContainer"i]):not([class*="secondaryImageContainer"i]):not([class*="heroHeaderContainer"i]) {
     width: 100% !important;
     margin-left: auto !important;
     margin-right: auto !important;

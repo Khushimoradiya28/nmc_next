@@ -7,7 +7,7 @@ import styles from './StickyActions.module.css';
 export default function StickyActions() {
   return (
     <aside 
-      className={styles.stickyActionsContainer} 
+      className={styles.stickyActionsWrap} 
       aria-label="Quick Action Floating Menu"
     >
       {/* 1. Admission Now Button */}

@@ -1,17 +1,22 @@
 /* ===== STICKY ACTION BUTTONS (VERTICAL RIGHT TABS) ===== */
-.stickyActionsContainer {
-  position: fixed;
-  right: 0;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 995;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
-  align-items: flex-end;
-  pointer-events: none;
-  margin: 0;
-  padding: 0;
+.stickyActionsWrap {
+  position: fixed !important;
+  right: 0 !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  z-index: 995 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 0.4rem !important;
+  align-items: flex-end !important;
+  pointer-events: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: auto !important;
+  max-width: max-content !important;
+  box-sizing: border-box !important;
 }
 
 .stickyBtn {
@@ -20,24 +25,25 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.6rem;
-  padding: 1.15rem 0.7rem;
-  border-radius: 9px 0 0 9px;
+  gap: 0.45rem;
+  padding: 0.85rem 0.45rem;
+  border-radius: 7px 0 0 7px;
   text-decoration: none;
   font-family: var(--font-heading, 'Outfit', sans-serif);
   font-weight: 700;
-  font-size: 0.86rem;
+  font-size: 0.82rem;
   line-height: 1;
-  box-shadow: -4px 6px 18px rgba(0, 0, 0, 0.18), 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: -3px 4px 14px rgba(0, 0, 0, 0.16);
   transform: translateX(0);
-  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
   overflow: hidden;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-right: none;
-  margin-right: 0;
+  margin: 0 !important;
+  margin-right: 0 !important;
 }
 
 .stickyBtn:hover {
@@ -153,9 +159,9 @@
 /* Tablets (<= 992px) */
 @media (max-width: 992px) {
   .stickyBtn {
-    padding: 1rem 0.62rem;
-    font-size: 0.8rem;
-    gap: 0.5rem;
+    padding: 0.75rem 0.4rem;
+    font-size: 0.78rem;
+    gap: 0.4rem;
   }
   .btnIconWrap {
     width: 22px;
@@ -169,7 +175,7 @@
 
 /* Mobile Screens (<= 768px) -> DOCKED STICKY BOTTOM BAR (100% EDGE-TO-EDGE) */
 @media (max-width: 768px) {
-  .stickyActionsContainer {
+  .stickyActionsWrap {
     position: fixed !important;
     top: auto !important;
     bottom: 0 !important;
@@ -201,6 +207,7 @@
     writing-mode: horizontal-tb !important;
     transform: none !important;
     display: flex !important;
+    flex-direction: row !important;
     align-items: center !important;
     justify-content: center !important;
     gap: 0.45rem !important;
@@ -242,9 +249,12 @@
   }
 
   .btnText {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    writing-mode: horizontal-tb !important;
+    transform: none !important;
+    white-space: nowrap !important;
+    letter-spacing: 0.01em !important;
+    display: inline-block !important;
+    overflow: visible !important;
   }
 }
 
