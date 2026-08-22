@@ -286,7 +286,6 @@ export default function SportsPage() {
         
         <ActivityHero 
           title="Sports Activities" 
-          subtitle="Empowering women athletes through dedication, teamwork, and sportsmanship"
           bgImage="/assets/banners/sports_banner.jpg"
           breadcrumbs={[
             { label: 'Activities' },

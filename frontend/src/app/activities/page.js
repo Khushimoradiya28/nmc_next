@@ -130,7 +130,6 @@ export default function ActivitiesHub() {
         {/* Reusable Hero banner */}
         <ActivityHero 
           title="Activities" 
-          subtitle="Celebrating learning beyond classrooms"
           bgImage="/assets/home/hero/2.jpg"
           breadcrumbs={[{ label: 'Activities' }]}
         />

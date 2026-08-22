@@ -155,7 +155,7 @@ export default function AcademicPage() {
                       aria-label="Clear search query"
                       title="Clear search"
                     >
-                      ×
+                      &times;
                     </button>
                   )}
                 </div>
@@ -235,23 +235,6 @@ export default function AcademicPage() {
                 </div>
 
               </div>
-
-              {/* Minimal Clean Status & Active Filter Strip */}
-              <div className={styles.hubMetaBar}>
-                <div className={styles.hubCountInfo}>
-                  Showing <strong>{filteredFaculty.length}</strong> of <strong>{ALL_FACULTY.length}</strong> Faculty Members
-                  {selectedDept !== 'all' && (
-                    <span className={styles.hubActiveTag}>
-                      in <em>{DEPARTMENT_CATEGORIES.find(d => d.value === selectedDept)?.label}</em>
-                    </span>
-                  )}
-                  {searchQuery && (
-                    <span className={styles.hubActiveTag}>
-                      matching &ldquo;{searchQuery}&rdquo;
-                    </span>
-                  )}
-                </div>
-              </div>
             </div>
 
             {/* Faculty Directory Cards Grid */}
@@ -328,7 +311,7 @@ export default function AcademicPage() {
             ) : (
               /* Empty State */
               <div className={styles.emptyStateContainer}>
-                <div className={styles.emptyStateIcon}>🔍</div>
+                <div className={styles.emptyStateIcon}>ðŸ”Â</div>
                 <h3 className={styles.emptyStateTitle}>No Faculty Members Found</h3>
                 <p className={styles.emptyStateText}>
                   We couldn&rsquo;t find any professors matching your current search criteria. Try modifying your search keywords or choosing another department.
@@ -367,7 +350,7 @@ export default function AcademicPage() {
               className={styles.modalCloseBtn}
               aria-label="Close profile modal"
             >
-              ×
+              &times;
             </button>
 
             {/* Modal Header Row */}

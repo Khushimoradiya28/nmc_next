@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -62,7 +62,6 @@ export default function OrientationPage() {
       <main>
         <ActivityHero
           title={<>Orientation <em>Programs</em></>}
-          subtitle="Welcoming new students to the NMC family — department-wise induction programs designed to ease your journey into higher education"
           bgImage="/assets/banners/banner1.webp"
           breadcrumbs={[
             { label: 'Activities', link: '/activities' },

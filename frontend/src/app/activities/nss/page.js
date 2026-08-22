@@ -309,7 +309,6 @@ export default function NssPage() {
         {/* ── Hero Banner ── */}
         <ActivityHero
           title="NSS — National Service Scheme"
-          subtitle="Not Me But You"
           bgImage="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&q=90"
           height="52vh"
           decorative={true}

@@ -107,7 +107,6 @@ export default function CollegeEventsPage() {
 
         <ActivityHero
           title="College Events"
-          subtitle="Relive the cultural highlights, national festivals, and annual day celebrations at NMC"
           bgImage="/assets/events_gallery/annual_day.jpg"
           height="55vh"
           decorative={true}

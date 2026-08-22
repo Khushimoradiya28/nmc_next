@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -68,7 +68,6 @@ export default function ByDepartmentPage() {
       <main>
         <ActivityHero
           title={<>Activities by <em>Department</em></>}
-          subtitle="Explore co-curricular schedules, academic panels, and campus milestones organized by each stream"
           bgImage="/assets/banners/banner1.webp"
           breadcrumbs={[
             { label: 'Activities', link: '/activities' },
