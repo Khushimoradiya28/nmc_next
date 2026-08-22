@@ -108,7 +108,7 @@ export default function CollegeEventsPage() {
         <ActivityHero
           title="College Events"
           bgImage="/assets/events_gallery/annual_day.jpg"
-          height="55vh"
+          height="50vh"
           decorative={true}
           breadcrumbs={[
             { label: 'Activities', link: '/activities' },

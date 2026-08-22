@@ -20,8 +20,8 @@ export default function AcademicProgramsPage() {
             <Image src="/assets/home/hero/2.jpg" alt="Academic Programs" width={1400} height={700} priority className={styles.heroBgImg} />
           </div>
           <div className={styles.heroOverlay}></div>
-          <div className={styles.heroContent}>
-            <h1 className="section-title"><em>Academic Programs</em></h1>
+          <div className={`${styles.heroContent} container`}>
+            <h1 className={`hero-main-title ${styles.heroTitle}`}><em>Academic Programs</em></h1>
           </div>
         </section>
 

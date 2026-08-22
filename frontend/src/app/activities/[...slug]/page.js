@@ -78,7 +78,7 @@ export default async function ActivitiesSubPage({ params }) {
     <>
       <Header />
       <main>
-        <section className="hero-fullscreen" id="home" style={{ minHeight: "45vh", height: "45vh", position: "relative", overflow: "hidden" }}>
+        <section className="hero-fullscreen" id="home" style={{ minHeight: "50vh", height: "50vh", position: "relative", overflow: "hidden" }}>
           <div className="hero-bg-image" style={{ position: "absolute", inset: 0, zIndex: -2 }}>
             <Image
               src="/assets/home/hero/2.jpg"
@@ -89,7 +89,7 @@ export default async function ActivitiesSubPage({ params }) {
           </div>
           <div className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: -1, background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))" }}></div>
 
-          <div className="container" style={{ paddingTop: "110px", display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", paddingBottom: "40px", zIndex: 1, position: "relative" }}>
+          <div className="container" style={{ paddingTop: "110px", display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", paddingBottom: "80px", zIndex: 1, position: "relative" }}>
 
             <h1 className="hero-main-title" style={{ paddingRight: "15px", color: "#fff", margin: "0 0 1rem 0" }}>
               <em>{pageTitle}</em>

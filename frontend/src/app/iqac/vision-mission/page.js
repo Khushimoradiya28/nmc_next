@@ -20,7 +20,7 @@ export default function VisionMissionPage() {
       <main className={styles.page}>
 
         {/* Hero Banner */}
-        <section className="hero-fullscreen" id="home" style={{ minHeight: "35vh", height: "35vh" }}>
+        <section className="hero-fullscreen" id="home" style={{ minHeight: "50vh", height: "50vh" }}>
           <div className="hero-bg-image">
             <Image
               src="/assets/home/hero/2.jpg"
@@ -32,8 +32,8 @@ export default function VisionMissionPage() {
             />
           </div>
           <div className="hero-overlay"></div>
-          <div className="hero-content container" style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", paddingBottom: "45px" }}>
-            <h1 className="hero-main-title" style={{ paddingRight: "15px", color: "#fff", margin: "0 0 0.5rem 0", fontSize: "clamp(2rem, 4vw, 3rem)" }}>
+          <div className="hero-content container" style={{ display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", paddingBottom: "80px" }}>
+            <h1 className="hero-main-title" style={{ paddingRight: "15px", color: "#fff", margin: "0 0 0.5rem 0" }}>
               Vision &amp; <em>Mission</em>
             </h1>
             <nav aria-label="breadcrumb">

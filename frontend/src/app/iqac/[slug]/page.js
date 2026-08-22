@@ -1603,8 +1603,8 @@ export default async function IQACSubPage({ params }) {
           </div>
           <div className={styles.heroOverlay}></div>
           
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>
+          <div className={`${styles.heroContent} container`}>
+            <h1 className={`hero-main-title ${styles.heroTitle}`}>
               <em>{pageTitle}</em>
             </h1>
             

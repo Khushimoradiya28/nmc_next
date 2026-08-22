@@ -310,7 +310,7 @@ export default function NssPage() {
         <ActivityHero
           title="NSS — National Service Scheme"
           bgImage="https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1920&q=90"
-          height="52vh"
+          height="50vh"
           decorative={true}
           breadcrumbs={[
             { label: 'Activities', link: '/activities' },

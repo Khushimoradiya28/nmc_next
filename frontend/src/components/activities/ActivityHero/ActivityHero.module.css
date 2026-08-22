@@ -1,10 +1,12 @@
 .heroSection {
     position: relative;
     width: 100%;
+    min-height: 50vh;
+    height: 50vh;
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
-    padding-bottom: 60px;
+    padding-bottom: 80px;
     box-sizing: border-box;
     overflow: hidden;
     isolation: isolate;
@@ -30,15 +32,15 @@
 
 .container {
     width: 100%;
-    max-width: 1320px;
+    max-width: 1380px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 2rem;
     box-sizing: border-box;
 }
 
 .heroContent {
     color: #ffffff;
-    padding-top: 120px;
+    padding-top: 100px;
 }
 
 .heroTitle {
@@ -46,8 +48,10 @@
     font-size: clamp(2.6rem, 5.8vw, 4.5rem);
     font-weight: 700;
     margin-bottom: 0.75rem;
-    line-height: 1.4;
+    line-height: 1.15;
     color: #ffffff;
+    letter-spacing: -0.01em;
+    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
 .heroTitle em {

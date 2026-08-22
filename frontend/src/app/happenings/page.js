@@ -70,7 +70,7 @@ export default function HappeningsPage() {
         <ActivityHero
           title="Happenings"
           bgImage="/assets/banners/happenings_banner_desi.jpg"
-          height="52vh"
+          height="50vh"
           decorative={true}
           breadcrumbs={[{ label: 'Happenings' }]}
         />

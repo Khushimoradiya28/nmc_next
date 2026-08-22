@@ -372,7 +372,7 @@ export default function AlumniSubPage() {
           title={title}
           subtitle={subtitle}
           bgImage={heroBg}
-          height="48vh"
+          height="50vh"
           decorative={true}
           breadcrumbs={[
             { label: 'Contact Us', link: '/contact' },

@@ -19,8 +19,8 @@ export default function OnlineLecturePage() {
             <Image src="/assets/home/hero/2.jpg" alt="Online Lectures" width={1400} height={700} priority className={styles.heroBgImg} />
           </div>
           <div className={styles.heroOverlay}></div>
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}><em>Online Lecture</em></h1>
+          <div className={`${styles.heroContent} container`}>
+            <h1 className={`hero-main-title ${styles.heroTitle}`}><em>Online Lecture</em></h1>
           </div>
         </section>
 

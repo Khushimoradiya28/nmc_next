@@ -298,7 +298,7 @@ export default function YearCalendarPage() {
         <ActivityHero
           title="Year Calendar 2025-26"
           bgImage="/assets/banners/college_year_calendar_banner.jpg"
-          height="45vh"
+          height="50vh"
           decorative={true}
           breadcrumbs={[
             { label: 'Home', link: '/' },

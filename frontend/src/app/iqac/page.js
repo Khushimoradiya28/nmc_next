@@ -22,8 +22,8 @@ export default function IQACPage() {
             <Image src="/assets/home/hero/2.jpg" alt="IQAC - NMC" width={1400} height={700} priority className={styles.heroBgImg} />
           </div>
           <div className={styles.heroOverlay}></div>
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}><em>IQAC</em></h1>
+          <div className={`${styles.heroContent} container`}>
+            <h1 className={`hero-main-title ${styles.heroTitle}`}><em>IQAC</em></h1>
             <nav aria-label="breadcrumb" className={styles.heroBreadcrumb}>
               <Link href="/">Home</Link>
               <span className={styles.heroBreadcrumbSep}>&gt;</span>

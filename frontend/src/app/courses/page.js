@@ -348,7 +348,7 @@ export default function CoursesPage() {
             }}
           ></div>
           <div
-            className="hero-content"
+            className="hero-content container"
             style={{
               paddingTop: "100px",
               display: "flex",

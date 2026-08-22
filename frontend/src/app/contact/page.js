@@ -28,8 +28,8 @@ export default function ContactPage() {
             />
           </div>
           <div className={styles.heroOverlay}></div>
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}><em>Contact Us</em></h1>
+          <div className={`${styles.heroContent} container`}>
+            <h1 className={`hero-main-title ${styles.heroTitle}`}><em>Contact Us</em></h1>
           </div>
         </section>
 

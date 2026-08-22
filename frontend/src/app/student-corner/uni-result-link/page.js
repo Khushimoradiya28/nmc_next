@@ -30,8 +30,8 @@ export default function UniResultLinkPage() {
             <Image src="/assets/home/hero/2.jpg" alt="University Results" width={1400} height={700} priority className={styles.heroBgImg} />
           </div>
           <div className={styles.heroOverlay}></div>
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}><em>University Result</em></h1>
+          <div className={`${styles.heroContent} container`}>
+            <h1 className={`hero-main-title ${styles.heroTitle}`}><em>University Results</em></h1>
           </div>
         </section>
 

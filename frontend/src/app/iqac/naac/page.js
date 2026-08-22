@@ -118,7 +118,7 @@ export default function NAACPage() {
       <Header />
       <main className={styles.naacPage}>
         {/* ═══════════════ HERO — Matching Theme Banner ═══════════════ */}
-        <section className="hero-fullscreen" style={{ minHeight: '35vh', height: '35vh' }}>
+        <section className="hero-fullscreen" style={{ minHeight: '50vh', height: '50vh' }}>
           <div className="hero-bg-image">
             <Image
               src="/assets/banners/vision_mission_banner.jpg"
@@ -130,9 +130,9 @@ export default function NAACPage() {
             />
           </div>
           <div className="hero-overlay"></div>
-          <div className="hero-content container" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '100%', paddingBottom: '45px' }}>
-            <h1 className="hero-main-title" style={{ color: '#fff', margin: '0 0 0.5rem 0', fontSize: 'clamp(2rem, 4vw, 3.2rem)', fontWeight: 900, letterSpacing: '-0.02em' }}>
-              NAAC <em style={{ color: 'var(--color-secondary, #F4B000)' }}>Accreditation</em>
+          <div className="hero-content container" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', height: '100%', paddingBottom: '80px' }}>
+            <h1 className="hero-main-title" style={{ color: '#fff', margin: '0 0 0.5rem 0' }}>
+              NAAC <em>Accreditation</em>
             </h1>
             <nav aria-label="breadcrumb">
               <ol style={{ display: 'flex', listStyle: 'none', padding: 0, margin: 0, gap: '0.5rem', color: 'var(--color-secondary, #f4b000)', fontSize: '0.82rem', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>

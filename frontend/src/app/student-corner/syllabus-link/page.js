@@ -35,8 +35,8 @@ export default function SyllabusLinkPage() {
             <Image src="/assets/home/hero/2.jpg" alt="Syllabus Link" width={1400} height={700} priority className={styles.heroBgImg} />
           </div>
           <div className={styles.heroOverlay}></div>
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}><em>Syllabus Link</em></h1>
+          <div className={`${styles.heroContent} container`}>
+            <h1 className={`hero-main-title ${styles.heroTitle}`}><em>Syllabus Link</em></h1>
           </div>
         </section>
 

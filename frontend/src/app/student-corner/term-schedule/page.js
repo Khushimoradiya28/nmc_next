@@ -19,8 +19,8 @@ export default function TermSchedulePage() {
             <Image src="/assets/home/hero/2.jpg" alt="Term Schedule" width={1400} height={700} priority className={styles.heroBgImg} />
           </div>
           <div className={styles.heroOverlay}></div>
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}><em>Term Schedule</em></h1>
+          <div className={`${styles.heroContent} container`}>
+            <h1 className={`hero-main-title ${styles.heroTitle}`}><em>Term Schedule</em></h1>
           </div>
         </section>
 

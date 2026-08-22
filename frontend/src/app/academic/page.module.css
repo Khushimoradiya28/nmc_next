@@ -25,9 +25,8 @@
 .heroBanner {
     position: relative;
     width: 100%;
-    min-height: 480px;
-    height: 52vh;
-    max-height: 580px;
+    min-height: 50vh;
+    height: 50vh;
     overflow: hidden;
     display: flex;
     align-items: flex-end;
@@ -83,7 +82,7 @@
 .heroContentContainer {
     position: relative;
     z-index: 5;
-    padding-bottom: 3.25rem;
+    padding-bottom: 80px;
     width: 100%;
 }
 
