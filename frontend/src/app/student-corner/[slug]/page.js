@@ -229,7 +229,7 @@ export default async function StudentCornerSubPage({ params }) {
           <div className="hero-overlay" style={{ position: "absolute", inset: 0, zIndex: -1, background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))" }}></div>
           
           <div className="container" style={{ paddingTop: "150px", display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", paddingBottom: "80px", zIndex: 1, position: "relative" }}>
-            <h1 className="hero-main-title" style={{ paddingRight: "15px", color: "#fff", margin: "0 0 1rem 0" }}>
+            <h1 className="section-title" style={{ paddingRight: "15px", color: "#fff", margin: "0 0 1rem 0" }}>
               <em>{pageTitle}</em>
             </h1>
             

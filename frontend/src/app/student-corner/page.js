@@ -29,7 +29,7 @@ export default function Page() {
           </div>
           <div className="hero-overlay" style={{ background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))" }}></div>
           <div className="hero-content container" style={{ paddingTop: "100px", display: "flex", alignItems: "flex-end", height: "100%", paddingBottom: "80px" }}>
-            <h1 className="hero-main-title"><em>Student Corner</em></h1>
+            <h1 className="section-title"><em>Student Corner</em></h1>
           </div>
         </section>
 
@@ -1068,6 +1068,7 @@ export default function Page() {
     </>
   );
 }
+
 
 
 

@@ -265,8 +265,6 @@ textarea {
 
 .section-title span {
   display: inline-block;
-  padding-right: 0.15em;
-  padding-bottom: 0.05em;
   overflow: visible;
   background: var(--grad-red);
   -webkit-background-clip: text;
