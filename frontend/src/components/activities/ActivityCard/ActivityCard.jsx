@@ -28,11 +28,9 @@ export default function ActivityCard({ event, basePath }) {
               {new Date(event.date).toLocaleDateString('en-US', { month: 'short' })}
             </span>
           </div>
-          <Image 
+          <img 
             src={event.thumbnail} 
             alt={event.title} 
-            width={400} 
-            height={250} 
             className={styles.cardImg}
           />
         </div>

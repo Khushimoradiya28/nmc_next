@@ -27,8 +27,9 @@
 }
 
 .cardImg {
-  width: 100%;
-  height: 100%;
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
@@ -128,4 +129,66 @@
 
 .cardContainer:hover .arrowCta svg {
   transform: translateX(4px);
+}
+
+/* ==========================================================================
+   TABLETS & PORTRAIT SCREENS (768px to 1023px)
+   ========================================================================== */
+@media screen and (max-width: 1023px) {
+  .imageWrapper {
+    height: 190px;
+  }
+  .cardBody {
+    padding: 1.25rem;
+  }
+  .cardTitle {
+    font-size: 1.05rem;
+    margin-bottom: 8px;
+  }
+  .cardDesc {
+    font-size: 0.82rem;
+    margin-bottom: 16px;
+  }
+}
+
+/* ==========================================================================
+   MOBILE DEVICES (767px and below)
+   ========================================================================= */
+@media screen and (max-width: 640px) {
+  .imageWrapper {
+    height: 175px;
+  }
+  .cardBody {
+    padding: 1rem;
+  }
+  .cardTitle {
+    font-size: 0.98rem;
+    margin-bottom: 6px;
+  }
+  .cardDesc {
+    font-size: 0.8rem;
+    margin-bottom: 12px;
+  }
+  .cardFooter {
+    padding-top: 10px;
+  }
+  .deptTag {
+    font-size: 0.72rem;
+    padding: 3px 8px;
+  }
+  .arrowCta {
+    font-size: 0.78rem;
+  }
+  .dateTag {
+    padding: 4px 8px;
+    top: 8px;
+    left: 8px;
+    border-radius: 6px;
+  }
+  .dateNum {
+    font-size: 1rem;
+  }
+  .dateMonth {
+    font-size: 0.58rem;
+  }
 }

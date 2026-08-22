@@ -63,7 +63,7 @@
 
 /* ── MONTH-BY-MONTH CALENDAR SECTION ── */
 .calendarSection {
-  padding: 4rem 0 6rem;
+  padding: 4rem 0 1rem;
 }
 
 .tabNavbarSection {
@@ -80,12 +80,7 @@
   overflow-x: auto;
   gap: 1rem;
   padding: 1rem 0;
-  scrollbar-width: none; /* Firefox */
   justify-content: center;
-}
-
-.tabNavbar::-webkit-scrollbar {
-  display: none; /* Chrome, Safari */
 }
 
 .tabBtn {
@@ -104,6 +99,7 @@
   align-items: center;
   gap: 0.5rem;
   outline: none;
+  flex-shrink: 0;
 }
 
 .tabBtn:focus {
@@ -179,7 +175,11 @@
 }
 
 .seasonBlock {
-  margin-bottom: 5.5rem;
+  margin-bottom: 3.5rem;
+}
+
+.seasonBlock:last-child {
+  margin-bottom: 0;
 }
 
 .seasonHeaderRow {
@@ -398,7 +398,7 @@
 
 /* ── DOWNLOAD CTA ── */
 .ctaSection {
-  padding: 5rem 0 6rem;
+  padding: 1.5rem 0 4rem;
   background: var(--color-white, #ffffff);
   border-top: 1px solid var(--color-gray-100, #f3f4f6);
 }
@@ -564,60 +564,69 @@
 .seasonVisualCard {
   position: sticky;
   top: 170px;
-  height: 420px;
-  border-radius: 24px;
-  overflow: hidden;
+  background: #ffffff;
+  border: 1px solid var(--color-gray-200, #e5e7eb);
+  border-left: 6px solid var(--color-primary, #B00000);
+  border-radius: 20px;
+  padding: 2.25rem 1.75rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  box-shadow: var(--shadow-lg, 0 10px 15px -3px rgba(0, 0, 0, 0.08));
-  transition: all 0.3s ease;
+  justify-content: space-between;
+  height: 290px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.03);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
 }
 
-.seasonVisualCard:hover .seasonImage {
-  transform: scale(1.05);
-}
-
-.seasonImageWrapper {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-}
-
-.seasonImage {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.seasonOverlay {
-  position: absolute;
-  inset: 0;
-  z-index: 2;
+.seasonVisualCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.06);
+  border-color: var(--color-gray-300, #d1d5db);
 }
 
 .seasonMeta {
-  position: relative;
-  z-index: 3;
-  padding: 2rem;
-  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
 }
 
 .seasonHeaderTitle {
   font-family: var(--font-heading, 'Plus Jakarta Sans', sans-serif);
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: #ffffff;
-  margin: 0.5rem 0 0.25rem 0;
+  font-size: 1.65rem;
+  font-weight: 900;
+  margin: 0.5rem 0 0.75rem 0;
+  letter-spacing: -0.5px;
 }
 
 .seasonHeaderDesc {
   font-family: var(--font-body, 'Inter', sans-serif);
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--color-gray-500, #555555);
   line-height: 1.5;
   margin: 0;
+}
+
+.seasonPillIndicator {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.76rem;
+  font-weight: 700;
+  padding: 8px 14px;
+  border: 1px solid;
+  border-radius: 30px;
+  align-self: flex-start;
+  margin-top: 1rem;
+}
+
+.seasonPillDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  display: inline-block;
 }
 
 .seasonContent {
@@ -665,10 +674,63 @@
   }
   .seasonVisualCard {
     position: static;
-    height: 240px;
+    height: auto;
+    background: #ffffff;
+    border: 1px solid var(--color-gray-200, #e5e7eb);
+    border-left: 6px solid var(--color-primary, #B00000);
+    border-radius: 20px;
+    padding: 1.75rem 1.5rem;
+    box-shadow: var(--shadow-sm, 0 1px 3px rgba(0, 0, 0, 0.05));
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  .seasonMeta {
+    color: inherit;
+  }
+  .seasonHeaderTitle {
+    margin: 0.25rem 0 0.5rem 0;
+    font-size: 1.4rem;
+  }
+  .seasonHeaderDesc {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .seasonHeaderBadge {
+    background-color: var(--color-primary, #B00000) !important;
+    color: #ffffff !important;
   }
   .seasonMonthsGrid {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .tabNavbar {
+    justify-content: flex-start;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
+    padding: 0.65rem 0;
+  }
+  .tabNavbar::-webkit-scrollbar {
+    display: block;
+    height: 5px;
+  }
+  .tabNavbar::-webkit-scrollbar-track {
+    background: rgba(176, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+  .tabNavbar::-webkit-scrollbar-thumb {
+    background: var(--color-primary, #B00000);
+    border-radius: 10px;
+  }
+  .tabBtn {
+    font-size: 0.82rem;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+  }
+  .tabNavbarSection {
+    top: 74px !important;
   }
 }
 
@@ -676,31 +738,88 @@
    MOBILE DEVICES (767px and below)
    ========================================================================== */
 @media screen and (max-width: 767px) {
+  .calendarSection {
+    padding: 2rem 0 0.5rem !important;
+  }
+  .ctaSection {
+    padding: 1rem 0 2.5rem !important;
+  }
+  .seasonBlock {
+    margin-bottom: 2rem !important;
+  }
   .ctaCard {
     flex-direction: column;
     text-align: center;
     padding: 2rem 1.5rem;
     gap: 1.5rem;
   }
+}
 
-  @media (max-width: 640px) {
-    .container {
-      padding: 0 1rem;
-    }
-    .statsGrid {
-      grid-template-columns: 1fr;
-    }
-    .seasonMonthsGrid {
-      grid-template-columns: 1fr;
-    }
-    .monthCardHeader {
-      padding: 1.25rem 1.5rem;
-    }
-    .monthCardBody {
-      padding: 1.5rem;
-    }
-    .monthCardName {
-      font-size: 1.25rem;
-    }
+@media screen and (max-width: 640px) {
+  .container {
+    padding: 0 1rem;
+  }
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
+  .seasonMonthsGrid {
+    grid-template-columns: 1fr;
+  }
+  .seasonVisualCard {
+    padding: 1.15rem 1rem !important;
+    border-left-width: 4px !important;
+    border-radius: 14px !important;
+    gap: 0.85rem !important;
+    box-shadow: none !important;
+    border-color: var(--color-gray-200, #e5e7eb) !important;
+  }
+  .seasonHeaderBadge {
+    font-size: 0.65rem !important;
+    padding: 3px 8px !important;
+    margin-bottom: 0.5rem !important;
+  }
+  .seasonHeaderTitle {
+    font-size: 1.25rem !important;
+    margin-bottom: 0.4rem !important;
+  }
+  .seasonHeaderDesc {
+    font-size: 0.8rem !important;
+    line-height: 1.4 !important;
+  }
+  .seasonPillIndicator {
+    font-size: 0.7rem !important;
+    padding: 5px 10px !important;
+    margin-top: 0.5rem !important;
+  }
+  .seasonPillDot {
+    width: 5px !important;
+    height: 5px !important;
+  }
+  .monthCard {
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    border-color: #e5e7eb !important;
+  }
+  .monthCardHeader {
+    padding: 0.85rem 1.1rem;
+  }
+  .monthCardBody {
+    padding: 1rem;
+  }
+  .monthCardName {
+    font-size: 1.1rem;
+  }
+  .eventItem {
+    padding: 0.5rem 0.75rem;
+    gap: 0.5rem;
+  }
+  .eventText {
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+  .eventDateBadge {
+    min-width: 50px;
+    font-size: 0.65rem;
+    padding: 3px 6px;
   }
 }

@@ -61,6 +61,11 @@
   gap: 0.75rem;
   margin-bottom: 2.5rem;
   flex-wrap: wrap;
+  position: sticky;
+  top: 90px;
+  z-index: 90;
+  background: var(--color-bg-alt, #FFF8E6);
+  padding: 10px 0;
 }
 
 .tabBtn {
@@ -78,6 +83,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .tabBtn:hover:not(.activeTab) {
@@ -188,30 +194,73 @@
 /* ==========================================================================
    TABLETS & PORTRAIT SCREENS (768px to 1023px)
    ========================================================================== */
+/* ==========================================================================
+   TABLETS & PORTRAIT SCREENS (768px to 1023px)
+   ========================================================================== */
 @media screen and (max-width: 1023px) {
+  .clubsSection {
+    padding: 3rem 0 2rem;
+  }
+  .feedSection {
+    padding: 3rem 0;
+  }
+  .sectionTitle {
+    font-size: 1.85rem;
+    margin-bottom: 1.5rem;
+  }
   .grid, .feedGrid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
+  }
+  .filterTabs {
+    top: 74px !important;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding-bottom: 10px;
+    margin-bottom: 1.75rem;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
+  }
+  .filterTabs::-webkit-scrollbar {
+    display: block;
+    height: 5px;
+  }
+  .filterTabs::-webkit-scrollbar-track {
+    background: rgba(176, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+  .filterTabs::-webkit-scrollbar-thumb {
+    background: var(--color-primary, #B00000);
+    border-radius: 10px;
+  }
+  .tabBtn {
+    flex-shrink: 0;
+    font-size: 0.8rem;
+    padding: 8px 15px;
+    border-radius: 6px;
   }
 }
 
 /* ==========================================================================
    MOBILE DEVICES (767px and below)
-   ========================================================================== */
+   ========================================================================= */
 @media screen and (max-width: 767px) {
-  @media (max-width: 640px) {
-    .grid, .feedGrid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-    .filterTabs {
-      overflow-x: auto;
-      flex-wrap: nowrap;
-      padding-bottom: 8px;
-      scrollbar-width: none;
-    }
-    .filterTabs::-webkit-scrollbar {
-      display: none;
-    }
+  .clubsSection {
+    padding: 2.5rem 0 1.5rem;
+  }
+  .feedSection {
+    padding: 2.5rem 0;
+  }
+  .sectionTitle {
+    font-size: 1.6rem;
+    margin-bottom: 1.25rem;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .grid, .feedGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
   }
 }

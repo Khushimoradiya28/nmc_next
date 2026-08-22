@@ -180,12 +180,124 @@ function useCounterAnimation(sectionRef) {
 const fadeUp = { hidden: { opacity: 0, y: 30 }, visible: { opacity: 1, y: 0 } };
 const stagger = { hidden: {}, visible: { transition: { staggerChildren: 0.08 } } };
 
+// Custom Mobile Slider Component for NSS Initiatives (Smooth Auto Scroll with Manual Arrows)
+function NssInitiativesSlider({ initiatives, styles }) {
+  const sliderRef = React.useRef(null);
+  const [isPaused, setIsPaused] = React.useState(false);
+
+  React.useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    let animationFrameId;
+    const speed = 0.8; // pixels per frame
+
+    const scroll = () => {
+      if (!isPaused) {
+        slider.scrollLeft += speed;
+        // loop scroll logic
+        if (slider.scrollLeft >= (slider.scrollWidth) / 2) {
+          slider.scrollLeft = 0;
+        }
+      }
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isPaused]);
+
+  const scrollManual = (direction) => {
+    setIsPaused(true);
+    const slider = sliderRef.current;
+    if (!slider) return;
+    const scrollAmount = slider.clientWidth; // scroll exactly 1 card width
+    slider.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+    setTimeout(() => {
+      setIsPaused(false);
+    }, 5000);
+  };
+
+  const doubleInitiatives = [...initiatives, ...initiatives];
+
+  return (
+    <div className={styles.mobileSliderContainer}>
+      <div 
+        className={styles.mobileSliderTrack}
+        ref={sliderRef}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        {doubleInitiatives.map((item, idx) => (
+          <div key={`mob-init-${idx}`} className={styles.initiativeCard}>
+            <div className={styles.initiativeBar} />
+            <span className={styles.initiativeNum}>{String((idx % initiatives.length) + 1).padStart(2, '0')}</span>
+            <h3 className={styles.initiativeName}>{item.title}</h3>
+            <p className={styles.initiativeDesc}>{item.desc}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Manual arrows below the card */}
+      <div className={styles.sliderControls}>
+        <button 
+          className={styles.sliderArrowBtn} 
+          onClick={() => scrollManual('left')}
+          aria-label="Previous Slide"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <button 
+          className={styles.sliderArrowBtn} 
+          onClick={() => scrollManual('right')}
+          aria-label="Next Slide"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="9 18 15 12 9 6"></polyline>
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export default function NssPage() {
   const [filter, setFilter] = useState('all');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
   const statsRef = useRef(null);
   useCounterAnimation(statsRef);
 
-  const events = filter === 'all' ? nssEvents : nssEvents.filter(e => e.category === filter);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 1024); // Mobile and tablet screens (under 1024px)
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Reset pagination page when filter changes
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filter]);
+
+  const filteredEvents = filter === 'all' ? nssEvents : nssEvents.filter(e => e.category === filter);
+  const eventsPerPage = isMobile ? 2 : filteredEvents.length; // Show 2 events on mobile/tablet, show all on desktop
+  const totalEventPages = Math.ceil(filteredEvents.length / eventsPerPage);
+  const paginatedEvents = filteredEvents.slice(
+    (currentPage - 1) * eventsPerPage,
+    currentPage * eventsPerPage
+  );
+
   const fmt = (d) => new Date(d).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' });
   const yr = (d) => new Date(d).getFullYear();
 
@@ -328,21 +440,24 @@ export default function NssPage() {
               </h2>
             </motion.div>
 
-            <motion.div
-              className={styles.initiativesGrid}
-              initial="hidden" whileInView="visible"
-              viewport={{ once: true }}
-              variants={stagger}
-            >
-              {nssInitiatives.map((item, i) => (
-                <motion.div key={i} className={styles.initiativeCard} variants={fadeUp} transition={{ duration: 0.4 }}>
-                  <div className={styles.initiativeBar} />
-                  <span className={styles.initiativeNum}>{String(i + 1).padStart(2, '0')}</span>
-                  <h3 className={styles.initiativeName}>{item.title}</h3>
-                  <p className={styles.initiativeDesc}>{item.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
+            <div className={styles.desktopGrid}>
+              <motion.div
+                className={styles.initiativesGrid}
+                initial="hidden" whileInView="visible"
+                viewport={{ once: true }}
+                variants={stagger}
+              >
+                {nssInitiatives.map((item, i) => (
+                  <motion.div key={i} className={styles.initiativeCard} variants={fadeUp} transition={{ duration: 0.4 }}>
+                    <div className={styles.initiativeBar} />
+                    <span className={styles.initiativeNum}>{String(i + 1).padStart(2, '0')}</span>
+                    <h3 className={styles.initiativeName}>{item.title}</h3>
+                    <p className={styles.initiativeDesc}>{item.desc}</p>
+                  </motion.div>
+                ))}
+              </motion.div>
+            </div>
+            <NssInitiativesSlider initiatives={nssInitiatives} styles={styles} />
           </div>
         </section>
 
@@ -373,38 +488,69 @@ export default function NssPage() {
               ))}
             </div>
 
-            <motion.div className={styles.eventsGrid} layout>
-              <AnimatePresence mode="popLayout">
-                {events.map((ev, i) => (
-                  <motion.div
-                    key={ev.id}
-                    className={styles.eventCard}
-                    layout
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.3, delay: i * 0.04 }}
-                  >
-                    <div className={styles.eventImg}>
-                      <Image src={ev.image} alt={ev.title} fill sizes="160px" className={styles.eventImage} />
-                      <span className={styles.eventYearBadge}>{yr(ev.date)}</span>
-                      <span className={`${styles.eventStatusBadge} ${ev.status === 'upcoming' ? styles.upcoming : styles.past}`}>
-                        {ev.status === 'upcoming' ? 'Upcoming' : 'Done'}
-                      </span>
-                    </div>
-                    <div className={styles.eventBody}>
-                      <div className={styles.eventMeta}>
-                        <span>📅 {fmt(ev.date)}</span>
-                        <span>🕐 {ev.time}</span>
-                      </div>
-                      <h3 className={styles.eventTitle}>{ev.title}</h3>
-                      <p className={styles.eventDesc}>{ev.description}</p>
-                      <p className={styles.eventBy}><strong>By:</strong> {ev.organizers}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </AnimatePresence>
-            </motion.div>
+             <motion.div className={styles.eventsGrid} layout>
+               <AnimatePresence mode="popLayout">
+                 {paginatedEvents.map((ev, i) => (
+                   <motion.div
+                     key={ev.id}
+                     className={styles.eventCard}
+                     layout
+                     initial={{ opacity: 0, y: 20 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     exit={{ opacity: 0, scale: 0.95 }}
+                     transition={{ duration: 0.3, delay: i * 0.04 }}
+                   >
+                     <div className={styles.eventImg}>
+                       <Image src={ev.image} alt={ev.title} fill sizes="160px" className={styles.eventImage} />
+                       <span className={styles.eventYearBadge}>{yr(ev.date)}</span>
+                       <span className={`${styles.eventStatusBadge} ${ev.status === 'upcoming' ? styles.upcoming : styles.past}`}>
+                         {ev.status === 'upcoming' ? 'Upcoming' : 'Done'}
+                       </span>
+                     </div>
+                     <div className={styles.eventBody}>
+                       <div className={styles.eventMeta}>
+                         <span>📅 {fmt(ev.date)}</span>
+                         <span>🕐 {ev.time}</span>
+                       </div>
+                       <h3 className={styles.eventTitle}>{ev.title}</h3>
+                       <p className={styles.eventDesc}>{ev.description}</p>
+                       <p className={styles.eventBy}><strong>By:</strong> {ev.organizers}</p>
+                     </div>
+                   </motion.div>
+                 ))}
+               </AnimatePresence>
+             </motion.div>
+
+             {/* Events Pagination (Mobile & Tablet only) */}
+             {isMobile && totalEventPages > 1 && (
+               <div className={styles.eventsPagination}>
+                 <button
+                   className={`${styles.pageNavBtn} ${currentPage === 1 ? styles.pageNavDisabled : ''}`}
+                   onClick={() => { if (currentPage > 1) setCurrentPage(p => p - 1); }}
+                   disabled={currentPage === 1}
+                   aria-label="Previous page"
+                 >
+                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                     <polyline points="15 18 9 12 15 6"></polyline>
+                   </svg>
+                 </button>
+
+                 <span className={styles.mobilePageIndicator}>
+                   Page {currentPage} of {totalEventPages}
+                 </span>
+
+                 <button
+                   className={`${styles.pageNavBtn} ${currentPage === totalEventPages ? styles.pageNavDisabled : ''}`}
+                   onClick={() => { if (currentPage < totalEventPages) setCurrentPage(p => p + 1); }}
+                   disabled={currentPage === totalEventPages}
+                   aria-label="Next page"
+                 >
+                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                     <polyline points="9 18 15 12 9 6"></polyline>
+                   </svg>
+                 </button>
+               </div>
+             )}
           </div>
         </section>
 
@@ -426,7 +572,6 @@ export default function NssPage() {
               </div>
               <div className={styles.ctaBtns}>
                 <Link href="/contact" className={styles.btnWhite}>Register Interest</Link>
-                <Link href="/activities" className={styles.btnOutline}>All Activities</Link>
               </div>
             </motion.div>
           </div>

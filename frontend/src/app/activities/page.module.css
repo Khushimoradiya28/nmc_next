@@ -122,10 +122,6 @@
 }
 
 /* ==========================================================================
-   DESKTOP & LARGE LAPTOPS (1440px and above)
-   ========================================================================== */
-
-/* ==========================================================================
    LAPTOPS & SMALL DESKTOPS (1024px to 1439px)
    ========================================================================== */
 
@@ -148,13 +144,24 @@
    MOBILE DEVICES (767px and below)
    ========================================================================== */
 @media screen and (max-width: 767px) {
-  @media (max-width: 640px) {
-    .grid, .recentGrid {
-      grid-template-columns: 1fr;
-      gap: 1.5rem;
-    }
-    .navCard {
-      padding: 1.75rem;
-    }
+  .container {
+    padding: 0 1rem;
+  }
+}
+
+@media screen and (max-width: 640px) {
+  .grid, .recentGrid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .navCard {
+    padding: 1.75rem;
+    min-height: 180px;
+  }
+  .cardTitle {
+    font-size: 1.15rem;
+  }
+  .cardDesc {
+    font-size: 0.85rem;
   }
 }

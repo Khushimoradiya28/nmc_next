@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
 import ActivityHero from '@/components/activities/ActivityHero/ActivityHero';
@@ -152,16 +152,114 @@ const galleryImages = [
 
 const GALLERY_PER_PAGE = 9; // 3 rows × 3 columns
 
+// Custom Mobile Slider Component for Loop Scroll with Manual Arrows
+function MobileSlider({ championships, TrophyIcon, styles }) {
+  const sliderRef = React.useRef(null);
+  const [isPaused, setIsPaused] = React.useState(false);
+
+  React.useEffect(() => {
+    const slider = sliderRef.current;
+    if (!slider) return;
+
+    let animationFrameId;
+    const speed = 0.8; // pixels per frame
+
+    const scroll = () => {
+      if (!isPaused) {
+        slider.scrollLeft += speed;
+        // loop scroll logic: reset scrollLeft to 0 if it reaches half of scrollWidth
+        if (slider.scrollLeft >= (slider.scrollWidth) / 2) {
+          slider.scrollLeft = 0;
+        }
+      }
+      animationFrameId = requestAnimationFrame(scroll);
+    };
+
+    animationFrameId = requestAnimationFrame(scroll);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [isPaused]);
+
+  const scrollManual = (direction) => {
+    setIsPaused(true); // pause auto scroll on manual interaction
+    const slider = sliderRef.current;
+    if (!slider) return;
+    const scrollAmount = slider.clientWidth; // scroll exactly 1 full card width
+    slider.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+    // resume auto scroll after a brief delay
+    setTimeout(() => {
+      setIsPaused(false);
+    }, 5000);
+  };
+
+  const doubleChampionships = [...championships, ...championships];
+
+  return (
+    <div className={styles.mobileSliderContainer}>
+      <button 
+        className={`${styles.sliderArrow} ${styles.arrowLeft}`} 
+        onClick={() => scrollManual('left')}
+        aria-label="Previous Slide"
+      >
+        ‹
+      </button>
+
+      <div 
+        className={styles.mobileSliderTrack}
+        ref={sliderRef}
+        onTouchStart={() => setIsPaused(true)}
+        onTouchEnd={() => setIsPaused(false)}
+        onMouseEnter={() => setIsPaused(true)}
+        onMouseLeave={() => setIsPaused(false)}
+      >
+        {doubleChampionships.map((ch, idx) => (
+          <div key={`mob-${idx}`} className={styles.champMarqueeCard}>
+            <div className={styles.champIconContainer}>
+              <TrophyIcon />
+            </div>
+            <div className={styles.champInfo}>
+              <span className={styles.champBadge}>{ch.badge}</span>
+              <h3 className={styles.champTitle}>{ch.sport}</h3>
+              <p className={styles.champDetail}>{ch.title}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <button 
+        className={`${styles.sliderArrow} ${styles.arrowRight}`} 
+        onClick={() => scrollManual('right')}
+        aria-label="Next Slide"
+      >
+        ›
+      </button>
+    </div>
+  );
+}
+
 export default function SportsPage() {
   const [activeTab, setActiveTab] = useState('tournaments');
   const [searchQuery, setSearchQuery] = useState('');
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [galleryPage, setGalleryPage] = useState(1);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const totalGalleryPages = Math.ceil(galleryImages.length / GALLERY_PER_PAGE);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const itemsPerPage = isMobile ? 1 : GALLERY_PER_PAGE;
+  const totalGalleryPages = Math.ceil(galleryImages.length / itemsPerPage);
   const paginatedImages = galleryImages.slice(
-    (galleryPage - 1) * GALLERY_PER_PAGE,
-    galleryPage * GALLERY_PER_PAGE
+    (galleryPage - 1) * itemsPerPage,
+    galleryPage * itemsPerPage
   );
 
   const filterSelections = selections.filter(sel => 
@@ -300,38 +398,43 @@ export default function SportsPage() {
                   </div>
 
                   {!searchQuery ? (
-                    <div className={styles.marqueeContainer}>
-                      {/* Row 1: Left scrolling */}
-                      <div className={`${styles.marqueeTrack} ${styles.marqueeTrackLeft}`}>
-                        {[...championships.slice(0, 6), ...championships.slice(0, 6)].map((ch, idx) => (
-                          <div key={`r1-${idx}`} className={styles.champMarqueeCard}>
-                            <div className={styles.champIconContainer}>
-                              <TrophyIcon />
-                            </div>
-                            <div className={styles.champInfo}>
-                              <span className={styles.champBadge}>{ch.badge}</span>
-                              <h3 className={styles.champTitle}>{ch.sport}</h3>
-                              <p className={styles.champDetail}>{ch.title}</p>
-                            </div>
+                    <div className={styles.sliderWrapper}>
+                      <div className={styles.desktopMarquee}>
+                        <div className={styles.marqueeContainer}>
+                          {/* Row 1: Left scrolling */}
+                          <div className={`${styles.marqueeTrack} ${styles.marqueeTrackLeft}`}>
+                            {[...championships.slice(0, 6), ...championships.slice(0, 6)].map((ch, idx) => (
+                              <div key={`r1-${idx}`} className={styles.champMarqueeCard}>
+                                <div className={styles.champIconContainer}>
+                                  <TrophyIcon />
+                                </div>
+                                <div className={styles.champInfo}>
+                                  <span className={styles.champBadge}>{ch.badge}</span>
+                                  <h3 className={styles.champTitle}>{ch.sport}</h3>
+                                  <p className={styles.champDetail}>{ch.title}</p>
+                                </div>
+                              </div>
+                            ))}
                           </div>
-                        ))}
-                      </div>
 
-                      {/* Row 2: Right scrolling */}
-                      <div className={`${styles.marqueeTrack} ${styles.marqueeTrackRight}`}>
-                        {[...championships.slice(6), ...championships.slice(6)].map((ch, idx) => (
-                          <div key={`r2-${idx}`} className={styles.champMarqueeCard}>
-                            <div className={styles.champIconContainer}>
-                              <TrophyIcon />
-                            </div>
-                            <div className={styles.champInfo}>
-                              <span className={styles.champBadge}>{ch.badge}</span>
-                              <h3 className={styles.champTitle}>{ch.sport}</h3>
-                              <p className={styles.champDetail}>{ch.title}</p>
-                            </div>
+                          {/* Row 2: Right scrolling */}
+                          <div className={`${styles.marqueeTrack} ${styles.marqueeTrackRight}`}>
+                            {[...championships.slice(6), ...championships.slice(6)].map((ch, idx) => (
+                              <div key={`r2-${idx}`} className={styles.champMarqueeCard}>
+                                <div className={styles.champIconContainer}>
+                                  <TrophyIcon />
+                                </div>
+                                <div className={styles.champInfo}>
+                                  <span className={styles.champBadge}>{ch.badge}</span>
+                                  <h3 className={styles.champTitle}>{ch.sport}</h3>
+                                  <p className={styles.champDetail}>{ch.title}</p>
+                                </div>
+                              </div>
+                            ))}
                           </div>
-                        ))}
+                        </div>
                       </div>
+                      <MobileSlider championships={championships} TrophyIcon={TrophyIcon} styles={styles} />
                     </div>
                   ) : (
                     <div className={styles.champsGrid}>
@@ -479,18 +582,24 @@ export default function SportsPage() {
                   </svg>
                 </button>
 
-                <div className={styles.pageNumbers}>
-                  {Array.from({ length: totalGalleryPages }, (_, i) => i + 1).map(pg => (
-                    <button
-                      key={pg}
-                      className={`${styles.pageNumBtn} ${pg === galleryPage ? styles.activePageBtn : ''}`}
-                      onClick={() => setGalleryPage(pg)}
-                      aria-label={`Page ${pg}`}
-                    >
-                      {pg}
-                    </button>
-                  ))}
-                </div>
+                {isMobile ? (
+                  <span className={styles.mobilePageIndicator}>
+                    Page {galleryPage} of {totalGalleryPages}
+                  </span>
+                ) : (
+                  <div className={styles.pageNumbers}>
+                    {Array.from({ length: totalGalleryPages }, (_, i) => i + 1).map(pg => (
+                      <button
+                        key={pg}
+                        className={`${styles.pageNumBtn} ${pg === galleryPage ? styles.activePageBtn : ''}`}
+                        onClick={() => setGalleryPage(pg)}
+                        aria-label={`Page ${pg}`}
+                      >
+                        {pg}
+                      </button>
+                    ))}
+                  </div>
+                )}
 
                 <button
                   className={`${styles.pageNavBtn} ${galleryPage === totalGalleryPages ? styles.pageNavDisabled : ''}`}
@@ -526,7 +635,7 @@ export default function SportsPage() {
                   }}
                   aria-label="Previous image"
                 >
-                  <IconChevronLeft size={22} stroke={2.5} />
+                  <IconChevronLeft size={22} strokeWidth={2.5} />
                 </button>
 
                 <motion.div 
@@ -542,7 +651,7 @@ export default function SportsPage() {
                     onClick={(e) => { e.stopPropagation(); setLightboxIndex(null); }}
                     aria-label="Close image popup"
                   >
-                    <IconX size={14} stroke={3} />
+                    <IconX size={14} strokeWidth={3} />
                   </button>
                   <div className={styles.lightboxImgWrapper}>
                     <img 
@@ -564,7 +673,7 @@ export default function SportsPage() {
                   }}
                   aria-label="Next image"
                 >
-                  <IconChevronRight size={22} stroke={2.5} />
+                  <IconChevronRight size={22} strokeWidth={2.5} />
                 </button>
               </div>
             </motion.div>

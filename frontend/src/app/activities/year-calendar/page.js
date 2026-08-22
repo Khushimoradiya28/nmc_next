@@ -372,18 +372,18 @@ export default function YearCalendarPage() {
                     return (
                       <div key={sIdx} className={styles.seasonBlock}>
                         <div className={styles.seasonRow}>
-                          {/* Season Visual Column */}
-                          <div className={styles.seasonVisualCard}>
-                            <div className={styles.seasonImageWrapper}>
-                              <img src={season.image} alt={season.title} className={styles.seasonImage} />
-                              <div className={styles.seasonOverlay} style={{ background: `linear-gradient(to bottom, transparent 20%, ${season.accent}aa 100%)` }} />
-                            </div>
+                          {/* Season Visual Column (Minimal distinguished card design, no image) */}
+                          <div className={styles.seasonVisualCard} style={{ borderLeftColor: season.accent }}>
                             <div className={styles.seasonMeta}>
-                              <span className={styles.seasonHeaderBadge} style={{ color: '#ffffff', backgroundColor: 'rgba(255, 255, 255, 0.2)' }}>
+                              <span className={styles.seasonHeaderBadge} style={{ color: '#ffffff', backgroundColor: season.accent }}>
                                 Academic Term
                               </span>
-                              <h3 className={styles.seasonHeaderTitle}>{season.title}</h3>
+                              <h3 className={styles.seasonHeaderTitle} style={{ color: season.accent }}>{season.title}</h3>
                               <p className={styles.seasonHeaderDesc}>{season.desc}</p>
+                            </div>
+                            <div className={styles.seasonPillIndicator} style={{ backgroundColor: `${season.accent}08`, borderColor: `${season.accent}15`, color: season.accent }}>
+                              <span className={styles.seasonPillDot} style={{ backgroundColor: season.accent }}></span>
+                              {season.months.join(' • ')}
                             </div>
                           </div>
 

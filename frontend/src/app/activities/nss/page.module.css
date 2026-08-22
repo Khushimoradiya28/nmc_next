@@ -510,6 +510,14 @@
   margin-bottom: 2.5rem;
 }
 
+.desktopGrid {
+  display: block;
+}
+
+.mobileSliderContainer {
+  display: none;
+}
+
 .initiativesGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -599,6 +607,8 @@
   transition: all 0.2s ease;
   outline: none;
   font-family: var(--font-body, 'Inter', sans-serif);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .filterBtn:hover {
@@ -835,6 +845,9 @@
 /* ==========================================================================
    LAPTOPS & SMALL DESKTOPS (1024px to 1439px)
    ========================================================================== */
+/* ==========================================================================
+   LAPTOPS & SMALL DESKTOPS (1024px to 1439px)
+   ========================================================================== */
 @media screen and (max-width: 1439px) {
   .statsGrid {
     gap: 1.25rem;
@@ -848,69 +861,282 @@
    TABLETS & PORTRAIT SCREENS (768px to 1023px)
    ========================================================================== */
 @media screen and (max-width: 1023px) {
-  .aboutGrid { grid-template-columns: 1fr; gap: 3rem; }
-  .statsGrid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-  .initiativesGrid { grid-template-columns: repeat(2, 1fr); }
-  .ctaInner { flex-direction: column; gap: 2rem; }
-  .ctaSubtext { max-width: 100%; }
-  .heroImageWrap { height: 340px; }
+  .aboutGrid {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.5rem;
+  }
+  .initiativesGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ctaInner {
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .ctaSubtext {
+    max-width: 100%;
+  }
+  .heroImageWrap {
+    height: 340px;
+  }
+  .filterBar {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    padding-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+    gap: 0.5rem;
+  }
+  .filterBar::-webkit-scrollbar {
+    display: block;
+    height: 5px;
+  }
+  .filterBar::-webkit-scrollbar-track {
+    background: rgba(176, 0, 0, 0.05);
+    border-radius: 10px;
+  }
+  .filterBar::-webkit-scrollbar-thumb {
+    background: var(--color-primary, #B00000);
+    border-radius: 10px;
+  }
+  .filterBtn {
+    font-size: 0.82rem;
+    padding: 6px 14px;
+    border-radius: 5px;
+  }
+  .eventsPagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2.5rem;
+  }
+  .mobilePageIndicator {
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #475569;
+    background: #f1f5f9;
+    padding: 6px 16px;
+    border-radius: 20px;
+    min-width: 100px;
+    text-align: center;
+    user-select: none;
+  }
+  .pageNavBtn {
+    background: var(--color-primary, #B00000);
+    border: none;
+    color: #ffffff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(176, 0, 0, 0.2);
+    transition: all 0.2s ease;
+  }
+  .pageNavBtn:active {
+    background: var(--color-primary-light, #d11c1c);
+  }
+  .pageNavDisabled {
+    opacity: 0.35;
+    background: #e2e8f0;
+    color: #94a3b8;
+    box-shadow: none;
+    cursor: not-allowed;
+  }
 }
 
 /* ==========================================================================
    MOBILE DEVICES (767px and below)
    ========================================================================== */
 @media screen and (max-width: 767px) {
-  .container { padding: 0 1.25rem; }
-
+  .container {
+    padding: 0 1.25rem;
+  }
+  .desktopGrid {
+    display: none !important;
+  }
+  .mobileSliderContainer {
+    display: block !important;
+    width: 100%;
+    overflow: hidden;
+  }
+  .mobileSliderTrack {
+    display: flex;
+    overflow-x: auto;
+    width: 100%;
+    gap: 0;
+    padding: 10px 0 15px 0;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+  .mobileSliderTrack::-webkit-scrollbar {
+    display: none;
+  }
+  .mobileSliderTrack > div {
+    width: 100% !important;
+    min-width: 100% !important;
+    flex-shrink: 0;
+    box-sizing: border-box;
+    margin: 0 !important;
+  }
+  .sliderControls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    width: 100%;
+  }
+  .sliderArrowBtn {
+    background: var(--color-primary, #B00000);
+    border: none;
+    color: #ffffff;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(176, 0, 0, 0.25);
+    transition: all 0.2s ease;
+  }
+  .sliderArrowBtn:active {
+    transform: scale(0.9);
+    background: var(--color-primary-light, #d11c1c);
+  }
   .aboutSection,
   .initiativesSection,
   .eventsSection,
-  .statsSection { padding: 3rem 0; }
-
-  .ctaSection { padding: 3rem 0; }
-
-  .heroImageWrap { height: 260px; }
-
+  .statsSection {
+    padding: 1.75rem 0 !important;
+  }
+  .ctaSection {
+    padding: 1.75rem 0 !important;
+  }
+  .sectionHeader {
+    margin-bottom: 1.25rem !important;
+  }
+  .heroImageWrap {
+    height: 260px;
+  }
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .statCard {
+    padding: 1rem 0.85rem !important;
+    border-radius: 12px !important;
+    box-shadow: none !important;
+    border-color: #f1f5f9 !important;
+  }
+  .statCardTop {
+    margin-bottom: 0.75rem !important;
+  }
+  .statIconWrap {
+    width: 36px !important;
+    height: 36px !important;
+    border-radius: 8px !important;
+  }
+  .statIconWrap svg {
+    width: 18px !important;
+    height: 18px !important;
+  }
+  .statNumber {
+    font-size: 1.8rem !important;
+    margin-bottom: 0.2rem !important;
+  }
+  .statLabel {
+    font-size: 0.8rem !important;
+    color: #475569 !important;
+    font-weight: 600 !important;
+    min-height: auto;
+  }
+  .statChip {
+    font-size: 0.6rem !important;
+    padding: 2px 6px !important;
+    border-radius: 6px !important;
+  }
+  .statMeterTrack {
+    height: 4px !important;
+    margin-top: 0.75rem !important;
+  }
+  .eventsGrid {
+    grid-template-columns: 1fr;
+  }
+  .metaRow {
+    flex-wrap: wrap;
     gap: 1rem;
   }
-
-  .statCard { padding: 1.5rem 1.25rem; }
-  .statNumber { font-size: clamp(2rem, 6vw, 2.8rem); }
-  .statLabel { font-size: 0.82rem; min-height: auto; }
-  .statChip { font-size: 0.62rem; padding: 0.2rem 0.5rem; }
-
-  .eventsGrid { grid-template-columns: 1fr; }
-
-  .metaRow { flex-wrap: wrap; gap: 1rem; }
-  .metaItem + .metaItem { border-left: none; padding-left: 0; margin-left: 0; border-top: 1px solid #f0f0f0; padding-top: 0.75rem; }
-
-  .ctaBtns { flex-direction: column; width: 100%; }
-  .btnWhite, .btnOutline { text-align: center; width: 100%; }
-
-  .ctaSection::after { font-size: 8rem; }
-
-  @media (max-width: 580px) {
-    .statsGrid { grid-template-columns: 1fr; gap: 1rem; }
-    .statCard { padding: 1.5rem 1.25rem; }
+  .metaItem + .metaItem {
+    border-left: none;
+    padding-left: 0;
+    margin-left: 0;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 0.75rem;
   }
+  .ctaBtns {
+    flex-direction: column;
+    width: 100%;
+  }
+  .btnWhite,
+  .btnOutline {
+    text-align: center;
+    width: 100%;
+  }
+  .ctaSection::after {
+    font-size: 8rem;
+  }
+}
 
-  @media (max-width: 480px) {
-    .container { padding: 0 1rem; }
+@media screen and (max-width: 580px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+}
 
-    .sectionTitle { font-size: 1.6rem; }
-
-    .initiativesGrid { grid-template-columns: 1fr; }
-
-    .eventCard { grid-template-columns: 1fr; }
-    .eventImg { width: 100%; height: 155px; position: relative; }
-
-    .heroImageWrap { height: 220px; border-radius: 14px; }
-
-    .statCard { padding: 1.25rem 1rem; }
-    .statIconWrap { width: 40px; height: 40px; }
-    .statNumber { font-size: 2.2rem; }
+@media screen and (max-width: 480px) {
+  .container {
+    padding: 0 1rem;
+  }
+  .sectionTitle {
+    font-size: 1.6rem;
+  }
+  .initiativesGrid {
+    grid-template-columns: 1fr;
+  }
+  .eventCard {
+    grid-template-columns: 1fr;
+    border-radius: 12px;
+  }
+  .eventImg {
+    width: 100%;
+    height: 155px;
+    position: relative;
+  }
+  .eventBody {
+    padding: 1rem;
+  }
+  .eventTitle {
+    font-size: 0.95rem;
+  }
+  .eventDesc {
+    font-size: 0.78rem;
+  }
+  .heroImageWrap {
+    height: 220px;
+    border-radius: 14px;
+  }
+  .statNumber {
+    font-size: 2.2rem !important;
   }
 }
 
