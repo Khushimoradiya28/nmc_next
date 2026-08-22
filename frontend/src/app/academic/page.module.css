@@ -1369,3 +1369,9 @@
         font-size: 0.68rem;
     }
 }
+
+@media (max-width: 1024px) {
+    .heroContentContainer {
+        padding-bottom: 30px !important;
+    }
+}

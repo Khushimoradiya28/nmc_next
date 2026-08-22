@@ -312,7 +312,6 @@
 }
 
 @media (max-width: 768px) {
-  .heroSection { min-height: 40vh; height: 40vh; }
   .heroContent { padding-bottom: 50px; }
   .ctaSection { padding: 4rem 0; }
   .resultsSection { padding: 3.5rem 0; }
@@ -322,7 +321,6 @@
 }
 
 @media (max-width: 575px) {
-  .heroSection { min-height: 38vh; height: 38vh; }
   .container { padding: 0 1.25rem; }
   .ctaSection { padding: 3.5rem 0; }
   .ctaTitle { font-size: 1.4rem; }
@@ -332,7 +330,6 @@
 }
 
 @media (max-width: 480px) {
-  .heroSection { min-height: 35vh; height: 35vh; }
   .heroContent { padding: 0 1rem 40px 1rem; }
   .container { padding: 0 1rem; }
   .resultRow { grid-template-columns: 1fr auto; gap: 0.75rem; }
@@ -360,7 +357,6 @@
 }
 
 @media (max-width: 360px) {
-  .heroSection { min-height: 32vh; height: 32vh; }
   .heroContent { padding: 0 0.75rem 30px 0.75rem; }
   .ctaSection { padding: 2.5rem 0; }
   .resultsSection { padding: 2.5rem 0; }

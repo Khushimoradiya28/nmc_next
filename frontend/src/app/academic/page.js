@@ -93,24 +93,20 @@ export default function AcademicPage() {
       <main>
 
         {/* HERO BANNER SECTION */}
-        <section className={styles.heroBanner} id="hero-banner">
-          <div className={styles.heroBgMedia}>
+        <section className="hero-fullscreen" id="home" style={{ minHeight: "50vh", height: "50vh" }}>
+          <div className="hero-bg-image">
             <Image
               src="/assets/hero/academic-hero-ai.jpg"
               alt="Academic Mentors and College Campus"
               fill
               priority
               unoptimized
-              className={styles.heroBgImage}
+              className="hero-bg-img"
             />
           </div>
-          <div className={styles.heroOverlayGradient} />
-          <div className={styles.heroOverlayMesh} />
-
-          <div className={`${styles.container} ${styles.heroContentContainer}`}>
-            <h1 className={styles.heroTitle}>
-              <span className={styles.heroTitleHighlight}>Academic Mentors</span>
-            </h1>
+          <div className="hero-overlay" style={{ background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))" }}></div>
+          <div className="hero-content container" style={{ paddingTop: "100px", display: "flex", alignItems: "flex-end", height: "100%", paddingBottom: "80px" }}>
+            <h1 className="hero-main-title"><em>Academic Mentors</em></h1>
           </div>
         </section>
 

@@ -7555,11 +7555,6 @@ select.form-control {
     z-index: 1001;
   }
 
-  .hero-fullscreen {
-    height: 80vh;
-    min-height: 500px;
-  }
-
   .hero-main-title {
     font-size: 2.2rem;
   }
@@ -10183,3 +10178,71 @@ select.form-control {
   border: 1px solid #fde68a;
   color: #b48500;
 }
+
+/* ==========================================================================
+   STRICT 50VH BANNER HEIGHT FOR ALL INNER MAIN & SUB PAGES (ALL SCREEN SIZES)
+   ========================================================================== */
+.hero-fullscreen:not(.home-hero-fullscreen),
+[class*="heroSection"]:not(.home-hero-fullscreen),
+[class*="heroBanner"]:not(.home-hero-fullscreen),
+[class*="aboutHeroSection"] {
+  min-height: 50vh !important;
+  height: 50vh !important;
+}
+
+@media (max-width: 1200px) {
+  .hero-fullscreen:not(.home-hero-fullscreen),
+  [class*="heroSection"]:not(.home-hero-fullscreen),
+  [class*="heroBanner"]:not(.home-hero-fullscreen),
+  [class*="aboutHeroSection"] {
+    min-height: 50vh !important;
+    height: 50vh !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .hero-fullscreen:not(.home-hero-fullscreen),
+  [class*="heroSection"]:not(.home-hero-fullscreen),
+  [class*="heroBanner"]:not(.home-hero-fullscreen),
+  [class*="aboutHeroSection"] {
+    min-height: 50vh !important;
+    height: 50vh !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-fullscreen:not(.home-hero-fullscreen),
+  [class*="heroSection"]:not(.home-hero-fullscreen),
+  [class*="heroBanner"]:not(.home-hero-fullscreen),
+  [class*="aboutHeroSection"] {
+    min-height: 50vh !important;
+    height: 50vh !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-fullscreen:not(.home-hero-fullscreen),
+  [class*="heroSection"]:not(.home-hero-fullscreen),
+  [class*="heroBanner"]:not(.home-hero-fullscreen),
+  [class*="aboutHeroSection"] {
+    min-height: 50vh !important;
+    height: 50vh !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE & TABLET: STRICT 30PX GAP FROM BOTTOM FOR ALL BANNER HEADINGS
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero-fullscreen:not(.home-hero-fullscreen) .hero-content,
+  .hero-fullscreen:not(.home-hero-fullscreen) [class*="heroContent"],
+  [class*="heroSection"]:not(.home-hero-fullscreen) .hero-content,
+  [class*="heroSection"]:not(.home-hero-fullscreen) [class*="heroContent"],
+  [class*="heroBanner"]:not(.home-hero-fullscreen) .hero-content,
+  [class*="heroBanner"]:not(.home-hero-fullscreen) [class*="heroContent"],
+  [class*="aboutHeroSection"] .hero-content,
+  [class*="aboutHeroSection"] [class*="heroContent"] {
+    padding-bottom: 30px !important;
+  }
+}
+

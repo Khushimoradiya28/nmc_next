@@ -445,10 +445,6 @@
 }
 
 @media (max-width: 360px) {
-  .heroSection {
-    min-height: 32vh;
-    height: 32vh;
-  }
   .programsTitle {
     font-size: 1.05rem;
   }

@@ -198,7 +198,6 @@
 }
 
 @media (max-width: 768px) {
-  .heroSection { min-height: 40vh; height: 40vh; }
   .heroContent { padding-bottom: 50px; }
   .scheduleSection { padding: 3.5rem 0; }
   .termGrid { grid-template-columns: 1fr; }
@@ -213,7 +212,6 @@
 }
 
 @media (max-width: 575px) {
-  .heroSection { min-height: 38vh; height: 38vh; }
   .scheduleSection { padding: 3rem 0; }
   .scheduleTitle { font-size: 1.35rem; }
   .termCardHeader { padding: 1rem 1.25rem; }
@@ -226,7 +224,6 @@
 }
 
 @media (max-width: 480px) {
-  .heroSection { min-height: 35vh; height: 35vh; }
   .heroContent { padding: 0 1rem 40px 1rem; }
   .scheduleSection { padding: 2.5rem 0; }
   .scheduleTitle { font-size: 1.25rem; }
@@ -254,7 +251,6 @@
 }
 
 @media (max-width: 360px) {
-  .heroSection { min-height: 32vh; height: 32vh; }
   .scheduleSection { padding: 2rem 0; }
   .scheduleTitle { font-size: 1rem; }
   .scheduleDesc { font-size: 0.8rem; }

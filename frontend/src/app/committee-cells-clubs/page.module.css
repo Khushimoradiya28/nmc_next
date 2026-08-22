@@ -330,12 +330,7 @@
 }
 
 @media (max-width: 768px) {
-  .heroSection {
-    min-height: 35vh;
-    height: 35vh;
-  }
-
-  .heroContent { padding-bottom: 40px; }
+  .heroContent { padding-bottom: 50px; }
   .heroTitle { font-size: 1.8rem; }
 
   .introSection { padding: 2.5rem 0 1.5rem; }
@@ -368,8 +363,7 @@
 }
 
 @media (max-width: 480px) {
-  .heroSection { min-height: 30vh; height: 30vh; }
-  .heroContent { padding: 0 1rem 30px 1rem; }
+  .heroContent { padding: 0 1rem 40px 1rem; }
   .container { padding: 0 1rem; }
   .cell { padding: 1.25rem; }
   .cellTitle { font-size: 1.05rem; }

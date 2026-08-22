@@ -514,11 +514,6 @@
 }
 
 @media (max-width: 768px) {
-    .heroSection {
-        min-height: 40vh;
-        height: 40vh;
-    }
-
     .ctaBarText {
         text-align: center;
     }
@@ -550,11 +545,6 @@
 }
 
 @media (max-width: 480px) {
-    .heroSection {
-        min-height: 35vh;
-        height: 35vh;
-    }
-
     .heroContent {
         padding: 0 1rem 40px 1rem;
     }

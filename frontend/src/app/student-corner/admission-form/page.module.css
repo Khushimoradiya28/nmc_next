@@ -319,7 +319,6 @@
 }
 
 @media (max-width: 768px) {
-  .heroSection { min-height: 40vh; height: 40vh; }
   .heroContent { padding-bottom: 50px; }
   .admissionSection { padding: 3.5rem 0; }
   .admissionLayout { grid-template-columns: 1fr; gap: 2rem; }
@@ -335,7 +334,6 @@
 }
 
 @media (max-width: 575px) {
-  .heroSection { min-height: 38vh; height: 38vh; }
   .admissionSection { padding: 3rem 0; }
   .admissionTitle { font-size: 1.35rem; }
   .formCard { padding: 20px; }
@@ -347,7 +345,6 @@
 }
 
 @media (max-width: 480px) {
-  .heroSection { min-height: 35vh; height: 35vh; }
   .heroContent { padding: 0 1rem 40px 1rem; }
   .admissionSection { padding: 2.5rem 0; }
   .admissionTitle { font-size: 1.25rem; }
@@ -377,7 +374,6 @@
 }
 
 @media (max-width: 360px) {
-  .heroSection { min-height: 32vh; height: 32vh; }
   .admissionSection { padding: 2rem 0; }
   .admissionTitle { font-size: 1rem; }
   .admissionDesc { font-size: 0.8rem; }

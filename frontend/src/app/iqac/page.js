@@ -17,13 +17,13 @@ export default function IQACPage() {
       <Header />
       <main>
         {/* Hero */}
-        <section className={styles.heroSection}>
-          <div className={styles.heroBgImage}>
-            <Image src="/assets/home/hero/2.jpg" alt="IQAC - NMC" width={1400} height={700} priority className={styles.heroBgImg} />
+        <section className="hero-fullscreen" id="home" style={{ minHeight: "50vh", height: "50vh" }}>
+          <div className="hero-bg-image">
+            <Image src="/assets/home/hero/2.jpg" alt="IQAC - NMC" width={1400} height={700} priority className="hero-bg-img" />
           </div>
-          <div className={styles.heroOverlay}></div>
-          <div className={`${styles.heroContent} container`}>
-            <h1 className={`hero-main-title ${styles.heroTitle}`}><em>IQAC</em></h1>
+          <div className="hero-overlay" style={{ background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))" }}></div>
+          <div className="hero-content container" style={{ paddingTop: "100px", display: "flex", flexDirection: "column", justifyContent: "flex-end", height: "100%", paddingBottom: "80px" }}>
+            <h1 className="hero-main-title" style={{ marginBottom: "0.35rem" }}><em>IQAC</em></h1>
             <nav aria-label="breadcrumb" className={styles.heroBreadcrumb}>
               <Link href="/">Home</Link>
               <span className={styles.heroBreadcrumbSep}>&gt;</span>

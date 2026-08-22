@@ -326,7 +326,6 @@
 }
 
 @media (max-width: 768px) {
-  .heroSection { min-height: 40vh; height: 40vh; }
   .heroContent { padding-bottom: 50px; }
   .infoSection { padding: 3.5rem 0; }
   .eligibilitySection { padding: 3.5rem 0; }
@@ -336,7 +335,6 @@
 }
 
 @media (max-width: 575px) {
-  .heroSection { min-height: 38vh; height: 38vh; }
   .container { padding: 0 1.25rem; }
   .infoTitle { font-size: 1.35rem; }
   .infoDesc { font-size: 0.9rem; }
@@ -347,7 +345,6 @@
 }
 
 @media (max-width: 480px) {
-  .heroSection { min-height: 35vh; height: 35vh; }
   .heroContent { padding: 0 1rem 40px 1rem; }
   .container { padding: 0 1rem; }
   .infoTitle { font-size: 1.25rem; }
@@ -379,7 +376,6 @@
 }
 
 @media (max-width: 360px) {
-  .heroSection { min-height: 32vh; height: 32vh; }
   .heroContent { padding: 0 0.75rem 30px 0.75rem; }
   .infoSection { padding: 2rem 0; }
   .eligibilitySection { padding: 2rem 0; }
