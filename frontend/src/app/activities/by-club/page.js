@@ -7,6 +7,7 @@ import Footer from '@/components/layout/Footer/Footer';
 import ActivityHero from '@/components/activities/ActivityHero/ActivityHero';
 import ClubCard from '@/components/activities/ClubCard/ClubCard';
 import ActivityCard from '@/components/activities/ActivityCard/ActivityCard';
+import { getEventsByCategory } from '@/data/activitiesData';
 import styles from './page.module.css';
 
 // SVG Icons for the 9 clubs
@@ -295,14 +296,16 @@ export default function ByClubPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9; // Exactly 3 rows of 3 columns
 
+  const allClubEvents = getEventsByCategory('by-club');
+
   // Reset page whenever filter changes
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedClub]);
 
   const filteredEvents = selectedClub === 'all' 
-    ? realEvents 
-    : realEvents.filter(e => e.clubSlug === selectedClub);
+    ? allClubEvents 
+    : allClubEvents.filter(e => e.subCategoryId === selectedClub);
 
   // Pagination indexing
   const totalPages = Math.ceil(filteredEvents.length / itemsPerPage);
@@ -389,17 +392,9 @@ export default function ByClubPage() {
                     transition={{ duration: 0.3 }}
                   >
                     <ActivityCard 
-                      event={{
-                        id: evt.id,
-                        title: evt.title,
-                        shortDescription: evt.shortDescription,
-                        date: evt.date,
-                        thumbnail: evt.thumbnail,
-                        clubName: evt.clubName,
-                        categoryId: "club",
-                        subCategoryId: evt.clubSlug
-                      }}
-                      disableLink={true}
+                      event={evt}
+                      basePath="/activities/by-club"
+                      disableLink={false}
                     />
                   </motion.div>
                 ))}
