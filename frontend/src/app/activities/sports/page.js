@@ -301,25 +301,43 @@ export default function SportsPage() {
                 className={`${styles.tabBtn} ${activeTab === 'tournaments' ? styles.activeTabBtn : ''}`}
                 onClick={() => { setActiveTab('tournaments'); setSearchQuery(''); }}
               >
-                🏫 Tournaments
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z" />
+                  <line x1="4" y1="22" x2="4" y2="15" />
+                </svg>
+                Tournaments
               </button>
               <button 
                 className={`${styles.tabBtn} ${activeTab === 'championships' ? styles.activeTabBtn : ''}`}
                 onClick={() => { setActiveTab('championships'); setSearchQuery(''); }}
               >
-                🏆 Championships
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
+                  <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
+                  <path d="M4 22h16" />
+                  <path d="M10 14.66V17c0 .55-.45 1-1 1H4v2h16v-2h-5c-.55 0-1-.45-1-1v-2.34" />
+                  <path d="M12 2a5 5 0 0 1 5 5v2H7V7a5 5 0 0 1 5-5z" />
+                </svg>
+                Championships
               </button>
               <button 
                 className={`${styles.tabBtn} ${activeTab === 'selections' ? styles.activeTabBtn : ''}`}
                 onClick={() => { setActiveTab('selections'); setSearchQuery(''); }}
               >
-                🎓 Uni Selections
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
+                  <path d="M6 12v5c3 3 9 3 12 0v-5" />
+                </svg>
+                Uni Selections
               </button>
               <button 
                 className={`${styles.tabBtn} ${activeTab === 'state' ? styles.activeTabBtn : ''}`}
                 onClick={() => { setActiveTab('state'); setSearchQuery(''); }}
               >
-                ⭐ State & Other Events
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                </svg>
+                State &amp; Other Events
               </button>
             </div>
           </div>
@@ -633,17 +651,6 @@ export default function SportsPage() {
               onClick={() => setLightboxIndex(null)}
             >
               <div className={styles.lightboxWrapper} onClick={(e) => e.stopPropagation()}>
-                <button 
-                  className={styles.lightboxPrevBtn} 
-                  onClick={(e) => { 
-                    e.stopPropagation(); 
-                    setLightboxIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length); 
-                  }}
-                  aria-label="Previous image"
-                >
-                  <IconChevronLeft size={22} strokeWidth={2.5} />
-                </button>
-
                 <motion.div 
                   className={styles.lightboxContent}
                   initial={{ scale: 0.9, opacity: 0 }}
@@ -652,35 +659,47 @@ export default function SportsPage() {
                   transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                   onClick={(e) => e.stopPropagation()}
                 >
+                  {/* Left Arrow Button */}
+                  <button 
+                    className={`${styles.lightboxNavBtn} ${styles.lightboxNavPrev}`}
+                    onClick={(e) => { 
+                      e.stopPropagation(); 
+                      setLightboxIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length); 
+                    }}
+                    aria-label="Previous image"
+                  >
+                    <IconChevronLeft size={20} strokeWidth={2.5} />
+                  </button>
+
+                  {/* Close Button */}
                   <button 
                     className={styles.lightboxCloseBtn} 
                     onClick={(e) => { e.stopPropagation(); setLightboxIndex(null); }}
                     aria-label="Close image popup"
                   >
-                    <IconX size={14} strokeWidth={3} />
+                    <IconX size={15} strokeWidth={2.5} />
                   </button>
+
                   <div className={styles.lightboxImgWrapper}>
                     <img 
                       src={galleryImages[lightboxIndex]} 
-                      alt={`Sports Activity Enlarged ${lightboxIndex + 1}`} 
-                      className={styles.lightboxImg} 
+                      alt={`Sports Gallery View ${lightboxIndex + 1}`} 
+                      className={styles.lightboxImg}
                     />
                   </div>
-                  <div className={styles.lightboxCaption}>
-                    <span>Sports Activity {lightboxIndex + 1} of {galleryImages.length}</span>
-                  </div>
-                </motion.div>
 
-                <button 
-                  className={styles.lightboxNextBtn} 
-                  onClick={(e) => { 
-                    e.stopPropagation(); 
-                    setLightboxIndex((prev) => (prev + 1) % galleryImages.length); 
-                  }}
-                  aria-label="Next image"
-                >
-                  <IconChevronRight size={22} strokeWidth={2.5} />
-                </button>
+                  {/* Right Arrow Button */}
+                  <button 
+                    className={`${styles.lightboxNavBtn} ${styles.lightboxNavNext}`}
+                    onClick={(e) => { 
+                      e.stopPropagation(); 
+                      setLightboxIndex((prev) => (prev + 1) % galleryImages.length); 
+                    }}
+                    aria-label="Next image"
+                  >
+                    <IconChevronRight size={20} strokeWidth={2.5} />
+                  </button>
+                </motion.div>
               </div>
             </motion.div>
           )}
