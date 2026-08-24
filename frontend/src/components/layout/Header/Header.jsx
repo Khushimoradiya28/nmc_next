@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import PopupForm from './PopupForm';
 import styles from './Header.module.css';
 
 export default function Header() {
@@ -59,6 +60,7 @@ export default function Header() {
   };
 
   return (
+    <>
     <header className={`${styles.heroHeader} ${scrolled ? styles.scrolled : ''}`} id="header">
       <div className="container">
       <div className={styles.heroHeaderContainer}>
@@ -253,5 +255,9 @@ export default function Header() {
       </div>
       </div>
     </header>
+
+    {/* Popup Contact Form - appears 7 seconds after page load */}
+    { <PopupForm /> }
+    </>
   );
 }

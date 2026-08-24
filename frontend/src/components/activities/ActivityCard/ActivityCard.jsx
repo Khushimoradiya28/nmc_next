@@ -9,7 +9,8 @@ import styles from './ActivityCard.module.css';
 export default function ActivityCard({ event, basePath, disableLink = false }) {
   const getEventPath = () => {
     if (basePath) return `${basePath}/${event.id}`;
-    return `/activities/${event.categoryId}/${event.subCategoryId}/${event.id}`;
+    if (event.categoryId) return `/activities/${event.categoryId}/${event.id}`;
+    return `/activities/by-club/${event.id}`;
   };
 
   const CardWrapper = disableLink ? 'div' : Link;
@@ -25,14 +26,14 @@ export default function ActivityCard({ event, basePath, disableLink = false }) {
         <div className={styles.imageWrapper}>
           <div className={styles.dateTag}>
             <span className={styles.dateNum}>
-              {new Date(event.date).getDate()}
+              {new Date(event.date).getDate() || '15'}
             </span>
             <span className={styles.dateMonth}>
-              {new Date(event.date).toLocaleDateString('en-US', { month: 'short' })}
+              {new Date(event.date).toLocaleDateString('en-US', { month: 'short' }) || 'AUG'}
             </span>
           </div>
           <img 
-            src={event.thumbnail} 
+            src={event.thumbnail || '/assets/activities/club_activity.jpg'} 
             alt={event.title} 
             className={styles.cardImg}
           />
@@ -44,7 +45,7 @@ export default function ActivityCard({ event, basePath, disableLink = false }) {
           
           <div className={styles.cardFooter}>
             <span className={styles.deptTag}>
-              {event.subCategoryId.replace(/-/g, ' ').toUpperCase()}
+              {(event.subCategoryId || event.clubName || 'NMC').replace(/-/g, ' ').toUpperCase()}
             </span>
             <span className={`${styles.arrowCta} ${disableLink ? styles.arrowCtaDisabled : ''}`}>
               Explore Activity
