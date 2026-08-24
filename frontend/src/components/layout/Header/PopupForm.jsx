@@ -141,7 +141,7 @@ export default function PopupForm() {
 
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 7000);
+    }, 15000);
 
     return () => clearTimeout(timer);
   }, [pathname]);
