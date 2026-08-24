@@ -361,6 +361,58 @@
     padding-right: 2.5rem;
 }
 
+/* Input with Icon */
+.inputWithIcon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.fieldIcon {
+    position: absolute;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.inputWithIcon .formInput {
+    padding-left: 2.8rem;
+}
+
+/* Textarea with Icon */
+.textareaWithIcon {
+    position: relative;
+    display: flex;
+}
+
+.textareaFieldIcon {
+    position: absolute;
+    left: 1rem;
+    top: 0.9rem;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.textareaWithIcon .formTextarea {
+    padding-left: 2.8rem;
+}
+
+/* Select Trigger Content with Icon */
+.selectTriggerContent {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.selectTriggerContent .fieldIcon {
+    position: static;
+    flex-shrink: 0;
+}
+
 /* Custom Themed Select Dropdown */
 .customSelectWrapper {
     position: relative;
@@ -388,8 +440,8 @@
 }
 
 .customSelectTrigger.isPlaceholder {
-    color: var(--gray-600, #4b5563);
-    font-weight: 500;
+    color: var(--gray-400, #9ca3af);
+    font-weight: 400;
 }
 
 .customSelectTrigger:hover {
@@ -423,40 +475,97 @@
     border-radius: 0.85rem;
     padding: 0.4rem;
     box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
-    max-height: 230px;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
+    max-height: 200px;
+    overflow: hidden;
     animation: dropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
-    scrollbar-width: thin;
-    scrollbar-color: #cbd5e1 transparent;
 }
+
+.customDropdownMenu::after {
+    display: none;
+}
+
+/* Inner scrollable wrapper handled via JS */
 
 /* Custom Sleek Grey Scrollbar */
 .customDropdownMenu::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
+    background: transparent;
 }
 
-.customDropdownMenu::-webkit-scrollbar-button {
-    display: none !important;
+.customDropdownMenu::-webkit-scrollbar-button,
+.customDropdownMenu::-webkit-scrollbar-button:start:decrement,
+.customDropdownMenu::-webkit-scrollbar-button:end:increment,
+.customDropdownMenu::-webkit-scrollbar-button:vertical:start:increment,
+.customDropdownMenu::-webkit-scrollbar-button:vertical:end:decrement {
+    display: none;
     width: 0;
     height: 0;
+    background: transparent;
 }
 
 .customDropdownMenu::-webkit-scrollbar-track {
-    background: transparent;
-    border-radius: 8px;
-    margin: 6px 0;
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 10px;
+    margin: 8px 0;
 }
 
 .customDropdownMenu::-webkit-scrollbar-thumb {
-    background: #cbd5e1;
-    border-radius: 8px;
+    background: rgba(138, 0, 0, 0.2);
+    border-radius: 10px;
+    min-height: 30px;
 }
 
 .customDropdownMenu::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
+    background: rgba(138, 0, 0, 0.4);
+}
+
+.customDropdownMenu::-webkit-scrollbar-corner,
+.customDropdownMenu::-webkit-resizer {
+    display: none;
+    background: transparent;
+}
+
+/* Inner scroll container - hide native, show custom scrollbar via wrapper */
+.dropdownScrollInner {
+    max-height: 190px;
+    overflow-y: scroll;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-right: 12px;
+}
+
+.dropdownScrollInner::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* Custom scrollbar elements */
+.scrollbarWrapper {
+    position: relative;
+}
+
+.customScrollbar {
+    position: absolute;
+    top: 6px;
+    right: 3px;
+    bottom: 6px;
+    width: 4px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.04);
+    z-index: 2;
+}
+
+.customScrollThumb {
+    width: 100%;
+    min-height: 20px;
+    border-radius: 10px;
+    background: rgba(138, 0, 0, 0.22);
+    transition: background 0.15s ease;
+    cursor: pointer;
+}
+
+.customScrollThumb:hover {
+    background: rgba(138, 0, 0, 0.4);
 }
 
 @keyframes dropdownFade {
@@ -464,6 +573,7 @@
         opacity: 0;
         transform: translateY(-6px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);

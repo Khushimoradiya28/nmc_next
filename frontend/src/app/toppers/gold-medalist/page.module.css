@@ -1,566 +1,722 @@
 .headerRow {
-  background: var(--white);
-  border: 1px solid var(--gray-200);
-  border-left: 5px solid #8a0000; /* Ruby Red theme */
-  border-radius: 1.25rem;
-  padding: 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
-  margin-bottom: 3rem;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-left: 5px solid #8a0000;
+    border-radius: 1.25rem;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    margin-bottom: 3rem;
+    position: relative;
+    overflow: visible;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .headerRow:hover {
-  border-color: rgba(138, 0, 0, 0.2);
-  border-left-color: #b30000;
-  box-shadow: 0 15px 35px rgba(138, 0, 0, 0.03);
+    border-color: rgba(138, 0, 0, 0.2);
+    border-left-color: #b30000;
+    box-shadow: 0 15px 35px rgba(138, 0, 0, 0.03);
 }
 
 .headerRow::after {
-  content: '';
-  position: absolute;
-  top: -50px;
-  right: -50px;
-  width: 150px;
-  height: 150px;
-  background: radial-gradient(circle, rgba(138, 0, 0, 0.04) 0%, transparent 70%);
-  border-radius: 50%;
-  pointer-events: none;
+    content: '';
+    position: absolute;
+    top: -50px;
+    right: -50px;
+    width: 150px;
+    height: 150px;
+    background: radial-gradient(circle, rgba(138, 0, 0, 0.04) 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
 }
 
 .headerText {
-  flex: 1;
-  min-width: 250px;
-  position: relative;
-  z-index: 2;
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+    z-index: 2;
 }
 
 .sectionTitle {
-  font-size: 1.6rem;
-  font-weight: 900;
-  color: var(--gray-900);
-  margin: 0 0 0.25rem 0;
-  letter-spacing: -0.5px;
+    font-size: 1.6rem;
+    font-weight: 900;
+    color: var(--gray-900);
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.5px;
 }
 
 .sectionSubtitle {
-  font-size: 0.9rem;
-  color: var(--gray-500);
-  margin: 0;
-  font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--gray-500);
+    margin: 0;
+    font-weight: 600;
 }
 
 .filterControls {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-  flex-wrap: wrap;
-  position: relative;
-  z-index: 2;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 10;
 }
 
+/* ============================================================
+   Custom Dropdown Styles (Pill-shaped like reference design)
+   ============================================================ */
+.customDropdown {
+    position: relative;
+    min-width: 170px;
+}
+
+.dropdownTrigger {
+    width: 100%;
+    padding: .75rem 1rem .75rem 1rem;
+    border-radius: 2rem;
+    border: 1.5px solid var(--gray-200);
+    background-color: var(--white);
+    color: var(--gray-800);
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    text-align: left;
+    white-space: nowrap;
+}
+
+.dropdownTrigger:hover {
+    border-color: rgba(138, 0, 0, 0.3);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.06);
+}
+
+.dropdownOpen {
+    border-color: #8a0000;
+    box-shadow: 0 6px 20px rgba(138, 0, 0, 0.1);
+}
+
+.dropdownValue {
+    flex: 1;
+    color: var(--gray-800);
+    font-weight: 700;
+}
+
+.dropdownArrow {
+    color: #8a0000;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    flex-shrink: 0;
+}
+
+.dropdownArrowRotated {
+    transform: rotate(180deg);
+}
+
+.dropdownMenu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 0.75rem;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+    list-style: none;
+    padding: 0.4rem 0;
+    margin: 0;
+    z-index: 100;
+    max-height: 280px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    animation: dropdownFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.dropdownMenu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdownMenu::-webkit-scrollbar-track {
+    background: #f9fafb;
+    border-radius: 10px;
+}
+
+.dropdownMenu::-webkit-scrollbar-thumb {
+    background: var(--gray-300, #d1d5db);
+    border-radius: 10px;
+}
+
+.dropdownMenu::-webkit-scrollbar-thumb:hover {
+    background: var(--gray-400, #9ca3af);
+}
+
+@keyframes dropdownFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdownItem {
+    padding: 0.8rem 1.25rem;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--gray-700);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid var(--gray-100, #f3f4f6);
+}
+
+.dropdownItem:last-child {
+    border-bottom: none;
+}
+
+.dropdownItem:hover {
+    background: rgba(138, 0, 0, 0.04);
+    color: #8a0000;
+}
+
+.dropdownItemActive {
+    background: rgba(138, 0, 0, 0.06);
+    color: #8a0000;
+    font-weight: 700;
+}
+
+/* Legacy filterSelect (kept for backwards compatibility) */
 .filterSelect {
-  padding: 0.75rem 1.25rem;
-  border-radius: 0.75rem;
-  border: 1.5px solid var(--gray-200);
-  background-color: var(--white);
-  color: var(--gray-800);
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.3s ease;
-  appearance: none;
-  min-width: 150px;
-  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a0000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1.15rem center;
-  background-size: 12px;
-  padding-right: 2.5rem;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
-}
-
-.filterSelect:focus {
-  border-color: #8a0000;
-  box-shadow: 0 0 0 3px rgba(138, 0, 0, 0.15);
+    display: none;
 }
 
 /* Expandable Search Styles */
 .searchWrapper {
-  display: flex;
-  align-items: center;
-  position: relative;
+    display: flex;
+    align-items: center;
+    position: relative;
 }
 
 .searchButton {
-  width: 38px;
-  height: 38px;
-  border-radius: 50%;
-  border: 1.5px solid var(--gray-200);
-  background-color: var(--white);
-  color: #8a0000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  outline: none;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
-  flex-shrink: 0;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid var(--gray-200);
+    background-color: var(--white);
+    color: #8a0000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.02);
+    flex-shrink: 0;
 }
 
 .searchButton:hover {
-  border-color: #8a0000;
-  background-color: rgba(138, 0, 0, 0.03);
-  transform: scale(1.05);
+    border-color: #8a0000;
+    background-color: rgba(138, 0, 0, 0.03);
+    transform: scale(1.05);
 }
 
 .searchInput {
-  padding: 0.65rem 1rem;
-  border-radius: 0.75rem;
-  border: 1.5px solid #8a0000;
-  background-color: var(--white);
-  color: var(--gray-800);
-  font-size: 0.85rem;
-  font-weight: 600;
-  outline: none;
-  width: 180px;
-  margin-right: 0.5rem;
-  box-shadow: 0 4px 12px rgba(138, 0, 0, 0.05);
-  animation: expandIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    padding: 0.65rem 1rem;
+    border-radius: 0.75rem;
+    border: 1.5px solid #8a0000;
+    background-color: var(--white);
+    color: var(--gray-800);
+    font-size: 0.85rem;
+    font-weight: 600;
+    outline: none;
+    width: 180px;
+    margin-right: 0.5rem;
+    box-shadow: 0 4px 12px rgba(138, 0, 0, 0.05);
+    animation: expandIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @keyframes expandIn {
-  from {
-    width: 0;
-    opacity: 0;
-  }
-  to {
-    width: 180px;
-    opacity: 1;
-  }
+    from {
+        width: 0;
+        opacity: 0;
+    }
+
+    to {
+        width: 180px;
+        opacity: 1;
+    }
 }
 
 /* Redesigned Compact Grid */
 .medalistGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 2rem;
 }
 
 .medalistCard {
-  background: var(--white);
-  border: 1px solid var(--gray-200);
-  border-radius: 1.25rem;
-  position: relative;
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Hide the overflow for the corner ribbon! */
+    background: var(--white);
+    border: 1px solid var(--gray-200);
+    border-radius: 1.25rem;
+    position: relative;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .medalistCard::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: 1.25rem;
-  padding: 1.5px;
-  background: linear-gradient(135deg, #8a0000, #f59e0b, transparent, transparent); /* Red and Yellow/Gold theme */
-  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
-  opacity: 0;
-  transition: opacity 0.4s ease;
-  pointer-events: none;
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 1.25rem;
+    padding: 1.5px;
+    background: linear-gradient(135deg, #8a0000, #f59e0b, transparent, transparent);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
 }
 
 .medalistCard:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(138, 0, 0, 0.05);
-  border-color: rgba(138, 0, 0, 0.15);
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(138, 0, 0, 0.05);
+    border-color: rgba(138, 0, 0, 0.15);
 }
 
 .medalistCard:hover::before {
-  opacity: 1;
+    opacity: 1;
 }
 
 .imageContainer {
-  position: relative;
-  height: 210px;
-  width: 100%;
-  overflow: hidden;
-  border-radius: 1.25rem 1.25rem 0 0;
+    position: relative;
+    height: 210px;
+    width: 100%;
+    overflow: hidden;
+    border-radius: 1.25rem 1.25rem 0 0;
 }
 
 .cardImage {
-  object-fit: cover;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .medalistCard:hover .cardImage {
-  transform: scale(1.06);
+    transform: scale(1.06);
 }
 
-/* Sleek Diagonal Corner Ribbon (Red and Yellow theme) */
+/* Sleek Diagonal Corner Ribbon */
 .ribbon {
-  position: absolute;
-  top: 18px;
-  left: -32px;
-  background: linear-gradient(135deg, #8a0000 0%, #b30000 100%);
-  color: var(--white);
-  width: 120px;
-  text-align: center;
-  font-size: 0.6rem;
-  font-weight: 800;
-  padding: 0.3rem 0;
-  transform: rotate(-45deg);
-  box-shadow: 0 2px 8px rgba(138, 0, 0, 0.3);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  z-index: 5;
-  border-bottom: 1.5px solid #f59e0b; /* Yellow border highlight */
+    position: absolute;
+    top: 18px;
+    left: -32px;
+    background: linear-gradient(135deg, #8a0000 0%, #b30000 100%);
+    color: var(--white);
+    width: 120px;
+    text-align: center;
+    font-size: 0.6rem;
+    font-weight: 800;
+    padding: 0.3rem 0;
+    transform: rotate(-45deg);
+    box-shadow: 0 2px 8px rgba(138, 0, 0, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    z-index: 5;
+    border-bottom: 1.5px solid #f59e0b;
 }
 
 .cardContent {
-  padding: 1.5rem 1.25rem 1.25rem 1.25rem;
-  text-align: center;
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+    padding: 1.5rem 1.25rem 1.25rem 1.25rem;
+    text-align: center;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .name {
-  font-size: 1.2rem;
-  font-weight: 800;
-  color: var(--gray-900);
-  margin: 0 0 0.25rem 0;
-  letter-spacing: -0.2px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: var(--gray-900);
+    margin: 0 0 0.25rem 0;
+    letter-spacing: -0.2px;
 }
 
 .metaInfo {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: var(--gray-400);
-  margin: 0 0 1rem 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--gray-400);
+    margin: 0 0 1rem 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .scoreBadge {
-  background: rgba(138, 0, 0, 0.03); /* Red theme tint */
-  border: 1px dashed rgba(138, 0, 0, 0.35); /* Red dashed border */
-  border-radius: 0.5rem;
-  padding: 0.5rem 1rem;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  width: 100%;
+    background: rgba(138, 0, 0, 0.03);
+    border: 1px dashed rgba(138, 0, 0, 0.35);
+    border-radius: 0.5rem;
+    padding: 0.5rem 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 100%;
 }
 
 .scoreLabel {
-  font-size: 0.75rem;
-  color: var(--gray-500);
-  font-weight: 700;
+    font-size: 0.75rem;
+    color: var(--gray-500);
+    font-weight: 700;
 }
 
 .scoreValue {
-  color: #8a0000; /* Crimson Red text for grade score */
-  font-size: 1.05rem;
-  font-weight: 900;
+    color: #8a0000;
+    font-size: 1.05rem;
+    font-weight: 900;
 }
 
 .noResults {
-  text-align: center;
-  padding: 4rem 2rem;
-  background: var(--white);
-  border-radius: 1.25rem;
-  border: 1px solid var(--gray-200);
-  box-shadow: 0 10px 25px rgba(0,0,0,0.02);
+    text-align: center;
+    padding: 4rem 2rem;
+    background: var(--white);
+    border-radius: 1.25rem;
+    border: 1px solid var(--gray-200);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.02);
 }
 
 .noResultsTitle {
-  font-size: 1.4rem;
-  color: var(--gray-800);
-  margin-bottom: 0.5rem;
-  font-weight: 800;
+    font-size: 1.4rem;
+    color: var(--gray-800);
+    margin-bottom: 0.5rem;
+    font-weight: 800;
 }
 
 .noResultsText {
-  color: var(--gray-500);
-  font-size: 0.95rem;
+    color: var(--gray-500);
+    font-size: 0.95rem;
 }
 
 .contentSection {
-  padding: 5rem 0;
+    padding: 5rem 0;
 }
 
 .dropdownsGroup {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
+    display: flex;
+    gap: 1rem;
+    align-items: center;
 }
 
 .paginationContainer {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-top: 3rem;
-  width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3rem;
+    width: 100%;
 }
 
 .mobilePageIndicator {
-  font-family: var(--font-body, 'Inter', sans-serif);
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: var(--gray-700, #4b5563);
-  background: var(--gray-100, #f3f4f6);
-  padding: 6px 16px;
-  border-radius: 20px;
-  min-width: 100px;
-  text-align: center;
-  user-select: none;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--gray-700, #4b5563);
+    background: var(--gray-100, #f3f4f6);
+    padding: 6px 16px;
+    border-radius: 20px;
+    min-width: 100px;
+    text-align: center;
+    user-select: none;
 }
 
 .pageNavBtn {
-  background: #8a0000;
-  border: none;
-  color: #ffffff;
-  height: 38px;
-  padding: 0 1.1rem;
-  border-radius: 20px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.35rem;
-  font-size: 0.82rem;
-  font-weight: 700;
-  font-family: var(--font-body, 'Inter', sans-serif);
-  box-shadow: 0 4px 10px rgba(138, 0, 0, 0.2);
-  transition: all 0.2s ease;
-  letter-spacing: 0.3px;
+    background: #8a0000;
+    border: none;
+    color: #ffffff;
+    height: 38px;
+    padding: 0 1.1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    box-shadow: 0 4px 10px rgba(138, 0, 0, 0.2);
+    transition: all 0.2s ease;
+    letter-spacing: 0.3px;
 }
 
 .pageNavBtn:hover:not(:disabled) {
-  background: #b30000;
-  box-shadow: 0 6px 14px rgba(138, 0, 0, 0.3);
+    background: #b30000;
+    box-shadow: 0 6px 14px rgba(138, 0, 0, 0.3);
 }
 
 .pageNavBtn:active {
-  background: #6b0000;
+    background: #6b0000;
 }
 
 .pageIndicator {
-  font-family: var(--font-body, 'Inter', sans-serif);
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: var(--gray-600, #4b5563);
-  background: #f3f4f6;
-  border: 1.5px solid var(--gray-200, #e5e7eb);
-  padding: 0.3rem 1rem;
-  border-radius: 20px;
-  min-width: 72px;
-  text-align: center;
-  user-select: none;
+    font-family: var(--font-body, 'Inter', sans-serif);
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--gray-600, #4b5563);
+    background: #f3f4f6;
+    border: 1.5px solid var(--gray-200, #e5e7eb);
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    min-width: 72px;
+    text-align: center;
+    user-select: none;
 }
 
 .pageNavDisabled {
-  opacity: 0.35;
-  background: var(--gray-200, #e5e7eb);
-  color: var(--gray-400, #9ca3af);
-  box-shadow: none;
-  cursor: not-allowed;
+    opacity: 0.35;
+    background: var(--gray-200, #e5e7eb);
+    color: var(--gray-400, #9ca3af);
+    box-shadow: none;
+    cursor: not-allowed;
 }
 
-/* Desktop numbered page buttons */
 .pageNumbersRow {
-  display: flex;
-  align-items: center;
-  gap: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
 }
 
 .pageNumBtn {
-  min-width: 36px;
-  height: 36px;
-  padding: 0 0.5rem;
-  border: 1.5px solid var(--gray-200, #e5e7eb);
-  background: #ffffff;
-  color: var(--gray-700, #4b5563);
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 700;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s ease;
-  font-family: var(--font-body, 'Inter', sans-serif);
+    min-width: 36px;
+    height: 36px;
+    padding: 0 0.5rem;
+    border: 1.5px solid var(--gray-200, #e5e7eb);
+    background: #ffffff;
+    color: var(--gray-700, #4b5563);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    font-family: var(--font-body, 'Inter', sans-serif);
 }
 
 .pageNumBtn:hover {
-  border-color: #8a0000;
-  color: #8a0000;
-  background: rgba(138, 0, 0, 0.04);
+    border-color: #8a0000;
+    color: #8a0000;
+    background: rgba(138, 0, 0, 0.04);
 }
 
 .pageNumActive {
-  background: #8a0000 !important;
-  color: #ffffff !important;
-  border-color: #8a0000 !important;
-  box-shadow: 0 4px 10px rgba(138, 0, 0, 0.25);
+    background: #8a0000 !important;
+    color: #ffffff !important;
+    border-color: #8a0000 !important;
+    box-shadow: 0 4px 10px rgba(138, 0, 0, 0.25);
 }
 
 /* ==========================================================================
    TABLETS (768px to 1023px)
    ========================================================================== */
 @media screen and (max-width: 1023px) {
-  .medalistGrid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 1.5rem;
-  }
+    .medalistGrid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 1.5rem;
+    }
 }
 
 /* ==========================================================================
    MOBILE (767px and below)
    ========================================================================== */
 @media screen and (max-width: 767px) {
-  .headerRow {
-    flex-direction: column;
-    align-items: flex-start !important;
-    gap: 0.9rem !important;
-    padding: 1.2rem !important;
-    border-radius: 14px !important;
-    box-shadow: none !important;
-    margin-bottom: 1.5rem !important;
-    border-left-width: 4px !important;
-  }
-  .sectionTitle {
-    font-size: 1.25rem !important;
-    margin-bottom: 0.2rem !important;
-  }
-  .sectionSubtitle {
-    font-size: 0.78rem !important;
-    line-height: 1.45 !important;
-  }
-  
-  /* Normal state: everything on one row */
-  .filterControls {
-    width: 100% !important;
-    display: flex !important;
-    flex-direction: row !important;
-    align-items: center !important;
-    gap: 0.5rem !important;
-    flex-wrap: nowrap !important;
-  }
-  .searchWrapper {
-    width: auto !important;
-    display: flex !important;
-    align-items: center;
-  }
-  .searchButton {
-    width: 32px !important;
-    height: 32px !important;
-  }
-  .searchInput {
-    display: none !important; /* Hide search input in normal one-row flow */
-  }
-  .dropdownsGroup {
-    display: flex !important;
-    flex: 1 !important;
-    gap: 0.5rem !important;
-    align-items: center;
-    width: auto !important;
-  }
-  .filterSelect {
-    flex: 1 !important;
-    min-width: 0 !important;
-    padding: 0.58rem 1.8rem 0.58rem 0.75rem !important;
-    font-size: 0.78rem !important;
-    border-radius: 8px !important;
-    background-position: right 0.75rem center !important;
-  }
+    .dropdownItem {
+        padding: .5rem 1rem;
+        font-size: .8rem;
+    }
 
-  /* Active search state: search bar full-width on row 1, dropdowns split on row 2 */
-  .filterControls.searchActive {
-    flex-direction: column !important;
-    align-items: stretch !important;
-    gap: 0.75rem !important;
-  }
-  .filterControls.searchActive .searchWrapper {
-    width: 100% !important;
-    justify-content: space-between !important;
-  }
-  .filterControls.searchActive .searchInput {
-    display: block !important;
-    flex: 1 !important;
-    padding: 0.45rem 0.75rem !important;
-    font-size: 0.78rem !important;
-    border-radius: 8px !important;
-    width: auto !important;
-    margin-right: 0.5rem !important;
-  }
-  .filterControls.searchActive .dropdownsGroup {
-    width: 100% !important;
-    flex: none !important;
-  }
-  .filterControls.searchActive .filterSelect {
-    width: 50% !important;
-  }
-  .contentSection {
-    padding: 1.5rem 0 !important;
-  }
-  .medalistGrid {
-    gap: 1.25rem !important;
-  }
-  .medalistCard {
-    border-radius: 14px !important;
-    box-shadow: none !important;
-    border-color: var(--gray-200) !important;
-  }
-  .medalistCard::before {
-    display: none !important;
-  }
-  .imageContainer {
-    height: 180px !important;
-    border-radius: 14px 14px 0 0 !important;
-  }
-  .cardContent {
-    padding: 1rem 0.85rem !important;
-  }
-  .name {
-    font-size: 1.05rem !important;
-    margin-bottom: 0.15rem !important;
-  }
-  .metaInfo {
-    font-size: 0.7rem !important;
-    margin-bottom: 0.75rem !important;
-  }
-  .scoreBadge {
-    padding: 0.4rem 0.75rem !important;
-    border-radius: 6px !important;
-    border-style: solid !important;
-    border-color: rgba(138, 0, 0, 0.15) !important;
-  }
-  .scoreLabel {
-    font-size: 0.7rem !important;
-  }
-  .scoreValue {
-    font-size: 0.9rem !important;
-  }
-  .ribbon {
-    top: 12px !important;
-    left: -35px !important;
-    font-size: 0.55rem !important;
-    padding: 0.2rem 0 !important;
-  }
+    .headerRow {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 0.9rem !important;
+        padding: 1.2rem !important;
+        border-radius: 14px !important;
+        box-shadow: none !important;
+        margin-bottom: 1.5rem !important;
+        border-left-width: 4px !important;
+    }
+
+    .sectionTitle {
+        font-size: 1.25rem !important;
+        margin-bottom: 0.2rem !important;
+    }
+
+    .sectionSubtitle {
+        font-size: 0.78rem !important;
+        line-height: 1.45 !important;
+    }
+
+    /* Normal state: everything on one row */
+    .filterControls {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: row !important;
+        align-items: center !important;
+        gap: 0.5rem !important;
+        flex-wrap: nowrap !important;
+    }
+
+    .searchWrapper {
+        width: auto !important;
+        display: flex !important;
+        align-items: center;
+    }
+
+    .searchButton {
+        width: 32px !important;
+        height: 32px !important;
+    }
+
+    .searchInput {
+        display: none !important;
+    }
+
+    .dropdownsGroup {
+        display: flex !important;
+        flex: 1 !important;
+        gap: 0.5rem !important;
+        align-items: center;
+        width: auto !important;
+    }
+
+    .customDropdown {
+        flex: 1 !important;
+        min-width: 0 !important;
+    }
+
+    .dropdownTrigger {
+        padding: 0.58rem 1.8rem 0.58rem 0.75rem !important;
+        font-size: 0.78rem !important;
+        border-radius: 1.5rem !important;
+    }
+
+    .dropdownMenu {
+        min-width: 180px;
+    }
+
+    /* Active search state */
+    .filterControls.searchActive {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 0.75rem !important;
+    }
+
+    .filterControls.searchActive .searchWrapper {
+        width: 100% !important;
+        justify-content: space-between !important;
+    }
+
+    .filterControls.searchActive .searchInput {
+        display: block !important;
+        flex: 1 !important;
+        padding: 0.45rem 0.75rem !important;
+        font-size: 0.78rem !important;
+        border-radius: 8px !important;
+        width: auto !important;
+        margin-right: 0.5rem !important;
+    }
+
+    .filterControls.searchActive .dropdownsGroup {
+        width: 100% !important;
+        flex: none !important;
+    }
+
+    .filterControls.searchActive .customDropdown {
+        width: 50% !important;
+        flex: none !important;
+    }
+
+    .contentSection {
+        padding: 1.5rem 0 !important;
+    }
+
+    .medalistGrid {
+        gap: 1.25rem !important;
+    }
+
+    .medalistCard {
+        border-radius: 14px !important;
+        box-shadow: none !important;
+        border-color: var(--gray-200) !important;
+    }
+
+    .medalistCard::before {
+        display: none !important;
+    }
+
+    .imageContainer {
+        height: 180px !important;
+        border-radius: 14px 14px 0 0 !important;
+    }
+
+    .cardContent {
+        padding: 1rem 0.85rem !important;
+    }
+
+    .name {
+        font-size: 1.05rem !important;
+        margin-bottom: 0.15rem !important;
+    }
+
+    .metaInfo {
+        font-size: 0.7rem !important;
+        margin-bottom: 0.75rem !important;
+    }
+
+    .scoreBadge {
+        padding: 0.4rem 0.75rem !important;
+        border-radius: 6px !important;
+        border-style: solid !important;
+        border-color: rgba(138, 0, 0, 0.15) !important;
+    }
+
+    .scoreLabel {
+        font-size: 0.7rem !important;
+    }
+
+    .scoreValue {
+        font-size: 0.9rem !important;
+    }
+
+    .ribbon {
+        top: 12px !important;
+        left: -35px !important;
+        font-size: 0.55rem !important;
+        padding: 0.2rem 0 !important;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .dropdownsGroup {
+        flex-direction: column;
+    }
+
+    .dropdownTrigger,
+    .customDropdown {
+        width: 100%;
+    }
 }

@@ -261,7 +261,7 @@ export default function PopupForm() {
                         type="text"
                         name="firstName"
                         className={styles.formInput}
-                        placeholder="Your name here..."
+                        placeholder="Your First Name"
                         value={formData.firstName}
                         onChange={handleChange}
                         required
@@ -282,7 +282,7 @@ export default function PopupForm() {
                         type="text"
                         name="lastName"
                         className={styles.formInput}
-                        placeholder="Your last name here..."
+                        placeholder="Your Last Name"
                         value={formData.lastName}
                         onChange={handleChange}
                       />
@@ -303,7 +303,7 @@ export default function PopupForm() {
                         type="text"
                         name="website"
                         className={styles.formInput}
-                        placeholder="Enter your Website ..."
+                        placeholder="Enter your Website"
                         value={formData.website}
                         onChange={handleChange}
                       />
@@ -323,7 +323,7 @@ export default function PopupForm() {
                         type="text"
                         name="reason"
                         className={styles.formInput}
-                        placeholder="Reason contacting us ..."
+                        placeholder="Reason contacting us"
                         value={formData.reason}
                         onChange={handleChange}
                       />
@@ -377,7 +377,7 @@ export default function PopupForm() {
                       <textarea
                         name="message"
                         className={styles.formTextarea}
-                        placeholder="Your message..."
+                        placeholder="Your message"
                         value={formData.message}
                         onChange={handleChange}
                         required

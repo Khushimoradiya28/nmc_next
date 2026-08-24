@@ -1,7 +1,60 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './page.module.css';
+
+// Custom Scrollbar Dropdown wrapper
+function ScrollableDropdown({ children, onWheel }) {
+  const scrollRef = useRef(null);
+  const thumbRef = useRef(null);
+  const trackRef = useRef(null);
+  const [thumbHeight, setThumbHeight] = useState(0);
+  const [thumbTop, setThumbTop] = useState(0);
+  const [showScrollbar, setShowScrollbar] = useState(false);
+
+  const updateThumb = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const { scrollTop, scrollHeight, clientHeight } = el;
+    if (scrollHeight <= clientHeight) {
+      setShowScrollbar(false);
+      return;
+    }
+    setShowScrollbar(true);
+    const trackHeight = clientHeight - 12; // 6px margin top+bottom
+    const ratio = clientHeight / scrollHeight;
+    const height = Math.max(ratio * trackHeight, 24);
+    const top = (scrollTop / (scrollHeight - clientHeight)) * (trackHeight - height);
+    setThumbHeight(height);
+    setThumbTop(top);
+  }, []);
+
+  useEffect(() => {
+    updateThumb();
+  }, [children, updateThumb]);
+
+  return (
+    <div className={styles.scrollbarWrapper}>
+      <div
+        ref={scrollRef}
+        className={styles.dropdownScrollInner}
+        onScroll={updateThumb}
+        onWheel={onWheel}
+      >
+        {children}
+      </div>
+      {showScrollbar && (
+        <div className={styles.customScrollbar} ref={trackRef}>
+          <div
+            ref={thumbRef}
+            className={styles.customScrollThumb}
+            style={{ height: thumbHeight, transform: `translateY(${thumbTop}px)` }}
+          />
+        </div>
+      )}
+    </div>
+  );
+}
 
 const COURSE_OPTIONS = [
   { value: 'bca', label: 'B.C.A. – ₹15,000/Sem' },
@@ -107,51 +160,84 @@ export default function ContactForm() {
         <div className={styles.formGrid}>
           {/* First Name */}
           <div className={styles.formGroup}>
-            <input
-              type="text"
-              name="firstName"
-              className={styles.formInput}
-              placeholder="Your name here..."
-              value={formData.firstName}
-              onChange={handleChange}
-              required
-            />
+            <div className={styles.inputWithIcon}>
+              <span className={styles.fieldIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
+              <input
+                type="text"
+                name="firstName"
+                className={styles.formInput}
+                placeholder="Your First Name"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           {/* Last Name */}
           <div className={styles.formGroup}>
-            <input
-              type="text"
-              name="lastName"
-              className={styles.formInput}
-              placeholder="Your last name here..."
-              value={formData.lastName}
-              onChange={handleChange}
-            />
+            <div className={styles.inputWithIcon}>
+              <span className={styles.fieldIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+              </span>
+              <input
+                type="text"
+                name="lastName"
+                className={styles.formInput}
+                placeholder="Your Last Name"
+                value={formData.lastName}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
           {/* Website */}
           <div className={styles.formGroup}>
-            <input
-              type="text"
-              name="website"
-              className={styles.formInput}
-              placeholder="Enter your Website ..."
-              value={formData.website}
-              onChange={handleChange}
-            />
+            <div className={styles.inputWithIcon}>
+              <span className={styles.fieldIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </span>
+              <input
+                type="text"
+                name="website"
+                className={styles.formInput}
+                placeholder="Enter your Website"
+                value={formData.website}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
           {/* Reason */}
           <div className={styles.formGroup}>
-            <input
-              type="text"
-              name="reason"
-              className={styles.formInput}
-              placeholder="Reason contacting us ..."
-              value={formData.reason}
-              onChange={handleChange}
-            />
+            <div className={styles.inputWithIcon}>
+              <span className={styles.fieldIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </span>
+              <input
+                type="text"
+                name="reason"
+                className={styles.formInput}
+                placeholder="Reason contacting us"
+                value={formData.reason}
+                onChange={handleChange}
+              />
+            </div>
           </div>
 
           {/* Choose Course Dropdown */}
@@ -167,7 +253,15 @@ export default function ContactForm() {
                 aria-haspopup="listbox"
                 aria-expanded={courseOpen}
               >
-                <span>{selectedCourseObj ? selectedCourseObj.label : 'Choose Course'}</span>
+                <span className={styles.selectTriggerContent}>
+                  <span className={styles.fieldIcon}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                      <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                    </svg>
+                  </span>
+                  <span>{selectedCourseObj ? selectedCourseObj.label : 'Choose Course'}</span>
+                </span>
                 <span className={styles.selectChevron}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
@@ -179,8 +273,8 @@ export default function ContactForm() {
                 <div
                   className={styles.customDropdownMenu}
                   role="listbox"
-                  onWheel={(e) => e.stopPropagation()}
                 >
+                  <ScrollableDropdown onWheel={(e) => e.stopPropagation()}>
                   {COURSE_OPTIONS.map((option) => {
                     const isSelected = formData.course === option.value;
                     return (
@@ -202,6 +296,7 @@ export default function ContactForm() {
                       </div>
                     );
                   })}
+                  </ScrollableDropdown>
                 </div>
               )}
             </div>
@@ -221,7 +316,17 @@ export default function ContactForm() {
                 aria-haspopup="listbox"
                 aria-expanded={teacherOpen}
               >
-                <span>{selectedTeacherObj ? selectedTeacherObj.label : 'Choose Teacher / Department'}</span>
+                <span className={styles.selectTriggerContent}>
+                  <span className={styles.fieldIcon}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                      <circle cx="9" cy="7" r="4"/>
+                      <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                      <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                  </span>
+                  <span>{selectedTeacherObj ? selectedTeacherObj.label : 'Choose Teacher / Department'}</span>
+                </span>
                 <span className={styles.selectChevron}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                     <polyline points="6 9 12 15 18 9"></polyline>
@@ -233,8 +338,8 @@ export default function ContactForm() {
                 <div
                   className={styles.customDropdownMenu}
                   role="listbox"
-                  onWheel={(e) => e.stopPropagation()}
                 >
+                  <ScrollableDropdown onWheel={(e) => e.stopPropagation()}>
                   {TEACHER_OPTIONS.map((option) => {
                     const isSelected = formData.teacher === option.value;
                     return (
@@ -256,6 +361,7 @@ export default function ContactForm() {
                       </div>
                     );
                   })}
+                  </ScrollableDropdown>
                 </div>
               )}
             </div>
@@ -264,14 +370,21 @@ export default function ContactForm() {
 
           {/* Message */}
           <div className={styles.formGroupFull}>
-            <textarea
-              name="message"
-              className={styles.formTextarea}
-              placeholder="Your message ..."
-              value={formData.message}
-              onChange={handleChange}
-              required
-            ></textarea>
+            <div className={styles.textareaWithIcon}>
+              <span className={styles.textareaFieldIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+              </span>
+              <textarea
+                name="message"
+                className={styles.formTextarea}
+                placeholder="Your message"
+                value={formData.message}
+                onChange={handleChange}
+                required
+              ></textarea>
+            </div>
           </div>
 
           {/* Submit Button */}
