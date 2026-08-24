@@ -373,6 +373,12 @@
   }
 }
 
+@media (max-width: 768px) {
+  .footer {
+    padding-bottom: 56px;
+  }
+}
+
 @media (max-width: 640px) {
   .footerGrid {
     grid-template-columns: 1fr;
@@ -391,13 +397,5 @@
     align-items: flex-start;
     gap: 12px;
     width: 100%;
-  }
-
-  .bigMarqueeText, .bigMarqueeDot {
-    font-size: clamp(3rem, 11vw, 5.5rem);
-  }
-
-  .bigMarqueeDot {
-    margin: 0 0.75rem;
   }
 }
