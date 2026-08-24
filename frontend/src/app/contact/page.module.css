@@ -250,6 +250,7 @@
 .socialLinks {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.6rem;
     margin-top: 0.5rem;
 }
@@ -358,6 +359,146 @@
     background-repeat: no-repeat;
     background-position: right 1rem center;
     padding-right: 2.5rem;
+}
+
+/* Custom Themed Select Dropdown */
+.customSelectWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.customSelectTrigger {
+    width: 100%;
+    padding: 0.82rem 1.1rem;
+    border-radius: 0.65rem;
+    border: 1px solid var(--gray-300, #d1d5db);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--gray-900, #111827);
+    background: var(--white, #ffffff);
+    font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.customSelectTrigger.isPlaceholder {
+    color: var(--gray-600, #4b5563);
+    font-weight: 500;
+}
+
+.customSelectTrigger:hover {
+    border-color: var(--red-800, #8a0000);
+}
+
+.customSelectTrigger.isOpen {
+    border-color: var(--red-800, #8a0000);
+    box-shadow: 0 0 0 3px rgba(138, 0, 0, 0.08);
+}
+
+.selectChevron {
+    color: var(--gray-500, #6b7280);
+    transition: transform 0.25s ease, color 0.25s ease;
+    flex-shrink: 0;
+}
+
+.customSelectTrigger.isOpen .selectChevron {
+    transform: rotate(180deg);
+    color: var(--red-800, #8a0000);
+}
+
+.customDropdownMenu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 60;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    border-radius: 0.85rem;
+    padding: 0.4rem;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+    max-height: 230px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    touch-action: pan-y;
+    animation: dropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+/* Custom Sleek Grey Scrollbar */
+.customDropdownMenu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.customDropdownMenu::-webkit-scrollbar-button {
+    display: none !important;
+    width: 0;
+    height: 0;
+}
+
+.customDropdownMenu::-webkit-scrollbar-track {
+    background: transparent;
+    border-radius: 8px;
+    margin: 6px 0;
+}
+
+.customDropdownMenu::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 8px;
+}
+
+.customDropdownMenu::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.customDropdownOption {
+    padding: 0.65rem 0.9rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    user-select: none;
+}
+
+.customDropdownOption:hover {
+    background: #fff5f5;
+    color: var(--red-800, #8a0000);
+}
+
+.customDropdownOption.isSelected {
+    background: #fdf2f2;
+    color: var(--red-800, #8a0000);
+    font-weight: 700;
+}
+
+.optionCheckmark {
+    color: var(--red-800, #8a0000);
+    margin-left: 0.5rem;
+    flex-shrink: 0;
 }
 
 .formTextarea {

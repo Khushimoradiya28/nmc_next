@@ -8174,7 +8174,7 @@ select.form-control {
   border-radius: var(--r-full);
   font-size: 0.9rem;
   font-weight: 700;
-  color: var(--gray-600);
+  color: var(--gray-700);
   background: var(--white);
   border: 1px solid var(--gray-200);
   cursor: pointer;
@@ -8182,10 +8182,23 @@ select.form-control {
   box-shadow: var(--shadow-xs);
 }
 
+.digi-tab svg {
+  color: #B00000;
+  stroke: #B00000;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
 .digi-tab:hover {
   border-color: var(--gold-400);
-  color: var(--gray-900);
-  background: var(--gold-50);
+  color: #B00000;
+  background: #fffbeb;
+}
+
+.digi-tab:hover svg {
+  color: #B00000 !important;
+  stroke: #B00000 !important;
+  transform: scale(1.1);
 }
 
 .digi-tab.active {
@@ -8196,7 +8209,8 @@ select.form-control {
 }
 
 .digi-tab.active svg {
-  stroke: var(--white);
+  color: var(--white) !important;
+  stroke: var(--white) !important;
 }
 
 /* Panels show/hide */

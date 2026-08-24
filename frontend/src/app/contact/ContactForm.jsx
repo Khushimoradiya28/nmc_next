@@ -1,7 +1,30 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import styles from './page.module.css';
+
+const COURSE_OPTIONS = [
+  { value: 'bca', label: 'B.C.A. – ₹15,000/Sem' },
+  { value: 'bba', label: 'B.B.A. – ₹8,000/Sem' },
+  { value: 'bcom', label: 'B.Com – Merit Fees' },
+  { value: 'ba', label: 'B.A. – Merit Fees' },
+  { value: 'msw', label: 'M.S.W. – Merit Fees' },
+  { value: 'mcom', label: 'M.Com – Merit Fees' },
+  { value: 'ma', label: 'M.A. – Merit Fees' },
+  { value: 'dfd', label: 'DFD (Fashion Design) – Subsidized' },
+  { value: 'dnys', label: 'DNYS (Naturopathy & Yoga) – Subsidized' },
+];
+
+const TEACHER_OPTIONS = [
+  { value: 'general', label: 'General Inquiry & Helpdesk' },
+  { value: 'admission', label: 'Admission Department' },
+  { value: 'principal', label: 'Principal Office' },
+  { value: 'bca_dept', label: 'BCA & IT Department Faculty' },
+  { value: 'bba_dept', label: 'BBA & Management Faculty' },
+  { value: 'commerce_dept', label: 'B.Com & M.Com Faculty' },
+  { value: 'arts_dept', label: 'B.A. & M.A. Arts Faculty' },
+  { value: 'social_work', label: 'MSW Social Work Faculty' },
+];
 
 export default function ContactForm() {
   const [formData, setFormData] = useState({
@@ -13,10 +36,39 @@ export default function ContactForm() {
     teacher: '',
     message: ''
   });
+
+  const [courseOpen, setCourseOpen] = useState(false);
+  const [teacherOpen, setTeacherOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+
+  const courseRef = useRef(null);
+  const teacherRef = useRef(null);
+
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (courseRef.current && !courseRef.current.contains(e.target)) {
+        setCourseOpen(false);
+      }
+      if (teacherRef.current && !teacherRef.current.contains(e.target)) {
+        setTeacherOpen(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSelectCourse = (value) => {
+    setFormData({ ...formData, course: value });
+    setCourseOpen(false);
+  };
+
+  const handleSelectTeacher = (value) => {
+    setFormData({ ...formData, teacher: value });
+    setTeacherOpen(false);
   };
 
   const handleSubmit = (e) => {
@@ -29,6 +81,9 @@ export default function ContactForm() {
       }, 6000);
     }
   };
+
+  const selectedCourseObj = COURSE_OPTIONS.find(c => c.value === formData.course);
+  const selectedTeacherObj = TEACHER_OPTIONS.find(t => t.value === formData.teacher);
 
   if (submitted) {
     return (
@@ -99,40 +154,112 @@ export default function ContactForm() {
             />
           </div>
 
-          {/* Choose Course */}
+          {/* Choose Course Dropdown */}
           <div className={styles.formGroupFull}>
-            <select
-              name="course"
-              className={styles.formSelect}
-              value={formData.course}
-              onChange={handleChange}
-            >
-              <option value="">Chose Course</option>
-              <option value="bba">BBA (Bachelor of Business Administration)</option>
-              <option value="bca">BCA (Bachelor of Computer Application)</option>
-              <option value="ba">BA (Bachelor of Arts)</option>
-              <option value="bcom">B.Com (Bachelor of Commerce)</option>
-              <option value="ma">MA (Master of Arts)</option>
-              <option value="mcom">M.Com (Master of Commerce)</option>
-              <option value="msw">MSW (Master of Social Work)</option>
-              <option value="dfd">Diploma in Fashion Designing (DFD/CFD)</option>
-              <option value="dnys">Diploma in Naturopathy (DNYS)</option>
-            </select>
+            <div className={styles.customSelectWrapper} ref={courseRef}>
+              <button
+                type="button"
+                className={`${styles.customSelectTrigger} ${courseOpen ? styles.isOpen : ''} ${!formData.course ? styles.isPlaceholder : ''}`}
+                onClick={() => {
+                  setCourseOpen(!courseOpen);
+                  setTeacherOpen(false);
+                }}
+                aria-haspopup="listbox"
+                aria-expanded={courseOpen}
+              >
+                <span>{selectedCourseObj ? selectedCourseObj.label : 'Choose Course'}</span>
+                <span className={styles.selectChevron}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </button>
+
+              {courseOpen && (
+                <div
+                  className={styles.customDropdownMenu}
+                  role="listbox"
+                  onWheel={(e) => e.stopPropagation()}
+                >
+                  {COURSE_OPTIONS.map((option) => {
+                    const isSelected = formData.course === option.value;
+                    return (
+                      <div
+                        key={option.value}
+                        className={`${styles.customDropdownOption} ${isSelected ? styles.isSelected : ''}`}
+                        onClick={() => handleSelectCourse(option.value)}
+                        role="option"
+                        aria-selected={isSelected}
+                      >
+                        <span>{option.label}</span>
+                        {isSelected && (
+                          <span className={styles.optionCheckmark}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            <input type="hidden" name="course" value={formData.course} />
           </div>
 
-          {/* Choose Teacher */}
+          {/* Choose Teacher Dropdown */}
           <div className={styles.formGroupFull}>
-            <select
-              name="teacher"
-              className={styles.formSelect}
-              value={formData.teacher}
-              onChange={handleChange}
-            >
-              <option value="">Chose Teacher</option>
-              <option value="general">General Inquiry</option>
-              <option value="admission">Admission Department</option>
-              <option value="principal">Principal Office</option>
-            </select>
+            <div className={styles.customSelectWrapper} ref={teacherRef}>
+              <button
+                type="button"
+                className={`${styles.customSelectTrigger} ${teacherOpen ? styles.isOpen : ''} ${!formData.teacher ? styles.isPlaceholder : ''}`}
+                onClick={() => {
+                  setTeacherOpen(!teacherOpen);
+                  setCourseOpen(false);
+                }}
+                aria-haspopup="listbox"
+                aria-expanded={teacherOpen}
+              >
+                <span>{selectedTeacherObj ? selectedTeacherObj.label : 'Choose Teacher / Department'}</span>
+                <span className={styles.selectChevron}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="6 9 12 15 18 9"></polyline>
+                  </svg>
+                </span>
+              </button>
+
+              {teacherOpen && (
+                <div
+                  className={styles.customDropdownMenu}
+                  role="listbox"
+                  onWheel={(e) => e.stopPropagation()}
+                >
+                  {TEACHER_OPTIONS.map((option) => {
+                    const isSelected = formData.teacher === option.value;
+                    return (
+                      <div
+                        key={option.value}
+                        className={`${styles.customDropdownOption} ${isSelected ? styles.isSelected : ''}`}
+                        onClick={() => handleSelectTeacher(option.value)}
+                        role="option"
+                        aria-selected={isSelected}
+                      >
+                        <span>{option.label}</span>
+                        {isSelected && (
+                          <span className={styles.optionCheckmark}>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+            <input type="hidden" name="teacher" value={formData.teacher} />
           </div>
 
           {/* Message */}
