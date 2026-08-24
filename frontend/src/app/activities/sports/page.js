@@ -651,17 +651,6 @@ export default function SportsPage() {
               onClick={() => setLightboxIndex(null)}
             >
               <div className={styles.lightboxWrapper} onClick={(e) => e.stopPropagation()}>
-                <button 
-                  className={styles.lightboxPrevBtn} 
-                  onClick={(e) => { 
-                    e.stopPropagation(); 
-                    setLightboxIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length); 
-                  }}
-                  aria-label="Previous image"
-                >
-                  <IconChevronLeft size={22} strokeWidth={2.5} />
-                </button>
-
                 <motion.div 
                   className={styles.lightboxContent}
                   initial={{ scale: 0.9, opacity: 0 }}
@@ -670,6 +659,19 @@ export default function SportsPage() {
                   transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                   onClick={(e) => e.stopPropagation()}
                 >
+                  {/* Left Arrow Button */}
+                  <button 
+                    className={`${styles.lightboxNavBtn} ${styles.lightboxNavPrev}`}
+                    onClick={(e) => { 
+                      e.stopPropagation(); 
+                      setLightboxIndex((prev) => (prev - 1 + galleryImages.length) % galleryImages.length); 
+                    }}
+                    aria-label="Previous image"
+                  >
+                    <IconChevronLeft size={20} strokeWidth={2.5} />
+                  </button>
+
+                  {/* Close Button */}
                   <button 
                     className={styles.lightboxCloseBtn} 
                     onClick={(e) => { e.stopPropagation(); setLightboxIndex(null); }}
@@ -677,25 +679,27 @@ export default function SportsPage() {
                   >
                     <IconX size={15} strokeWidth={2.5} />
                   </button>
+
                   <div className={styles.lightboxImgWrapper}>
                     <img 
                       src={galleryImages[lightboxIndex]} 
-                      alt={`Sports Activity Enlarged ${lightboxIndex + 1}`} 
-                      className={styles.lightboxImg} 
+                      alt={`Sports Gallery View ${lightboxIndex + 1}`} 
+                      className={styles.lightboxImg}
                     />
                   </div>
-                </motion.div>
 
-                <button 
-                  className={styles.lightboxNextBtn} 
-                  onClick={(e) => { 
-                    e.stopPropagation(); 
-                    setLightboxIndex((prev) => (prev + 1) % galleryImages.length); 
-                  }}
-                  aria-label="Next image"
-                >
-                  <IconChevronRight size={22} strokeWidth={2.5} />
-                </button>
+                  {/* Right Arrow Button */}
+                  <button 
+                    className={`${styles.lightboxNavBtn} ${styles.lightboxNavNext}`}
+                    onClick={(e) => { 
+                      e.stopPropagation(); 
+                      setLightboxIndex((prev) => (prev + 1) % galleryImages.length); 
+                    }}
+                    aria-label="Next image"
+                  >
+                    <IconChevronRight size={20} strokeWidth={2.5} />
+                  </button>
+                </motion.div>
               </div>
             </motion.div>
           )}

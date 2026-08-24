@@ -362,17 +362,6 @@ export default function GalleryPage() {
               onClick={() => setLightboxIndex(null)}
             >
               <div className={styles.lightboxWrapper} onClick={(e) => e.stopPropagation()}>
-                <button
-                  className={styles.lightboxNavBtn}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setLightboxIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length);
-                  }}
-                  aria-label="Previous media"
-                >
-                  <IconChevronLeft size={22} strokeWidth={2.5} />
-                </button>
-
                 <motion.div
                   className={styles.lightboxContent}
                   initial={{ scale: 0.9, opacity: 0 }}
@@ -381,6 +370,19 @@ export default function GalleryPage() {
                   transition={{ type: 'spring', damping: 25, stiffness: 200 }}
                   onClick={(e) => e.stopPropagation()}
                 >
+                  {/* Left Arrow Button */}
+                  <button
+                    className={`${styles.lightboxNavBtn} ${styles.lightboxNavPrev}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLightboxIndex((prev) => (prev - 1 + filteredItems.length) % filteredItems.length);
+                    }}
+                    aria-label="Previous media"
+                  >
+                    <IconChevronLeft size={20} strokeWidth={2.5} />
+                  </button>
+
+                  {/* Close Button */}
                   <button
                     className={styles.lightboxCloseBtn}
                     onClick={(e) => { e.stopPropagation(); setLightboxIndex(null); }}
@@ -406,18 +408,19 @@ export default function GalleryPage() {
                       />
                     )}
                   </div>
-                </motion.div>
 
-                <button
-                  className={styles.lightboxNavBtn}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setLightboxIndex((prev) => (prev + 1) % filteredItems.length);
-                  }}
-                  aria-label="Next media"
-                >
-                  <IconChevronRight size={22} strokeWidth={2.5} />
-                </button>
+                  {/* Right Arrow Button */}
+                  <button
+                    className={`${styles.lightboxNavBtn} ${styles.lightboxNavNext}`}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setLightboxIndex((prev) => (prev + 1) % filteredItems.length);
+                    }}
+                    aria-label="Next media"
+                  >
+                    <IconChevronRight size={20} strokeWidth={2.5} />
+                  </button>
+                </motion.div>
               </div>
             </motion.div>
           )}
