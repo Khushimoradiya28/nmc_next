@@ -116,7 +116,7 @@ export default function GoldMedalistPage() {
       const width = window.innerWidth;
       if (width < 640) { setItemsPerPage(4); setIsMobile(true); }
       else if (width < 1024) { setItemsPerPage(6); setIsMobile(true); }
-      else { setItemsPerPage(21); setIsMobile(false); }
+      else { setItemsPerPage(15); setIsMobile(false); }
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -157,7 +157,7 @@ export default function GoldMedalistPage() {
         </section>
 
         <section className={`section-padding ${styles.contentSection}`}>
-          <div className="container" style={{ maxWidth: "1200px" }}>
+          <div className="container">
             <div className={styles.headerRow}>
               <div className={styles.headerText}>
                 <h3 className={styles.sectionTitle} style={{ margin: 0 }}>Gold Medalist <span style={{ color: "#8a0000" }}>Achievers</span></h3>

@@ -258,11 +258,11 @@
     }
 }
 
-/* Redesigned Compact Grid */
+/* Redesigned 5-Column Grid */
 .medalistGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.5rem 1.15rem;
 }
 
 .medalistCard {
@@ -304,7 +304,7 @@
 
 .imageContainer {
     position: relative;
-    height: 210px;
+    height: 195px;
     width: 100%;
     overflow: hidden;
     border-radius: 1.25rem 1.25rem 0 0;
@@ -340,53 +340,64 @@
 }
 
 .cardContent {
-    padding: 1.5rem 1.25rem 1.25rem 1.25rem;
+    padding: 1.25rem 1rem 1.15rem 1rem;
     text-align: center;
     flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 0.75rem;
 }
 
 .name {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 800;
     color: var(--gray-900);
-    margin: 0 0 0.25rem 0;
+    margin: 0 0 0.2rem 0;
     letter-spacing: -0.2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .metaInfo {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 700;
     color: var(--gray-400);
-    margin: 0 0 1rem 0;
+    margin: 0;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .scoreBadge {
     background: rgba(138, 0, 0, 0.03);
     border: 1px dashed rgba(138, 0, 0, 0.35);
     border-radius: 0.5rem;
-    padding: 0.5rem 1rem;
+    padding: 0.45rem 0.6rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 0.4rem;
+    gap: 0.35rem;
     width: 100%;
+    white-space: nowrap;
+    box-sizing: border-box;
 }
 
 .scoreLabel {
-    font-size: 0.75rem;
-    color: var(--gray-500);
-    font-weight: 700;
+    font-size: 0.82rem;
+    color: #475569;
+    font-weight: 600;
+    white-space: nowrap;
 }
 
 .scoreValue {
     color: #8a0000;
-    font-size: 1.05rem;
+    font-size: 0.98rem;
     font-weight: 900;
+    white-space: nowrap;
 }
 
 .noResults {
@@ -536,7 +547,7 @@
 @media screen and (max-width: 1023px) {
     .medalistGrid {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 1.5rem;
+        gap: 1rem;
     }
 }
 
@@ -655,7 +666,8 @@
     }
 
     .medalistGrid {
-        gap: 1.25rem !important;
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 1rem 0.85rem !important;
     }
 
     .medalistCard {
@@ -674,32 +686,38 @@
     }
 
     .cardContent {
-        padding: 1rem 0.85rem !important;
+        padding: 0.9rem 0.75rem !important;
     }
 
     .name {
-        font-size: 1.05rem !important;
+        font-size: 1rem !important;
         margin-bottom: 0.15rem !important;
     }
 
     .metaInfo {
-        font-size: 0.7rem !important;
-        margin-bottom: 0.75rem !important;
+        font-size: 0.68rem !important;
+        margin-bottom: 0.5rem !important;
     }
 
     .scoreBadge {
-        padding: 0.4rem 0.75rem !important;
+        padding: 0.35rem 0.5rem !important;
         border-radius: 6px !important;
-        border-style: solid !important;
-        border-color: rgba(138, 0, 0, 0.15) !important;
+        border: 1px dashed rgba(138, 0, 0, 0.35) !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 0.3rem !important;
+        white-space: nowrap !important;
     }
 
     .scoreLabel {
-        font-size: 0.7rem !important;
+        font-size: 0.75rem !important;
+        white-space: nowrap !important;
     }
 
     .scoreValue {
-        font-size: 0.9rem !important;
+        font-size: 0.88rem !important;
+        white-space: nowrap !important;
     }
 
     .ribbon {
@@ -710,7 +728,23 @@
     }
 }
 
+@media screen and (max-width: 1380px) and (min-width: 1025px) {
+    .medalistGrid {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    }
+}
+
+@media screen and (max-width: 1024px) and (min-width: 769px) {
+    .medalistGrid {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+    }
+}
+
 @media screen and (max-width: 480px) {
+    .medalistGrid {
+        grid-template-columns: 1fr !important;
+    }
+
     .dropdownsGroup {
         flex-direction: column;
     }
