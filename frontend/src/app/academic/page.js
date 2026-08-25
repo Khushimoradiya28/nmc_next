@@ -185,14 +185,12 @@ export default function AcademicPage() {
                       role="listbox"
                       aria-label="Department Filter Options"
                       data-lenis-prevent="true"
-                      data-lenis-prevent
                       onWheel={(e) => e.stopPropagation()}
                       onTouchMove={(e) => e.stopPropagation()}
                     >
                       <div
                         className={styles.deptMenuList}
                         data-lenis-prevent="true"
-                        data-lenis-prevent
                         onWheel={(e) => e.stopPropagation()}
                         onTouchMove={(e) => e.stopPropagation()}
                       >
