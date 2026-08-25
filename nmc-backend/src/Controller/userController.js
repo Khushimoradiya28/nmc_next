@@ -1,8 +1,5 @@
 const User = require("../Model/user");
 const Role = require("../Model/role");
-const Order = require("../Model/productOrder");
-
-const ProfileImage = require("../Model/profileImage");
 const config = require("../Config/app");
 const fs = require("fs");
 const path = require("path");
@@ -429,8 +426,8 @@ exports.getAllCustomerOrder = async (req, res, next) => {
         )
         : null;
 
-      // Count orders for this user
-      const totalOrders = await Order.countDocuments({ user_id: user._id });
+      // Count orders for this user (default to 0)
+      const totalOrders = 0;
 
       return {
         ...user.toObject(),

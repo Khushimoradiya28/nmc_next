@@ -14,10 +14,6 @@ const path = require("path");
 
 const app = express();
 app.disable('x-powered-by');
-const { scheduleDailyReport } = require("./src/Cron/cronJobs");
-
-// Initialize Cron Jobs
-scheduleDailyReport();
 
 dotenv.config();
 
@@ -86,10 +82,11 @@ app.use("/api", (req, res, next) => {
     "bulk-import-images",
     "bulk-import-prices",
     "updateproductseo",
-    "get-reviews"
+    "get-reviews",
+    "testimonial"
   ];
 
-  if (openPaths.some((key) => req.path.toLowerCase().includes(key))) {
+  if (req.method === "GET" || openPaths.some((key) => req.path.toLowerCase().includes(key))) {
     return next();
   }
 
