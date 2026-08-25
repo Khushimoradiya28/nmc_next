@@ -23,7 +23,7 @@ const InputTextarea = ({
       type={type}
       placeholder={placeholder}
       name={name}
-      className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:focus:bg-gray-800 text-gray-700 dark:text-gray-200 focus:border-green-500 dark:focus:border-green-500 rounded-md"
+      className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:focus:bg-gray-800 text-gray-700 dark:text-gray-200 focus:border-red-800 dark:focus:border-red-700 rounded-md"
     />
   );
 };

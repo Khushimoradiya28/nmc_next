@@ -1,3 +1,11 @@
+:root {
+  --color-primary: #8A0000;
+  --color-primary-light: #B00000;
+  --color-primary-dark: #6B0000;
+  --color-secondary: #F4B000;
+  --color-gold: #F59E0B;
+}
+
 /* for hiding process is not defined bug from console */
 body
   > iframe[style*='2147483647']:not([id='webpack-dev-server-client-overlay']) {
@@ -299,3 +307,19 @@ body
 .notification-content p span {
   font-size: 11px;
 }
+
+/* Hide scrollbar for Chrome, Safari, Opera, Firefox and IE/Edge */
+aside,
+.no-scrollbar,
+.custom-scrollbar-none {
+  -ms-overflow-style: none !important;  /* IE and Edge */
+  scrollbar-width: none !important;  /* Firefox */
+}
+aside::-webkit-scrollbar,
+.no-scrollbar::-webkit-scrollbar,
+.custom-scrollbar-none::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari and Opera */
+  width: 0 !important;
+  height: 0 !important;
+}
+

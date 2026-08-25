@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
+const path = require("path");
 const dotenv = require("dotenv");
-dotenv.config();
+dotenv.config({ path: path.join(__dirname, "../../.env") });
 
 const connectDB = require("../Config/db");
 const Role = require("../Model/role");
@@ -41,7 +42,13 @@ const seedAdmin = async () => {
       console.log("   Email: superadmin@gmail.com");
       console.log("   Password: Admin@123");
     } else {
-      console.log("ℹ️  Superadmin user already exists");
+      adminUser.password = "Admin@123";
+      adminUser.role = adminRole._id;
+      adminUser.status = "1";
+      await adminUser.save();
+      console.log("✅ Superadmin user password & role updated successfully");
+      console.log("   Email: superadmin@gmail.com");
+      console.log("   Password: Admin@123");
     }
 
     console.log("\n🎉 Seeding completed!");

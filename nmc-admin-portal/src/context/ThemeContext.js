@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useLayoutEffect, useMemo, createCon
 
 /**
  * Saves the old ThemeContext for future use
- * @param {string} theme - Name of curent theme
+ * @param {string} theme - Name of current theme
  * @return {string} previousTheme
  */
 function usePrevious(theme) {
@@ -19,24 +19,20 @@ function usePrevious(theme) {
  * @return {array} getter and setter for user preferred theme
  */
 function useStorageTheme(key) {
-  // Get system preference
-  const userPreference =
-    !!window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-
   const [theme, setTheme] = useState(() => {
-    const stored = localStorage.getItem(key);
+    // Check if initialized for NMC Portal
+    const initialized = localStorage.getItem('nmc_portal_light_default');
+    if (!initialized) {
+      localStorage.setItem('nmc_portal_light_default', 'true');
+      localStorage.setItem(key, 'light');
+      return 'light';
+    }
 
-    // If strict string 'dark' or 'light', use it
+    const stored = localStorage.getItem(key);
     if (stored === 'dark' || stored === 'light') {
       return stored;
     }
-
-    // If boolean-like string (legacy), convert
-    if (stored === 'true') return 'dark';
-    if (stored === 'false') return 'light';
-
-    // Fallback to system preference
-    return userPreference ? 'dark' : 'light';
+    return 'light';
   });
 
   // update stored theme
@@ -77,8 +73,8 @@ export const ThemeProvider = ({ children }) => {
     () => ({
       theme,
       toggleTheme,
+      setTheme,
     }),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     [theme]
   )
 

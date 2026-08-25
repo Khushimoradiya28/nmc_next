@@ -31,7 +31,7 @@ const myTheme = {
   },
   // TableHeader
   tableHeader: {
-    base: 'text-xs font-semibold tracking-wide text-left text-gray-500 uppercase border-b border-gray-200 dark:border-gray-700 bg-gray-100 dark:text-gray-400 dark:bg-gray-800',
+    base: 'text-xs font-semibold tracking-wide text-left text-gray-600 uppercase border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:text-gray-400 dark:bg-gray-800',
   },
   // TableContainer
   tableContainer: {
@@ -46,8 +46,6 @@ const myTheme = {
     base: 'bg-white divide-y divide-gray-100 dark:divide-gray-700 dark:bg-gray-800 text-gray-700 dark:text-gray-400',
   },
   // DropdownItem
-  // this is the <li> that lives inside the Dropdown <ul>
-  // you're probably looking for the dropdownItem style inside button
   dropdownItem: {
     base: 'mb-2 last:mb-0',
   },
@@ -88,11 +86,11 @@ const myTheme = {
   badge: {
     base: 'inline-flex px-2 text-xs font-medium leading-5 rounded-full',
     success:
-      'text-green-500 bg-green-100 dark:bg-green-800 dark:text-green-100',
-    danger: 'text-red-500 bg-red-100 dark:text-red-100 dark:bg-red-800',
-    warning: 'text-yellow-500 bg-yellow-100 dark:text-white dark:bg-yellow-600',
-    neutral: 'text-gray-500 bg-gray-100 dark:text-gray-100 dark:bg-gray-800',
-    primary: 'text-blue-500 bg-blue-100 dark:text-white dark:bg-blue-800',
+      'text-green-600 bg-green-100 dark:bg-green-800 dark:text-green-100',
+    danger: 'text-red-700 bg-red-100 dark:text-red-100 dark:bg-red-800',
+    warning: 'text-amber-700 bg-amber-100 dark:text-white dark:bg-amber-600',
+    neutral: 'text-gray-600 bg-gray-100 dark:text-gray-100 dark:bg-gray-800',
+    primary: 'text-red-800 bg-red-100 dark:text-white dark:bg-red-900',
   },
   // Backdrop
   backdrop: {
@@ -102,7 +100,7 @@ const myTheme = {
   textarea: {
     base: 'block w-full text-sm dark:text-gray-300 rounded-md focus:outline-none form-textarea',
     active:
-      'focus:border-purple-400 border-gray-300 dark:border-gray-600 dark:focus:border-gray-600 dark:bg-gray-700 dark:focus:ring-gray-300 focus:ring focus:ring-purple-300',
+      'focus:border-red-700 border-gray-300 dark:border-gray-600 dark:focus:border-red-500 dark:bg-gray-700 dark:focus:ring-red-300 focus:ring focus:ring-red-200',
     disabled: 'cursor-not-allowed opacity-50 bg-gray-300 dark:bg-gray-800',
     valid:
       'border-green-600 dark:bg-gray-700 focus:border-green-400 dark:focus:border-green-400 focus:ring focus:ring-green-200 dark:focus:ring-green-200',
@@ -113,7 +111,7 @@ const myTheme = {
   select: {
     base: 'block w-full px-2 py-1 text-sm dark:text-gray-300 focus:outline-none rounded-md form-select',
     active:
-      'focus:border-gray-200 border-gray-200 dark:border-gray-600 focus:shadow-none focus:ring focus:ring-green-300 dark:focus:border-gray-500 dark:focus:ring-gray-300 dark:bg-gray-700',
+      'focus:border-red-700 border-gray-200 dark:border-gray-600 focus:shadow-none focus:ring focus:ring-red-200 dark:focus:border-red-500 dark:focus:ring-red-300 dark:bg-gray-700',
     select: 'leading-5',
     disabled: 'cursor-not-allowed opacity-50 bg-gray-300 dark:bg-gray-800',
     valid:
@@ -124,7 +122,6 @@ const myTheme = {
   // Label
   label: {
     base: 'block text-sm text-gray-700 dark:text-gray-400',
-    // check and radio get this same style
     check: 'inline-flex items-center',
     disabled: 'opacity-50 cursor-not-allowed',
   },
@@ -132,16 +129,16 @@ const myTheme = {
   input: {
     base: 'block w-full px-3 py-1 text-sm focus:outline-none dark:text-gray-300 leading-5 rounded-md',
     active:
-      'focus:border-gray-200 border-gray-200 dark:border-gray-600 focus:ring focus:ring-green-300 dark:focus:border-gray-500 dark:focus:ring-gray-300 dark:bg-gray-700',
+      'focus:border-red-700 border-gray-200 dark:border-gray-600 focus:ring focus:ring-red-200 dark:focus:border-red-500 dark:focus:ring-red-300 dark:bg-gray-700',
     disabled: 'cursor-not-allowed opacity-50 bg-gray-300 dark:bg-gray-800',
     valid:
       'border-green-600 dark:bg-gray-700 focus:border-green-400 dark:focus:border-green-400 focus:ring focus:ring-green-200 dark:focus:ring-green-200',
     invalid:
       'border-red-600 dark:bg-gray-700 focus:border-red-400 dark:focus:border-red-400 focus:ring focus:ring-red-200 dark:focus:ring-red-200',
     radio:
-      'text-green-500 form-radio focus:border-green-400 focus:outline-none focus:ring focus:ring-green-300 focus:ring-offset-0 dark:focus:ring-gray-300',
+      'text-red-700 form-radio focus:border-red-700 focus:outline-none focus:ring focus:ring-red-200 focus:ring-offset-0 dark:focus:ring-red-300',
     checkbox:
-      'text-green-500 form-checkbox focus:border-green-500 focus:outline-none focus:ring focus:ring-green-300 focus:ring-offset-0 rounded dark:focus:ring-gray-300',
+      'text-red-700 form-checkbox focus:border-red-700 focus:outline-none focus:ring focus:ring-red-200 focus:ring-offset-0 rounded dark:focus:ring-red-300',
   },
   // HelperText
   helperText: {
@@ -151,7 +148,7 @@ const myTheme = {
   },
   // Card
   card: {
-    base: 'min-w-0 rounded-lg ring-1 ring-black ring-opacity-4 overflow-hidden',
+    base: 'min-w-0 rounded-lg ring-1 ring-black ring-opacity-4 overflow-hidden shadow-sm',
     default: 'bg-white dark:bg-gray-800',
   },
   cardBody: {
@@ -174,7 +171,6 @@ const myTheme = {
       },
       pagination: 'px-3 py-1 rounded-md text-xs',
     },
-    // styles applied to the SVG icon
     icon: {
       larger: 'h-5 w-5',
       large: 'h-5 w-5',
@@ -184,15 +180,15 @@ const myTheme = {
       right: 'ml-2 -mr-1',
     },
     primary: {
-      base: 'text-white bg-green-500 border border-transparent',
+      base: 'text-white bg-red-800 border border-transparent',
       active:
-        'active:bg-green-600 hover:bg-green-600 focus:ring focus:ring-purple-300',
+        'active:bg-red-900 hover:bg-red-900 focus:ring focus:ring-red-200',
       disabled: 'opacity-50 cursor-not-allowed',
     },
     outline: {
-      base: 'text-gray-600 border-gray-200 border dark:text-gray-400 focus:outline-none',
+      base: 'text-gray-700 border-gray-200 border dark:text-gray-400 focus:outline-none',
       active:
-        'rounded-lg border border-gray-200 px-4 w-full mr-3 flex items-center justify-center cursor-pointer h-12 bg-gray-200',
+        'rounded-lg border border-gray-200 px-4 w-full mr-3 flex items-center justify-center cursor-pointer h-12 bg-gray-50 hover:bg-gray-100',
       disabled: 'opacity-50 cursor-not-allowed bg-gray-300',
     },
     link: {
@@ -201,10 +197,10 @@ const myTheme = {
         'active:bg-transparent hover:bg-gray-100 focus:ring focus:ring-gray-300 dark:hover:bg-gray-500 dark:hover:text-gray-300 dark:hover:bg-opacity-10',
       disabled: 'opacity-50 cursor-not-allowed',
     },
-    // this is the button that lives inside the DropdownItem
     dropdownItem: {
       base: 'inline-flex items-center cursor-pointer w-full px-2 py-1 text-sm font-medium transition-colors duration-150 rounded-md hover:bg-gray-100 hover:text-gray-800 dark:hover:bg-gray-800 dark:hover:text-gray-200',
     },
   },
 };
+
 export default myTheme;

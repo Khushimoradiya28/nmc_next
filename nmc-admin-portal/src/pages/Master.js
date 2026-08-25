@@ -28,49 +28,49 @@ const Masters = () => {
           <CardItem
             title="Age Group"
             Icon={FiAtSign}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
         <NavLink to="/master/brand">
           <CardItem
             title="Brand"
             Icon={FiTruck}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
         <NavLink to="/master/category">
           <CardItem
             title="Categories"
             Icon={FiCornerDownLeft}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
         <NavLink to="/master/color">
           <CardItem
             title="Colors"
             Icon={FiCopy}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
         <NavLink to="/master/commodity">
           <CardItem
             title="Commodities"
             Icon={FiCornerDownLeft}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
         <NavLink to="/master/character">
           <CardItem
             title="Character"
             Icon={FiUserCheck}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
         <NavLink to="/master/material">
           <CardItem
             title="Material"
             Icon={FiCommand}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
 
@@ -78,28 +78,28 @@ const Masters = () => {
           <CardItem
             title="Skills"
             Icon={FiCrop}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
         <NavLink to="/master/tag">
           <CardItem
             title="Tag"
             Icon={FiInstagram}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
         <NavLink to="/master/user">
           <CardItem
             title="Users"
             Icon={FiUser}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
         <NavLink to="/master/userrole">
           <CardItem
             title="Users Role"
             Icon={FiUserX}
-            className="text-green-600 dark:text-green-100 bg-green-100 dark:bg-green-500"
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>
       </div>

@@ -9,8 +9,8 @@ export const SidebarProvider = ({ children }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
   const [isfilterDrawerOpen, setfilterIsDrawerOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const [isPinned, setIsPinned] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isPinned, setIsPinned] = useState(true);
   const [isleadfilterDrawerOpen, setleadfilterDrawerOpen] = useState(false);
   const [isordersfilterDrawerOpen, setordersfilterDrawerOpen] = useState(false);
 

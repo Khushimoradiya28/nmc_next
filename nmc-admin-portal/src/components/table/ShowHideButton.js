@@ -95,7 +95,7 @@ const ShowHideButton = ({ id, status, type = "brand" }) => {
       title={status === 1 ? "Deactivate" : "Activate"}
     >
       {status === 1 ? (
-        <BsToggleOn className="text-green-500" />
+        <BsToggleOn className="text-red-800" />
       ) : (
         <BsToggleOff className="text-orange-500" />
       )}

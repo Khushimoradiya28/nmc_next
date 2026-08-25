@@ -9,9 +9,9 @@ const EditDeleteButton = ({ id, handleUpdate, handleModalOpen }) => {
       <div className="flex justify-content-center">
         <div
           onClick={() => handleUpdate(id)}
-          className="p-2 cursor-pointer text-gray-400 hover:text-green-600"
+          className="p-2 cursor-pointer text-gray-400 hover:text-red-800"
         >
-          <Tooltip id="edit" Icon={FiEdit} title="Edit" bgColor="#10B981" />
+          <Tooltip id="edit" Icon={FiEdit} title="Edit" bgColor="#8A0000" />
         </div>
 
         <div

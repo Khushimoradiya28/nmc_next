@@ -3,76 +3,62 @@ import { NavLink, Route } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Button, WindmillContext } from '@windmill/react-ui';
 import { IoLogOutOutline } from 'react-icons/io5';
-import logoDark from '../../assets/img/logo/runr-kids.svg';
-import logoLight from '../../assets/img/logo/runr-kids.svg';
+import nmcLogo from '../../assets/img/logo/new-logo-1.png';
 
 import sidebar from '../../routes/sidebar';
+import SidebarSubmenu from './SidebarSubmenu';
 import { AdminContext } from '../../context/AdminContext';
 
 const SidebarContent = ({ isCollapsed }) => {
   const { mode } = useContext(WindmillContext);
   const { dispatch } = useContext(AdminContext);
 
-  // LOGOUT 
-  // const handleLogOut = () => {
-  //   dispatch({ type: 'USER_LOGOUT' });
-  //   Cookies.remove('adminInfo');
-  // };
-
   return (
     <div className="py-4 text-gray-500 dark:text-gray-400">
-      <a className="text-gray-900 dark:text-gray-200 block px-6 mb-2" href="/dashboard">
-        {mode === 'dark' ? (
+      <a className="text-gray-900 dark:text-gray-200 block px-4 mb-3" href="/dashboard">
+        <div className="flex items-center justify-center gap-2">
           <img
-            src={logoLight}
-            alt="dashtar"
-            width={isCollapsed ? "40" : "135"}
-            className={`mx-auto transition-all duration-300 ${isCollapsed ? 'opacity-80' : 'opacity-100'}`}
+            src={nmcLogo}
+            alt="NMC Logo"
+            className={`transition-all duration-300 object-contain ${
+              isCollapsed ? 'h-9 w-9 opacity-90' : 'h-12 max-w-[170px] opacity-100'
+            }`}
           />
-        ) : (
-          <img
-            src={logoDark}
-            alt="dashtar"
-            width={isCollapsed ? "40" : "135"}
-            className={`mx-auto transition-all duration-300 ${isCollapsed ? 'opacity-80' : 'opacity-100'}`}
-          />
-        )}
+        </div>
       </a>
-      <ul className="mt-8">
-        {sidebar.map((route) => (
-          <li className="relative" key={route.name}>
-            <NavLink
-              exact
-              to={route.path}
-              className={`px-6 py-4 inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-green-700 dark:hover:text-gray-200 ${isCollapsed ? 'justify-center' : ''
+      <ul className="mt-6">
+        {sidebar.map((route) =>
+          route.routes ? (
+            <SidebarSubmenu route={route} key={route.name} isCollapsed={isCollapsed} />
+          ) : (
+            <li className="relative" key={route.name}>
+              <NavLink
+                exact
+                to={route.path}
+                className={`px-6 py-3.5 inline-flex items-center w-full text-sm font-semibold transition-colors duration-150 hover:text-red-800 dark:hover:text-amber-400 ${
+                  isCollapsed ? 'justify-center' : ''
                 }`}
-              activeClassName="text-green-500 dark:text-gray-100"
-            >
-              <Route path={route.path} exact={route.exact}>
-                <span
-                  className="absolute inset-y-0 left-0 w-1 bg-green-500 rounded-tr-lg rounded-br-lg"
-                  aria-hidden="true"
-                ></span>
-              </Route>
-              <route.icon className="w-5 h-5" aria-hidden="true" />
-              <span
-                className={`ml-4 transition-all duration-300 ${isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
-                  }`}
+                activeClassName="text-red-800 dark:text-amber-400 font-bold bg-red-50/70 dark:bg-gray-800"
               >
-                {route.name}
-              </span>
-            </NavLink>
-          </li>
-        ))}
+                <Route path={route.path} exact={route.exact}>
+                  <span
+                    className="absolute inset-y-0 left-0 w-1.5 bg-gradient-to-b from-red-800 to-amber-500 rounded-tr-md rounded-br-md"
+                    aria-hidden="true"
+                  ></span>
+                </Route>
+                <route.icon className="w-5 h-5" aria-hidden="true" />
+                <span
+                  className={`ml-4 transition-all duration-300 ${
+                    isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
+                  }`}
+                >
+                  {route.name}
+                </span>
+              </NavLink>
+            </li>
+          )
+        )}
       </ul>
-      {/* <span className="lg:fixed bottom-0 px-6 py-6 w-64 mx-auto relative mt-3 block">
-        <Button onClick={handleLogOut} size="large" className="w-full">
-          <span className="flex items-center">
-            <IoLogOutOutline className="mr-3 text-lg" />
-            <span className="text-sm">Log out</span>
-          </span>
-        </Button>
-      </span> */}
     </div>
   );
 };

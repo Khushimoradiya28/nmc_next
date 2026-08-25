@@ -5,7 +5,7 @@ const ViewButton = ({ id, onView }) => {
   return (
     <div
       onClick={() => onView(id)}
-      className="p-2 rounded-lg bg-green-600 text-white transition flex text-white-400 cursor-pointer"
+      className="p-2 rounded-lg bg-red-800 text-white hover:bg-red-900 transition flex cursor-pointer"
     >
       <FiEye size={18} />
     </div>

@@ -407,19 +407,19 @@ const Dashboard = () => {
           title="Today Order"
           Icon={ImStack}
           price={orderSummary.today}
-          className="text-white bg-teal-500"
+          className="text-white bg-gradient-to-r from-red-800 to-red-600 shadow-md"
         />
         <CardItemTwo
           title="This Month"
           Icon={FiShoppingCart}
           price={orderSummary.month}
-          className="text-white bg-blue-500"
+          className="text-white bg-gradient-to-r from-amber-500 to-yellow-600 shadow-md"
         />
         <CardItemTwo
           title="Total Order"
           Icon={ImCreditCard}
           price={orderSummary.year}
-          className="text-white bg-green-500"
+          className="text-white bg-gradient-to-r from-red-950 to-red-800 shadow-md"
         />
       </div>
 
@@ -462,7 +462,7 @@ const Dashboard = () => {
           action={
             <div className="relative">
               <button
-                className="p-2 hover:bg-green-100 rounded-full text-green-500"
+                className="p-2 hover:bg-red-50 rounded-full text-red-800"
                 title="Reset Filter"
                 onClick={() => {
                   setCategoryFilter("this_year"); // useEffect will call fetchCategoryStats
@@ -477,7 +477,7 @@ const Dashboard = () => {
                 className="p-2 hover:bg-gray-100 rounded-full"
                 onClick={() => setShowFilter(!showFilter)}
               >
-                <FiFilter size={18} className="text-green-500" />
+                <FiFilter size={18} className="text-red-800" />
               </button>
               {/* RESET ICON */}
               {showFilter && (
@@ -501,7 +501,7 @@ const Dashboard = () => {
                         text-gray-800 dark:text-gray-200
                         hover:bg-gray-100 dark:hover:bg-gray-700
                         ${tempFilter === item.value
-                            ? "bg-green-100 dark:bg-green-900 font-semibold"
+                            ? "bg-red-50 text-red-800 dark:bg-red-900 font-semibold"
                             : ""
                           }
                       `}
@@ -546,7 +546,7 @@ const Dashboard = () => {
                               setCategoryFilter("custom");
                               setShowFilter(false);
                             }}
-                            className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded hover:bg-blue-600 dark:hover:bg-blue-700"
+                            className="w-full bg-red-800 text-white py-2 rounded hover:bg-red-900"
                           >
                             Apply
                           </button>
@@ -592,7 +592,7 @@ const Dashboard = () => {
           action={
             <div className="relative">
               <button
-                className="p-2 hover:bg-green-100 rounded-full text-green-500"
+                className="p-2 hover:bg-red-50 rounded-full text-red-800"
                 title="Reset Filter"
                 onClick={() => {
                   setBrandFilter("this_year");
@@ -607,7 +607,7 @@ const Dashboard = () => {
                 className="p-2 hover:bg-gray-100 rounded-full"
                 onClick={() => setShowBrandFilter(!showBrandFilter)}
               >
-                <FiFilter size={18} className="text-green-500" />
+                <FiFilter size={18} className="text-red-800" />
               </button>
 
               {showBrandFilter && (
@@ -631,7 +631,7 @@ const Dashboard = () => {
                   text-gray-800 dark:text-gray-200
                   hover:bg-gray-100 dark:hover:bg-gray-700
                   ${brandTempFilter === item.value
-                            ? "bg-green-100 dark:bg-green-900 font-semibold"
+                            ? "bg-red-50 text-red-800 dark:bg-red-900 font-semibold"
                             : ""
                           }
                 `}
@@ -677,7 +677,7 @@ const Dashboard = () => {
                                 setBrandFilter("custom");
                                 setShowBrandFilter(false);
                               }}
-                              className="w-full bg-blue-500 dark:bg-blue-600 text-white py-2 rounded hover:bg-blue-600 dark:hover:bg-blue-700"
+                              className="w-full bg-red-800 text-white py-2 rounded hover:bg-red-900"
                             >
                               Apply
                             </button>

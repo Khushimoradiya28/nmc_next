@@ -1,4 +1,5 @@
 import React, { useContext, useRef, useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Table, TableContainer, TableFooter, Pagination, Input, Button, Card, CardBody
 } from "@windmill/react-ui";
@@ -13,11 +14,21 @@ import Breadcrumb from "../components/form/Breadcrumb";
 import FilterDrawer from "../components/drawer/ProductFilterDrawer";
 import MainDrawer from "../components/drawer/MainDrawer";
 import ProductDrawer from "../components/drawer/ProductDrawer";
+import TestimonialDrawer from "../components/drawer/TestimonialDrawer";
 import ProductTable from "../components/product/ProductTable";
 import Loading from "../components/preloader/Loading";
 import NotFound from "../components/table/NotFound";
 
 const Products = () => {
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const typeParam = query.get("type");
+
+  let pageHeading = "Home";
+  if (typeParam === "testimonial") pageHeading = "Testimonial";
+  else if (typeParam === "awards") pageHeading = "Awards & Certificates";
+  else if (typeParam === "courses") pageHeading = "Professional Certificate Courses";
+
   const { toggleDrawer, setIsUpdate, filtertoggleDrawer, closefilterDrawer, isfilterDrawerOpen, setCategoryType } = useContext(SidebarContext);
 
   const [filters, setFilters] = useState({
@@ -110,18 +121,19 @@ const Products = () => {
     <>
       {/* <PageTitle>Products</PageTitle> */}
       <MainDrawer>
-        <ProductDrawer />
+        {typeParam === "testimonial" ? <TestimonialDrawer /> : <ProductDrawer />}
       </MainDrawer>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 my-2">
         {/* Title + Breadcrumb */}
         <div className="flex flex-col text-left w-full sm:w-auto">
-          <PageTitle>Products</PageTitle>
+          <PageTitle>{pageHeading}</PageTitle>
 
           <Breadcrumb
             items={[
               { label: "Dashboard", link: "/dashboard" },
-              { label: "Products" },
+              { label: "Home", link: "/products" },
+              ...(typeParam ? [{ label: pageHeading }] : []),
             ]}
           />
         </div>
@@ -182,7 +194,7 @@ const Products = () => {
             <span className="mr-3">
               <FiPlus />
             </span>
-            Add Product
+            {typeParam === "testimonial" ? "Add Testimonial" : "Add Product"}
           </Button>
         </div>
       </div>
