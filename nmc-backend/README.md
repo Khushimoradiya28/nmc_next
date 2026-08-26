@@ -1,6 +1,6 @@
-# RUNR Kids Backend
+# NMC Backend
 
-Backend API for RUNR Kids e-commerce platform.
+Backend API for NMC e-commerce platform.
 
 ## Tech Stack
 
@@ -34,6 +34,58 @@ Backend API for RUNR Kids e-commerce platform.
    node server
    ```
 
+## Global API Rules & Standards
+
+Har API me niche diye gaye rules strictly follow hone chahiye:
+
+1. **Unique Identification & Timezone Standard**:
+   - Every API & model record must contain:
+     - Unique identifier: `_id` / `guid` (and `slug` where applicable).
+     - `created_by` & `updated_by` (User ID / Admin ID).
+     - `created_at` & `updated_at` timestamps strictly stored & formatted in **India Kolkata Time Zone (`Asia/Kolkata`)** (`YYYY-MM-DD HH:mm:ss`).
+2. **Slug Sub-ID for Inner / Specific Operations (Security Policy)**:
+   - Jab bhi kisi API me inner specific record add, update, delete ya fetch jaisa koi operation perform hota hai, tab direct internal DB ID exposure se bachne ke liye **`slug`** pass hona chahiye as sub ID.
+   - Slug generation rule: Main heading / title / name ko lowercase me convert karke hyphenated slug (`generateSlug`) banana hai (e.g. `"A BENCHMARK FOR WOMEN'S HIGHER EDUCATION."` -> `"a-benchmark-for-womens-higher-education"`). Security purpose ke liye raw database IDs public URLs ya payload me pass nahi karni hai.
+
+---
+
+## Testimonial API Field Mapping & Validations
+
+Admin portal ke do forms (Student Testimonials & Dignitary Testimonials) ke anusar field mapping:
+
+### 1. Student Testimonials Form
+| Admin Form Field Label | Backend Field Name | Type | Mandatory? | Notes / Validation Rule |
+|-------------------------|--------------------|------|------------|-------------------------|
+| **Testimonial Type \*** | `type` | String | **Yes** | Value: `"student"` |
+| **Student Name \*** | `authorName` | String | **Yes** | Blank / empty not allowed (`"Student Name is mandatory."`) |
+| **Course / Subtext \*** | `designationSubtext` | String | **Yes** | Blank / empty not allowed (`"Course / Subtext is mandatory."`) |
+| **Rating \*** | `rating` | Number | **Yes** | Value between 1 to 5 (e.g., 5 for 5 Stars) |
+| **Testimonial Quote \*** | `quote` | String | **Yes** | Blank / empty not allowed (`"Testimonial Quote is mandatory."`) |
+| **Student Photo / Avatar** | `avatarUrl` | String | No | Image path / URL |
+
+### 2. Dignitary Testimonials Form
+| Admin Form Field Label | Backend Field Name | Type | Mandatory? | Notes / Validation Rule |
+|-------------------------|--------------------|------|------------|-------------------------|
+| **Testimonial Type \*** | `type` | String | **Yes** | Value: `"dignitary"` |
+| **Headline / Title \*** | `title` | String | **Yes** | Blank / empty not allowed (`"Headline / Title is mandatory for Dignitary Testimonials."`) |
+| **Dignitary Name \*** | `authorName` | String | **Yes** | Blank / empty not allowed (`"Dignitary Name is mandatory."`) |
+| **Designation / Subtext \*** | `designationSubtext` | String | **Yes** | Blank / empty not allowed (`"Designation / Subtext is mandatory."`) |
+| **Testimonial Quote \*** | `quote` | String | **Yes** | Blank / empty not allowed (`"Testimonial Quote is mandatory."`) |
+| **Profile Photo / Image** | `avatarUrl` | String | No | Image path / URL |
+
+---
+
+## Testimonial Endpoints
+
+- **List Testimonials**: `GET /api/testimonials` / `POST /api/testimonials/list`
+  - Filters: `type` (`student` | `dignitary`), `isActive`, `search`, `slug`, `limit`, `offset`, `sort_by`, `sort_order`
+- **Get Single Testimonial**: `GET /api/testimonials/:idOrSlug`
+- **Add Testimonial**: `POST /api/testimonials` / `POST /api/testimonials/add`
+- **Update Testimonial**: `PUT /api/testimonials/:idOrSlug` / `POST /api/testimonials/update`
+- **Delete Testimonial**: `DELETE /api/testimonials/:idOrSlug` / `POST /api/testimonials/delete`
+
+---
+
 ## API Documentation
 
-See [API Documentation](API_DOCUMENTATION.md) for detailed endpoint information.
+See [API Documentation](API_DOCUMENTATION.md) for detailed endpoint information.

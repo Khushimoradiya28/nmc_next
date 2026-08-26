@@ -10,11 +10,16 @@ const {
 
 // Public / Listing
 router.get("/", getTestimonials);
-router.get("/:id", getTestimonialById);
+router.post("/list", getTestimonials);
+router.get("/:idOrSlug", getTestimonialById);
 
 // Admin / Write Operations
 router.post("/", createTestimonial);
-router.put("/:id", updateTestimonial);
-router.delete("/:id", deleteTestimonial);
+router.post("/add", createTestimonial);
+router.put("/:idOrSlug", updateTestimonial);
+router.post("/update", updateTestimonial);
+router.delete("/:idOrSlug", deleteTestimonial);
+router.post("/delete", deleteTestimonial);
 
 module.exports = router;
+
