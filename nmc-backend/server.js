@@ -83,7 +83,8 @@ app.use("/api", (req, res, next) => {
     "bulk-import-prices",
     "updateproductseo",
     "get-reviews",
-    "testimonial"
+    "testimonial",
+    "certificate-course"
   ];
 
   if (req.method === "GET" || openPaths.some((key) => req.path.toLowerCase().includes(key))) {
