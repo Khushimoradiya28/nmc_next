@@ -74,11 +74,23 @@ const certificateCourseSchema = new mongoose.Schema(
       default: true,
       index: true,
     },
+    status: {
+      type: String,
+      enum: ["active", "inactive"],
+      default: "active",
+      index: true,
+    },
+    is_deleted: {
+      type: Boolean,
+      default: false,
+      index: true,
+    },
     sortOrder: {
       type: Number,
       default: 0,
       index: true,
     },
+
     created_by: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

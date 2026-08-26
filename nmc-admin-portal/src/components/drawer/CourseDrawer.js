@@ -15,6 +15,7 @@ const CourseDrawer = ({ id }) => {
   const { closeDrawer, setIsUpdate, isDrawerOpen } = useContext(SidebarContext);
 
   const [imageUrl, setImageUrl] = useState('');
+  const [uploadedFile, setUploadedFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -26,18 +27,20 @@ const CourseDrawer = ({ id }) => {
     formState: { errors },
   } = useForm();
 
-  // Reset form when drawer opens/closes or when adding new
+  // Reset form when drawer opens to add new
   useEffect(() => {
     if (!id && isDrawerOpen) {
       setImageUrl('');
+      setUploadedFile(null);
       reset({
         title: '',
-        category: 'ACCOUNTING & FINANCE',
-        tag: 'Popular',
-        duration: '6 Months',
-        fees: 'Rs. 8,000/Sem.',
+        category: '',
+        badge: '',
+        duration: '',
+        fees: '',
         description: '',
         highlightsText: '',
+        enrollUrl: '',
       });
       clearErrors();
     }
@@ -49,27 +52,38 @@ const CourseDrawer = ({ id }) => {
 
     CourseServices.getCourseById(id)
       .then((res) => {
-        if (res && res.data) {
-          const data = res.data;
-          setValue('title', data.title || '');
-          setValue('category', data.category || '');
-          setValue('tag', data.tag || '');
-          setValue('duration', data.duration || '');
-          setValue('fees', data.fees || '');
-          setValue('description', data.description || '');
-          setValue(
-            'highlightsText',
-            Array.isArray(data.highlights) ? data.highlights.join('\n') : ''
-          );
-          setImageUrl(data.imageUrl || '');
+        const data = res?.data || res;
+        if (data) {
+          reset({
+            title: data.title || '',
+            category: data.category || '',
+            badge: data.badge || '',
+            duration: data.duration || '',
+            fees: data.fees || '',
+            description: data.description || '',
+            enrollUrl: data.enrollUrl || '',
+            highlightsText: Array.isArray(data.highlights) ? data.highlights.join('\n') : '',
+          });
+
+          // Backend returns imageUrl, image, image_url, or images
+          const fetchedImage =
+            data.imageUrl ||
+            data.image ||
+            data.image_url ||
+            (Array.isArray(data.images) && data.images[0]) ||
+            '';
+          setImageUrl(fetchedImage);
+          setUploadedFile(null);
+          clearErrors();
         }
       })
       .catch((err) => {
         notifyError(err.message || 'Failed to fetch course details');
       });
-  }, [id, isDrawerOpen, setValue]);
+  }, [id, isDrawerOpen, reset, clearErrors]);
 
-  // Submit handler
+
+  // Submit handler matching exact user specification
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
@@ -81,35 +95,30 @@ const CourseDrawer = ({ id }) => {
             .filter((h) => h.length > 0)
         : [];
 
-      const payload = {
-        title: data.title ? data.title.trim() : '',
-        category: data.category ? data.category.trim() : '',
-        tag: data.tag ? data.tag.trim() : '',
-        duration: data.duration ? data.duration.trim() : '',
-        fees: data.fees ? data.fees.trim() : '',
-        description: data.description ? data.description.trim() : '',
-        highlights: highlightsArray,
-        imageUrl: imageUrl || '',
-      };
+      const formData = new FormData();
+      formData.append('title', data.title ? data.title.trim() : '');
+      formData.append('category', data.category ? data.category.trim() : '');
+      formData.append('description', data.description ? data.description.trim() : '');
+      formData.append('duration', data.duration ? data.duration.trim() : '');
+      formData.append('fees', data.fees ? data.fees.trim() : '');
+      if (data.badge) formData.append('badge', data.badge.trim());
+      if (data.enrollUrl) formData.append('enrollUrl', data.enrollUrl.trim());
+      if (highlightsArray.length > 0) formData.append('highlights', JSON.stringify(highlightsArray));
 
-      if (!payload.title) {
-        notifyError('Course title is required');
-        setIsSubmitting(false);
-        return;
+      // If user uploaded a new file
+      if (uploadedFile) {
+        formData.append('image', uploadedFile); // File instance from input
+      } else if (imageUrl && typeof imageUrl === 'string' && !imageUrl.startsWith('blob:')) {
+        formData.append('imageUrl', imageUrl);
       }
 
-      if (!payload.description) {
-        notifyError('Course description is required');
-        setIsSubmitting(false);
-        return;
-      }
 
       if (id) {
-        const res = await CourseServices.updateCourse(id, payload);
-        notifySuccess(res.message || 'Course updated successfully!');
+        const res = await CourseServices.updateCourse(id, formData);
+        notifySuccess(res?.message || 'Course updated successfully!');
       } else {
-        const res = await CourseServices.addCourse(payload);
-        notifySuccess(res.message || 'Course created successfully!');
+        const res = await CourseServices.addCourse(formData);
+        notifySuccess(res?.message || 'Course created successfully!');
       }
 
       setIsUpdate(true);
@@ -155,7 +164,7 @@ const CourseDrawer = ({ id }) => {
               <Error errorName={errors.title} />
             </div>
 
-            {/* Category & Tag */}
+            {/* Category & Badge */}
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
@@ -171,11 +180,11 @@ const CourseDrawer = ({ id }) => {
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
-                  Tag Badge
+                  Badge / Tag
                 </label>
                 <Input
-                  {...register('tag')}
-                  name="tag"
+                  {...register('badge')}
+                  name="badge"
                   type="text"
                   placeholder="e.g. Popular / High Demand"
                   className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
@@ -209,6 +218,20 @@ const CourseDrawer = ({ id }) => {
                   className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
                 />
               </div>
+            </div>
+
+            {/* Enroll / Admission Link URL */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
+                Enroll / Admission URL
+              </label>
+              <Input
+                {...register('enrollUrl')}
+                name="enrollUrl"
+                type="text"
+                placeholder="e.g. https://admission.example.com"
+                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
+              />
             </div>
 
             {/* Description */}
@@ -247,7 +270,11 @@ const CourseDrawer = ({ id }) => {
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
                 Course Cover Image
               </label>
-              <Uploader imageUrl={imageUrl} setImageUrl={setImageUrl} />
+              <Uploader
+                imageUrl={imageUrl}
+                setImageUrl={setImageUrl}
+                setUploadedFile={setUploadedFile}
+              />
             </div>
           </div>
 

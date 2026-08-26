@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import { Textarea, Select, Input } from '@windmill/react-ui';
+import { Textarea, Input } from '@windmill/react-ui';
 import { useForm } from 'react-hook-form';
 
 import Title from '../form/Title';
@@ -15,7 +15,6 @@ import { notifyError, notifySuccess } from '../../utils/toast';
 const TestimonialDrawer = ({ id }) => {
   const { closeDrawer, setIsUpdate, isDrawerOpen } = useContext(SidebarContext);
 
-  // Default selected testimonial type is "dignitary" (Dignitary Testimonials)
   const [testimonialType, setTestimonialType] = useState('dignitary');
   const [imageUrl, setImageUrl] = useState('');
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -36,7 +35,7 @@ const TestimonialDrawer = ({ id }) => {
     },
   });
 
-  // Reset form when drawer opens/closes or when adding new
+  // Reset form when drawer opens to add new
   useEffect(() => {
     if (!id && isDrawerOpen) {
       setTestimonialType('dignitary');
@@ -55,13 +54,13 @@ const TestimonialDrawer = ({ id }) => {
     }
   }, [id, isDrawerOpen, reset, clearErrors]);
 
-  // Fetch existing testimonial for update
+  // Fetch existing testimonial for update mode
   useEffect(() => {
     if (!id || !isDrawerOpen) return;
 
     TestimonialServices.getTestimonialById(id)
       .then((res) => {
-        const item = res?.data;
+        const item = res?.data || res;
         if (!item) {
           notifyError('Testimonial details not found!');
           return;
@@ -69,7 +68,17 @@ const TestimonialDrawer = ({ id }) => {
 
         const currentType = item.type || 'dignitary';
         setTestimonialType(currentType);
-        setImageUrl(item.avatarUrl || '');
+
+        const fetchedAvatar =
+          item.avatarUrl ||
+          item.avatar ||
+          item.imageUrl ||
+          item.image ||
+          item.image_url ||
+          (Array.isArray(item.images) && item.images[0]) ||
+          '';
+        setImageUrl(fetchedAvatar);
+        setUploadedFile(null);
 
         reset({
           type: currentType,
@@ -78,7 +87,7 @@ const TestimonialDrawer = ({ id }) => {
           designationSubtext: item.designationSubtext || '',
           quote: item.quote || '',
           rating: item.rating || 5,
-          avatarUrl: item.avatarUrl || '',
+          avatarUrl: fetchedAvatar,
         });
       })
       .catch((err) => notifyError(err.message || 'Failed to fetch testimonial data'));
@@ -91,26 +100,40 @@ const TestimonialDrawer = ({ id }) => {
     clearErrors();
   };
 
-  // Form submission handler
+  // Form submission handler matching exact user specification
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      const payload = {
-        type: testimonialType,
-        authorName: data.authorName?.trim(),
-        designationSubtext: data.designationSubtext?.trim(),
-        quote: data.quote?.trim(),
-        avatarUrl: testimonialType === 'dignitary' ? (imageUrl || data.avatarUrl || '') : '',
-        title: testimonialType === 'dignitary' ? data.title?.trim() : '',
-        rating: testimonialType === 'student' ? Number(data.rating || 5) : 5,
-      };
+      let payload;
+
+      if (testimonialType === 'student') {
+        payload = {
+          type: 'student',
+          authorName: data.authorName?.trim() || '',
+          designationSubtext: data.designationSubtext?.trim() || '',
+          rating: Number(data.rating || 5),
+          quote: data.quote?.trim() || '',
+          avatarUrl: imageUrl || data.avatarUrl || '',
+          isActive: true,
+        };
+      } else {
+        payload = {
+          type: 'dignitary',
+          title: data.title?.trim() || '',
+          authorName: data.authorName?.trim() || '',
+          designationSubtext: data.designationSubtext?.trim() || '',
+          quote: data.quote?.trim() || '',
+          avatarUrl: imageUrl || data.avatarUrl || '',
+          isActive: true,
+        };
+      }
 
       if (id) {
         const res = await TestimonialServices.updateTestimonial(id, payload);
-        notifySuccess(res.message || 'Testimonial updated successfully!');
+        notifySuccess(res?.message || 'Testimonial updated successfully!');
       } else {
         const res = await TestimonialServices.addTestimonial(payload);
-        notifySuccess(res.message || 'Testimonial created successfully!');
+        notifySuccess(res?.message || 'Testimonial created successfully!');
       }
 
       setIsUpdate(true);
@@ -139,8 +162,7 @@ const TestimonialDrawer = ({ id }) => {
 
       <Scrollbars className="w-full relative dark:bg-gray-700 dark:text-gray-200">
         <form onSubmit={handleSubmit(onSubmit)} className="block p-6 pb-36">
-          
-          {/* First Field: Testimonial Type Dropdown (Top Priority) */}
+          {/* Testimonial Type Dropdown */}
           <div className="mb-6 flex flex-col">
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
               Testimonial Type <span className="text-red-500">*</span>
@@ -164,14 +186,13 @@ const TestimonialDrawer = ({ id }) => {
           {/* DIGNITARY TESTIMONIAL FIELDS */}
           {testimonialType === 'dignitary' && (
             <>
-              {/* Dignitary Headline / Title */}
               <div className="mb-5 flex flex-col">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Headline / Title <span className="text-red-500">*</span>
                 </label>
                 <Input
                   {...register('title', {
-                    required: testimonialType === 'dignitary' ? 'Title is required for dignitary testimonial' : false,
+                    required: 'Title is required for dignitary testimonial',
                   })}
                   type="text"
                   placeholder="e.g. A BENCHMARK FOR WOMEN'S HIGHER EDUCATION."
@@ -180,7 +201,6 @@ const TestimonialDrawer = ({ id }) => {
                 <Error errorName={errors.title} />
               </div>
 
-              {/* Dignitary Name */}
               <div className="mb-5 flex flex-col">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Dignitary Name <span className="text-red-500">*</span>
@@ -194,7 +214,6 @@ const TestimonialDrawer = ({ id }) => {
                 <Error errorName={errors.authorName} />
               </div>
 
-              {/* Designation / Organization */}
               <div className="mb-5 flex flex-col">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Designation / Subtext <span className="text-red-500">*</span>
@@ -208,7 +227,6 @@ const TestimonialDrawer = ({ id }) => {
                 <Error errorName={errors.designationSubtext} />
               </div>
 
-              {/* Testimonial Quote / Message */}
               <div className="mb-5 flex flex-col">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Testimonial Quote <span className="text-red-500">*</span>
@@ -222,7 +240,6 @@ const TestimonialDrawer = ({ id }) => {
                 <Error errorName={errors.quote} />
               </div>
 
-              {/* Dignitary Image Uploader */}
               <div className="mb-5 flex flex-col">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Profile Photo / Image
@@ -239,7 +256,6 @@ const TestimonialDrawer = ({ id }) => {
           {/* STUDENT TESTIMONIAL FIELDS */}
           {testimonialType === 'student' && (
             <>
-              {/* Student Name */}
               <div className="mb-5 flex flex-col">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Student Name <span className="text-red-500">*</span>
@@ -253,7 +269,6 @@ const TestimonialDrawer = ({ id }) => {
                 <Error errorName={errors.authorName} />
               </div>
 
-              {/* Course / Designation / Subtext */}
               <div className="mb-5 flex flex-col">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Course / Subtext <span className="text-red-500">*</span>
@@ -267,7 +282,6 @@ const TestimonialDrawer = ({ id }) => {
                 <Error errorName={errors.designationSubtext} />
               </div>
 
-              {/* Rating (Stars) */}
               <div className="mb-5 flex flex-col">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Rating <span className="text-red-500">*</span>
@@ -288,7 +302,6 @@ const TestimonialDrawer = ({ id }) => {
                 <Error errorName={errors.rating} />
               </div>
 
-              {/* Testimonial Quote / Message */}
               <div className="mb-5 flex flex-col">
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Testimonial Quote <span className="text-red-500">*</span>

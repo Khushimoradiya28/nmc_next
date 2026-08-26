@@ -20,9 +20,9 @@ const formatTestimonial = (item) => {
 exports.getTestimonials = async (req, res, next) => {
   try {
     const queryParams = req.method === "POST" ? req.body : req.query;
-    const { type, isActive, search, slug, limit, offset, sort_by, sort_order } = queryParams || {};
+    const { type, isActive, search, slug, limit, offset, sort_by, sort_order, status } = queryParams || {};
 
-    const filter = {};
+    const filter = { is_deleted: false };
 
     if (type) {
       if (!["dignitary", "student"].includes(type.toLowerCase())) {
@@ -34,6 +34,10 @@ exports.getTestimonials = async (req, res, next) => {
         });
       }
       filter.type = type.toLowerCase();
+    }
+
+    if (status) {
+      filter.status = status.toLowerCase().trim();
     }
 
     if (slug) {
@@ -99,7 +103,9 @@ exports.getTestimonialById = async (req, res, next) => {
     }
 
     const isMongoId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
-    const query = isMongoId ? { _id: idOrSlug } : { slug: idOrSlug.toLowerCase() };
+    const query = isMongoId
+      ? { _id: idOrSlug, is_deleted: false }
+      : { slug: idOrSlug.toLowerCase(), is_deleted: false };
 
     const testimonial = await Testimonial.findOne(query)
       .populate("created_by", "first_name last_name email")
@@ -121,6 +127,7 @@ exports.getTestimonialById = async (req, res, next) => {
     next(error);
   }
 };
+
 
 // @desc    Create new testimonial (maps both Student and Dignitary form fields)
 // @route   POST /api/testimonials
@@ -247,7 +254,9 @@ exports.updateTestimonial = async (req, res, next) => {
     }
 
     const isMongoId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
-    const query = isMongoId ? { _id: idOrSlug } : { slug: idOrSlug.toLowerCase() };
+    const query = isMongoId
+      ? { _id: idOrSlug, is_deleted: false }
+      : { slug: idOrSlug.toLowerCase(), is_deleted: false };
 
     const existingTestimonial = await Testimonial.findOne(query);
     if (!existingTestimonial) {
@@ -256,6 +265,7 @@ exports.updateTestimonial = async (req, res, next) => {
         message: "Testimonial not found",
       });
     }
+
 
     const body = req.body || {};
     const errors = {};
@@ -370,7 +380,7 @@ exports.updateTestimonial = async (req, res, next) => {
   }
 };
 
-// @desc    Delete testimonial by ID or Slug
+// @desc    Soft Delete testimonial by ID or Slug
 // @route   DELETE /api/testimonials/:idOrSlug
 exports.deleteTestimonial = async (req, res, next) => {
   try {
@@ -384,15 +394,26 @@ exports.deleteTestimonial = async (req, res, next) => {
     }
 
     const isMongoId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
-    const query = isMongoId ? { _id: idOrSlug } : { slug: idOrSlug.toLowerCase() };
+    const query = isMongoId
+      ? { _id: idOrSlug, is_deleted: false }
+      : { slug: idOrSlug.toLowerCase(), is_deleted: false };
 
-    const testimonial = await Testimonial.findOneAndDelete(query);
+    const testimonial = await Testimonial.findOne(query);
     if (!testimonial) {
       return res.status(404).json({
         status: 404,
-        message: "Testimonial not found",
+        message: "Testimonial not found or already deleted",
       });
     }
+
+    // Soft delete
+    testimonial.is_deleted = true;
+    testimonial.status = "inactive";
+    testimonial.isActive = false;
+    testimonial.updated_at = moment().tz("Asia/Kolkata").toDate();
+    if (req.user) testimonial.updated_by = req.user._id;
+
+    await testimonial.save();
 
     return res.status(200).json({
       status: 200,
@@ -401,10 +422,12 @@ exports.deleteTestimonial = async (req, res, next) => {
       data: {
         id: testimonial._id,
         slug: testimonial.slug,
+        is_deleted: true,
       },
     });
   } catch (error) {
     next(error);
   }
 };
+
 

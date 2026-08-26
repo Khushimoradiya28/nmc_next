@@ -14,6 +14,11 @@ const instance = axios.create({
 instance.interceptors.request.use(function (config) {
   const token = Cookies.get("adminToken");
 
+  if (config.data instanceof FormData) {
+    // Let browser set the correct multipart/form-data boundary header
+    delete config.headers['Content-Type'];
+  }
+
   return {
     ...config,
     headers: {
@@ -25,20 +30,25 @@ instance.interceptors.request.use(function (config) {
 
 
 
+
 const responseBody = (response) => response.data;
 
 const requests = {
-  get: (url, body, headers) =>
-    instance.get(url, body, headers).then(responseBody),
+  get: (url, params, headers = {}) =>
+    instance.get(url, { params, headers }).then(responseBody),
 
-  post: (url, body) => instance.post(url, body).then(responseBody),
+  post: (url, body, headers = {}) =>
+    instance.post(url, body, { headers }).then(responseBody),
 
-  put: (url, body, headers) =>
-    instance.put(url, body, headers).then(responseBody),
+  put: (url, body, headers = {}) =>
+    instance.put(url, body, { headers }).then(responseBody),
 
-  patch: (url, body) => instance.patch(url, body).then(responseBody),
+  patch: (url, body, headers = {}) =>
+    instance.patch(url, body, { headers }).then(responseBody),
 
-  delete: (url) => instance.delete(url).then(responseBody),
+  delete: (url, config) => instance.delete(url, config).then(responseBody),
 };
+
+
 
 export default requests;

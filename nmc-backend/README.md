@@ -70,10 +70,28 @@ Every API, service, and data model in this project must strictly follow the stan
        }
        ```
 
-5. **Soft Delete Policy (`is_deleted` & `status`)**:
-   - Kisi bhi main database record ko hard-delete (`remove()` / `deleteOne()`) nahi karna hai.
-   - Har schema me `is_deleted: { type: Boolean, default: false }` aur `status: { type: String, enum: ['active', 'inactive'], default: 'active' }` hona chahiye.
-   - Delete API request par record ki `is_deleted` property `true` set hogi taaki historical data database me preserve rahe.
+5. **Soft Delete Policy (`is_deleted`, `status`, & `isActive`)**:
+   - **No Hard Delete Allowed**: Kisi bhi main database record ko database collection se permanently delete (`deleteOne()`, `deleteMany()`, `findByIdAndDelete()`, ya `remove()`) **nahi** karna hai.
+   - **Schema Requirements**:
+     - Har schema me mandatory fields hone chahiye:
+       ```javascript
+       is_deleted: { type: Boolean, default: false, index: true },
+       status: { type: String, enum: ['active', 'inactive'], default: 'active', index: true },
+       isActive: { type: Boolean, default: true, index: true }
+       ```
+   - **Delete Operation Action**:
+     - Jab bhi koi Delete API (`DELETE /api/.../:idOrSlug` ya `POST /api/.../delete`) call hogi:
+       - `is_deleted: true`
+       - `status: "inactive"`
+       - `isActive: false`
+       - `updated_at: moment().tz("Asia/Kolkata").toDate()`
+       - `updated_by: req.user ? req.user._id : body.updated_by`
+   - **Read / Query Filtering**:
+     - Sabhi listing, detail fetch, search, aur update queries me `{ is_deleted: false }` filter mandatory hona chahiye taaki soft-deleted records client aur admin list me display na ho:
+       ```javascript
+       const filter = { is_deleted: false, ...otherFilters };
+       ```
+
 
 6. **Pagination & Query Standard for GET APIs**:
    - Har list-fetching GET API (e.g., Testimonials, Blogs, Users) me mandatory pagination, search, aur status filter support hona chahiye:
@@ -92,11 +110,22 @@ Every API, service, and data model in this project must strictly follow the stan
    - Every string value coming from body or params must be auto-trimmed (`.trim()`) to avoid whitespace pollution in the database.
    - HTML injection prevention / sanitization must be applied on text input fields.
 
-<!-- 
-8. **File Uploading Standard (AWS S3 & Local Fallback)**:
-   - Images/Files directly database me base64 format me store nahi hongi.
-   - File upload APIs strictly Multer + AWS S3/Cloud Storage path return karengi. Database me sirf image ka public URL (`avatar_url` / `image_path`) store hoga. -->
-   
+8. **Image & File Uploading Standards (Local Storage & Cloud S3)**:
+   - **No Base64 or Binary in DB**: Images ya media files ko directly database me Base64 / binary string ke roop me store **nahi** karna hai. Database me sirf image ka relative path ya public S3 URL store hoga.
+   - **Multer Middleware & Supported Formats**:
+     - Image uploads ke liye standard Multer middleware (`getMulterUpload("folder_name")`) use hoga.
+     - Supported formats: `.jpeg`, `.jpg`, `.png`, `.webp`, `.svg` (Max size: 5MB to 10MB per file).
+   - **Dual Storage Strategy (Local & Production S3)**:
+     - **Development Mode (`NODE_ENV !== "production"`)**: 
+       - Files locally `src/media/<folder_name>/` directory me store hongi aur Express static path (`/media/...`) se accessible hongi.
+       - Sharp library dwara non-webp images ka `.webp` version automatically generate hoga for web performance.
+     - **Production Mode (`NODE_ENV === "production"`)**:
+       - Files automatically configured AWS S3 Bucket me stream/upload hongi (`uploadToS3AndCreateWebp`).
+   - **Accessible URL in Responses**:
+     - GET aur Write API responses me backend automatically full accessible URL construct karke return karega (e.g., `http://localhost:5000/media/awards/filename.webp` ya `https://bucket.s3.amazonaws.com/...`) under standardized keys: `image_url` / `imageUrl`.
+   - **Old File Cleanup Policy**:
+     - Record update hone par agar nayi image upload ki jaati hai, toh purani image file (`deleteLocalImages` ya `deleteS3Objects`) database/disk se clean/delete ho jani chahiye taaki server storage bloat na ho.
+
 
 9. **Security & Authentication (JWT & Role Guards)**:
    - Admin/Private APIs par compulsory Authentication Middleware (`authGuard`) aur Role Checking (`roleGuard(['super_admin', 'admin'])`) hona chahiye.

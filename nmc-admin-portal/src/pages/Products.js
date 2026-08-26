@@ -67,20 +67,33 @@ const Products = () => {
   const fetchProducts = async (payloadFilters) => {
     setLoading(true);
     try {
+      const searchVal = searchRef.current?.value || "";
       if (typeParam === "testimonial") {
-        const res = await TestimonialServices.getAllTestimonials();
-        setData(res.data || []);
+        const params = {};
+        if (searchVal) params.search = searchVal;
+        const res = await TestimonialServices.getAllTestimonials(params);
+        const list = res?.data || res?.testimonials || (Array.isArray(res) ? res : []);
+        setData(Array.isArray(list) ? list : []);
       } else if (typeParam === "awards") {
-        const res = await AwardServices.getAllAwards();
-        setData(res.data || []);
+
+        const params = {
+          page: 1,
+          limit: 100,
+          ...payloadFilters,
+        };
+        if (searchVal) params.search = searchVal;
+        const res = await AwardServices.getAllAwards(params);
+        setData(res.data || res.awards || (Array.isArray(res) ? res : []));
       } else if (typeParam === "courses") {
-        const res = await CourseServices.getAllCourses();
-        setData(res.data || []);
+        const params = {};
+        if (searchVal) params.search = searchVal;
+        const res = await CourseServices.getAllCourses(params);
+        setData(res.data || res.courses || (Array.isArray(res) ? res : []));
       } else {
         const payload = {
           type: "product_list",
           status: 1,
-          search: searchRef.current?.value || "",
+          search: searchVal,
           ...payloadFilters,
         };
         const res = await ProductServices.getAllProducts(payload);
@@ -94,6 +107,7 @@ const Products = () => {
     }
   };
 
+
   useEffect(() => {
     fetchProducts(filters);
   }, [filters, typeParam]);
@@ -103,7 +117,8 @@ const Products = () => {
       fetchProducts(filters);
       setIsUpdate(false);
     }
-  }, [isUpdate]);
+  }, [isUpdate, filters]);
+
 
   const {
     handleChangePage,

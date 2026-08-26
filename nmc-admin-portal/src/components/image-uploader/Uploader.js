@@ -1,35 +1,70 @@
 import React, { useEffect, useState } from 'react';
 
 
-// SAVE FILE NAME 
 const Uploader = ({ imageUrl, setImageUrl, setUploadedFile }) => {
+  const fallbackImg = 'https://runrkids.s3.ap-south-1.amazonaws.com/media/default/default.png';
 
   const handleFile = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
-    setUploadedFile(file);
+    if (setUploadedFile) {
+      setUploadedFile(file);
+    }
 
-    // Show preview
+    // Show preview immediately
     setImageUrl(URL.createObjectURL(file));
   };
 
+  let resolvedSrc = fallbackImg;
+  if (imageUrl) {
+    if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://') || imageUrl.startsWith('blob:')) {
+      resolvedSrc = imageUrl;
+    } else {
+      const backendBase = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
+      let cleanPath = imageUrl;
+      if (!imageUrl.startsWith('/')) {
+        if (imageUrl.startsWith('media/') || imageUrl.startsWith('uploads/')) {
+          cleanPath = `/${imageUrl}`;
+        } else {
+          cleanPath = `/media/certificate_courses/${imageUrl}`;
+        }
+      }
+      resolvedSrc = `${backendBase}${cleanPath}`;
+
+    }
+  }
+
+
+
   return (
     <div>
-      <input type="file" onChange={handleFile} />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleFile}
+        className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-50 file:text-red-800 hover:file:bg-red-100 dark:file:bg-gray-700 dark:file:text-gray-200"
+      />
 
       {imageUrl && (
-        <img
-          src={imageUrl}
-          className="w-100 h-100 mt-3 rounded border"
-        // alt="Brand"
-        />
+        <div className="mt-3 relative inline-block">
+          <img
+            src={resolvedSrc}
+            alt="Preview"
+            className="w-32 h-32 object-cover rounded-md border border-gray-200 dark:border-gray-600 shadow-xs"
+            onError={(e) => {
+              e.target.onerror = null;
+              e.target.src = fallbackImg;
+            }}
+          />
+        </div>
       )}
     </div>
   );
 };
 
 export default Uploader;
+
 
 
 // import React, { useState } from "react";

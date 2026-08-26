@@ -15,6 +15,7 @@ const AwardDrawer = ({ id }) => {
   const { closeDrawer, setIsUpdate, isDrawerOpen } = useContext(SidebarContext);
 
   const [imageUrl, setImageUrl] = useState('');
+  const [uploadedFile, setUploadedFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -30,10 +31,12 @@ const AwardDrawer = ({ id }) => {
   useEffect(() => {
     if (!id && isDrawerOpen) {
       setImageUrl('');
+      setUploadedFile(null);
       reset({
         title: '',
         description: '',
-        imageUrl: '',
+        sort_order: 1,
+        status: 'active',
       });
       clearErrors();
     }
@@ -45,11 +48,21 @@ const AwardDrawer = ({ id }) => {
 
     AwardServices.getAwardById(id)
       .then((res) => {
-        if (res && res.data) {
-          const data = res.data;
+        const data = res?.data || res;
+        if (data) {
           setValue('title', data.title || '');
           setValue('description', data.description || '');
-          setImageUrl(data.imageUrl || '');
+          setValue('sort_order', data.sort_order || 1);
+          setValue('status', data.status || 'active');
+
+          const fetchedImg =
+            data.imageUrl ||
+            data.image ||
+            data.image_url ||
+            (Array.isArray(data.images) && data.images[0]) ||
+            '';
+          setImageUrl(fetchedImg);
+          setUploadedFile(null);
         }
       })
       .catch((err) => {
@@ -57,35 +70,44 @@ const AwardDrawer = ({ id }) => {
       });
   }, [id, isDrawerOpen, setValue]);
 
-  // Form submit handler
+  // Form submit handler matching exact user specification
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
 
-      const payload = {
-        title: data.title ? data.title.trim() : '',
-        description: data.description ? data.description.trim() : '',
-        imageUrl: imageUrl || '',
-      };
+      const title = data.title ? data.title.trim() : '';
+      const description = data.description ? data.description.trim() : '';
 
-      if (!payload.title) {
+      if (!title) {
         notifyError('Award title is required');
         setIsSubmitting(false);
         return;
       }
 
-      if (!payload.description) {
+      if (!description) {
         notifyError('Award description is required');
         setIsSubmitting(false);
         return;
       }
 
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('description', description);
+      if (data.sort_order) formData.append('sort_order', data.sort_order);
+      if (data.status) formData.append('status', data.status);
+
+      if (uploadedFile && typeof uploadedFile === 'object') {
+        formData.append('image', uploadedFile); // File instance from input
+      } else if (typeof imageUrl === 'string' && imageUrl) {
+        formData.append('imageUrl', imageUrl);
+      }
+
       if (id) {
-        const res = await AwardServices.updateAward(id, payload);
-        notifySuccess(res.message || 'Award updated successfully!');
+        const res = await AwardServices.updateAward(id, formData);
+        notifySuccess(res?.message || 'Award updated successfully!');
       } else {
-        const res = await AwardServices.addAward(payload);
-        notifySuccess(res.message || 'Award created successfully!');
+        const res = await AwardServices.addAward(formData);
+        notifySuccess(res?.message || 'Award created successfully!');
       }
 
       setIsUpdate(true);
@@ -153,7 +175,11 @@ const AwardDrawer = ({ id }) => {
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
                 Award Image
               </label>
-              <Uploader imageUrl={imageUrl} setImageUrl={setImageUrl} />
+              <Uploader
+                imageUrl={imageUrl}
+                setImageUrl={setImageUrl}
+                setUploadedFile={setUploadedFile}
+              />
             </div>
           </div>
 

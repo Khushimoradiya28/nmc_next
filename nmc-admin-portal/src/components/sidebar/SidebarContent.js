@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { NavLink, Route } from 'react-router-dom';
+import { NavLink, Route, Link } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { Button, WindmillContext } from '@windmill/react-ui';
 import { IoLogOutOutline } from 'react-icons/io5';
@@ -15,7 +15,7 @@ const SidebarContent = ({ isCollapsed }) => {
 
   return (
     <div className="py-4 text-gray-500 dark:text-gray-400">
-      <a className="text-gray-900 dark:text-gray-200 block px-4 mb-3" href="/dashboard">
+      <Link className="text-gray-900 dark:text-gray-200 block px-4 mb-3" to="/dashboard">
         <div className="flex items-center justify-center gap-2">
           <img
             src={nmcLogo}
@@ -25,7 +25,8 @@ const SidebarContent = ({ isCollapsed }) => {
             }`}
           />
         </div>
-      </a>
+      </Link>
+
       <ul className="mt-6">
         {sidebar.map((route) =>
           route.routes ? (

@@ -93,10 +93,14 @@ const useFilter = (data) => {
     }
 
     //products filtering
+    if (location.search.includes('type=testimonial') || location.search.includes('type=awards') || location.search.includes('type=courses')) {
+      return Array.isArray(services) ? services : [];
+    }
 
     if (filter) {
       services = services.filter((item) => item.parent === filter);
     }
+
 
     if (sortedField === 'Low') {
       services = services.sort((a, b) => a.price < b.price && -1);

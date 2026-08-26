@@ -11,17 +11,6 @@ import ExpandableText from '../common/ExpandableText';
 import { Fancybox } from '@fancyapps/ui';
 import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
-const DEFAULT_AWARDS = [
-  {
-    _id: 'sample_award_1',
-    title: "Best Women's College Recognition",
-    description: "Empowering women through quality education and holistic growth across academic excellence and student welfare.",
-    imageUrl: 'https://runrkids.s3.ap-south-1.amazonaws.com/media/default/default.png',
-    createdAt: '2026-06-17T10:00:00.000Z',
-    updatedAt: '2026-08-07T14:30:00.000Z',
-  },
-];
-
 const AwardTable = ({
   awards = [],
   currentPage = 1,
@@ -29,7 +18,7 @@ const AwardTable = ({
   onEdit,
   onDelete,
 }) => {
-  const displayAwards = awards && awards.length > 0 ? awards : DEFAULT_AWARDS;
+  const displayAwards = Array.isArray(awards) ? awards : [];
   const startIndex = (currentPage - 1) * resultsPerPage;
 
   useEffect(() => {
@@ -39,6 +28,7 @@ const AwardTable = ({
       Fancybox.close();
     };
   }, []);
+
 
   return (
     <>
@@ -54,71 +44,86 @@ const AwardTable = ({
       </TableHeader>
 
       <TableBody>
-        {displayAwards.map((item, i) => (
-          <TableRow key={item._id || i}>
-            {/* Sr No */}
-            <TableCell>
-              <span className="text-xs uppercase font-semibold">
-                {startIndex + i + 1}
-              </span>
-            </TableCell>
+        {displayAwards.map((item, i) => {
+          const itemKey = item.slug || item._id || item.id || i;
+          const actionId = item.slug || item._id || item.id;
+          const rawImg = item.image_url || item.imageUrl || item.image || '';
+          const fallbackImg = 'https://runrkids.s3.ap-south-1.amazonaws.com/media/default/default.png';
+          
+          let img = fallbackImg;
+          if (rawImg) {
+            if (rawImg.startsWith('http://') || rawImg.startsWith('https://') || rawImg.startsWith('blob:')) {
+              img = rawImg;
+            } else {
+              const backendBase = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
+              const cleanPath = rawImg.startsWith('/') ? rawImg : rawImg.startsWith('uploads/') ? `/${rawImg}` : `/uploads/${rawImg}`;
+              img = `${backendBase}${cleanPath}`;
+            }
+          }
 
-            {/* Award Image */}
-            <TableCell>
-              <div className="flex items-center">
-                <div className="relative inline-block w-12 h-12 rounded overflow-hidden bg-gray-100 dark:bg-gray-700 shadow-xs border border-gray-200 dark:border-gray-600">
-                  <a
-                    data-fancybox="awards-gallery"
-                    href={
-                      item.imageUrl ||
-                      'https://runrkids.s3.ap-south-1.amazonaws.com/media/default/default.png'
-                    }
-                  >
-                    <img
-                      src={
-                        item.imageUrl ||
-                        'https://runrkids.s3.ap-south-1.amazonaws.com/media/default/default.png'
-                      }
-                      alt={item.title}
-                      className="object-cover w-full h-full"
-                    />
-                  </a>
+
+          return (
+            <TableRow key={itemKey}>
+              {/* Sr No */}
+              <TableCell>
+                <span className="text-xs uppercase font-semibold">
+                  {startIndex + i + 1}
+                </span>
+              </TableCell>
+
+              {/* Award Image */}
+              <TableCell>
+                <div className="flex items-center">
+                  <div className="relative inline-block w-12 h-12 rounded overflow-hidden bg-gray-100 dark:bg-gray-700 shadow-xs border border-gray-200 dark:border-gray-600">
+                    <a data-fancybox="awards-gallery" href={img}>
+                      <img
+                        src={img}
+                        alt={item.title || 'Award'}
+                        className="object-cover w-full h-full"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = fallbackImg;
+                        }}
+                      />
+                    </a>
+                  </div>
                 </div>
-              </div>
-            </TableCell>
+              </TableCell>
 
-            {/* Title */}
-            <TableCell>
-              <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
-                {item.title || '-'}
-              </span>
-            </TableCell>
 
-            {/* Description with Reusable ExpandableText component */}
-            <TableCell className="w-64 max-w-xs whitespace-normal break-words">
-              <ExpandableText text={item.description} />
-            </TableCell>
+              {/* Title */}
+              <TableCell>
+                <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
+                  {item.title || '-'}
+                </span>
+              </TableCell>
 
-            {/* Time Stamp */}
-            <TableCell>
-              <DateBox
-                created_at={item.createdAt || item.created_at}
-                updated_at={item.updatedAt || item.updated_at}
-              />
-            </TableCell>
+              {/* Description with Reusable ExpandableText component */}
+              <TableCell className="w-64 max-w-xs whitespace-normal break-words">
+                <ExpandableText text={item.description} />
+              </TableCell>
 
-            {/* Actions */}
-            <TableCell>
-              <div className="flex items-center justify-end gap-2">
-                <EditDeleteButton
-                  id={item._id}
-                  handleUpdate={() => onEdit && onEdit(item._id)}
-                  handleModalOpen={() => onDelete && onDelete(item._id)}
+              {/* Time Stamp */}
+              <TableCell>
+                <DateBox
+                  created_at={item.createdAt || item.created_at}
+                  updated_at={item.updatedAt || item.updated_at}
                 />
-              </div>
-            </TableCell>
-          </TableRow>
-        ))}
+              </TableCell>
+
+              {/* Actions */}
+              <TableCell>
+                <div className="flex items-center justify-end gap-2">
+                  <EditDeleteButton
+                    id={actionId}
+                    handleUpdate={() => onEdit && onEdit(actionId)}
+                    handleModalOpen={() => onDelete && onDelete(actionId)}
+                  />
+                </div>
+              </TableCell>
+            </TableRow>
+          );
+        })}
       </TableBody>
     </>
   );
