@@ -50,17 +50,32 @@ const errorHandler = (err, req, res, next) => {
     };
   }
 
-  // ✅ Handle Custom Errors (manual thrown)
+  // ✅ Handle Custom Errors (manual thrown with statusCode)
   else if (err.statusCode) {
     statusCode = err.statusCode;
     response = {
+      success: false,
       status: statusCode,
-      // message: err.message,
+      message: err.message,
       error: {
-        message: [err.message]
+        file: [err.message]
       }
     };
   }
+
+  // ✅ Handle Multer Specific Errors
+  else if (err.name === "MulterError" || err.message?.includes("format allowed")) {
+    statusCode = 400;
+    response = {
+      success: false,
+      status: 400,
+      message: err.message,
+      error: {
+        image: [err.message]
+      }
+    };
+  }
+
 
   // ✅ Log error details for debugging
   logger.error(

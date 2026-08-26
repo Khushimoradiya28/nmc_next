@@ -32,13 +32,14 @@ const testimonialSchema = new mongoose.Schema(
       required: [true, "Designation / Subtext is required"],
       trim: true,
     },
-    // Rating (Mandatory for student: 1 to 5)
+    // Rating (Mandatory for student: 1 to 5, null/not applicable for dignitary)
     rating: {
       type: Number,
-      default: 5,
+      default: null,
       min: [1, "Rating must be at least 1"],
       max: [5, "Rating cannot exceed 5"],
     },
+
     // Testimonial Quote
     quote: {
       type: String,

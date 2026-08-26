@@ -9,6 +9,7 @@ const roleRoutes = require("./roleRoutes");
 const mediaRoutes = require("./mediaRoutes");
 const testimonialRoutes = require("./testimonialRoutes");
 const certificateCourseRoutes = require("./certificateCourseRoutes");
+const awardRoutes = require("./awardRoutes");
 
 // All routes grouped under /api
 router.use("/user", userRoutes);
@@ -18,5 +19,8 @@ router.use("/testimonials", testimonialRoutes);
 router.use("/testimonial", testimonialRoutes);
 router.use("/certificate-courses", certificateCourseRoutes);
 router.use("/certificate-course", certificateCourseRoutes);
+router.use("/awards", awardRoutes);
+router.use("/award", awardRoutes);
 
 module.exports = router;
+

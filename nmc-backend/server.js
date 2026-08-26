@@ -84,8 +84,14 @@ app.use("/api", (req, res, next) => {
     "updateproductseo",
     "get-reviews",
     "testimonial",
-    "certificate-course"
+    "testimonials",
+    "certificate-course",
+    "certificate-courses",
+    "award",
+    "awards"
   ];
+
+
 
   if (req.method === "GET" || openPaths.some((key) => req.path.toLowerCase().includes(key))) {
     return next();

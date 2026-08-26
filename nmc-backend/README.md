@@ -48,6 +48,64 @@ Every API, service, and data model in this project must strictly follow the stan
      }
      ```
 
+
+     4. **Standardized API Response Structure (Success & Error)**:
+   - Har API response (Success ya Failure) ka format 100% consistent hona chahiye:
+     - **Success Response (200/201)**:
+       ```json
+       {
+         "success": true,
+         "status": 200,
+         "message": "Testimonial fetched successfully.",
+         "data": { ... }
+       }
+       ```
+     - **Server/Internal Error (500)**:
+       ```json
+       {
+         "success": false,
+         "status": 500,
+         "message": "Internal Server Error. Please try again later.",
+         "error": {}
+       }
+       ```
+
+5. **Soft Delete Policy (`is_deleted` & `status`)**:
+   - Kisi bhi main database record ko hard-delete (`remove()` / `deleteOne()`) nahi karna hai.
+   - Har schema me `is_deleted: { type: Boolean, default: false }` aur `status: { type: String, enum: ['active', 'inactive'], default: 'active' }` hona chahiye.
+   - Delete API request par record ki `is_deleted` property `true` set hogi taaki historical data database me preserve rahe.
+
+6. **Pagination & Query Standard for GET APIs**:
+   - Har list-fetching GET API (e.g., Testimonials, Blogs, Users) me mandatory pagination, search, aur status filter support hona chahiye:
+     - Default Query Params: `?page=1&limit=10&search=&status=active`
+   - Response me pagination metadata mandatory return hoga:
+     ```json
+     "meta": {
+       "total_records": 45,
+       "current_page": 1,
+       "total_pages": 5,
+       "limit": 10
+     }
+     ```
+
+7. **Payload Sanitization & Trim Middleware**:
+   - Every string value coming from body or params must be auto-trimmed (`.trim()`) to avoid whitespace pollution in the database.
+   - HTML injection prevention / sanitization must be applied on text input fields.
+
+<!-- 
+8. **File Uploading Standard (AWS S3 & Local Fallback)**:
+   - Images/Files directly database me base64 format me store nahi hongi.
+   - File upload APIs strictly Multer + AWS S3/Cloud Storage path return karengi. Database me sirf image ka public URL (`avatar_url` / `image_path`) store hoga. -->
+   
+
+9. **Security & Authentication (JWT & Role Guards)**:
+   - Admin/Private APIs par compulsory Authentication Middleware (`authGuard`) aur Role Checking (`roleGuard(['super_admin', 'admin'])`) hona chahiye.
+   - Request object me logged-in user ki details (`req.user`) pass honi chahiye taaki `created_by` aur `updated_by` automatically fill ho sakein.
+
+10. **Strict Code & AI File Generation Limits**:
+    - AI Agent must NOT generate unnecessary helper, markdown, or redundant wrapper files.
+    - Strict adherence to project architecture: `routes/`, `controllers/`, `models/`, `middlewares/`, `services/`.
+
 ## API Documentation
 
 See [API Documentation](API_DOCUMENTATION.md) for detailed endpoint information.

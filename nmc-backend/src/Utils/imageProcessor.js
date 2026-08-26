@@ -18,21 +18,22 @@ async function saveLocalAndCreateWebp(file, folderPath) {
   const uploadsDir = path.join(__dirname, "..", "media", folderPath);
   if (!fs.existsSync(uploadsDir)) fs.mkdirSync(uploadsDir, { recursive: true });
 
-  // originalPath is the multer saved path (absolute or relative)
-  const originalPath = file.path; // e.g. src/media/profile/12345-..jpg
+  const originalPath = file.path; // e.g. src/media/awards/12345-..webp
   const ext = path.extname(originalPath).toLowerCase();
   const baseName = path.basename(originalPath, ext);
-  const webpPath = path.join(path.dirname(originalPath), baseName + ".webp");
 
-  // convert to webp
-  await sharp(originalPath).webp({ quality: 80 }).toFile(webpPath);
+  let relOriginal = path.join("media", folderPath, path.basename(originalPath)).replace(/\\/g, "/");
+  let relWebp = relOriginal;
 
-  // return relative paths as 'media/profile/xxx'
-  const relOriginal = path.join("media", folderPath, path.basename(originalPath));
-  const relWebp = path.join("media", folderPath, path.basename(webpPath));
+  if (ext !== ".webp") {
+    const webpPath = path.join(path.dirname(originalPath), baseName + ".webp");
+    await sharp(originalPath).webp({ quality: 80 }).toFile(webpPath);
+    relWebp = path.join("media", folderPath, path.basename(webpPath)).replace(/\\/g, "/");
+  }
 
   return { originalPath: relOriginal, webpPath: relWebp };
 }
+
 
 /**
  * Upload original + webp to S3 (when multer uses memoryStorage)

@@ -172,19 +172,23 @@ exports.createTestimonial = async (req, res, next) => {
       }
     }
 
-    let rating = body.rating;
+    let rating = null;
     if (type === "student") {
-      if (rating === undefined || rating === null || rating === "") {
+      if (body.rating === undefined || body.rating === null || body.rating === "") {
         errors.rating = ["Rating is mandatory for Student Testimonials."];
       } else {
-        rating = Number(rating);
-        if (isNaN(rating) || rating < 1 || rating > 5) {
+        const numRating = Number(body.rating);
+        if (isNaN(numRating) || numRating < 1 || numRating > 5) {
           errors.rating = ["Rating must be a valid number between 1 and 5."];
+        } else {
+          rating = numRating;
         }
       }
     } else {
-      rating = rating ? Number(rating) : 5;
+      // Dignitary does not use rating
+      rating = null;
     }
+
 
     // Image / Photo
     const avatarUrl = body.avatarUrl || body.avatar_url || body.student_photo || body.profile_photo || body.image || body.photo || "";
@@ -313,14 +317,17 @@ exports.updateTestimonial = async (req, res, next) => {
     }
 
     // Check Rating
-    if (body.rating !== undefined) {
+    if (targetType === "dignitary") {
+      existingTestimonial.rating = null;
+    } else if (body.rating !== undefined) {
       const rating = Number(body.rating);
-      if (targetType === "student" && (isNaN(rating) || rating < 1 || rating > 5)) {
-        errors.rating = ["Rating must be between 1 and 5."];
+      if (isNaN(rating) || rating < 1 || rating > 5) {
+        errors.rating = ["Rating must be between 1 and 5 for student testimonials."];
       } else {
-        existingTestimonial.rating = isNaN(rating) ? 5 : rating;
+        existingTestimonial.rating = rating;
       }
     }
+
 
     if (Object.keys(errors).length > 0) {
       return res.status(400).json({
