@@ -1,418 +1,234 @@
 /* Syllabus Link Page */
-.heroSection {
-    position: relative;
-    min-height: 50vh;
-    height: 50vh;
-    display: flex;
-    align-items: flex-end;
-    overflow: hidden;
-}
-
-.heroBgImage {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-}
-
-.heroBgImg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
-
-.heroOverlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.4));
-    z-index: 1;
-}
-
-.heroContent {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 1380px;
-    margin: 0 auto;
-    padding: 0 2rem 80px 2rem;
-}
-
-.heroTitle {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: clamp(2.6rem, 5.8vw, 4.5rem);
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.15;
-    margin: 0;
-    letter-spacing: -0.01em;
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-}
-
+.heroSection { position: relative; min-height: 50vh; height: 50vh; display: flex; align-items: flex-end; overflow: hidden; }
+.heroBgImage { position: absolute; inset: 0; z-index: 0; }
+.heroBgImg { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.82), rgba(0,0,0,0.4)); z-index: 1; }
+.heroContent { position: relative; z-index: 2; width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem 80px 2rem; }
+.heroTitle { font-family: var(--font-heading, 'Outfit', sans-serif); font-size: clamp(2.6rem, 5.8vw, 4.5rem); font-weight: 700; color: #fff; line-height: 1.15; margin: 0; }
 .heroTitle em {
-    font-style: italic;
-    font-weight: 700;
-    display: inline-block;
-    padding-right: 0.15em;
-    padding-bottom: 0.05em;
-    overflow: visible;
-    background: linear-gradient(135deg, #ffffff 60%, var(--gold-300, #f59e0b) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  font-style: italic;
+  font-weight: 700;
+  display: inline-block;
+  padding-right: 0.15em;
+  padding-bottom: 0.05em;
+  overflow: visible;
+  background: linear-gradient(135deg, #ffffff 60%, var(--gold-300, #f59e0b) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.container {
-    width: 100%;
-    max-width: 1380px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
+.container { width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem; }
 
 /* ============================================
    Syllabus Section
    ============================================ */
 .syllabusSection {
-    padding: 5rem 0;
-    background: var(--sky-50, #fffdf5);
+  padding: 5rem 0;
+  background: var(--sky-50, #fffdf5);
 }
 
 .syllabusHeader {
-    margin-bottom: 3rem;
+  margin-bottom: 3rem;
 }
 
 .syllabusLabel {
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--red-800, #8a0000);
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red-800, #8a0000);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .syllabusLabelLine {
-    width: 24px;
-    height: 2px;
-    background: var(--red-800, #8a0000);
+  width: 24px;
+  height: 2px;
+  background: var(--red-800, #8a0000);
 }
 
 .syllabusTitle {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: clamp(1.7rem, 3vw, 2.4rem);
-    font-weight: 800;
-    color: var(--gray-900, #111827);
-    margin: 0 0 0.5rem 0;
-    line-height: 1.2;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: var(--gray-900, #111827);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
 }
 
 .syllabusTitle span {
-    background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .syllabusDesc {
-    font-size: 0.95rem;
-    color: var(--gray-600, #4b5563);
-    line-height: 1.7;
-    max-width: 650px;
+  font-size: 0.95rem;
+  color: var(--gray-600, #4b5563);
+  line-height: 1.7;
+  max-width: 650px;
 }
 
 /* Syllabus Grid */
 .syllabusGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
 }
 
 .syllabusCard {
-    background: var(--white, #ffffff);
-    border: 1px solid var(--gray-200, #e5e7eb);
-    border-radius: 1.25rem;
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  background: var(--white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 1.25rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .syllabusCard:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(138, 0, 0, 0.06);
-    border-color: rgba(138, 0, 0, 0.15);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(138, 0, 0, 0.06);
+  border-color: rgba(138, 0, 0, 0.15);
 }
 
 .syllabusCardIcon {
-    width: 44px;
-    height: 44px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 1.25rem;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
 }
 
-.iconRed {
-    background: var(--red-50, #fef2f2);
-    color: var(--red-800, #8a0000);
-}
-
-.iconGold {
-    background: var(--gold-100, #fef9c3);
-    color: var(--gold-700, #b45309);
-}
-
-.iconGreen {
-    background: #ecfdf5;
-    color: #16a34a;
-}
+.iconRed { background: var(--red-50, #fef2f2); color: var(--red-800, #8a0000); }
+.iconGold { background: var(--gold-100, #fef9c3); color: var(--gold-700, #b45309); }
+.iconGreen { background: #ecfdf5; color: #16a34a; }
 
 .syllabusCardName {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: 1.05rem;
-    font-weight: 700;
-    color: var(--gray-900, #111827);
-    margin: 0 0 0.4rem 0;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--gray-900, #111827);
+  margin: 0 0 0.4rem 0;
 }
 
 .syllabusCardType {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--gray-500, #6b7280);
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    margin-bottom: 1rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--gray-500, #6b7280);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-bottom: 1rem;
 }
 
 .syllabusCardSemesters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-    margin-bottom: 1.25rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 1.25rem;
 }
 
 .semBadge {
-    font-size: 0.7rem;
-    font-weight: 700;
-    padding: 0.25rem 0.55rem;
-    border-radius: 4px;
-    background: var(--gray-100, #f3f4f6);
-    color: var(--gray-700, #374151);
-    border: 1px solid var(--gray-200, #e5e7eb);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.55rem;
+  border-radius: 4px;
+  background: var(--gray-100, #f3f4f6);
+  color: var(--gray-700, #374151);
+  border: 1px solid var(--gray-200, #e5e7eb);
 }
 
 .syllabusCardLink {
-    margin-top: auto;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--red-800, #8a0000);
-    text-decoration: none;
-    transition: all 0.25s ease;
+  margin-top: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--red-800, #8a0000);
+  text-decoration: none;
+  transition: all 0.25s ease;
 }
 
 .syllabusCardLink:hover {
-    gap: 0.75rem;
-    color: var(--gold-700, #b45309);
+  gap: 0.75rem;
+  color: var(--gold-700, #b45309);
 }
 
 /* Responsive */
 @media (max-width: 1799px) {
-    .syllabusGrid {
-        gap: 1.35rem;
-    }
+  .syllabusGrid { gap: 1.35rem; }
 }
 
 @media (max-width: 1599px) {
-    .syllabusCard {
-        padding: 1.75rem;
-    }
+  .syllabusCard { padding: 1.75rem; }
 }
 
 @media (max-width: 1408px) {
-    .syllabusTitle {
-        font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-    }
+  .syllabusTitle { font-size: clamp(1.5rem, 2.8vw, 2.1rem); }
 }
 
 @media (max-width: 1216px) {
-    .container {
-        padding: 0 1.75rem;
-    }
-
-    .syllabusTitle {
-        font-size: clamp(1.4rem, 2.6vw, 1.9rem);
-    }
-
-    .syllabusGrid {
-        gap: 1.25rem;
-    }
+  .container { padding: 0 1.75rem; }
+  .syllabusTitle { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
+  .syllabusGrid { gap: 1.25rem; }
 }
 
 @media (max-width: 1024px) {
-    .syllabusGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .syllabusTitle {
-        font-size: clamp(1.35rem, 2.5vw, 1.8rem);
-    }
-
-    .syllabusSection {
-        padding: 4rem 0;
-    }
+  .syllabusGrid { grid-template-columns: repeat(2, 1fr); }
+  .syllabusTitle { font-size: clamp(1.35rem, 2.5vw, 1.8rem); }
+  .syllabusSection { padding: 4rem 0; }
 }
 
 @media (max-width: 768px) {
-    .heroSection {
-        min-height: 40vh;
-        height: 40vh;
-    }
-
-    .heroContent {
-        padding-bottom: 50px;
-    }
-
-    .syllabusSection {
-        padding: 3.5rem 0;
-    }
-
-    .syllabusGrid {
-        grid-template-columns: 1fr;
-    }
-
-    .syllabusCard {
-        padding: 1.5rem;
-    }
-
-    .syllabusHeader {
-        margin-bottom: 2.5rem;
-    }
+  .heroContent { padding-bottom: 50px; }
+  .syllabusSection { padding: 3.5rem 0; }
+  .syllabusGrid { grid-template-columns: 1fr; }
+  .syllabusCard { padding: 1.5rem; }
+  .syllabusHeader { margin-bottom: 2.5rem; }
 }
 
 @media (max-width: 575px) {
-    .heroSection {
-        min-height: 38vh;
-        height: 38vh;
-    }
-
-    .container {
-        padding: 0 1.25rem;
-    }
-
-    .syllabusTitle {
-        font-size: 1.35rem;
-    }
-
-    .syllabusDesc {
-        font-size: 0.9rem;
-    }
-
-    .syllabusSection {
-        padding: 3rem 0;
-    }
+  .container { padding: 0 1.25rem; }
+  .syllabusTitle { font-size: 1.35rem; }
+  .syllabusDesc { font-size: 0.9rem; }
+  .syllabusSection { padding: 3rem 0; }
 }
 
 @media (max-width: 480px) {
-    .heroSection {
-        min-height: 35vh;
-        height: 35vh;
-    }
-
-    .heroContent {
-        padding: 0 1rem 40px 1rem;
-    }
-
-    .container {
-        padding: 0 1rem;
-    }
-
-    .syllabusTitle {
-        font-size: 1.25rem;
-    }
-
-    .syllabusCard {
-        padding: 1.35rem;
-    }
+  .heroContent { padding: 0 1rem 40px 1rem; }
+  .container { padding: 0 1rem; }
+  .syllabusTitle { font-size: 1.25rem; }
+  .syllabusCard { padding: 1.35rem; }
 }
 
 @media (max-width: 420px) {
-    .heroContent {
-        padding: 0 0.85rem 35px 0.85rem;
-    }
-
-    .syllabusSection {
-        padding: 2.5rem 0;
-    }
-
-    .syllabusCard {
-        padding: 1.25rem;
-    }
-
-    .syllabusCardIcon {
-        width: 38px;
-        height: 38px;
-    }
-
-    .syllabusCardName {
-        font-size: 0.98rem;
-    }
+  .heroContent { padding: 0 0.85rem 35px 0.85rem; }
+  .syllabusSection { padding: 2.5rem 0; }
+  .syllabusCard { padding: 1.25rem; }
+  .syllabusCardIcon { width: 38px; height: 38px; }
+  .syllabusCardName { font-size: 0.98rem; }
 }
 
 @media (max-width: 380px) {
-    .container {
-        padding: 0 0.85rem;
-    }
-
-    .syllabusTitle {
-        font-size: 1.15rem;
-    }
-
-    .syllabusHeader {
-        margin-bottom: 2rem;
-    }
-
-    .syllabusCard {
-        padding: 1.15rem;
-        border-radius: 1rem;
-    }
-
-    .syllabusCardLink {
-        font-size: 0.78rem;
-    }
+  .container { padding: 0 0.85rem; }
+  .syllabusTitle { font-size: 1.15rem; }
+  .syllabusHeader { margin-bottom: 2rem; }
+  .syllabusCard { padding: 1.15rem; border-radius: 1rem; }
+  .syllabusCardLink { font-size: 0.78rem; }
 }
 
 @media (max-width: 360px) {
-    .heroSection {
-        min-height: 32vh;
-        height: 32vh;
-    }
-
-    .heroContent {
-        padding: 0 0.75rem 30px 0.75rem;
-    }
-
-    .syllabusSection {
-        padding: 2rem 0;
-    }
-
-    .syllabusTitle {
-        font-size: 1.1rem;
-    }
-
-    .syllabusCard {
-        padding: 1rem;
-    }
-
-    .syllabusCardName {
-        font-size: 0.92rem;
-    }
-
-    .syllabusDesc {
-        font-size: 0.85rem;
-    }
+  .heroContent { padding: 0 0.75rem 30px 0.75rem; }
+  .syllabusSection { padding: 2rem 0; }
+  .syllabusTitle { font-size: 1.1rem; }
+  .syllabusCard { padding: 1rem; }
+  .syllabusCardName { font-size: 0.92rem; }
+  .syllabusDesc { font-size: 0.85rem; }
 }

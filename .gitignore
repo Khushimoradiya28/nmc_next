@@ -1,2 +1,9 @@
-frontend/.kiro/steering/ponytail.md
-frontend/.kiro/skills/godly-ui-design/SKILL.md
+ node_modules/
+*/node_modules/
+.next/
+*/.next/
+.env
+*/.env
+src/Storage/logs/
+*.log
+

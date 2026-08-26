@@ -1,6 +1,6 @@
 .heroSection {
-  min-height: 45vh;
-  height: 45vh;
+  min-height: 50vh;
+  height: 50vh;
   position: relative;
   display: flex;
   align-items: flex-end;
@@ -35,7 +35,7 @@
 }
 
 .heroContent {
-  padding-bottom: 60px;
+  padding-bottom: 80px;
 }
 
 .heroTitle {
@@ -487,3 +487,9 @@
     grid-template-columns: 1fr;
   }
 }
+
+@media (max-width: 1024px) {
+  .heroContent {
+    padding-bottom: 30px !important;
+  }
+}

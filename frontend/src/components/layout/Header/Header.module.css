@@ -88,8 +88,6 @@
     content: "";
     position: absolute;
     bottom: 2px;
-    /* left: 50%;
-    transform: translateX(-50%); */
     width: 0;
     height: 2px;
     background: var(--gold-500, #f59e0b);
@@ -101,16 +99,23 @@
 }
 
 .activeLink::after {
-    display: none;
+    width: 0;
 }
 
 .activeLink svg {
     color: var(--gold-500, #f59e0b);
-    opacity: 1;
 }
 
 .heroNavLink svg {
     opacity: 0.7;
+}
+
+.heroNavLink:hover {
+    color: var(--gold-500, #f59e0b);
+}
+
+.heroNavLink:hover svg {
+    color: var(--gold-500, #f59e0b);
 }
 
 /* Dropdown styling */
@@ -286,7 +291,7 @@
         display: flex;
         align-items: flex-start;
         justify-content: flex-start;
-        padding: 5rem 0 2rem 0;
+        padding: 5rem 0 100px 0;
         z-index: 998;
         transition: right 0.35s cubic-bezier(0.16, 1, 0.3, 1);
         overflow-y: scroll;
@@ -328,7 +333,7 @@
         align-items: flex-start;
         gap: 0;
         width: 100%;
-        padding: 0 2rem;
+        padding: 0 2rem 0px 2rem;
     }
 
     .heroNavMenu>li {

@@ -188,7 +188,7 @@ export default function ActivitiesHub() {
 
             <div className={styles.recentGrid}>
               {recentActivities.map((act) => (
-                <ActivityCard key={act.id} event={act} disableLink={true} />
+                <ActivityCard key={act.id} event={act} disableLink={false} />
               ))}
             </div>
 

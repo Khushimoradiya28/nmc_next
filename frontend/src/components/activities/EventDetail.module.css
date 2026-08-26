@@ -1,0 +1,612 @@
+.detailPageWrapper {
+  background: #FAF9F6;
+  min-height: 85vh;
+  padding: 2rem 0 5rem 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* 1. Back Navigation */
+.topNavRibbon {
+  margin-bottom: 1.5rem;
+}
+
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--color-primary, #B00000);
+  background: #ffffff;
+  padding: 0.55rem 1.25rem;
+  border-radius: 30px;
+  border: 1px solid rgba(176, 0, 0, 0.15);
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.25s ease;
+}
+
+.backBtn:hover {
+  background: var(--color-primary, #B00000);
+  color: #ffffff;
+  transform: translateX(-4px);
+  box-shadow: 0 4px 14px rgba(176, 0, 0, 0.25);
+}
+
+/* 2. Main Minimal Container */
+.mainCard {
+  background: #ffffff;
+  border-radius: 20px;
+  padding: 2.5rem 2.75rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 6px 30px rgba(0, 0, 0, 0.04);
+  position: relative;
+  overflow: hidden;
+}
+
+.mainCard::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--color-primary, #B00000), var(--color-secondary, #F4B000));
+}
+
+/* Header Section */
+.headerBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.badgeRow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.categoryBadge {
+  background: rgba(176, 0, 0, 0.08);
+  color: var(--color-primary, #B00000);
+  font-size: 0.82rem;
+  font-weight: 800;
+  padding: 0.4rem 1.1rem;
+  border-radius: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  border: 1px solid rgba(176, 0, 0, 0.15);
+}
+
+.galleryCounterBadge {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 0.35rem 0.85rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* ==========================================================================
+   3. MODERN INTERACTIVE HERO STAGE + THUMBNAILS GALLERY
+   ========================================================================== */
+.gallerySection {
+  margin-bottom: 2.75rem;
+}
+
+.modernGalleryContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Main Active Viewport (Responsive heights across devices) */
+.mainViewport {
+  position: relative;
+  width: 100%;
+  height: 440px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0f172a;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+.mainStageImg {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  object-position: center;
+  transition: transform 0.4s ease;
+  display: block;
+}
+
+.mainViewport:hover .mainStageImg {
+  transform: scale(1.02);
+}
+
+.stageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.6), transparent 50%);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  padding: 1.5rem;
+  pointer-events: none;
+}
+
+.stageCaption {
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  max-width: 70%;
+  line-height: 1.35;
+}
+
+.expandBadge {
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 0.4rem 0.9rem;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+}
+
+/* Thumbnails Strip */
+.thumbnailsStrip {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+  gap: 12px;
+}
+
+.thumbItem {
+  position: relative;
+  height: 85px;
+  border-radius: 10px;
+  overflow: hidden;
+  cursor: pointer;
+  border: 2px solid transparent;
+  background: #f1f5f9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+  touch-action: manipulation;
+}
+
+.thumbItem:hover {
+  transform: translateY(-2px);
+  border-color: rgba(176, 0, 0, 0.4);
+}
+
+.activeThumb {
+  border-color: var(--color-primary, #B00000) !important;
+  box-shadow: 0 4px 14px rgba(176, 0, 0, 0.3) !important;
+}
+
+.thumbImg {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  display: block;
+}
+
+/* ==========================================================================
+   4. BOTTOM TWO-COLUMN BODY LAYOUT (FLUID & ADAPTIVE)
+   ========================================================================== */
+.bodyLayout {
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 2.5rem;
+  align-items: start;
+  padding-top: 2rem;
+  border-top: 1px solid #edf2f7;
+}
+
+/* Left: Description Content */
+.contentCol {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.sectionHeading {
+  font-family: var(--font-heading, serif);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #111111;
+  margin: 0 0 1.25rem 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sectionHeading::before {
+  content: '';
+  display: inline-block;
+  width: 4px;
+  height: 20px;
+  background: var(--color-primary, #B00000);
+  border-radius: 4px;
+}
+
+.bodyText {
+  font-size: 1.02rem;
+  color: #334155;
+  line-height: 1.8;
+  white-space: pre-line;
+}
+
+.bodyText p {
+  margin-bottom: 1.2rem;
+}
+
+.bodyText p:last-child {
+  margin-bottom: 0;
+}
+
+/* Right: Sidebar Cards */
+.sidebarCol {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  position: sticky;
+  top: 100px;
+}
+
+/* Event Info Card (Unified with CTA Button inside) */
+.infoCard {
+  background: #FAF9F6;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+}
+
+.infoCardTitle {
+  font-family: var(--font-heading, serif);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #111111;
+  margin: 0 0 1.2rem 0;
+  padding-bottom: 0.6rem;
+  border-bottom: 2px solid rgba(176, 0, 0, 0.1);
+}
+
+.metaList {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.metaItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.metaIconBox {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(176, 0, 0, 0.08);
+  color: var(--color-primary, #B00000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.metaLabel {
+  display: block;
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 800;
+  color: #64748b;
+  margin-bottom: 2px;
+}
+
+.metaValue {
+  display: block;
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+  word-break: break-word;
+}
+
+/* Minimalist Clean Join Button */
+.ctaBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  background: var(--color-primary, #B00000);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-radius: 10px;
+  text-decoration: none;
+  transition: all 0.25s ease;
+  box-shadow: 0 3px 10px rgba(176, 0, 0, 0.18);
+  border: 1px solid var(--color-primary, #B00000);
+}
+
+.ctaBtn:hover {
+  background: var(--color-secondary, #F4B000);
+  color: #111111;
+  border-color: var(--color-secondary, #F4B000);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 14px rgba(244, 176, 0, 0.3);
+}
+
+/* Lightbox Modal */
+.lightboxModal {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.lightboxContent {
+  position: relative;
+  max-width: 92vw;
+  max-height: 85vh;
+  cursor: default;
+}
+
+.lightboxImg {
+  max-width: 100%;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+}
+
+.lightboxClose {
+  position: absolute;
+  top: -45px;
+  right: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  color: #ffffff;
+  font-size: 1.5rem;
+  cursor: pointer;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.lightboxClose:hover {
+  background: var(--color-primary, #B00000);
+}
+
+/* ==========================================================================
+   5. COMPREHENSIVE RESPONSIVE BREAKPOINTS (Laptop, Tablet, Mobile)
+   ========================================================================== */
+
+/* Laptop / Large Tablets (1024px - 1200px) */
+@media screen and (max-width: 1200px) {
+  .container {
+    max-width: 100%;
+    padding: 0 1.25rem;
+  }
+  .mainCard {
+    padding: 2.25rem 2rem;
+  }
+  .bodyLayout {
+    grid-template-columns: 1fr 310px;
+    gap: 2rem;
+  }
+  .mainViewport {
+    height: 400px;
+  }
+}
+
+/* Small Laptop / Regular Tablet Landscape (769px - 1024px) */
+@media screen and (max-width: 1024px) {
+  .bodyLayout {
+    grid-template-columns: 1fr 290px;
+    gap: 1.75rem;
+  }
+  .mainViewport {
+    height: 360px;
+  }
+  .thumbnailsStrip {
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
+    gap: 10px;
+  }
+  .thumbItem {
+    height: 75px;
+  }
+}
+
+/* Tablet Portrait & Large Mobile (601px - 768px) */
+@media screen and (max-width: 768px) {
+  .detailPageWrapper {
+    padding: 1.25rem 0 3.5rem 0;
+  }
+  .container {
+    padding: 0 1rem;
+  }
+  .mainCard {
+    padding: 1.75rem 1.25rem;
+    border-radius: 16px;
+  }
+  .bodyLayout {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    padding-top: 1.5rem;
+  }
+  .sidebarCol {
+    position: static;
+    order: 2;
+  }
+  .contentCol {
+    order: 1;
+  }
+  .mainViewport {
+    height: 300px;
+    border-radius: 12px;
+  }
+  .stageOverlay {
+    padding: 1rem;
+  }
+  .stageCaption {
+    font-size: 0.85rem;
+    max-width: 60%;
+  }
+  .expandBadge {
+    font-size: 0.72rem;
+    padding: 0.3rem 0.65rem;
+  }
+  .thumbnailsStrip {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 8px;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .thumbItem {
+    flex: 0 0 90px;
+    height: 68px;
+    scroll-snap-align: start;
+  }
+  .infoCard {
+    padding: 1.25rem;
+  }
+}
+
+/* Mobile Devices (<= 600px) */
+@media screen and (max-width: 600px) {
+  .detailPageWrapper {
+    padding: 1rem 0 3rem 0;
+  }
+  .container {
+    padding: 0 0.75rem;
+  }
+  .mainCard {
+    padding: 1.25rem 1rem;
+    border-radius: 14px;
+  }
+  .topNavRibbon {
+    margin-bottom: 1rem;
+  }
+  .backBtn {
+    font-size: 0.8rem;
+    padding: 0.45rem 1rem;
+  }
+  .headerBlock {
+    margin-bottom: 1.25rem;
+  }
+  .categoryBadge {
+    font-size: 0.75rem;
+    padding: 0.35rem 0.85rem;
+  }
+  .galleryCounterBadge {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.65rem;
+  }
+  .gallerySection {
+    margin-bottom: 1.75rem;
+  }
+  .mainViewport {
+    height: 220px;
+    border-radius: 10px;
+  }
+  .stageOverlay {
+    padding: 0.75rem;
+  }
+  .stageCaption {
+    font-size: 0.8rem;
+    max-width: 60%;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .expandBadge {
+    font-size: 0.68rem;
+    padding: 0.25rem 0.55rem;
+  }
+  .thumbnailsStrip {
+    display: flex;
+    overflow-x: auto;
+    gap: 8px;
+    padding-bottom: 4px;
+  }
+  .thumbItem {
+    flex: 0 0 78px;
+    height: 58px;
+    border-radius: 8px;
+  }
+  .sectionHeading {
+    font-size: 1.15rem;
+    margin-bottom: 0.85rem;
+  }
+  .bodyText {
+    font-size: 0.94rem;
+    line-height: 1.7;
+  }
+  .metaList {
+    gap: 0.85rem;
+    margin-bottom: 1.25rem;
+  }
+  .metaIconBox {
+    width: 32px;
+    height: 32px;
+  }
+  .metaValue {
+    font-size: 0.88rem;
+  }
+  .ctaBtn {
+    font-size: 0.85rem;
+    padding: 0.7rem 0.85rem;
+  }
+  .lightboxModal {
+    padding: 0.75rem;
+  }
+  .lightboxClose {
+    top: -38px;
+    right: 0;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+  }
+}

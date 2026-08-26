@@ -6,6 +6,7 @@ import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
 import ActivityHero from '@/components/activities/ActivityHero/ActivityHero';
 import ActivityCard from '@/components/activities/ActivityCard/ActivityCard';
+import { getEventsByCategory } from '@/data/activitiesData';
 import styles from './page.module.css';
 
 const departments = [
@@ -19,37 +20,18 @@ const departments = [
   { id: 'fd',    label: 'F.D.' },
 ];
 
-const deptEvents = [
-  { id: 'bcom-guest-lecture-3', deptSlug: 'bcom', deptName: 'B.Com Department', title: 'B.Com Guest Lecture', shortDescription: 'On 12th August 2025, Nandkunwarba Mahila Commerce College organized an insightful guest lecture for B.Com Semester 1 students on key commerce topics.', date: '2025-08-12', thumbnail: '/assets/dept/bcom_lecture.jpg' },
-  { id: 'soft-skill-seminar-3', deptSlug: 'mcom', deptName: 'M.Com Department & NSS', title: 'Soft Skill Seminar', shortDescription: 'Soft Skill Seminar organized by NSS Unit and M.Com Department. Timings: 09:00 AM to 12:00 PM. Date: 26 July 2025.', date: '2025-07-26', thumbnail: '/assets/dept/mcom_seminar.jpg' },
-  { id: 'bca-photoshop-workshop', deptSlug: 'bca', deptName: 'B.C.A. Department', title: 'BCA Photoshop Workshop', shortDescription: '"PHOTOSHOP TECHNIQUE" IT workshop organized under "TECHNO SPARK" by Nandkunvarba Mahila BCA College.', date: '2025-08-05', thumbnail: '/assets/dept/bca_workshop.jpg' },
-  { id: 'mcom-guest-lecture-2', deptSlug: 'mcom', deptName: 'M.Com Department', title: 'M.Com Department - Guest Lecture', shortDescription: 'Department: P.G. Center of M.Com. Guest Lecture by Renuka. Timings: 01:35 PM to 02:30 PM. Date: 22 July 2025.', date: '2025-07-22', thumbnail: '/assets/dept/mcom_seminar.jpg' },
-  { id: 'guest-lecture-bba-2', deptSlug: 'bba', deptName: 'B.B.A. Department', title: 'Guest Lecture - BBA', shortDescription: 'Understanding the Law of Diminishing Marginal Utility with Dr. S. D. Shah on 21st July 2025. Audience: FY BBA students.', date: '2025-07-21', thumbnail: '/assets/dept/bba_seminar.jpg' },
-  { id: 'guest-lecture-bba-1', deptSlug: 'bba', deptName: 'B.B.A. Department', title: 'Guest Lecture - BBA (HR Expert)', shortDescription: 'Speaker: Mr. Dipal Gohel, Freelance HR Expert at Nandkunvarba Mahila BBA College. Time: 10:30 AM to 11:30 AM. Date: 07 July 2025.', date: '2025-07-07', thumbnail: '/assets/dept/bba_seminar.jpg' },
-  { id: 'bba-industrial-visit', deptSlug: 'bba', deptName: 'B.B.A. Department', title: 'Industrial Visit - BBA Department', shortDescription: 'Industrial Visit organized on 19th July 2025: Educational Tour to AMUL Dairy by BBA Department.', date: '2025-07-19', thumbnail: '/assets/dept/bba_industrial.jpg' },
-  { id: 'ba-gujarati-guest-lecture', deptSlug: 'ba', deptName: 'B.A. Department', title: 'B.A. Gujarati Guest Lecture', shortDescription: 'On 15th July 2025, a guest lecture was organized for S.Y. B.A. Semester 3 Gujarati students at Nandkuvarba Mahila Arts College.', date: '2025-07-15', thumbnail: '/assets/dept/ba_lecture.jpg' },
-  { id: 'ba-english-guest-lecture', deptSlug: 'ba', deptName: 'B.A. Department', title: 'B.A. English Departments Guest Lecture', shortDescription: 'On 12th July 2025, a guest lecture by Dr. Vishal Pandya, Dept of English, was arranged for arts students.', date: '2025-07-12', thumbnail: '/assets/dept/ba_lecture.jpg' },
-  { id: 'bcom-guest-lecture-july', deptSlug: 'bcom', deptName: 'B.Com Department', title: 'Guest Lecture - B.Com', shortDescription: 'Guest lecture for B.Com Semester-1 students. CA Abhishek Shah was invited to share expertise on financial accounting.', date: '2025-07-22', thumbnail: '/assets/dept/bcom_lecture.jpg' },
-  { id: 'ba-sociology-community', deptSlug: 'ba', deptName: 'B.A. Department', title: 'Sociology Department Community Visit', shortDescription: 'B.A. Sociology students conducted an educational community visit as part of field-work curriculum for understanding social structures.', date: '2025-06-10', thumbnail: '/assets/dept/msw_fieldwork.jpg' },
-  { id: 'bca-it-quiz', deptSlug: 'bca', deptName: 'B.C.A. Department', title: 'IT Quiz - BCA Department', shortDescription: 'BCA department organized the IT Quiz event under Focus Club for BCA Sem 2, Sem 4, and Sem 6 students.', date: '2025-01-15', thumbnail: '/assets/dept/bca_workshop.jpg' },
-  { id: 'mcom-tally-workshop', deptSlug: 'mcom', deptName: 'M.Com Department', title: 'Accounting Software Workshop', shortDescription: 'Faculty-led software session covering business ledgers, GST filings, and Tally transactions for M.Com students.', date: '2024-08-12', thumbnail: '/assets/dept/mcom_seminar.jpg' },
-  { id: 'bcom-import-export', deptSlug: 'bcom', deptName: 'B.Com Department', title: 'Import-Export Trade Activity', shortDescription: 'B.Com Department organized an activity related to Import-Export Trade regulations under the Expert Club banner.', date: '2024-09-04', thumbnail: '/assets/dept/bcom_lecture.jpg' },
-  { id: 'fd-fashion-show', deptSlug: 'fd', deptName: 'F.D. Department', title: 'Fashion Design Exhibition', shortDescription: 'Fashion Design students showcased their semester projects at the annual internal exhibition with traditional and modern garment designs.', date: '2024-11-20', thumbnail: '/assets/dept/fd_exhibition.jpg' },
-  { id: 'msw-field-work', deptSlug: 'msw', deptName: 'M.S.W. Department', title: 'Community Field Work - MSW', shortDescription: 'M.S.W. students conducted community development field work with NGO partners focusing on rural women empowerment.', date: '2025-03-08', thumbnail: '/assets/dept/msw_fieldwork.jpg' },
-  { id: 'bba-brand-management', deptSlug: 'bba', deptName: 'B.B.A. Department', title: 'Brand Management Workshop', shortDescription: 'A comprehensive Brand Management workshop organized for BBA students covering product launches, marketing strategy, and consumer behavior.', date: '2024-10-15', thumbnail: '/assets/dept/bba_seminar.jpg' },
-  { id: 'ba-psychology-assessment', deptSlug: 'ba', deptName: 'B.A. Department', title: 'Psychological Assessment Activity', shortDescription: 'The B.A. Psychology Department organized Psychological Assessment activity to train students in standardized testing methods.', date: '2024-07-27', thumbnail: '/assets/dept/ba_lecture.jpg' },
-];
-
 export default function ByDepartmentPage() {
   const [selectedDept, setSelectedDept] = useState('all');
   const [currentPage, setCurrentPage]   = useState(1);
   const ITEMS_PER_PAGE = 9;
 
+  const allDeptEvents = getEventsByCategory('by-department');
+
   useEffect(() => {
     setCurrentPage(1);
   }, [selectedDept]);
 
-  const filteredEvents   = selectedDept === 'all' ? deptEvents : deptEvents.filter(e => e.deptSlug === selectedDept);
+  const filteredEvents   = selectedDept === 'all' ? allDeptEvents : allDeptEvents.filter(e => e.subCategoryId === selectedDept);
   const totalPages       = Math.ceil(filteredEvents.length / ITEMS_PER_PAGE);
   const startIndex       = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedEvents  = filteredEvents.slice(startIndex, startIndex + ITEMS_PER_PAGE);
@@ -113,17 +95,9 @@ export default function ByDepartmentPage() {
                     transition={{ duration: 0.3 }}
                   >
                     <ActivityCard
-                      event={{
-                        id: evt.id,
-                        title: evt.title,
-                        shortDescription: evt.shortDescription,
-                        date: evt.date,
-                        thumbnail: evt.thumbnail,
-                        clubName: evt.deptName,
-                        categoryId: 'department',
-                        subCategoryId: evt.deptSlug,
-                      }}
-                      disableLink={true}
+                      event={evt}
+                      basePath="/activities/by-department"
+                      disableLink={false}
                     />
                   </motion.div>
                 ))}

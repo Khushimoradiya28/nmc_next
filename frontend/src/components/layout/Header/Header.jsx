@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
+import PopupForm from './PopupForm';
 import styles from './Header.module.css';
 
 export default function Header() {
@@ -59,6 +60,7 @@ export default function Header() {
   };
 
   return (
+    <>
     <header className={`${styles.heroHeader} ${scrolled ? styles.scrolled : ''}`} id="header">
       <div className="container">
       <div className={styles.heroHeaderContainer}>
@@ -228,34 +230,14 @@ export default function Header() {
               </ul>
             </li>
 
-            <li className={`${styles.heroNavDropdown} ${openDropdown === 'contact' ? styles.dropdownOpen : ''}`}>
-              <span 
-                className={`${styles.heroNavLink} ${pathname.startsWith('/contact') || pathname.startsWith('/alumni') ? styles.activeLink : ''}`}
-                onClick={(e) => toggleDropdown('contact', e)}
+            <li>
+              <Link 
+                href="/contact" 
+                className={`${styles.heroNavLink} ${pathname.startsWith('/contact') ? styles.activeLink : ''}`}
+                onClick={closeMobileNav}
               >
                 CONTACT US
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="6 9 12 15 18 9"></polyline>
-                </svg>
-              </span>
-              <ul className={styles.heroDropdownMenu}>
-                <li><Link href="/contact" onClick={closeMobileNav}>Contact Us</Link></li>
-                <li className={`${styles.heroSubDropdown} ${openDropdown === 'alumni' ? styles.dropdownOpen : ''}`}>
-                  <a 
-                    href="#" 
-                    className={styles.heroSubMenuToggle} 
-                    onClick={(e) => { e.preventDefault(); toggleDropdown('alumni', e); }}
-                  >
-                    Alumni Legacy
-                    <span>»</span>
-                  </a>
-                  <ul className={styles.heroSubDropdownMenu}>
-                    <li><Link href="/alumni/alumni-association" onClick={closeMobileNav}>» Alumni Association</Link></li>
-                    <li><Link href="/alumni/other-details" onClick={closeMobileNav}>» Other Details</Link></li>
-                    <li><Link href="/alumni/feedback-link" onClick={closeMobileNav}>» Feedback link</Link></li>
-                  </ul>
-                </li>
-              </ul>
+              </Link>
             </li>
           </ul>
         </nav>
@@ -273,5 +255,9 @@ export default function Header() {
       </div>
       </div>
     </header>
+
+    {/* Popup Contact Form - appears 7 seconds after page load */}
+    { <PopupForm /> }
+    </>
   );
 }

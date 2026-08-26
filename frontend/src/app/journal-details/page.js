@@ -15,20 +15,20 @@ export default function JournalDetailsPage() {
       <Header />
       <main className={styles.pageWrapper}>
         {/* Hero Banner */}
-        <section className={`hero-fullscreen ${styles.heroSection}`}>
-          <div className={`hero-bg-image ${styles.heroBgWrapper}`}>
+        <section className="hero-fullscreen" id="home" style={{ minHeight: "50vh", height: "50vh" }}>
+          <div className="hero-bg-image">
             <Image 
               src="/assets/home/hero/2.jpg" 
               alt="Journal Details Banner" 
               fill
-              className={styles.heroImage}
+              className="hero-bg-img"
               priority
             />
           </div>
-          <div className={`hero-overlay ${styles.heroOverlay}`}></div>
+          <div className="hero-overlay" style={{ background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))" }}></div>
           
-          <div className={`container ${styles.heroContent}`}>
-            <h1 className={`hero-main-title ${styles.heroTitle}`}>
+          <div className="hero-content container" style={{ paddingTop: "100px", display: "flex", alignItems: "flex-end", height: "100%", paddingBottom: "80px" }}>
+            <h1 className="hero-main-title">
               <em>Journal Details</em>
             </h1>
           </div>

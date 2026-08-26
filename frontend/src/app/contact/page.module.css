@@ -70,11 +70,9 @@
     font-family: var(--font-heading, 'Outfit', sans-serif);
     font-size: clamp(2.6rem, 5.8vw, 4.5rem);
     font-weight: 700;
-    color: #ffffff;
+    color: var(--white, #ffffff);
     line-height: 1.15;
     margin: 0;
-    letter-spacing: -0.01em;
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
 }
 
 .heroTitle em {
@@ -84,7 +82,7 @@
     padding-right: 0.15em;
     padding-bottom: 0.05em;
     overflow: visible;
-    background: linear-gradient(135deg, #ffffff 60%, var(--gold-300, #f4c749) 100%);
+    background: linear-gradient(135deg, #ffffff 60%, var(--gold-300, #f59e0b) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -252,6 +250,7 @@
 .socialLinks {
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
     gap: 0.6rem;
     margin-top: 0.5rem;
 }
@@ -360,6 +359,256 @@
     background-repeat: no-repeat;
     background-position: right 1rem center;
     padding-right: 2.5rem;
+}
+
+/* Input with Icon */
+.inputWithIcon {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.fieldIcon {
+    position: absolute;
+    left: 1rem;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.inputWithIcon .formInput {
+    padding-left: 2.8rem;
+}
+
+/* Textarea with Icon */
+.textareaWithIcon {
+    position: relative;
+    display: flex;
+}
+
+.textareaFieldIcon {
+    position: absolute;
+    left: 1rem;
+    top: 0.9rem;
+    display: flex;
+    align-items: center;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.textareaWithIcon .formTextarea {
+    padding-left: 2.8rem;
+}
+
+/* Select Trigger Content with Icon */
+.selectTriggerContent {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.selectTriggerContent .fieldIcon {
+    position: static;
+    flex-shrink: 0;
+}
+
+/* Custom Themed Select Dropdown */
+.customSelectWrapper {
+    position: relative;
+    width: 100%;
+}
+
+.customSelectTrigger {
+    width: 100%;
+    padding: 0.82rem 1.1rem;
+    border-radius: 0.65rem;
+    border: 1px solid var(--gray-300, #d1d5db);
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--gray-900, #111827);
+    background: var(--white, #ffffff);
+    font-family: var(--font-body, 'Plus Jakarta Sans', sans-serif);
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: all 0.2s ease;
+    user-select: none;
+    box-sizing: border-box;
+}
+
+.customSelectTrigger.isPlaceholder {
+    color: var(--gray-400, #9ca3af);
+    font-weight: 400;
+}
+
+.customSelectTrigger:hover {
+    border-color: var(--red-800, #8a0000);
+}
+
+.customSelectTrigger.isOpen {
+    border-color: var(--red-800, #8a0000);
+    box-shadow: 0 0 0 3px rgba(138, 0, 0, 0.08);
+}
+
+.selectChevron {
+    color: var(--gray-500, #6b7280);
+    transition: transform 0.25s ease, color 0.25s ease;
+    flex-shrink: 0;
+}
+
+.customSelectTrigger.isOpen .selectChevron {
+    transform: rotate(180deg);
+    color: var(--red-800, #8a0000);
+}
+
+.customDropdownMenu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    z-index: 60;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.09);
+    border-radius: 0.85rem;
+    padding: 0.4rem;
+    box-shadow: 0 14px 35px rgba(0, 0, 0, 0.12), 0 4px 12px rgba(0, 0, 0, 0.04);
+    max-height: 200px;
+    overflow: hidden;
+    animation: dropdownFade 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.customDropdownMenu::after {
+    display: none;
+}
+
+/* Inner scrollable wrapper handled via JS */
+
+/* Custom Sleek Grey Scrollbar */
+.customDropdownMenu::-webkit-scrollbar {
+    width: 5px;
+    background: transparent;
+}
+
+.customDropdownMenu::-webkit-scrollbar-button,
+.customDropdownMenu::-webkit-scrollbar-button:start:decrement,
+.customDropdownMenu::-webkit-scrollbar-button:end:increment,
+.customDropdownMenu::-webkit-scrollbar-button:vertical:start:increment,
+.customDropdownMenu::-webkit-scrollbar-button:vertical:end:decrement {
+    display: none;
+    width: 0;
+    height: 0;
+    background: transparent;
+}
+
+.customDropdownMenu::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.03);
+    border-radius: 10px;
+    margin: 8px 0;
+}
+
+.customDropdownMenu::-webkit-scrollbar-thumb {
+    background: rgba(138, 0, 0, 0.2);
+    border-radius: 10px;
+    min-height: 30px;
+}
+
+.customDropdownMenu::-webkit-scrollbar-thumb:hover {
+    background: rgba(138, 0, 0, 0.4);
+}
+
+.customDropdownMenu::-webkit-scrollbar-corner,
+.customDropdownMenu::-webkit-resizer {
+    display: none;
+    background: transparent;
+}
+
+/* Inner scroll container - hide native, show custom scrollbar via wrapper */
+.dropdownScrollInner {
+    max-height: 190px;
+    overflow-y: scroll;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding-right: 12px;
+}
+
+.dropdownScrollInner::-webkit-scrollbar {
+    display: none !important;
+}
+
+/* Custom scrollbar elements */
+.scrollbarWrapper {
+    position: relative;
+}
+
+.customScrollbar {
+    position: absolute;
+    top: 6px;
+    right: 3px;
+    bottom: 6px;
+    width: 4px;
+    border-radius: 10px;
+    background: rgba(0, 0, 0, 0.04);
+    z-index: 2;
+}
+
+.customScrollThumb {
+    width: 100%;
+    min-height: 20px;
+    border-radius: 10px;
+    background: rgba(138, 0, 0, 0.22);
+    transition: background 0.15s ease;
+    cursor: pointer;
+}
+
+.customScrollThumb:hover {
+    background: rgba(138, 0, 0, 0.4);
+}
+
+@keyframes dropdownFade {
+    from {
+        opacity: 0;
+        transform: translateY(-6px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.customDropdownOption {
+    padding: 0.65rem 0.9rem;
+    border-radius: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1e293b;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: all 0.18s ease;
+    user-select: none;
+}
+
+.customDropdownOption:hover {
+    background: #fff5f5;
+    color: var(--red-800, #8a0000);
+}
+
+.customDropdownOption.isSelected {
+    background: #fdf2f2;
+    color: var(--red-800, #8a0000);
+    font-weight: 700;
+}
+
+.optionCheckmark {
+    color: var(--red-800, #8a0000);
+    margin-left: 0.5rem;
+    flex-shrink: 0;
 }
 
 .formTextarea {
@@ -516,11 +765,6 @@
 }
 
 @media (max-width: 768px) {
-    .heroSection {
-        min-height: 40vh;
-        height: 40vh;
-    }
-
     .ctaBarText {
         text-align: center;
     }
@@ -552,11 +796,6 @@
 }
 
 @media (max-width: 480px) {
-    .heroSection {
-        min-height: 35vh;
-        height: 35vh;
-    }
-
     .heroContent {
         padding: 0 1rem 40px 1rem;
     }

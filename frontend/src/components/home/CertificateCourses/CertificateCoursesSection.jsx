@@ -36,9 +36,8 @@ export default function CertificateCoursesSection() {
   const [message, setMessage] = useState('');
 
   const openEnrollModal = (courseName) => {
-    setSelectedCert(courseName);
-    setIsOpen(true);
-    document.body.style.overflow = 'hidden';
+    // Open the global contact popup form
+    window.dispatchEvent(new CustomEvent('openContactPopup'));
   };
 
   const closeEnrollModal = () => {

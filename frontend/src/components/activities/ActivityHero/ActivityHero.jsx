@@ -8,7 +8,7 @@ import styles from './ActivityHero.module.css';
 
 export default function ActivityHero({ title, subtitle, bgImage = '/assets/home/hero/2.jpg', height = '50vh', breadcrumbs = [], decorative = false }) {
   return (
-    <section className={styles.heroSection} style={{ height }}>
+    <section className={styles.heroSection} style={{ minHeight: height, height }}>
       <div className={styles.heroBgImage}>
         <Image 
           src={bgImage} 

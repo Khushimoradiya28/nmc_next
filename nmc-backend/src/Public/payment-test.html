@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Razorpay Secure Checkout</title>
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #3b82f6; /* Modern Blue */
+            --primary-hover: #2563eb;
+            --text-dark: #1f2937;
+            --text-gray: #6b7280;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --success: #10b981;
+            --error: #ef4444;
+            --border-radius: 12px;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .checkout-container {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            width: 100%;
+            max-width: 480px;
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
+            color: white;
+            padding: 24px;
+            text-align: center;
+        }
+
+        .header h2 {
+            font-weight: 600;
+            font-size: 1.5rem;
+            margin-bottom: 4px;
+        }
+
+        .header p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 32px 24px;
+        }
+
+        .section-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 16px;
+            display: block;
+        }
+
+        /* Payment Options */
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .payment-option-label {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .payment-option-label:hover {
+            background-color: #f9fafb;
+            border-color: #d1d5db;
+        }
+
+        .payment-option-label input[type="radio"] {
+            margin-right: 12px;
+            accent-color: var(--primary-color);
+            transform: scale(1.1);
+        }
+
+        .payment-option-text {
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+
+        /* Coupon Section */
+        .coupon-section {
+            margin-bottom: 32px;
+            background-color: #f9fafb;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px dashed #d1d5db;
+        }
+
+        .coupon-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 10px 14px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-family: inherit;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        input[type="text"]:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .btn-apply {
+            padding: 10px 18px;
+            background-color: var(--text-dark);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+        }
+
+        .btn-apply:hover {
+            background-color: black;
+        }
+
+        #couponMessage {
+            margin-top: 10px;
+            font-size: 0.85rem;
+            min-height: 1.2em;
+        }
+
+        /* Pay Button */
+        #payBtn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, var(--primary-color), var(--primary-hover));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.4);
+            transition: transform 0.1s, box-shadow 0.2s;
+        }
+
+        #payBtn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 8px -1px rgba(59, 130, 246, 0.5);
+        }
+
+        #payBtn:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="checkout-container">
+        <div class="header">
+            <h2>Complete Payment</h2>
+            <p>Secure Checkout</p>
+        </div>
+
+        <div class="content">
+
+            <div class="payment-options">
+                <span class="section-title">Select Payment Method</span>
+                <label class="payment-option-label">
+                    <input type="radio" name="payment_method" value="razorpay" checked>
+                    <span class="payment-option-text">Pay Online (Razorpay)</span>
+                </label>
+                <label class="payment-option-label">
+                    <input type="radio" name="payment_method" value="cod">
+                    <span class="payment-option-text">Cash on Delivery (COD)</span>
+                </label>
+            </div>
+
+            <div class="coupon-section">
+                <span class="section-title" style="margin-bottom: 12px; display:inline-block;">Have a Coupon?</span>
+                <div class="coupon-input-group">
+                    <input type="text" id="couponCode" placeholder="Enter code here">
+                    <button class="btn-apply" id="applyCouponBtn">Apply</button>
+                    <button class="btn-apply" id="removeCouponBtn" style="background-color: #ef4444; display: none;">Remove</button>
+                </div>
+                <p id="couponMessage"></p>
+            </div>
+
+            <!-- New Summary Section -->
+            <div id="orderSummary" style="background: #f8fafc; padding: 20px; border-radius: 8px; margin-bottom: 30px;">
+                <span class="section-title">Order Summary</span>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="color: var(--text-gray);">Items (<span id="itemCount">0</span>)</span>
+                    <span id="summarySubtotal">₹0.00</span>
+                </div>
+                <!-- <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                    <span style="color: var(--text-gray);">Discount</span>
+                    <span id="summaryDiscount" style="color: var(--success);">- ₹0.00</span>
+                </div> -->
+                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                   <span style="color: var(--text-gray);">Tax</span>
+                   <span id="summaryTax">₹0.00</span>
+               </div>
+               <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                   <span style="color: var(--text-gray);">Shipping</span>
+                   <span id="summaryShipping">₹0.00</span>
+               </div>
+               
+               <div id="couponRow" style="display: none; justify-content: space-between; margin-bottom: 8px;">
+                   <span style="color: var(--success);">Coupon Discount</span>
+                   <span id="summaryCoupon" style="color: var(--success);">- ₹0.00</span>
+               </div>
+
+                <div style="border-top: 1px dashed #d1d5db; margin: 12px 0;"></div>
+                <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 1.1rem;">
+                    <span>Grand Total</span>
+                    <span id="summaryGrandTotal">₹0.00</span>
+                </div>
+            </div>
+
+            <button id="payBtn">Place Order & Pay</button>
+        </div>
+    </div>
+
+    <!-- Razorpay SDK -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        let appliedCouponCode = "";
+        const msgEl = document.getElementById("couponMessage");
+
+        // Helper to flash messages
+        function showMessage(msg, type = "error") {
+            msgEl.innerText = msg;
+            msgEl.style.color = type === "success" ? "var(--success)" : "var(--error)";
+            msgEl.style.fontWeight = "500";
+        }
+
+        async function fetchCartSummary() {
+            try {
+                // Hardcoded IDs for test context
+                 const user_id = "6934022d29d223d69a54b6d4"; 
+                 const billing_address_id = "693aafa9b94baa6515bf0339";
+                // const shipping_address_id = "693aafbab94baa6515bf033c";
+                // const same_as_shipping = true;
+
+                const response = await fetch("/api/cart/summary", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        user_id,
+                        billing_address_id,
+                        // shipping_address_id, // Add if needed
+                        coupon_code: appliedCouponCode
+                    })
+                });
+
+                const result = await response.json();
+                if (result.status === 200) {
+                    const data = result.data;
+                    document.getElementById("itemCount").innerText = data.item_count;
+                    document.getElementById("summarySubtotal").innerText = "₹" + data.offer_total; // Showing Offer Total as main price
+                    document.getElementById("summaryTax").innerText = "₹" + data.tax;
+                    document.getElementById("summaryShipping").innerText = "₹" + data.shipping;
+                    document.getElementById("summaryGrandTotal").innerText = "₹" + data.grand_total;
+
+                    if (data.discount > 0) {
+                        document.getElementById("couponRow").style.display = "flex";
+                        document.getElementById("summaryCoupon").innerText = "- ₹" + data.discount;
+                    } else {
+                         document.getElementById("couponRow").style.display = "none";
+                    }
+                }
+            } catch (err) {
+                console.error("Failed to fetch summary", err);
+            }
+        }
+
+        // Initial Fetch
+        fetchCartSummary();
+
+        document.getElementById("applyCouponBtn").addEventListener("click", async function() {
+            const couponInput = document.getElementById("couponCode");
+            const couponCode = couponInput.value.trim();
+            const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzQwMjJkMjlkMjIzZDY5YTU0YjZkNCIsImVtYWlsIjoicnVucmtpZHNAc2hvcC5pbiIsInJvbGUiOiI2OTMzZmU0YjI5ZDIyM2Q2OWE1NGI1OTIiLCJpYXQiOjE3NjU3Nzk0OTd9.6izQDzk8QjbP-2K7J6vAQIL94a19hljOF5CuHe_E_ZU";
+
+            if (!couponCode) {
+                showMessage("Please enter a coupon code.");
+                return;
+            }
+
+            // UI Feedback
+            this.innerText = "Applying...";
+            this.disabled = true;
+
+            try {
+                const response = await fetch("/api/coupon/validate", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": TOKEN
+                    },
+                    body: JSON.stringify({ coupon_code: couponCode })
+                });
+
+                const data = await response.json();
+
+                if (data.status === 200) {
+                    showMessage(`Success! ${data.data.discount_type === 'percentage' ? data.data.coupon_percentage + '%' : '₹' + data.data.coupon_percentage} off applied.`, "success");
+                    appliedCouponCode = couponCode;
+                    
+                    // Update UI to show Remove button
+                    document.getElementById("applyCouponBtn").style.display = "none";
+                    document.getElementById("removeCouponBtn").style.display = "inline-block";
+                    document.getElementById("couponCode").disabled = true;
+
+                    // Refresh Summary
+                    fetchCartSummary();
+
+                } else {
+                    showMessage(data.message || "Invalid Coupon Code");
+                    appliedCouponCode = "";
+                }
+
+            } catch (err) {
+                console.error(err);
+                showMessage("Failed to validate coupon.");
+            } finally {
+                this.innerText = "Apply";
+                this.disabled = false;
+            }
+        });
+
+        document.getElementById("removeCouponBtn").addEventListener("click", function() {
+            appliedCouponCode = "";
+            document.getElementById("couponCode").value = "";
+            document.getElementById("couponCode").disabled = false;
+            document.getElementById("applyCouponBtn").style.display = "inline-block";
+            document.getElementById("removeCouponBtn").style.display = "none";
+            showMessage("");
+            fetchCartSummary();
+        });
+
+        document.getElementById("payBtn").addEventListener("click", async function () {
+
+            const user_id = "6934022d29d223d69a54b6d4"; // Hardcoded for test
+            const billing_address_id = "693aafa9b94baa6515bf0339";
+            const shipping_address_id = "693aafbab94baa6515bf033c";
+            const same_as_shipping = true;
+
+            const payment_method = document.querySelector('input[name="payment_method"]:checked').value;
+            const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY5MzQwMjJkMjlkMjIzZDY5YTU0YjZkNCIsImVtYWlsIjoicnVucmtpZHNAc2hvcC5pbiIsInJvbGUiOiI2OTMzZmU0YjI5ZDIyM2Q2OWE1NGI1OTIiLCJpYXQiOjE3NjU3Nzk0OTd9.6izQDzk8QjbP-2K7J6vAQIL94a19hljOF5CuHe_E_ZU";
+
+            // UI Feedback
+            const originalBtnText = this.innerText;
+            this.innerText = "Processing...";
+            this.disabled = true;
+
+            try {
+                const orderResponse = await fetch("/api/order/ordersummary", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": TOKEN
+                    },
+                    body: JSON.stringify({
+                        user_id,
+                        billing_address_id,
+                        shipping_address_id,
+                        same_as_shipping,
+                        payment_method,
+                        coupon_code: appliedCouponCode
+                    })
+                });
+
+                const orderData = await orderResponse.json();
+                console.log("OrderSummary API Response:", orderData);
+
+                if (orderData.status !== 200) {
+                    alert("Error creating order: " + (orderData.error || orderData.message));
+                    this.innerText = originalBtnText;
+                    this.disabled = false;
+                    return;
+                }
+
+                // === HANDLE COD ===
+                if (payment_method === 'cod') {
+                    alert("Order Placed Successfully via COD!\nOrder ID: " + orderData.order_number + "\nDiscount: " + (orderData.order_discount || 0));
+                    this.innerText = "Order Placed!";
+                    return;
+                }
+
+                // === HANDLE RAZORPAY ===
+                const options = {
+                    key: orderData.key_id,
+                    amount: orderData.amount,
+                    currency: "INR",
+                    name: "RunR Kids",
+                    description: "Order #" + orderData.order_number,
+                    order_id: orderData.razorpay_order_id,
+                    handler: async function (response) {
+                        console.log("Payment response:", response);
+
+                        const verifyResponse = await fetch("/api/order/payment/verify", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": TOKEN
+                            },
+                            body: JSON.stringify({
+                                order_id: orderData.order_id,
+                                razorpay_order_id: response.razorpay_order_id,
+                                razorpay_payment_id: response.razorpay_payment_id,
+                                razorpay_signature: response.razorpay_signature
+                            })
+                        });
+
+                        const verifyData = await verifyResponse.json();
+                        if (verifyData.status === 200) {
+                            alert("Payment Successful! Order Confirmed.");
+                        } else {
+                            alert("Payment Verification Failed! Please contact support.");
+                        }
+                    },
+                    theme: { color: "#3b82f6" },
+                    modal: {
+                        ondismiss: function() {
+                            document.getElementById("payBtn").innerText = originalBtnText;
+                            document.getElementById("payBtn").disabled = false;
+                        }
+                    }
+                };
+
+                var rzp = new Razorpay(options);
+
+                // Handle Payment Failure
+                let failedProcessed = false;
+                rzp.on('payment.failed', async function (response){
+                    if (failedProcessed) return;
+                    failedProcessed = true;
+
+                    console.error("Payment Failed:", response.error);
+
+                    // Call Backend to Mark Order as Failed
+                    try {
+                        await fetch("/api/order/payment/failure", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Authorization": TOKEN
+                            },
+                            body: JSON.stringify({
+                                order_id: orderData.order_id,
+                                razorpay_order_id: response.error.metadata.order_id,
+                                razorpay_payment_id: response.error.metadata.payment_id,
+                                error: response.error
+                            })
+                        });
+                    } catch (apiErr) {
+                         console.error("Failed to update backend status", apiErr);
+                    }
+                    
+                    // Construct a detailed error message based on user request
+                    let failureReason = `Payment Failed!\n\nReason: ${response.error.reason}\nDescription: ${response.error.description}\nSource: ${response.error.source}\nStep: ${response.error.step}\nCode: ${response.error.code}`;
+                    
+                    if (response.error.metadata) {
+                        failureReason += `\nOrder ID: ${response.error.metadata.order_id}`;
+                        failureReason += `\nPayment ID: ${response.error.metadata.payment_id}`;
+                    }
+
+                    alert(failureReason);
+
+                    // Reset button state
+                    document.getElementById("payBtn").innerText = originalBtnText;
+                    document.getElementById("payBtn").disabled = false;
+                });
+
+                rzp.open();
+
+            } catch (err) {
+                console.error("Error:", err);
+                alert("Something went wrong! Check console.");
+                this.innerText = originalBtnText;
+                this.disabled = false;
+            }
+        });
+    </script>
+</body>
+
+</html>

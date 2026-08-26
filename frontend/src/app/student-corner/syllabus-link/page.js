@@ -30,13 +30,13 @@ export default function SyllabusLinkPage() {
       <Header />
       <main>
         {/* Hero */}
-        <section className={styles.heroSection}>
-          <div className={styles.heroBgImage}>
-            <Image src="/assets/home/hero/2.jpg" alt="Syllabus Link" width={1400} height={700} priority className={styles.heroBgImg} />
+        <section className="hero-fullscreen" id="home" style={{ minHeight: "50vh", height: "50vh" }}>
+          <div className="hero-bg-image">
+            <Image src="/assets/home/hero/2.jpg" alt="Syllabus Link" width={1400} height={700} priority className="hero-bg-img" />
           </div>
-          <div className={styles.heroOverlay}></div>
-          <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}><em>Syllabus Link</em></h1>
+          <div className="hero-overlay" style={{ background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))" }}></div>
+          <div className="hero-content container" style={{ paddingTop: "100px", display: "flex", alignItems: "flex-end", height: "100%", paddingBottom: "80px" }}>
+            <h1 className="hero-main-title"><em>Syllabus Link</em></h1>
           </div>
         </section>
 

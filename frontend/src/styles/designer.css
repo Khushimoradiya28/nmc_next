@@ -639,6 +639,16 @@ textarea {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+}
+
+@media (max-width: 397px) {
+  .hero-main-title em {
+    display: inline;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
+  }
 }
 
 .hero-subtitle {
@@ -6288,11 +6298,6 @@ select.form-control {
     z-index: 1001;
   }
 
-  .hero-fullscreen {
-    height: 80vh;
-    min-height: 500px;
-  }
-
   .hero-main-title {
     font-size: 2.2rem;
   }
@@ -8179,7 +8184,7 @@ select.form-control {
   border-radius: var(--r-full);
   font-size: 0.9rem;
   font-weight: 700;
-  color: var(--gray-600);
+  color: var(--gray-700);
   background: var(--white);
   border: 1px solid var(--gray-200);
   cursor: pointer;
@@ -8187,10 +8192,23 @@ select.form-control {
   box-shadow: var(--shadow-xs);
 }
 
+.digi-tab svg {
+  color: #B00000;
+  stroke: #B00000;
+  transition: all 0.3s ease;
+  flex-shrink: 0;
+}
+
 .digi-tab:hover {
   border-color: var(--gold-400);
-  color: var(--gray-900);
-  background: var(--gold-50);
+  color: #B00000;
+  background: #fffbeb;
+}
+
+.digi-tab:hover svg {
+  color: #B00000 !important;
+  stroke: #B00000 !important;
+  transform: scale(1.1);
 }
 
 .digi-tab.active {
@@ -8201,7 +8219,8 @@ select.form-control {
 }
 
 .digi-tab.active svg {
-  stroke: var(--white);
+  color: var(--white) !important;
+  stroke: var(--white) !important;
 }
 
 /* Panels show/hide */
@@ -9758,11 +9777,6 @@ main section {
     z-index: 1001;
   }
 
-  .hero-fullscreen {
-    height: 80vh;
-    min-height: 500px;
-  }
-
   .hero-main-title {
     font-size: 2.2rem;
   }
@@ -10884,3 +10898,71 @@ main section {
     .aguild-form-box { padding: 0.75rem 0.65rem; border-radius: 0.85rem; }
     .btn-alumni-submit { font-size: 0.78rem; padding: 0.65rem 0.85rem; }
 }
+
+/* ==========================================================================
+   STRICT 50VH BANNER HEIGHT FOR ALL INNER MAIN & SUB PAGES (ALL SCREEN SIZES)
+   ========================================================================== */
+.hero-fullscreen:not(.home-hero-fullscreen),
+[class*="heroSection"]:not(.home-hero-fullscreen),
+[class*="heroBanner"]:not(.home-hero-fullscreen),
+[class*="aboutHeroSection"] {
+  min-height: 50vh !important;
+  height: 50vh !important;
+}
+
+@media (max-width: 1200px) {
+  .hero-fullscreen:not(.home-hero-fullscreen),
+  [class*="heroSection"]:not(.home-hero-fullscreen),
+  [class*="heroBanner"]:not(.home-hero-fullscreen),
+  [class*="aboutHeroSection"] {
+    min-height: 50vh !important;
+    height: 50vh !important;
+  }
+}
+
+@media (max-width: 991px) {
+  .hero-fullscreen:not(.home-hero-fullscreen),
+  [class*="heroSection"]:not(.home-hero-fullscreen),
+  [class*="heroBanner"]:not(.home-hero-fullscreen),
+  [class*="aboutHeroSection"] {
+    min-height: 50vh !important;
+    height: 50vh !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero-fullscreen:not(.home-hero-fullscreen),
+  [class*="heroSection"]:not(.home-hero-fullscreen),
+  [class*="heroBanner"]:not(.home-hero-fullscreen),
+  [class*="aboutHeroSection"] {
+    min-height: 50vh !important;
+    height: 50vh !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-fullscreen:not(.home-hero-fullscreen),
+  [class*="heroSection"]:not(.home-hero-fullscreen),
+  [class*="heroBanner"]:not(.home-hero-fullscreen),
+  [class*="aboutHeroSection"] {
+    min-height: 50vh !important;
+    height: 50vh !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE & TABLET: STRICT 30PX GAP FROM BOTTOM FOR ALL BANNER HEADINGS
+   ========================================================================== */
+@media (max-width: 1024px) {
+  .hero-fullscreen:not(.home-hero-fullscreen) .hero-content,
+  .hero-fullscreen:not(.home-hero-fullscreen) [class*="heroContent"],
+  [class*="heroSection"]:not(.home-hero-fullscreen) .hero-content,
+  [class*="heroSection"]:not(.home-hero-fullscreen) [class*="heroContent"],
+  [class*="heroBanner"]:not(.home-hero-fullscreen) .hero-content,
+  [class*="heroBanner"]:not(.home-hero-fullscreen) [class*="heroContent"],
+  [class*="aboutHeroSection"] .hero-content,
+  [class*="aboutHeroSection"] [class*="heroContent"] {
+    padding-bottom: 30px !important;
+  }
+}
+

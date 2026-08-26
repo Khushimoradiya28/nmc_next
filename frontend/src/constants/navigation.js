@@ -165,7 +165,7 @@ const MAIN_NAV = [
       }
     ]
   },
-  { id: 'nav-alumni', label: 'Alumni Legacy', path: '/alumni-legacy', visible: true }
+  { id: 'nav-alumni', label: 'Alumni Legacy', path: '/alumni-legacy', visible: false }
 ];
 
 export const NAVIGATION_CONFIG = {

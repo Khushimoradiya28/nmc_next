@@ -1,509 +1,274 @@
 /* Online Lecture Page */
-.heroSection {
-    position: relative;
-    min-height: 50vh;
-    height: 50vh;
-    display: flex;
-    align-items: flex-end;
-    overflow: hidden;
-}
-
-.heroBgImage {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-}
-
-.heroBgImg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
-
-.heroOverlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.4));
-    z-index: 1;
-}
-
-.heroContent {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 1380px;
-    margin: 0 auto;
-    padding: 0 2rem 80px 2rem;
-}
-
-.heroTitle {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: clamp(2.6rem, 5.8vw, 4.5rem);
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.15;
-    margin: 0;
-    letter-spacing: -0.01em;
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-}
-
+.heroSection { position: relative; min-height: 50vh; height: 50vh; display: flex; align-items: flex-end; overflow: hidden; }
+.heroBgImage { position: absolute; inset: 0; z-index: 0; }
+.heroBgImg { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.82), rgba(0,0,0,0.4)); z-index: 1; }
+.heroContent { position: relative; z-index: 2; width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem 80px 2rem; }
+.heroTitle { font-family: var(--font-heading, 'Outfit', sans-serif); font-size: clamp(2.6rem, 5.8vw, 4.5rem); font-weight: 700; color: #fff; line-height: 1.15; margin: 0; }
 .heroTitle em {
-    font-style: italic;
-    font-weight: 700;
-    display: inline-block;
-    padding-right: 0.15em;
-    padding-bottom: 0.05em;
-    overflow: visible;
-    background: linear-gradient(135deg, #ffffff 60%, var(--gold-300, #f59e0b) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  font-style: italic;
+  font-weight: 700;
+  display: inline-block;
+  padding-right: 0.15em;
+  padding-bottom: 0.05em;
+  overflow: visible;
+  background: linear-gradient(135deg, #ffffff 60%, var(--gold-300, #f59e0b) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.container {
-    width: 100%;
-    max-width: 1380px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
+.container { width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem; }
 
 /* ============================================
    Schedule Section — Timetable Style
    ============================================ */
 .scheduleSection {
-    padding: 5rem 0;
-    background: var(--sky-50, #fffdf5);
+  padding: 5rem 0;
+  background: var(--sky-50, #fffdf5);
 }
 
 .scheduleHeader {
-    margin-bottom: 3rem;
+  margin-bottom: 3rem;
 }
 
 .scheduleLabel {
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--red-800, #8a0000);
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red-800, #8a0000);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .scheduleLabelLine {
-    width: 24px;
-    height: 2px;
-    background: var(--red-800, #8a0000);
+  width: 24px;
+  height: 2px;
+  background: var(--red-800, #8a0000);
 }
 
 .scheduleTitle {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: clamp(1.7rem, 3vw, 2.4rem);
-    font-weight: 800;
-    color: var(--gray-900, #111827);
-    margin: 0 0 0.5rem 0;
-    line-height: 1.2;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: var(--gray-900, #111827);
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
 }
 
 .scheduleTitle span {
-    background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .scheduleDesc {
-    font-size: 0.95rem;
-    color: var(--gray-600, #4b5563);
-    line-height: 1.7;
-    max-width: 650px;
+  font-size: 0.95rem;
+  color: var(--gray-600, #4b5563);
+  line-height: 1.7;
+  max-width: 650px;
 }
 
 /* Department Timetable Blocks */
 .deptGrid {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
 }
 
 .deptBlock {
-    background: var(--white, #ffffff);
-    border: 1px solid var(--gray-200, #e5e7eb);
-    border-radius: 1.25rem;
-    overflow: hidden;
+  background: var(--white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 1.25rem;
+  overflow: hidden;
 }
 
 .deptHeader {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1.25rem 2rem;
-    border-bottom: 1px solid var(--gray-100, #f3f4f6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 2rem;
+  border-bottom: 1px solid var(--gray-100, #f3f4f6);
 }
 
-.deptHeaderRed {
-    background: linear-gradient(135deg, #fef2f2, #fff1f2);
-}
-
-.deptHeaderGold {
-    background: linear-gradient(135deg, #fffbeb, #fef9c3);
-}
-
-.deptHeaderGreen {
-    background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-}
+.deptHeaderRed { background: linear-gradient(135deg, #fef2f2, #fff1f2); }
+.deptHeaderGold { background: linear-gradient(135deg, #fffbeb, #fef9c3); }
+.deptHeaderGreen { background: linear-gradient(135deg, #ecfdf5, #d1fae5); }
 
 .deptName {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: 1rem;
-    font-weight: 800;
-    color: var(--gray-900, #111827);
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--gray-900, #111827);
 }
 
 .deptBadge {
-    font-size: 0.68rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 0.25rem 0.65rem;
-    border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.25rem 0.65rem;
+  border-radius: 4px;
 }
 
-.badgeRed {
-    background: var(--red-50, #fef2f2);
-    color: var(--red-800, #8a0000);
-    border: 1px solid var(--red-200, #fecaca);
-}
-
-.badgeGold {
-    background: var(--gold-100, #fef9c3);
-    color: var(--gold-700, #b45309);
-    border: 1px solid var(--gold-200, #fde68a);
-}
-
-.badgeGreen {
-    background: #ecfdf5;
-    color: #16a34a;
-    border: 1px solid #bbf7d0;
-}
+.badgeRed { background: var(--red-50, #fef2f2); color: var(--red-800, #8a0000); border: 1px solid var(--red-200, #fecaca); }
+.badgeGold { background: var(--gold-100, #fef9c3); color: var(--gold-700, #b45309); border: 1px solid var(--gold-200, #fde68a); }
+.badgeGreen { background: #ecfdf5; color: #16a34a; border: 1px solid #bbf7d0; }
 
 .deptBody {
-    padding: 0;
+  padding: 0;
 }
 
 .lectureRow {
-    display: grid;
-    grid-template-columns: 100px 1fr 140px 100px;
-    gap: 1.5rem;
-    align-items: center;
-    padding: 1rem 2rem;
-    border-bottom: 1px solid var(--gray-50, #f9fafb);
-    transition: background 0.2s ease;
+  display: grid;
+  grid-template-columns: 100px 1fr 140px 100px;
+  gap: 1.5rem;
+  align-items: center;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid var(--gray-50, #f9fafb);
+  transition: background 0.2s ease;
 }
 
 .lectureRow:last-child {
-    border-bottom: none;
+  border-bottom: none;
 }
 
 .lectureRow:hover {
-    background: #fffdf5;
+  background: #fffdf5;
 }
 
 .lectureDay {
-    font-size: 0.82rem;
-    font-weight: 700;
-    color: var(--gray-900, #111827);
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--gray-900, #111827);
 }
 
 .lectureSubject {
-    font-size: 0.88rem;
-    font-weight: 600;
-    color: var(--gray-700, #374151);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--gray-700, #374151);
 }
 
 .lectureTime {
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--gray-500, #6b7280);
-    font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--gray-500, #6b7280);
+  font-family: var(--font-heading, 'Outfit', sans-serif);
 }
 
 .lecturePlatform {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: var(--red-800, #8a0000);
-    background: var(--red-50, #fef2f2);
-    padding: 0.25rem 0.6rem;
-    border-radius: 4px;
-    text-align: center;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--red-800, #8a0000);
+  background: var(--red-50, #fef2f2);
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
+  text-align: center;
 }
 
 /* Note */
 .noteBox {
-    margin-top: 3rem;
-    padding: 1.25rem 1.75rem;
-    background: var(--gold-100, #fef9c3);
-    border: 1px solid var(--gold-200, #fde68a);
-    border-radius: 0.75rem;
-    font-size: 0.85rem;
-    color: var(--gray-700, #374151);
-    line-height: 1.6;
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
+  margin-top: 3rem;
+  padding: 1.25rem 1.75rem;
+  background: var(--gold-100, #fef9c3);
+  border: 1px solid var(--gold-200, #fde68a);
+  border-radius: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--gray-700, #374151);
+  line-height: 1.6;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
 }
 
 .noteIcon {
-    color: var(--gold-700, #b45309);
-    flex-shrink: 0;
-    margin-top: 2px;
+  color: var(--gold-700, #b45309);
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 /* Responsive */
 @media (max-width: 1799px) {
-    .deptGrid {
-        gap: 1.75rem;
-    }
+  .deptGrid { gap: 1.75rem; }
 }
 
 @media (max-width: 1599px) {
-    .lectureRow {
-        padding: 0.95rem 1.75rem;
-    }
+  .lectureRow { padding: 0.95rem 1.75rem; }
 }
 
 @media (max-width: 1408px) {
-    .scheduleTitle {
-        font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-    }
+  .scheduleTitle { font-size: clamp(1.5rem, 2.8vw, 2.1rem); }
 }
 
 @media (max-width: 1216px) {
-    .container {
-        padding: 0 1.75rem;
-    }
-
-    .scheduleTitle {
-        font-size: clamp(1.4rem, 2.6vw, 1.9rem);
-    }
-
-    .lectureRow {
-        grid-template-columns: 90px 1fr 130px 90px;
-        gap: 1.25rem;
-    }
+  .container { padding: 0 1.75rem; }
+  .scheduleTitle { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
+  .lectureRow { grid-template-columns: 90px 1fr 130px 90px; gap: 1.25rem; }
 }
 
 @media (max-width: 1024px) {
-    .scheduleSection {
-        padding: 4rem 0;
-    }
-
-    .scheduleTitle {
-        font-size: clamp(1.35rem, 2.5vw, 1.8rem);
-    }
-
-    .lectureRow {
-        grid-template-columns: 85px 1fr 120px 90px;
-        gap: 1rem;
-        padding: 0.9rem 1.5rem;
-    }
+  .scheduleSection { padding: 4rem 0; }
+  .scheduleTitle { font-size: clamp(1.35rem, 2.5vw, 1.8rem); }
+  .lectureRow { grid-template-columns: 85px 1fr 120px 90px; gap: 1rem; padding: 0.9rem 1.5rem; }
 }
 
 @media (max-width: 768px) {
-    .heroSection {
-        min-height: 40vh;
-        height: 40vh;
-    }
-
-    .heroContent {
-        padding-bottom: 50px;
-    }
-
-    .scheduleSection {
-        padding: 3.5rem 0;
-    }
-
-    .lectureRow {
-        grid-template-columns: 80px 1fr;
-        gap: 0.75rem;
-        padding: 0.85rem 1.5rem;
-    }
-
-    .lectureTime,
-    .lecturePlatform {
-        display: none;
-    }
-
-    .scheduleHeader {
-        margin-bottom: 2.5rem;
-    }
+  .heroContent { padding-bottom: 50px; }
+  .scheduleSection { padding: 3.5rem 0; }
+  .lectureRow { grid-template-columns: 80px 1fr; gap: 0.75rem; padding: 0.85rem 1.5rem; }
+  .lectureTime, .lecturePlatform { display: none; }
+  .scheduleHeader { margin-bottom: 2.5rem; }
 }
 
 @media (max-width: 575px) {
-    .heroSection {
-        min-height: 38vh;
-        height: 38vh;
-    }
-
-    .container {
-        padding: 0 1.25rem;
-    }
-
-    .scheduleTitle {
-        font-size: 1.35rem;
-    }
-
-    .scheduleDesc {
-        font-size: 0.9rem;
-    }
-
-    .scheduleSection {
-        padding: 3rem 0;
-    }
-
-    .deptHeader {
-        padding: 1rem 1.5rem;
-    }
-
-    .lectureRow {
-        padding: 0.8rem 1.25rem;
-    }
+  .container { padding: 0 1.25rem; }
+  .scheduleTitle { font-size: 1.35rem; }
+  .scheduleDesc { font-size: 0.9rem; }
+  .scheduleSection { padding: 3rem 0; }
+  .deptHeader { padding: 1rem 1.5rem; }
+  .lectureRow { padding: 0.8rem 1.25rem; }
 }
 
 @media (max-width: 480px) {
-    .heroSection {
-        min-height: 35vh;
-        height: 35vh;
-    }
-
-    .heroContent {
-        padding: 0 1rem 40px 1rem;
-    }
-
-    .container {
-        padding: 0 1rem;
-    }
-
-    .scheduleTitle {
-        font-size: 1.25rem;
-    }
-
-    .deptHeader {
-        padding: 1rem 1.25rem;
-    }
-
-    .lectureRow {
-        padding: 0.75rem 1.25rem;
-    }
-
-    .deptName {
-        font-size: 0.92rem;
-    }
+  .heroContent { padding: 0 1rem 40px 1rem; }
+  .container { padding: 0 1rem; }
+  .scheduleTitle { font-size: 1.25rem; }
+  .deptHeader { padding: 1rem 1.25rem; }
+  .lectureRow { padding: 0.75rem 1.25rem; }
+  .deptName { font-size: 0.92rem; }
 }
 
 @media (max-width: 420px) {
-    .heroContent {
-        padding: 0 0.85rem 35px 0.85rem;
-    }
-
-    .scheduleSection {
-        padding: 2.5rem 0;
-    }
-
-    .deptHeader {
-        padding: 0.85rem 1rem;
-    }
-
-    .lectureRow {
-        grid-template-columns: 70px 1fr;
-        padding: 0.7rem 1rem;
-    }
-
-    .deptName {
-        font-size: 0.88rem;
-    }
-
-    .lectureDay {
-        font-size: 0.78rem;
-    }
-
-    .lectureSubject {
-        font-size: 0.82rem;
-    }
-
-    .noteBox {
-        padding: 1rem 1.25rem;
-        font-size: 0.82rem;
-    }
+  .heroContent { padding: 0 0.85rem 35px 0.85rem; }
+  .scheduleSection { padding: 2.5rem 0; }
+  .deptHeader { padding: 0.85rem 1rem; }
+  .lectureRow { grid-template-columns: 70px 1fr; padding: 0.7rem 1rem; }
+  .deptName { font-size: 0.88rem; }
+  .lectureDay { font-size: 0.78rem; }
+  .lectureSubject { font-size: 0.82rem; }
+  .noteBox { padding: 1rem 1.25rem; font-size: 0.82rem; }
 }
 
 @media (max-width: 380px) {
-    .container {
-        padding: 0 0.85rem;
-    }
-
-    .scheduleTitle {
-        font-size: 1.15rem;
-    }
-
-    .deptBlock {
-        border-radius: 1rem;
-    }
-
-    .lectureRow {
-        grid-template-columns: 60px 1fr;
-        gap: 0.6rem;
-        padding: 0.65rem 0.85rem;
-    }
-
-    .deptBadge {
-        font-size: 0.62rem;
-        padding: 0.2rem 0.5rem;
-    }
-
-    .noteBox {
-        padding: 0.85rem 1rem;
-        font-size: 0.8rem;
-    }
+  .container { padding: 0 0.85rem; }
+  .scheduleTitle { font-size: 1.15rem; }
+  .deptBlock { border-radius: 1rem; }
+  .lectureRow { grid-template-columns: 60px 1fr; gap: 0.6rem; padding: 0.65rem 0.85rem; }
+  .deptBadge { font-size: 0.62rem; padding: 0.2rem 0.5rem; }
+  .noteBox { padding: 0.85rem 1rem; font-size: 0.8rem; }
 }
 
 @media (max-width: 360px) {
-    .heroSection {
-        min-height: 32vh;
-        height: 32vh;
-    }
-
-    .heroContent {
-        padding: 0 0.75rem 30px 0.75rem;
-    }
-
-    .scheduleSection {
-        padding: 2rem 0;
-    }
-
-    .scheduleTitle {
-        font-size: 1.1rem;
-    }
-
-    .scheduleDesc {
-        font-size: 0.85rem;
-    }
-
-    .deptGrid {
-        gap: 1.25rem;
-    }
-
-    .lectureDay {
-        font-size: 0.75rem;
-    }
-
-    .lectureSubject {
-        font-size: 0.8rem;
-    }
-
-    .deptName {
-        font-size: 0.85rem;
-    }
+  .heroContent { padding: 0 0.75rem 30px 0.75rem; }
+  .scheduleSection { padding: 2rem 0; }
+  .scheduleTitle { font-size: 1.1rem; }
+  .scheduleDesc { font-size: 0.85rem; }
+  .deptGrid { gap: 1.25rem; }
+  .lectureDay { font-size: 0.75rem; }
+  .lectureSubject { font-size: 0.8rem; }
+  .deptName { font-size: 0.85rem; }
 }

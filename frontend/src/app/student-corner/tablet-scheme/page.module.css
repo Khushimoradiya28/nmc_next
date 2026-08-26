@@ -1,625 +1,387 @@
 /* Tablet Scheme Page */
-.heroSection {
-    position: relative;
-    min-height: 50vh;
-    height: 50vh;
-    display: flex;
-    align-items: flex-end;
-    overflow: hidden;
-}
-
-.heroBgImage {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-}
-
-.heroBgImg {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-}
-
-.heroOverlay {
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.82), rgba(0, 0, 0, 0.4));
-    z-index: 1;
-}
-
-.heroContent {
-    position: relative;
-    z-index: 2;
-    width: 100%;
-    max-width: 1380px;
-    margin: 0 auto;
-    padding: 0 2rem 80px 2rem;
-}
-
-.heroTitle {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: clamp(2.6rem, 5.8vw, 4.5rem);
-    font-weight: 700;
-    color: #fff;
-    line-height: 1.15;
-    margin: 0;
-    letter-spacing: -0.01em;
-    text-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
-}
-
+.heroSection { position: relative; min-height: 50vh; height: 50vh; display: flex; align-items: flex-end; overflow: hidden; }
+.heroBgImage { position: absolute; inset: 0; z-index: 0; }
+.heroBgImg { width: 100%; height: 100%; object-fit: cover; object-position: center; }
+.heroOverlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(0,0,0,0.82), rgba(0,0,0,0.4)); z-index: 1; }
+.heroContent { position: relative; z-index: 2; width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem 80px 2rem; }
+.heroTitle { font-family: var(--font-heading, 'Outfit', sans-serif); font-size: clamp(2.6rem, 5.8vw, 4.5rem); font-weight: 700; color: #fff; line-height: 1.15; margin: 0; }
 .heroTitle em {
-    font-style: italic;
-    font-weight: 700;
-    display: inline-block;
-    padding-right: 0.15em;
-    padding-bottom: 0.05em;
-    overflow: visible;
-    background: linear-gradient(135deg, #ffffff 60%, var(--gold-300, #f59e0b) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  font-style: italic;
+  font-weight: 700;
+  display: inline-block;
+  padding-right: 0.15em;
+  padding-bottom: 0.05em;
+  overflow: visible;
+  background: linear-gradient(135deg, #ffffff 60%, var(--gold-300, #f59e0b) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-.container {
-    width: 100%;
-    max-width: 1380px;
-    margin: 0 auto;
-    padding: 0 2rem;
-}
+.container { width: 100%; max-width: 1380px; margin: 0 auto; padding: 0 2rem; }
 
 /* ============================================
    Info Section — Two Column
    ============================================ */
 .infoSection {
-    padding: 5rem 0;
-    background: var(--sky-50, #fffdf5);
+  padding: 5rem 0;
+  background: var(--sky-50, #fffdf5);
 }
 
 .infoLayout {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    align-items: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
 }
 
 .infoLeft {}
 
 .infoLabel {
-    font-size: 0.68rem;
-    font-weight: 800;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--red-800, #8a0000);
-    margin-bottom: 0.75rem;
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red-800, #8a0000);
+  margin-bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
 }
 
 .infoLabelLine {
-    width: 24px;
-    height: 2px;
-    background: var(--red-800, #8a0000);
+  width: 24px;
+  height: 2px;
+  background: var(--red-800, #8a0000);
 }
 
 .infoTitle {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: clamp(1.7rem, 3vw, 2.4rem);
-    font-weight: 800;
-    color: var(--gray-900, #111827);
-    margin: 0 0 1rem 0;
-    line-height: 1.2;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  font-weight: 800;
+  color: var(--gray-900, #111827);
+  margin: 0 0 1rem 0;
+  line-height: 1.2;
 }
 
 .infoTitle span {
-    background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .infoDesc {
-    font-size: 0.95rem;
-    color: var(--gray-600, #4b5563);
-    line-height: 1.75;
-    margin: 0 0 2rem 0;
+  font-size: 0.95rem;
+  color: var(--gray-600, #4b5563);
+  line-height: 1.75;
+  margin: 0 0 2rem 0;
 }
 
 /* Highlights */
 .highlights {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .highlightItem {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.75rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
 }
 
 .highlightIcon {
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    background: var(--red-50, #fef2f2);
-    color: var(--red-800, #8a0000);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    margin-top: 2px;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  background: var(--red-50, #fef2f2);
+  color: var(--red-800, #8a0000);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
 }
 
 .highlightText {
-    font-size: 0.9rem;
-    color: var(--gray-700, #374151);
-    line-height: 1.5;
-    font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--gray-700, #374151);
+  line-height: 1.5;
+  font-weight: 600;
 }
 
 /* Right — Visual Card */
 .infoVisual {
-    background: var(--white, #ffffff);
-    border: 1px solid var(--gray-200, #e5e7eb);
-    border-radius: 1.5rem;
-    padding: 3rem;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
+  background: var(--white, #ffffff);
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 1.5rem;
+  padding: 3rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
 .infoVisual::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: var(--grad-gold, linear-gradient(135deg, #f4c749, #d97706));
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--grad-gold, linear-gradient(135deg, #f4c749, #d97706));
 }
 
 .visualIcon {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    background: var(--gold-100, #fef9c3);
-    color: var(--gold-700, #b45309);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 1.5rem auto;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  background: var(--gold-100, #fef9c3);
+  color: var(--gold-700, #b45309);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem auto;
 }
 
 .visualTitle {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: 1.3rem;
-    font-weight: 800;
-    color: var(--gray-900, #111827);
-    margin: 0 0 0.5rem 0;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--gray-900, #111827);
+  margin: 0 0 0.5rem 0;
 }
 
 .visualSub {
-    font-size: 0.88rem;
-    color: var(--gray-600, #4b5563);
-    line-height: 1.6;
-    margin: 0 0 2rem 0;
+  font-size: 0.88rem;
+  color: var(--gray-600, #4b5563);
+  line-height: 1.6;
+  margin: 0 0 2rem 0;
 }
 
 .visualStats {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
 }
 
 .visualStat {
-    padding: 1rem;
-    background: var(--gray-50, #f9fafb);
-    border-radius: 0.75rem;
-    border: 1px solid var(--gray-100, #f3f4f6);
+  padding: 1rem;
+  background: var(--gray-50, #f9fafb);
+  border-radius: 0.75rem;
+  border: 1px solid var(--gray-100, #f3f4f6);
 }
 
 .visualStatNum {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: 1.5rem;
-    font-weight: 900;
-    color: var(--red-800, #8a0000);
-    line-height: 1;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--red-800, #8a0000);
+  line-height: 1;
 }
 
 .visualStatLabel {
-    font-size: 0.72rem;
-    color: var(--gray-500, #6b7280);
-    font-weight: 600;
-    margin-top: 0.3rem;
+  font-size: 0.72rem;
+  color: var(--gray-500, #6b7280);
+  font-weight: 600;
+  margin-top: 0.3rem;
 }
 
 /* ============================================
    Eligibility Section
    ============================================ */
 .eligibilitySection {
-    padding: 5rem 0;
-    background: var(--white, #ffffff);
+  padding: 5rem 0;
+  background: var(--white, #ffffff);
 }
 
 .eligibilityHeader {
-    margin-bottom: 2.5rem;
+  margin-bottom: 2.5rem;
 }
 
 .eligibilityTitle {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: clamp(1.5rem, 2.5vw, 2rem);
-    font-weight: 800;
-    color: var(--gray-900, #111827);
-    margin: 0;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 800;
+  color: var(--gray-900, #111827);
+  margin: 0;
 }
 
 .eligibilityTitle span {
-    background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .eligibilityGrid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
 }
 
 .eligibilityCard {
-    padding: 1.5rem;
-    border: 1px solid var(--gray-200, #e5e7eb);
-    border-radius: 1rem;
-    display: flex;
-    align-items: flex-start;
-    gap: 1rem;
-    transition: all 0.3s ease;
+  padding: 1.5rem;
+  border: 1px solid var(--gray-200, #e5e7eb);
+  border-radius: 1rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  transition: all 0.3s ease;
 }
 
 .eligibilityCard:hover {
-    border-color: rgba(138, 0, 0, 0.15);
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
+  border-color: rgba(138, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
 }
 
 .eligibilityNum {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-size: 1.25rem;
-    font-weight: 900;
-    color: var(--gold-500, #f59e0b);
-    min-width: 28px;
+  font-family: var(--font-heading, 'Outfit', sans-serif);
+  font-size: 1.25rem;
+  font-weight: 900;
+  color: var(--gold-500, #f59e0b);
+  min-width: 28px;
 }
 
 .eligibilityText {
-    font-size: 0.88rem;
-    color: var(--gray-700, #374151);
-    line-height: 1.5;
-    font-weight: 600;
-    margin: 0;
+  font-size: 0.88rem;
+  color: var(--gray-700, #374151);
+  line-height: 1.5;
+  font-weight: 600;
+  margin: 0;
 }
 
 /* Apply CTA */
 .applyCta {
-    margin-top: 3rem;
-    padding: 1.5rem 2.5rem;
-    background: var(--gray-900, #111827);
-    border-radius: 1rem;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 1rem;
+  margin-top: 3rem;
+  padding: 1.5rem 2.5rem;
+  background: var(--gray-900, #111827);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 .applyCtaText {
-    font-size: 1rem;
-    font-weight: 700;
-    color: var(--white, #ffffff);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--white, #ffffff);
 }
 
 .applyCtaText strong {
-    color: var(--gold-400, #f4c749);
+  color: var(--gold-400, #f4c749);
 }
 
 .applyCtaBtn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.7rem 1.5rem;
-    border-radius: 9999px;
-    background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
-    color: var(--white, #ffffff);
-    font-size: 0.82rem;
-    font-weight: 800;
-    text-transform: uppercase;
-    text-decoration: none;
-    transition: all 0.25s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  border-radius: 9999px;
+  background: var(--grad-red, linear-gradient(135deg, #7f0000, #b30000));
+  color: var(--white, #ffffff);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  text-decoration: none;
+  transition: all 0.25s ease;
 }
 
 .applyCtaBtn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(138, 0, 0, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(138, 0, 0, 0.3);
 }
 
 /* Responsive */
 @media (max-width: 1799px) {
-    .infoLayout {
-        gap: 3.5rem;
-    }
-
-    .eligibilityGrid {
-        gap: 1.15rem;
-    }
+  .infoLayout { gap: 3.5rem; }
+  .eligibilityGrid { gap: 1.15rem; }
 }
 
 @media (max-width: 1599px) {
-    .infoVisual {
-        padding: 2.5rem;
-    }
-
-    .eligibilityCard {
-        padding: 1.35rem;
-    }
+  .infoVisual { padding: 2.5rem; }
+  .eligibilityCard { padding: 1.35rem; }
 }
 
 @media (max-width: 1408px) {
-    .infoTitle {
-        font-size: clamp(1.5rem, 2.8vw, 2.1rem);
-    }
-
-    .eligibilityTitle {
-        font-size: clamp(1.4rem, 2.3vw, 1.85rem);
-    }
+  .infoTitle { font-size: clamp(1.5rem, 2.8vw, 2.1rem); }
+  .eligibilityTitle { font-size: clamp(1.4rem, 2.3vw, 1.85rem); }
 }
 
 @media (max-width: 1216px) {
-    .container {
-        padding: 0 1.75rem;
-    }
-
-    .infoTitle {
-        font-size: clamp(1.4rem, 2.6vw, 1.9rem);
-    }
-
-    .infoLayout {
-        gap: 3rem;
-    }
-
-    .eligibilityGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
+  .container { padding: 0 1.75rem; }
+  .infoTitle { font-size: clamp(1.4rem, 2.6vw, 1.9rem); }
+  .infoLayout { gap: 3rem; }
+  .eligibilityGrid { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (max-width: 1024px) {
-    .infoLayout {
-        grid-template-columns: 1fr;
-        gap: 2.5rem;
-    }
-
-    .infoSection {
-        padding: 4rem 0;
-    }
-
-    .eligibilitySection {
-        padding: 4rem 0;
-    }
-
-    .eligibilityGrid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .infoTitle {
-        font-size: clamp(1.35rem, 2.5vw, 1.8rem);
-    }
+  .infoLayout { grid-template-columns: 1fr; gap: 2.5rem; }
+  .infoSection { padding: 4rem 0; }
+  .eligibilitySection { padding: 4rem 0; }
+  .eligibilityGrid { grid-template-columns: repeat(2, 1fr); }
+  .infoTitle { font-size: clamp(1.35rem, 2.5vw, 1.8rem); }
 }
 
 @media (max-width: 768px) {
-    .heroSection {
-        min-height: 40vh;
-        height: 40vh;
-    }
-
-    .heroContent {
-        padding-bottom: 50px;
-    }
-
-    .infoSection {
-        padding: 3.5rem 0;
-    }
-
-    .eligibilitySection {
-        padding: 3.5rem 0;
-    }
-
-    .eligibilityGrid {
-        grid-template-columns: 1fr;
-    }
-
-    .applyCta {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .infoVisual {
-        padding: 2rem;
-    }
+  .heroContent { padding-bottom: 50px; }
+  .infoSection { padding: 3.5rem 0; }
+  .eligibilitySection { padding: 3.5rem 0; }
+  .eligibilityGrid { grid-template-columns: 1fr; }
+  .applyCta { flex-direction: column; align-items: flex-start; }
+  .infoVisual { padding: 2rem; }
 }
 
 @media (max-width: 575px) {
-    .heroSection {
-        min-height: 38vh;
-        height: 38vh;
-    }
-
-    .container {
-        padding: 0 1.25rem;
-    }
-
-    .infoTitle {
-        font-size: 1.35rem;
-    }
-
-    .infoDesc {
-        font-size: 0.9rem;
-    }
-
-    .infoSection {
-        padding: 3rem 0;
-    }
-
-    .eligibilitySection {
-        padding: 3rem 0;
-    }
-
-    .eligibilityCard {
-        padding: 1.25rem;
-    }
-
-    .applyCta {
-        padding: 1.25rem 2rem;
-    }
+  .container { padding: 0 1.25rem; }
+  .infoTitle { font-size: 1.35rem; }
+  .infoDesc { font-size: 0.9rem; }
+  .infoSection { padding: 3rem 0; }
+  .eligibilitySection { padding: 3rem 0; }
+  .eligibilityCard { padding: 1.25rem; }
+  .applyCta { padding: 1.25rem 2rem; }
 }
 
 @media (max-width: 480px) {
-    .heroSection {
-        min-height: 35vh;
-        height: 35vh;
-    }
-
-    .heroContent {
-        padding: 0 1rem 40px 1rem;
-    }
-
-    .container {
-        padding: 0 1rem;
-    }
-
-    .infoTitle {
-        font-size: 1.25rem;
-    }
-
-    .infoVisual {
-        padding: 1.75rem;
-    }
-
-    .visualStats {
-        grid-template-columns: 1fr;
-    }
-
-    .applyCta {
-        padding: 1.25rem 1.5rem;
-    }
-
-    .applyCtaBtn {
-        font-size: 0.78rem;
-        padding: 0.6rem 1.25rem;
-    }
+  .heroContent { padding: 0 1rem 40px 1rem; }
+  .container { padding: 0 1rem; }
+  .infoTitle { font-size: 1.25rem; }
+  .infoVisual { padding: 1.75rem; }
+  .visualStats { grid-template-columns: 1fr; }
+  .applyCta { padding: 1.25rem 1.5rem; }
+  .applyCtaBtn { font-size: 0.78rem; padding: 0.6rem 1.25rem; }
 }
 
 @media (max-width: 420px) {
-    .heroContent {
-        padding: 0 0.85rem 35px 0.85rem;
-    }
-
-    .infoSection {
-        padding: 2.5rem 0;
-    }
-
-    .eligibilitySection {
-        padding: 2.5rem 0;
-    }
-
-    .infoVisual {
-        padding: 1.5rem;
-    }
-
-    .visualIcon {
-        width: 64px;
-        height: 64px;
-    }
-
-    .visualTitle {
-        font-size: 1.15rem;
-    }
-
-    .eligibilityCard {
-        padding: 1.15rem;
-    }
-
-    .eligibilityText {
-        font-size: 0.84rem;
-    }
+  .heroContent { padding: 0 0.85rem 35px 0.85rem; }
+  .infoSection { padding: 2.5rem 0; }
+  .eligibilitySection { padding: 2.5rem 0; }
+  .infoVisual { padding: 1.5rem; }
+  .visualIcon { width: 64px; height: 64px; }
+  .visualTitle { font-size: 1.15rem; }
+  .eligibilityCard { padding: 1.15rem; }
+  .eligibilityText { font-size: 0.84rem; }
 }
 
 @media (max-width: 380px) {
-    .container {
-        padding: 0 0.85rem;
-    }
-
-    .infoTitle {
-        font-size: 1.15rem;
-    }
-
-    .eligibilityTitle {
-        font-size: 1.2rem;
-    }
-
-    .infoVisual {
-        padding: 1.25rem;
-        border-radius: 1rem;
-    }
-
-    .highlightText {
-        font-size: 0.85rem;
-    }
-
-    .applyCta {
-        padding: 1rem 1.25rem;
-        border-radius: 0.75rem;
-    }
-
-    .applyCtaText {
-        font-size: 0.9rem;
-    }
+  .container { padding: 0 0.85rem; }
+  .infoTitle { font-size: 1.15rem; }
+  .eligibilityTitle { font-size: 1.2rem; }
+  .infoVisual { padding: 1.25rem; border-radius: 1rem; }
+  .highlightText { font-size: 0.85rem; }
+  .applyCta { padding: 1rem 1.25rem; border-radius: 0.75rem; }
+  .applyCtaText { font-size: 0.9rem; }
 }
 
 @media (max-width: 360px) {
-    .heroSection {
-        min-height: 32vh;
-        height: 32vh;
-    }
-
-    .heroContent {
-        padding: 0 0.75rem 30px 0.75rem;
-    }
-
-    .infoSection {
-        padding: 2rem 0;
-    }
-
-    .eligibilitySection {
-        padding: 2rem 0;
-    }
-
-    .infoTitle {
-        font-size: 1.1rem;
-    }
-
-    .eligibilityTitle {
-        font-size: 1.1rem;
-    }
-
-    .infoDesc {
-        font-size: 0.85rem;
-    }
-
-    .eligibilityCard {
-        padding: 1rem;
-        border-radius: 0.75rem;
-    }
-
-    .visualStatNum {
-        font-size: 1.25rem;
-    }
+  .heroContent { padding: 0 0.75rem 30px 0.75rem; }
+  .infoSection { padding: 2rem 0; }
+  .eligibilitySection { padding: 2rem 0; }
+  .infoTitle { font-size: 1.1rem; }
+  .eligibilityTitle { font-size: 1.1rem; }
+  .infoDesc { font-size: 0.85rem; }
+  .eligibilityCard { padding: 1rem; border-radius: 0.75rem; }
+  .visualStatNum { font-size: 1.25rem; }
 }

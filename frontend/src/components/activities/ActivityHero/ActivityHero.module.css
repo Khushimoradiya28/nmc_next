@@ -1,6 +1,8 @@
 .heroSection {
     position: relative;
     width: 100%;
+    min-height: 50vh;
+    height: 50vh;
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
@@ -30,15 +32,15 @@
 
 .container {
     width: 100%;
-    max-width: 1320px;
+    max-width: 1380px;
     margin: 0 auto;
-    padding: 0 1.5rem;
+    padding: 0 2rem;
     box-sizing: border-box;
 }
 
 .heroContent {
     color: #ffffff;
-    padding-top: 120px;
+    padding-top: 100px;
 }
 
 .heroTitle {
@@ -74,7 +76,7 @@
 }
 
 .breadcrumbNav {
-    margin-top: 1.25rem;
+    margin-top: 0.4rem;
 }
 
 .breadcrumbList {
@@ -225,10 +227,6 @@
    LAPTOPS & SMALL DESKTOPS (1024px to 1439px)
    ========================================================================== */
 @media screen and (max-width: 1439px) {
-    .heroSection {
-        padding-bottom: 48px;
-    }
-
     .heroContent {
         padding-top: 100px;
     }
@@ -248,8 +246,7 @@
    ========================================================================== */
 @media screen and (max-width: 1023px) {
     .heroSection {
-        padding-bottom: 40px;
-        min-height: 320px;
+        padding-bottom: 30px !important;
     }
 
     .container {
@@ -286,11 +283,6 @@
    MOBILE DEVICES (767px and below)
    ========================================================================== */
 @media screen and (max-width: 767px) {
-    .heroSection {
-        padding-bottom: 32px;
-        min-height: 280px;
-    }
-
     .heroContent {
         padding-top: 80px;
     }
@@ -312,22 +304,11 @@
         letter-spacing: 0.3px;
     }
 
-    /* 
-  .heroOverlay {
-    background: 
-      linear-gradient(to bottom, rgba(15, 23, 42, 0.9) 0%, rgba(15, 23, 42, 0.7) 50%, rgba(15, 23, 42, 0.9) 100%);
-  } */
-
     .heroDecorative {
         display: none;
     }
 
     @media (max-width: 480px) {
-        .heroSection {
-            padding-bottom: 24px;
-            min-height: 250px;
-        }
-
         .container {
             padding: 0 1rem;
         }
@@ -358,11 +339,6 @@
     }
 
     @media (max-width: 360px) {
-        .heroSection {
-            padding-bottom: 20px;
-            min-height: 220px;
-        }
-
         .container {
             padding: 0 0.75rem;
         }
