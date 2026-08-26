@@ -1,9 +1,19 @@
+<<<<<<< Updated upstream
  node_modules/
+=======
+frontend/.kiro/steering/ponytail.md
+frontend/.kiro/skills/godly-ui-design/SKILL.md
+ 
+node_modules/
+>>>>>>> Stashed changes
 */node_modules/
 .next/
 */.next/
 .env
 */.env
+<<<<<<< Updated upstream
 src/Storage/logs/
 *.log
+=======
+>>>>>>> Stashed changes
 
