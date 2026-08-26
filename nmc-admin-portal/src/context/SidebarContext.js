@@ -77,6 +77,7 @@ export const SidebarProvider = ({ children }) => {
         isCollapsed,
         setIsCollapsed,
         isPinned,
+        setIsPinned,
         togglePinned,
         closeleadfilterDrawer,
         leadfiltertoggleDrawer,

@@ -30,7 +30,7 @@ app.use(cors({
     if (!origin) return callback(null, true);
 
     if (
-      origin.includes("localhost") || 
+      origin.includes("localhost") ||
       origin.includes("127.0.0.1") ||
       origin.includes("runr-kids.web.app") ||
       origin.includes("runr-kids-portal.vercel.app") ||

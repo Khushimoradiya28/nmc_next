@@ -6,6 +6,7 @@ import { useForm } from 'react-hook-form';
 import Title from '../form/Title';
 import Error from '../form/Error';
 import DrawerButton from '../form/DrawerButton';
+import CustomSelect from '../form/CustomSelect';
 import Uploader from '../image-uploader/Uploader';
 import { SidebarContext } from '../../context/SidebarContext';
 import TestimonialServices from '../../services/TestimonialServices';
@@ -26,6 +27,7 @@ const TestimonialDrawer = ({ id }) => {
     setValue,
     clearErrors,
     reset,
+    watch,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -83,10 +85,9 @@ const TestimonialDrawer = ({ id }) => {
   }, [id, isDrawerOpen, reset]);
 
   // Handle dropdown change for Testimonial Type
-  const handleTypeChange = (e) => {
-    const selectedType = e.target.value;
-    setTestimonialType(selectedType);
-    setValue('type', selectedType);
+  const handleTypeChange = (selectedVal) => {
+    setTestimonialType(selectedVal);
+    setValue('type', selectedVal);
     clearErrors();
   };
 
@@ -99,7 +100,7 @@ const TestimonialDrawer = ({ id }) => {
         authorName: data.authorName?.trim(),
         designationSubtext: data.designationSubtext?.trim(),
         quote: data.quote?.trim(),
-        avatarUrl: imageUrl || data.avatarUrl || '',
+        avatarUrl: testimonialType === 'dignitary' ? (imageUrl || data.avatarUrl || '') : '',
         title: testimonialType === 'dignitary' ? data.title?.trim() : '',
         rating: testimonialType === 'student' ? Number(data.rating || 5) : 5,
       };
@@ -144,15 +145,17 @@ const TestimonialDrawer = ({ id }) => {
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
               Testimonial Type <span className="text-red-500">*</span>
             </label>
-            <Select
-              {...register('type', { required: 'Please select testimonial type' })}
+            <CustomSelect
+              name="type"
+              register={register}
+              required
               value={testimonialType}
               onChange={handleTypeChange}
-              className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-md px-3"
-            >
-              <option value="dignitary">Dignitary Testimonials</option>
-              <option value="student">Student Testimonials</option>
-            </Select>
+              options={[
+                { label: 'Dignitary Testimonials', value: 'dignitary' },
+                { label: 'Student Testimonials', value: 'student' },
+              ]}
+            />
             <Error errorName={errors.type} />
           </div>
 
@@ -269,16 +272,19 @@ const TestimonialDrawer = ({ id }) => {
                 <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                   Rating <span className="text-red-500">*</span>
                 </label>
-                <Select
-                  {...register('rating')}
-                  className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-md px-3"
-                >
-                  <option value={5}>5 Stars ⭐⭐⭐⭐⭐</option>
-                  <option value={4}>4 Stars ⭐⭐⭐⭐</option>
-                  <option value={3}>3 Stars ⭐⭐⭐</option>
-                  <option value={2}>2 Stars ⭐⭐</option>
-                  <option value={1}>1 Star ⭐</option>
-                </Select>
+                <CustomSelect
+                  name="rating"
+                  register={register}
+                  value={watch ? watch('rating') || 5 : 5}
+                  onChange={(val) => setValue('rating', val)}
+                  options={[
+                    { label: '5 Stars ⭐⭐⭐⭐⭐', value: 5 },
+                    { label: '4 Stars ⭐⭐⭐⭐', value: 4 },
+                    { label: '3 Stars ⭐⭐⭐', value: 3 },
+                    { label: '2 Stars ⭐⭐', value: 2 },
+                    { label: '1 Star ⭐', value: 1 },
+                  ]}
+                />
                 <Error errorName={errors.rating} />
               </div>
 
@@ -294,18 +300,6 @@ const TestimonialDrawer = ({ id }) => {
                   className="border text-sm p-3 focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 text-gray-700 dark:text-gray-200 rounded-md"
                 />
                 <Error errorName={errors.quote} />
-              </div>
-
-              {/* Student Photo / Avatar */}
-              <div className="mb-5 flex flex-col">
-                <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                  Student Photo / Avatar
-                </label>
-                <Uploader
-                  imageUrl={imageUrl}
-                  setImageUrl={setImageUrl}
-                  setUploadedFile={setUploadedFile}
-                />
               </div>
             </>
           )}

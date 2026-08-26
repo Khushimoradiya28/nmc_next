@@ -1,24 +1,23 @@
 import requests from './httpService';
 
 const TestimonialServices = {
-  getAllTestimonials(params = {}) {
-    const query = new URLSearchParams(params).toString();
-    return requests.get(`/testimonials${query ? `?${query}` : ''}`);
+  getAllTestimonials: async () => {
+    return requests.get('/testimonials');
   },
 
-  getTestimonialById(id) {
+  getTestimonialById: async (id) => {
     return requests.get(`/testimonials/${id}`);
   },
 
-  addTestimonial(body) {
+  addTestimonial: async (body) => {
     return requests.post('/testimonials', body);
   },
 
-  updateTestimonial(id, body) {
+  updateTestimonial: async (id, body) => {
     return requests.put(`/testimonials/${id}`, body);
   },
 
-  deleteTestimonial(id) {
+  deleteTestimonial: async (id) => {
     return requests.delete(`/testimonials/${id}`);
   },
 };

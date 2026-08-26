@@ -19,6 +19,9 @@ import CommodityService from '../../../src/services/master/CommodityService';
 import MaterialService from '../../../src/services/master/MaterialService';
 import ProductServices from '../../../src/services/ProductServices';
 import CouponServices from '../../../src/services/CouponServices';
+import TestimonialServices from '../../services/TestimonialServices';
+import AwardServices from '../../services/AwardServices';
+import CourseServices from '../../services/CourseServices';
 import { SidebarContext } from '../../context/SidebarContext';
 import { notifySuccess, notifyError } from '../../utils/toast';
 
@@ -27,7 +30,41 @@ const MainModal = ({ id }) => {
   const location = useLocation();
 
   const handleDelete = () => {
-    
+    const query = new URLSearchParams(location.search);
+    const typeParam = query.get("type");
+
+    if (location.pathname === '/products' && typeParam === 'testimonial') {
+      TestimonialServices.deleteTestimonial(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message || 'Testimonial deleted successfully!');
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+      return;
+    }
+
+    if (location.pathname === '/products' && typeParam === 'awards') {
+      AwardServices.deleteAward(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message || 'Award deleted successfully!');
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+      return;
+    }
+
+    if (location.pathname === '/products' && typeParam === 'courses') {
+      CourseServices.deleteCourse(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message || 'Course deleted successfully!');
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+      return;
+    }
     // if (location.pathname === '/products') {
     //   ProductServices.deleteProduct(id)
     //     .then((res) => {
@@ -56,7 +93,7 @@ const MainModal = ({ id }) => {
         .catch((err) => notifyError(err.message));
       closeModal();
     }
-    
+
     if (location.pathname === '/our-staff') {
       AdminServices.deleteStaff(id)
         .then((res) => {
@@ -78,7 +115,7 @@ const MainModal = ({ id }) => {
       closeModal();
     }
 
-     if (location.pathname === '/master/userrole') {
+    if (location.pathname === '/master/userrole') {
       UserRoleService.deleteData(id)
         .then((res) => {
           setIsUpdate(true);
@@ -88,86 +125,86 @@ const MainModal = ({ id }) => {
       closeModal();
     }
     if (location.pathname === '/master/tag') {
-          TagService.deleteData(id)
-            .then((res) => {              
-              setIsUpdate(true);
-              notifySuccess(res.message);
-            })
-            .catch((err) => notifyError(err.message));
-          closeModal();
-        }
+      TagService.deleteData(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message);
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+    }
     if (location.pathname === '/master/color') {
-          ColorService.deleteData(id)
-            .then((res) => {
-              setIsUpdate(true);
-              notifySuccess(res.message);
-            })
-            .catch((err) => notifyError(err.message));
-          closeModal();
-        }    
-        if (location.pathname === '/master/material') {
-          MaterialService.deleteData(id)
-            .then((res) => {
-              setIsUpdate(true);
-              notifySuccess(res.message);
-            })
-            .catch((err) => notifyError(err.message));
-          closeModal();
-        }    
-        if (location.pathname === '/master/category') {
-          CategoryService.deleteData(id)
-            .then((res) => {
-              setIsUpdate(true);
-              notifySuccess(res.message);
-            })
-            .catch((err) => notifyError(err.message));
-          closeModal();
-        }  
-        if (location.pathname === '/master/user') {
-          MasterUserService.deleteData(id)
-            .then((res) => {
-              setIsUpdate(true);
-              notifySuccess(res.message);
-            })
-            .catch((err) => notifyError(err.message));
-          closeModal();
-        }  
-        if (location.pathname === '/master/commodity') {
-          CommodityService.deleteData(id)
-            .then((res) => {
-              setIsUpdate(true);
-              notifySuccess(res.message);
-            })
-            .catch((err) => notifyError(err.message));
-          closeModal();
-        }
-         if (location.pathname === '/products') {
-          ProductServices.deleteData(id)
-            .then((res) => {
-              setIsUpdate(true);
-              notifySuccess(res.message);
-            })
-            .catch((err) => notifyError(err.message));
-          closeModal();
-        }
-          if (location.pathname === '/coupons') {
-          CouponServices.deleteData(id)
-            .then((res) => {
-              setIsUpdate(true);
-              notifySuccess(res.message);
-            })
-            .catch((err) => notifyError(err.message));
-          closeModal();
-        }
-        // if (location.pathname === '/master/user') {
-        //   MasterUserService.deleteData(id)
-        //     .then((res) => {
-        //       setIsUpdate(true);
-        //       notifySuccess(res.message);
-        //     })
-        //     .catch((err) => notifyError(err.message));
-        //   closeModal();
-        // }    
+      ColorService.deleteData(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message);
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+    }
+    if (location.pathname === '/master/material') {
+      MaterialService.deleteData(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message);
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+    }
+    if (location.pathname === '/master/category') {
+      CategoryService.deleteData(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message);
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+    }
+    if (location.pathname === '/master/user') {
+      MasterUserService.deleteData(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message);
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+    }
+    if (location.pathname === '/master/commodity') {
+      CommodityService.deleteData(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message);
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+    }
+    if (location.pathname === '/products') {
+      ProductServices.deleteData(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message);
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+    }
+    if (location.pathname === '/coupons') {
+      CouponServices.deleteData(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res.message);
+        })
+        .catch((err) => notifyError(err.message));
+      closeModal();
+    }
+    // if (location.pathname === '/master/user') {
+    //   MasterUserService.deleteData(id)
+    //     .then((res) => {
+    //       setIsUpdate(true);
+    //       notifySuccess(res.message);
+    //     })
+    //     .catch((err) => notifyError(err.message));
+    //   closeModal();
+    // }    
 
     if (location.pathname === '/master/character') {
       CharacterServices.deleteCharacter(id)
@@ -196,7 +233,7 @@ const MainModal = ({ id }) => {
         .catch((err) => notifyError(err.message));
       closeModal();
     }
-    
+
   };
 
   return (
