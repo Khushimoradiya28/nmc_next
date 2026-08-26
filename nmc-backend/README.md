@@ -34,58 +34,32 @@ Backend API for NMC e-commerce platform.
    node server
    ```
 
-## Global API Rules & Standards
+## Global API & Service Rules
 
-Har API me niche diye gaye rules strictly follow hone chahiye:
+Every API, service, and data model in this project must strictly follow the standards below:
 
-1. **Unique Identification & Timezone Standard**:
-   - Every API & model record must contain:
+1. **Unique Identification & India Kolkata Timezone**:
+   - Every API model/record must have:
      - Unique identifier: `_id` / `guid` (and `slug` where applicable).
-     - `created_by` & `updated_by` (User ID / Admin ID).
-     - `created_at` & `updated_at` timestamps strictly stored & formatted in **India Kolkata Time Zone (`Asia/Kolkata`)** (`YYYY-MM-DD HH:mm:ss`).
+     - `created_by`: User / Admin identifier who created the record.
+     - `updated_by`: User / Admin identifier who last modified the record.
+     - `created_at` & `updated_at`: Timestamps strictly stored and returned in **India Kolkata Time Zone (`Asia/Kolkata`)** in standard format (`YYYY-MM-DD HH:mm:ss`).
 2. **Slug Sub-ID for Inner / Specific Operations (Security Policy)**:
-   - Jab bhi kisi API me inner specific record add, update, delete ya fetch jaisa koi operation perform hota hai, tab direct internal DB ID exposure se bachne ke liye **`slug`** pass hona chahiye as sub ID.
-   - Slug generation rule: Main heading / title / name ko lowercase me convert karke hyphenated slug (`generateSlug`) banana hai (e.g. `"A BENCHMARK FOR WOMEN'S HIGHER EDUCATION."` -> `"a-benchmark-for-womens-higher-education"`). Security purpose ke liye raw database IDs public URLs ya payload me pass nahi karni hai.
-
----
-
-## Testimonial API Field Mapping & Validations
-
-Admin portal ke do forms (Student Testimonials & Dignitary Testimonials) ke anusar field mapping:
-
-### 1. Student Testimonials Form
-| Admin Form Field Label | Backend Field Name | Type | Mandatory? | Notes / Validation Rule |
-|-------------------------|--------------------|------|------------|-------------------------|
-| **Testimonial Type \*** | `type` | String | **Yes** | Value: `"student"` |
-| **Student Name \*** | `authorName` | String | **Yes** | Blank / empty not allowed (`"Student Name is mandatory."`) |
-| **Course / Subtext \*** | `designationSubtext` | String | **Yes** | Blank / empty not allowed (`"Course / Subtext is mandatory."`) |
-| **Rating \*** | `rating` | Number | **Yes** | Value between 1 to 5 (e.g., 5 for 5 Stars) |
-| **Testimonial Quote \*** | `quote` | String | **Yes** | Blank / empty not allowed (`"Testimonial Quote is mandatory."`) |
-| **Student Photo / Avatar** | `avatarUrl` | String | No | Image path / URL |
-
-### 2. Dignitary Testimonials Form
-| Admin Form Field Label | Backend Field Name | Type | Mandatory? | Notes / Validation Rule |
-|-------------------------|--------------------|------|------------|-------------------------|
-| **Testimonial Type \*** | `type` | String | **Yes** | Value: `"dignitary"` |
-| **Headline / Title \*** | `title` | String | **Yes** | Blank / empty not allowed (`"Headline / Title is mandatory for Dignitary Testimonials."`) |
-| **Dignitary Name \*** | `authorName` | String | **Yes** | Blank / empty not allowed (`"Dignitary Name is mandatory."`) |
-| **Designation / Subtext \*** | `designationSubtext` | String | **Yes** | Blank / empty not allowed (`"Designation / Subtext is mandatory."`) |
-| **Testimonial Quote \*** | `quote` | String | **Yes** | Blank / empty not allowed (`"Testimonial Quote is mandatory."`) |
-| **Profile Photo / Image** | `avatarUrl` | String | No | Image path / URL |
-
----
-
-## Testimonial Endpoints
-
-- **List Testimonials**: `GET /api/testimonials` / `POST /api/testimonials/list`
-  - Filters: `type` (`student` | `dignitary`), `isActive`, `search`, `slug`, `limit`, `offset`, `sort_by`, `sort_order`
-- **Get Single Testimonial**: `GET /api/testimonials/:idOrSlug`
-- **Add Testimonial**: `POST /api/testimonials` / `POST /api/testimonials/add`
-- **Update Testimonial**: `PUT /api/testimonials/:idOrSlug` / `POST /api/testimonials/update`
-- **Delete Testimonial**: `DELETE /api/testimonials/:idOrSlug` / `POST /api/testimonials/delete`
-
----
+   - Jab bhi kisi API me inner / specific record add, update, delete ya fetch jaisa operation perform hota hai, tab direct internal DB ID expose karne ke bajaye **`slug`** pass hona chahiye as sub ID.
+   - Slug generation rule: Main heading / title / name ko lowercase me convert karke hyphenated slug (`generateSlug`) banana hai (e.g., `"A BENCHMARK FOR HIGHER EDUCATION"` -> `"a-benchmark-for-higher-education"`). Security purpose ke liye raw database IDs use nahi karna hai.
+3. **Mandatory Field Validation & Error Standards**:
+   - Har API request me mandatory fields blank ya invalid hone par `400 Bad Request` response return hona chahiye with structured error object containing exact field-wise error messages:
+     ```json
+     {
+       "status": 400,
+       "message": "Validation failed. Please fill all mandatory fields properly.",
+       "error": {
+         "fieldName": ["This field is mandatory."]
+       }
+     }
+     ```
 
 ## API Documentation
 
-See [API Documentation](API_DOCUMENTATION.md) for detailed endpoint information.
+See [API Documentation](API_DOCUMENTATION.md) for detailed endpoint information.
+
