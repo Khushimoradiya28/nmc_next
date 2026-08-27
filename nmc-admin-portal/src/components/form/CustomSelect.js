@@ -109,7 +109,7 @@ const CustomSelect = ({
 
       {/* Options Dropdown Menu */}
       {isOpen && !disabled && (
-        <div className="absolute z-50 w-full mt-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-y-auto py-1 animate-fadeIn focus:outline-none">
+        <div className="absolute z-50 w-full mt-1.5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-y-auto py-1 animate-fadeIn focus:outline-none custom-dropdown-scrollbar">
           {normalizedOptions.length === 0 ? (
             <div className="px-4 py-3 text-sm text-gray-500 dark:text-gray-400 text-center">
               No options available

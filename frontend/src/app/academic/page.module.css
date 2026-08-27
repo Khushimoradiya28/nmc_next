@@ -1374,4 +1374,106 @@
     .heroContentContainer {
         padding-bottom: 30px !important;
     }
-}
+}
+
+/* ==========================================================================
+   FACULTY DIRECTORY PAGINATION
+   ========================================================================== */
+.paginationWrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 3.5rem;
+    padding-top: 2rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.paginationInfo {
+    font-size: 0.88rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.paginationInfo span {
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.paginationControls {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pageNumbers {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.pageNumBtn {
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #475569;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    width: 42px;
+    height: 42px;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+.pageNumBtn:hover:not(.activePageBtn) {
+    background: #fef2f2;
+    border-color: #8a0000;
+    color: #8a0000;
+    transform: translateY(-2px);
+}
+
+.activePageBtn {
+    background: #8a0000 !important;
+    color: #ffffff !important;
+    border-color: #8a0000 !important;
+    box-shadow: 0 4px 14px rgba(138, 0, 0, 0.28);
+}
+
+.pageNavBtn {
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 0.75rem;
+    background: #ffffff;
+    border: 1.5px solid #e2e8f0;
+    color: #475569;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    outline: none;
+    box-shadow: 0 2px 6px rgba(15, 23, 42, 0.03);
+}
+
+.pageNavBtn:hover:not(:disabled) {
+    background: #fef2f2;
+    border-color: #8a0000;
+    color: #8a0000;
+    transform: translateY(-2px);
+}
+
+.pageNavDisabled {
+    opacity: 0.35;
+    cursor: not-allowed;
+    box-shadow: none;
+}

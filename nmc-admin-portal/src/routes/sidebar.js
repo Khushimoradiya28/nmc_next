@@ -1,8 +1,10 @@
 import {
   FiGrid,
-  FiHome,
   FiCompass,
-  FiList
+  FiList,
+  FiMessageSquare,
+  FiAward,
+  FiBookOpen,
 } from 'react-icons/fi';
 
 /**
@@ -24,22 +26,19 @@ const sidebar = [
     name: 'Leads',
   },
   {
-    icon: FiHome,
-    name: 'Home',
-    routes: [
-      {
-        path: '/products?type=testimonial',
-        name: 'Testimonial',
-      },
-      {
-        path: '/products?type=awards',
-        name: 'Awards & Certificates',
-      },
-      {
-        path: '/products?type=courses',
-        name: 'Professional Certificate Courses',
-      },
-    ],
+    path: '/products?type=testimonial',
+    icon: FiMessageSquare,
+    name: 'Testimonial',
+  },
+  {
+    path: '/products?type=awards',
+    icon: FiAward,
+    name: 'Awards & Certificates',
+  },
+  {
+    path: '/products?type=courses',
+    icon: FiBookOpen,
+    name: 'Professional Certificate Courses',
   },
   {
     path: '/master',

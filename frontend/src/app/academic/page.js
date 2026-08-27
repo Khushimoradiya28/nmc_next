@@ -8,9 +8,12 @@ import Footer from '@/components/layout/Footer/Footer';
 import { ALL_FACULTY, DEPARTMENT_CATEGORIES } from '@/data/facultyData';
 import styles from './page.module.css';
 
+const ITEMS_PER_PAGE = 16; // 4 rows x 4 items per row on desktop layout
+
 export default function AcademicPage() {
   const [selectedDept, setSelectedDept] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
   const [activeModalTeacher, setActiveModalTeacher] = useState(null);
   const [isDeptOpen, setIsDeptOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -81,10 +84,30 @@ export default function AcademicPage() {
     });
   }, [selectedDept, searchQuery]);
 
+  // Total pages calculation
+  const totalPages = Math.ceil(filteredFaculty.length / ITEMS_PER_PAGE);
+
+  // Paginated subset of faculty for the active page
+  const paginatedFaculty = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    return filteredFaculty.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  }, [filteredFaculty, currentPage]);
+
+  const handlePageChange = (newPage) => {
+    if (newPage >= 1 && newPage <= totalPages) {
+      setCurrentPage(newPage);
+      const section = document.getElementById('faculty-directory');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   const handleResetFilters = () => {
     setSelectedDept('all');
     setSearchQuery('');
     setIsSearchActive(false);
+    setCurrentPage(1);
   };
 
   return (
@@ -139,14 +162,20 @@ export default function AcademicPage() {
                     type="text"
                     placeholder="Search by faculty name, qualification, subject..."
                     value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onChange={(e) => {
+                      setSearchQuery(e.target.value);
+                      setCurrentPage(1);
+                    }}
                     className={styles.hubSearchInput}
                     aria-label="Search faculty directory"
                   />
                   {searchQuery && (
                     <button
                       type="button"
-                      onClick={() => setSearchQuery('')}
+                      onClick={() => {
+                        setSearchQuery('');
+                        setCurrentPage(1);
+                      }}
                       className={styles.hubSearchClearBtn}
                       aria-label="Clear search query"
                       title="Clear search"
@@ -205,6 +234,7 @@ export default function AcademicPage() {
                               aria-selected={isSelected}
                               onClick={() => {
                                 setSelectedDept(dept.value);
+                                setCurrentPage(1);
                                 setIsDeptOpen(false);
                               }}
                               className={`${styles.deptMenuItem} ${isSelected ? styles.deptMenuItemActive : ''}`}
@@ -233,75 +263,126 @@ export default function AcademicPage() {
 
             {/* Faculty Directory Cards Grid */}
             {filteredFaculty.length > 0 ? (
-              <div className={styles.facultyGrid}>
-                {filteredFaculty.map((fac) => {
-                  const badgeClass =
-                    fac.badgeType === 'ruby'
-                      ? styles.badgeRuby
-                      : fac.badgeType === 'gold'
-                        ? styles.badgeGold
-                        : fac.badgeType === 'azure'
-                          ? styles.badgeAzure
-                          : styles.badgePurple;
+              <>
+                <div className={styles.facultyGrid}>
+                  {paginatedFaculty.map((fac) => {
+                    const badgeClass =
+                      fac.badgeType === 'ruby'
+                        ? styles.badgeRuby
+                        : fac.badgeType === 'gold'
+                          ? styles.badgeGold
+                          : fac.badgeType === 'azure'
+                            ? styles.badgeAzure
+                            : styles.badgePurple;
 
-                  return (
-                    <article
-                      key={fac.id}
-                      className={styles.facultyCard}
-                      onClick={() => setActiveModalTeacher(fac)}
-                    >
-                      {/* Portrait Image & Floating Badges */}
-                      <div className={styles.cardMedia}>
-                        <Image
-                          src={fac.image}
-                          alt={`${fac.name} - ${fac.role}`}
-                          fill
-                          sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                          className={styles.portraitImg}
-                        />
-                        <span className={`${styles.cardRoleBadge} ${badgeClass}`}>
-                          {fac.badge}
-                        </span>
-                      </div>
-
-                      {/* Card Content Information */}
-                      <div className={styles.cardContent}>
-                        <span className={styles.cardRole}>{fac.role}</span>
-                        <h3 className={styles.cardName}>{fac.name}</h3>
-                        <p className={styles.cardQual}>{fac.qualification}</p>
-
-                        {/* Micro Specialization Tags */}
-                        <div className={styles.cardSpecTags}>
-                          {fac.specializations.slice(0, 3).map((spec, idx) => (
-                            <span key={idx} className={styles.cardSpecTag}>
-                              {spec}
-                            </span>
-                          ))}
+                    return (
+                      <article
+                        key={fac.id}
+                        className={styles.facultyCard}
+                        onClick={() => setActiveModalTeacher(fac)}
+                      >
+                        {/* Portrait Image & Floating Badges */}
+                        <div className={styles.cardMedia}>
+                          <Image
+                            src={fac.image}
+                            alt={`${fac.name} - ${fac.role}`}
+                            fill
+                            sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                            className={styles.portraitImg}
+                          />
+                          <span className={`${styles.cardRoleBadge} ${badgeClass}`}>
+                            {fac.badge}
+                          </span>
                         </div>
 
-                        {/* Card Footer */}
-                        <div className={styles.cardFooterRow}>
-                          <span className={styles.cardExp}>{fac.experience}</span>
+                        {/* Card Content Information */}
+                        <div className={styles.cardContent}>
+                          <span className={styles.cardRole}>{fac.role}</span>
+                          <h3 className={styles.cardName}>{fac.name}</h3>
+                          <p className={styles.cardQual}>{fac.qualification}</p>
+
+                          {/* Micro Specialization Tags */}
+                          <div className={styles.cardSpecTags}>
+                            {fac.specializations.slice(0, 3).map((spec, idx) => (
+                              <span key={idx} className={styles.cardSpecTag}>
+                                {spec}
+                              </span>
+                            ))}
+                          </div>
+
+                          {/* Card Footer */}
+                          <div className={styles.cardFooterRow}>
+                            <span className={styles.cardExp}>{fac.experience}</span>
+                            <button
+                              type="button"
+                              className={styles.viewProfileTrigger}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setActiveModalTeacher(fac);
+                              }}
+                              aria-label={`View profile for ${fac.name}`}
+                            >
+                              Details
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                              </svg>
+                            </button>
+                          </div>
+                        </div>
+                      </article>
+                    );
+                  })}
+                </div>
+
+                {/* Modern Luxury Pagination Bar */}
+                {totalPages > 1 && (
+                  <div className={styles.paginationWrapper}>
+                    <div className={styles.paginationInfo}>
+                      Showing <span>{(currentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(currentPage * ITEMS_PER_PAGE, filteredFaculty.length)}</span> of <span>{filteredFaculty.length}</span> Faculty Members
+                    </div>
+
+                    <div className={styles.paginationControls}>
+                      <button
+                        type="button"
+                        onClick={() => handlePageChange(currentPage - 1)}
+                        disabled={currentPage === 1}
+                        className={`${styles.pageNavBtn} ${currentPage === 1 ? styles.pageNavDisabled : ''}`}
+                        aria-label="Previous page"
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="15 18 9 12 15 6"></polyline>
+                        </svg>
+                      </button>
+
+                      <div className={styles.pageNumbers}>
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
                           <button
+                            key={pg}
                             type="button"
-                            className={styles.viewProfileTrigger}
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              setActiveModalTeacher(fac);
-                            }}
-                            aria-label={`View profile for ${fac.name}`}
+                            onClick={() => handlePageChange(pg)}
+                            className={`${styles.pageNumBtn} ${pg === currentPage ? styles.activePageBtn : ''}`}
+                            aria-label={`Page ${pg}`}
                           >
-                            Details
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="9 18 15 12 9 6"></polyline>
-                            </svg>
+                            {pg}
                           </button>
-                        </div>
+                        ))}
                       </div>
-                    </article>
-                  );
-                })}
-              </div>
+
+                      <button
+                        type="button"
+                        onClick={() => handlePageChange(currentPage + 1)}
+                        disabled={currentPage === totalPages}
+                        className={`${styles.pageNavBtn} ${currentPage === totalPages ? styles.pageNavDisabled : ''}`}
+                        aria-label="Next page"
+                      >
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="9 18 15 12 9 6"></polyline>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </>
             ) : (
               /* Empty State */
               <div className={styles.emptyStateContainer}>

@@ -323,3 +323,29 @@ aside::-webkit-scrollbar,
   height: 0 !important;
 }
 
+/* Custom Sleek Dropdown Scrollbar */
+.custom-dropdown-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.custom-dropdown-scrollbar::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
+}
+.custom-dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background: #8A0000;
+  border-radius: 10px;
+}
+.custom-dropdown-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #6B0000;
+}
+.theme-dark .custom-dropdown-scrollbar::-webkit-scrollbar-track {
+  background: #24262d;
+}
+.theme-dark .custom-dropdown-scrollbar::-webkit-scrollbar-thumb {
+  background: #b91c1c;
+}
+.custom-dropdown-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #8A0000 #f1f1f1;
+}
+
