@@ -56,3 +56,41 @@ Ye rules niche diye gaye sabhi modules ke liye apply hote hain:
 1. **Professional Certificate Courses** (`/api/certificate-courses`)
 2. **Awards & Certificates** (`/api/awards`)
 3. **Testimonials - Dignitary & Students** (`/api/testimonials`)
+4. **Academic Programs (Master Courses)** (`/api/academic-programs`)
+
+---
+
+## 📌 7. Global API Development & Validation Rules (Mandatory)
+
+### 🔹 Rule A: Requirements & Reusable API Architecture
+- **Check Requirements First**: Har API development se pehle requirement analyse karke clean aur reusable pattern follow karein (e.g. standard pagination, search filters, lookup by slug/ID, soft-delete, active/inactive toggles).
+- **Reusable Operations**:
+  - `GET /api/module` (with `page`, `limit`, `search`, `status`, `category` filters)
+  - `GET /api/module/:slug` (supports both MongoDB `_id` and unique `slug`)
+  - `POST /api/module` (full create with automated slug generation)
+  - `PUT /api/module/:slug` (partial/full update with validation)
+  - `DELETE /api/module/:slug` (safe soft delete with `is_deleted: true`)
+
+### 🔹 Rule B: Strict Input Validation & Handled Status Codes
+Har API me input fields ko properly validate karna mandatory hai:
+- **Blank / Missing Mandatory Fields**: Agar koi required field missing, blank string `""`, ya whitespace ho, toh request ko **`400 Bad Request`** status ke sath field-level error messages return karein:
+  ```json
+  {
+    "status": 400,
+    "success": false,
+    "message": "Validation failed",
+    "errors": [
+      "shortTitle is required and cannot be blank (e.g. B.B.A.).",
+      "fullName is required and cannot be blank."
+    ]
+  }
+  ```
+- **Enum / Uneven Data Validation**: Agar koi field predefined list me se ho (jaise `programType: ['ug', 'pg', 'diploma']` ya `status: ['active', 'inactive']`), toh invalid values aane par proper 400 error return karein.
+- **Resource Not Found (`404 Not Found`)**: Agar update/delete/get me given ID/Slug database me exist nahi karta ya deleted hai, toh **`404 Not Found`** return karein.
+- **Proper Status Codes**:
+  - `200 OK`: Successful fetch / update / delete.
+  - `201 Created`: Successful creation.
+  - `400 Bad Request`: Validation error / invalid input payload.
+  - `404 Not Found`: Resource not found.
+  - `500 Internal Server Error`: Unexpected server/database exceptions.
+
