@@ -71,26 +71,27 @@ Ye rules niche diye gaye sabhi modules ke liye apply hote hain:
   - `PUT /api/module/:slug` (partial/full update with validation)
   - `DELETE /api/module/:slug` (safe soft delete with `is_deleted: true`)
 
-### 🔹 Rule B: Strict Input Validation & Handled Status Codes
-Har API me input fields ko properly validate karna mandatory hai:
-- **Blank / Missing Mandatory Fields**: Agar koi required field missing, blank string `""`, ya whitespace ho, toh request ko **`400 Bad Request`** status ke sath field-level error messages return karein:
+### 🔹 Rule B: Strict Input Validation & Handled Status Codes (422 vs 400 vs 404)
+Har API me input fields ko standard HTTP status codes ke sath validate karna mandatory hai:
+- **Blank / Missing / Invalid Data (`422 Unprocessable Entity`)**: Jab client request syntax (JSON) valid ho lekin payload ke andar mandatory fields blank string `""`, missing, whitespace, ya invalid enum/data type hon, toh server **`422 Unprocessable Entity`** return karega:
   ```json
   {
-    "status": 400,
+    "status": 422,
     "success": false,
-    "message": "Validation failed",
+    "message": "Validation error: Unable to process input fields",
     "errors": [
       "shortTitle is required and cannot be blank (e.g. B.B.A.).",
-      "fullName is required and cannot be blank."
+      "fees is required and cannot be blank (e.g. ₹8,000 / Sem)."
     ]
   }
   ```
-- **Enum / Uneven Data Validation**: Agar koi field predefined list me se ho (jaise `programType: ['ug', 'pg', 'diploma']` ya `status: ['active', 'inactive']`), toh invalid values aane par proper 400 error return karein.
-- **Resource Not Found (`404 Not Found`)**: Agar update/delete/get me given ID/Slug database me exist nahi karta ya deleted hai, toh **`404 Not Found`** return karein.
-- **Proper Status Codes**:
+- **Malformed Request Syntax (`400 Bad Request`)**: `400 Bad Request` sirf tab use hoga jab client request body syntactically invalid/broken ho (e.g., corrupted JSON string, bad header format) jise server decode na kar sake.
+- **Resource Not Found (`404 Not Found`)**: Agar update/delete/get me given ID/Slug database me exist nahi karta ya soft-deleted hai, toh **`404 Not Found`** return hoga.
+- **Proper Status Codes Standard**:
   - `200 OK`: Successful fetch / update / delete.
   - `201 Created`: Successful creation.
-  - `400 Bad Request`: Validation error / invalid input payload.
+  - `422 Unprocessable Entity`: Validation error (blank fields, invalid enum/data format).
+  - `400 Bad Request`: Malformed syntax / client-side parsing error.
   - `404 Not Found`: Resource not found.
   - `500 Internal Server Error`: Unexpected server/database exceptions.
 

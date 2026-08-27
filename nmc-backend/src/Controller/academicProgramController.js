@@ -13,11 +13,9 @@ function slugifyText(text) {
     .replace(/-+$/, '');
 }
 
-
 function generateGuid() {
   return crypto.randomBytes(6).toString('hex');
 }
-
 
 const generateUniqueSlug = async (text, currentId = null) => {
   let baseSlug = slugifyText(text) || 'program';
@@ -36,7 +34,7 @@ const generateUniqueSlug = async (text, currentId = null) => {
   return slug;
 };
 
-// Validation Helper
+// 422 Unprocessable Entity Validation Helper
 const validateProgramInputs = (data, isUpdate = false) => {
   const errors = [];
   const validProgramTypes = ['ug', 'pg', 'diploma'];
@@ -44,9 +42,9 @@ const validateProgramInputs = (data, isUpdate = false) => {
 
   if (!isUpdate || data.programType !== undefined) {
     if (!data.programType || typeof data.programType !== 'string' || !data.programType.trim()) {
-      errors.push('programType is required and must be a non-empty string.');
+      errors.push('programType is required and cannot be blank (e.g. ug, pg, diploma).');
     } else if (!validProgramTypes.includes(data.programType.toLowerCase())) {
-      errors.push(`Invalid programType. Allowed values: ${validProgramTypes.join(', ')}`);
+      errors.push('Invalid programType. Allowed values: ' + validProgramTypes.join(', '));
     }
   }
 
@@ -61,7 +59,6 @@ const validateProgramInputs = (data, isUpdate = false) => {
       errors.push('fullName is required and cannot be blank (e.g. Bachelor of Business Administration).');
     }
   }
-
 
   if (!isUpdate || data.description !== undefined) {
     if (!data.description || typeof data.description !== 'string' || !data.description.trim()) {
@@ -81,16 +78,15 @@ const validateProgramInputs = (data, isUpdate = false) => {
     }
   }
 
-
   if (data.status !== undefined) {
     if (!validStatuses.includes(data.status)) {
-      errors.push(`Invalid status. Allowed values: ${validStatuses.join(', ')}`);
+      errors.push('Invalid status. Allowed values: ' + validStatuses.join(', '));
     }
   }
 
-
   if (data.sort_order !== undefined && data.sort_order !== null && data.sort_order !== '') {
-    if (isNaN(number = Number(data.sort_order)) || number < 0) {
+    const num = Number(data.sort_order);
+    if (isNaN(num) || num < 0) {
       errors.push('sort_order must be a valid positive number.');
     }
   }
@@ -121,7 +117,7 @@ exports.getAllPrograms = async (req, res) => {
 
     if (search && search.trim() !== '') {
       const searchRegex = new RegExp(search.trim(), 'i');
-      query['or'] = [
+      query['$or'] = [
         { shortTitle: searchRegex },
         { fullName: searchRegex },
         { degreeBadge: searchRegex },
@@ -168,9 +164,9 @@ exports.getProgramById = async (req, res) => {
   try {
     const { slug } = req.params;
 
-    if (!slug || !typeof slug === 'string' || !slug.trim()) {
-      return res.status(400).json({
-        status: 400,
+    if (!slug || typeof slug !== 'string' || !slug.trim()) {
+      return res.status(422).json({
+        status: 422,
         success: false,
         message: 'Program slug or ID is required.',
       });
@@ -217,10 +213,10 @@ exports.addProgram = async (req, res) => {
     const errors = validateProgramInputs(req.body, false);
 
     if (errors.length > 0) {
-      return res.status(400).json({
-        status: 400,
+      return res.status(422).json({
+        status: 422,
         success: false,
-        message: 'Validation failed',
+        message: 'Validation error: Unable to process input fields',
         errors,
       });
     }
@@ -295,9 +291,9 @@ exports.updateProgram = async (req, res) => {
   try {
     const { slug } = req.params;
 
-    if (!slug || !typeof slug === 'string' || !slug.trim()) {
-      return res.status(400).json({
-        status: 400,
+    if (!slug || typeof slug !== 'string' || !slug.trim()) {
+      return res.status(422).json({
+        status: 422,
         success: false,
         message: 'Program slug or ID is required to update.',
       });
@@ -306,10 +302,10 @@ exports.updateProgram = async (req, res) => {
     const errors = validateProgramInputs(req.body, true);
 
     if (errors.length > 0) {
-      return res.status(400).json({
-        status: 400,
+      return res.status(422).json({
+        status: 422,
         success: false,
-        message: 'Validation failed',
+        message: 'Validation error: Unable to process input fields',
         errors,
       });
     }
@@ -319,7 +315,7 @@ exports.updateProgram = async (req, res) => {
     };
     
     if (slug.trim().match(/^[0-9a-fA-F]{24}$/)) {
-      query['or'] = [{ _id: slug.trim() }, { slug: slug.trim() }];
+      query['$or'] = [{ _id: slug.trim() }, { slug: slug.trim() }];
     } else {
       query.slug = slug.trim();
     }
@@ -330,7 +326,7 @@ exports.updateProgram = async (req, res) => {
       return res.status(404).json({
         status: 404,
         success: false,
-      message: 'Academic program not found to update',
+        message: 'Academic program not found to update',
       });
     }
 
@@ -410,9 +406,9 @@ exports.deleteProgram = async (req, res) => {
   try {
     const { slug } = req.params;
 
-    if (!slug || !typeof slug === 'string' || !slug.trim()) {
-      return res.status(400).json({
-        status: 400,
+    if (!slug || typeof slug !== 'string' || !slug.trim()) {
+      return res.status(422).json({
+        status: 422,
         success: false,
         message: 'Program slug or ID is required to delete.',
       });
@@ -423,7 +419,7 @@ exports.deleteProgram = async (req, res) => {
     };
     
     if (slug.trim().match(/^[0-9a-fA-F]{24}$/)) {
-      query['or'] = [{ _id: slug.trim() }, { slug: slug.trim() }];
+      query['$or'] = [{ _id: slug.trim() }, { slug: slug.trim() }];
     } else {
       query.slug = slug.trim();
     }

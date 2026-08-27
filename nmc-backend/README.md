@@ -36,18 +36,22 @@ Every API, service, and data model in this project must strictly follow the stan
 2. **Slug Sub-ID for Inner / Specific Operations (Security Policy)**:
    - Jab bhi kisi API me inner / specific record add, update, delete ya fetch jaisa operation perform hota hai, tab direct internal DB ID expose karne ke bajaye **`slug`** pass hona chahiye as sub ID.
    - Slug generation rule: Main heading / title / name ko lowercase me convert karke hyphenated slug (`generateSlug`) banana hai (e.g., `"A BENCHMARK FOR HIGHER EDUCATION"` -> `"a-benchmark-for-higher-education"`). Security purpose ke liye raw database IDs use nahi karna hai.
-3. **Mandatory Field Validation & Error Standards**:
-   - Har API request me mandatory fields blank ya invalid hone par `400 Bad Request` response return hona chahiye with structured error object containing exact field-wise error messages:
+3. **Mandatory Field Validation & HTTP Status Standards (422 vs 400 vs 404)**:
+   - **Validation Error (422 Unprocessable Entity)**: Jab request syntax correct ho lekin fields blank `""`, missing, whitespace, ya invalid format/enum pass hon, tab strictly `422 Unprocessable Entity` status code return hona chahiye with field-level error details:
      ```json
      {
-       "status": 400,
-       "message": "Validation failed. Please fill all mandatory fields properly.",
-       "error": {
-         "fieldName": ["This field is mandatory."]
-       }
+       "status": 422,
+       "success": false,
+       "message": "Validation error: Unable to process input fields",
+       "errors": [
+         "shortTitle is required and cannot be blank (e.g. B.B.A.).",
+         "fees is required and cannot be blank (e.g. ₸8,000 / Sem)."
+       ]
      }
      ```
-
+   - **Malformed Syntax (400 Bad Request)**: `400 Bad Request` sirf tab use hoga jab client side se body malformed JSON ho, invalid Http headers/parameters hon, ya server request syntax decode na kar sake.
+   - **Resource Not Found (404 Not Found)**: Jab requested slug ya ID database me exist na kare ya already soft-deleted ho tab `404 Not Found` return karein.
+   - **Check Requirements & Reusable APIs (Rule)**: Har API me reusable pattern (pagination, search, slug/id lookup, soft-delete) proper status codes `2p0``/`201`/`422`/`404`/`500` ke sath handled hona chahiye.
 
      4. **Standardized API Response Structure (Success & Error)**:
    - Har API response (Success ya Failure) ka format 100% consistent hona chahiye:
