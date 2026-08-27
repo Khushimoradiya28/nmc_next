@@ -1,231 +1,172 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useContext, useEffect, useRef, useMemo } from 'react';
 import {
   Table,
   TableContainer,
   TableFooter,
-  Pagination,
   Button,
-  Modal,
-  ModalBody,
-  ModalFooter,
 } from '@windmill/react-ui';
-import { FiPlus, FiSearch, FiTrash2 } from 'react-icons/fi';
+import { FiPlus, FiSearch, FiRefreshCw } from 'react-icons/fi';
 
 import PageTitle from '../../components/Typography/PageTitle';
+import Breadcrumb from '../../components/form/Breadcrumb';
 import AcademicProgramTable from '../../components/academic-program/AcademicProgramTable';
 import AcademicProgramDetailModal from '../../components/academic-program/AcademicProgramDetailModal';
 import AcademicProgramDrawer from '../../components/drawer/AcademicProgramDrawer';
 import MainDrawer from '../../components/drawer/MainDrawer';
+import MainModal from '../../components/modal/MainModal';
 import CustomSelect from '../../components/form/CustomSelect';
+import CustomPagination from '../../components/table/CustomPagination';
+import Loading from '../../components/preloader/Loading';
+import NotFound from '../../components/table/NotFound';
 import { SidebarContext } from '../../context/SidebarContext';
-import { notifySuccess } from '../../utils/toast';
+import useToggleDrawer from '../../hooks/useToggleDrawer';
+import AcademicProgramServices from '../../services/AcademicProgramServices';
 
-const CATEGORY_OPTIONS = [
-  { label: 'All Programs', value: 'all' },
-  { label: 'Undergraduate (UG)', value: 'UG' },
-  { label: 'Postgraduate (PG)', value: 'PG' },
-  { label: 'Diploma & Vocational', value: 'Diploma' },
+const PROGRAM_TYPE_OPTIONS = [
+  { label: 'All Program Types', value: 'all' },
+  { label: 'Undergraduate (UG)', value: 'ug' },
+  { label: 'Postgraduate (PG)', value: 'pg' },
+  { label: 'Diploma & Vocational', value: 'diploma' },
 ];
 
-const INITIAL_PROGRAM_DATA = [
-  {
-    id: 1,
-    shortName: 'B.B.A.',
-    fullName: 'Bachelor of Business Administration',
-    category: 'UG',
-    description: 'Comprehensive corporate leadership training covering marketing, strategy, corporate finance, and business management.',
-    highlights: [
-      'Strategic Marketing & Human Resources',
-      'Financial & Corporate Law',
-      'Executive Presentation & Internships',
-    ],
-    duration: '3 Years (6 Sems)',
-    fee: '₹8,000 / Sem',
-    icon: 'briefcase',
-    applyButtonText: 'Apply for B.B.A.',
-  },
-  {
-    id: 2,
-    shortName: 'B.C.A.',
-    fullName: 'Bachelor of Computer Applications',
-    category: 'UG',
-    description: 'Modern computing curriculum with hands-on software development, database engineering, and full-stack web technologies.',
-    highlights: [
-      'C++, Java, Python & Full-Stack Web',
-      'Database Systems & Cloud Infrastructure',
-      'High-Speed Computer Lab Workstations',
-    ],
-    duration: '3 Years (6 Sems)',
-    fee: '₹15,000 / Sem',
-    icon: 'code',
-    applyButtonText: 'Apply for B.C.A.',
-  },
-  {
-    id: 3,
-    shortName: 'B.A.',
-    fullName: 'Bachelor of Arts',
-    category: 'UG',
-    description: 'Rich humanities program fostering critical thought, communication skills, and social-cultural awareness.',
-    highlights: [
-      'Gujarati, English & Hindi Literature',
-      'Sociology, Psychology & History',
-      'Competitive Exam Coaching Alignment',
-    ],
-    duration: '3 Years (6 Sems)',
-    fee: 'Affordable Fee',
-    icon: 'book',
-    applyButtonText: 'Apply for B.A.',
-  },
-  {
-    id: 4,
-    shortName: 'B.Com',
-    fullName: 'Bachelor of Commerce',
-    category: 'UG',
-    description: 'Strong foundation in accounting, taxation, and business principles with practical industry exposure.',
-    highlights: [
-      'Advanced Accounting & Auditing',
-      'Taxation & Business Law',
-      'Banking & Financial Services',
-    ],
-    duration: '3 Years (6 Sems)',
-    fee: '₹6,000 / Sem',
-    icon: 'clipboard',
-    applyButtonText: 'Apply for B.Com',
-  },
-  {
-    id: 5,
-    shortName: 'M.Com',
-    fullName: 'Master of Commerce',
-    category: 'PG',
-    description: 'Advanced commerce studies with specialization in accounting, finance, and business research methodology.',
-    highlights: [
-      'Advanced Financial Management',
-      'Research Methodology & Analysis',
-      'Corporate Governance & Ethics',
-    ],
-    duration: '2 Years (4 Sems)',
-    fee: '₹10,000 / Sem',
-    icon: 'clipboard',
-    applyButtonText: 'Apply for M.Com',
-  },
-  {
-    id: 6,
-    shortName: 'M.A.',
-    fullName: 'Master of Arts',
-    category: 'PG',
-    description: 'Post-graduate arts program deepening expertise in literature, social sciences, and research.',
-    highlights: [
-      'Specialized Literature Studies',
-      'Advanced Research & Dissertation',
-      'NET/SET Exam Preparation Support',
-    ],
-    duration: '2 Years (4 Sems)',
-    fee: '₹8,000 / Sem',
-    icon: 'book',
-    applyButtonText: 'Apply for M.A.',
-  },
-  {
-    id: 7,
-    shortName: 'M.S.W.',
-    fullName: 'Master of Social Work',
-    category: 'PG',
-    description: 'Professional social work education combining fieldwork, community engagement, and welfare management.',
-    highlights: [
-      'Community Development & Welfare',
-      'Intensive Fieldwork & Internships',
-      'Counseling & Rehabilitation Studies',
-    ],
-    duration: '2 Years (4 Sems)',
-    fee: '₹12,000 / Sem',
-    icon: 'award',
-    applyButtonText: 'Apply for M.S.W.',
-  },
-  {
-    id: 8,
-    shortName: 'PGDCA',
-    fullName: 'Post Graduate Diploma in Computer Application',
-    category: 'Diploma',
-    description: 'Intensive computer application diploma focusing on software tools, programming, and IT skills for career readiness.',
-    highlights: [
-      'Programming & Web Development',
-      'Database Management Systems',
-      'Industry-Ready IT Certification',
-    ],
-    duration: '1 Year (2 Sems)',
-    fee: '₹12,000 / Sem',
-    icon: 'code',
-    applyButtonText: 'Apply for PGDCA',
-  },
-  {
-    id: 9,
-    shortName: 'DFD',
-    fullName: 'Diploma in Fashion Design',
-    category: 'Diploma',
-    description: 'Creative fashion design diploma covering garment construction, textile science, and design principles.',
-    highlights: [
-      'Fashion Illustration & Sketching',
-      'Textile Science & Fabric Study',
-      'Portfolio & Exhibition Preparation',
-    ],
-    duration: '1 Year (2 Sems)',
-    fee: '₹15,000 / Sem',
-    icon: 'layers',
-    applyButtonText: 'Apply for DFD',
-  },
+const STATUS_OPTIONS = [
+  { label: 'All Statuses', value: 'all' },
+  { label: 'Active', value: 'active' },
+  { label: 'Inactive', value: 'inactive' },
 ];
+
+// Helper to normalize strings for search (removes dots, spaces, special chars)
+const normalizeSearch = (str) => {
+  if (!str) return '';
+  return String(str).toLowerCase().replace(/[\.\s\-\/\(\)]+/g, '');
+};
 
 const AcademicPrograms = () => {
-  const { toggleDrawer, isDrawerOpen, closeDrawer } = useContext(SidebarContext);
+  const { toggleDrawer, isUpdate, setIsUpdate } = useContext(SidebarContext);
+  const { serviceId, handleModalOpen, handleUpdate } = useToggleDrawer();
 
-  const [programList, setProgramList] = useState(INITIAL_PROGRAM_DATA);
+  const [programs, setPrograms] = useState([]);
+  const [loading, setLoading] = useState(false);
+
   const [searchText, setSearchText] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
+  const [selectedProgramType, setSelectedProgramType] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState('all');
   const [currentPage, setCurrentPage] = useState(1);
   const resultsPerPage = 10;
 
-  // Selected program for Detail Modal
+  // Detail View Modal State
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedProgramForView, setSelectedProgramForView] = useState(null);
 
-  // Selected program for Drawer Edit
-  const [selectedProgramForEdit, setSelectedProgramForEdit] = useState(null);
+  const searchInputRef = useRef(null);
 
-  // Delete modal state item ID
-  const [deleteItemId, setDeleteItemId] = useState(null);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  // Fetch academic programs from backend API
+  const fetchAcademicPrograms = async (backendSearchTerm = '') => {
+    setLoading(true);
+    try {
+      const params = {
+        page: 1,
+        limit: 200,
+        search: backendSearchTerm ? backendSearchTerm.trim() : '',
+        programType: selectedProgramType !== 'all' ? selectedProgramType : '',
+        status: selectedStatus !== 'all' ? selectedStatus : '',
+      };
 
-  // Search & Filtered Data
+      const res = await AcademicProgramServices.getAllPrograms(params);
+      const list = res?.data || res?.programs || (Array.isArray(res) ? res : []);
+      setPrograms(Array.isArray(list) ? list : []);
+      setCurrentPage(1);
+    } catch (err) {
+      console.error('Error fetching academic programs:', err);
+      setPrograms([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAcademicPrograms();
+  }, [selectedProgramType, selectedStatus]);
+
+  useEffect(() => {
+    if (isUpdate) {
+      fetchAcademicPrograms();
+      setIsUpdate(false);
+    }
+  }, [isUpdate]);
+
+  // Client-side instant search and filter
   const filteredPrograms = useMemo(() => {
-    return programList.filter((item) => {
-      const matchesSearch =
-        !searchText ||
-        item.shortName.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.fullName.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.description.toLowerCase().includes(searchText.toLowerCase());
+    const rawTerm = (searchText || '').toLowerCase().trim();
+    const normalizedTerm = normalizeSearch(rawTerm);
 
-      const matchesCategory =
-        selectedCategory === 'all' ||
-        item.category === selectedCategory;
+    return programs.filter((item) => {
+      // 1. Check Search Match
+      let matchesSearch = true;
+      if (rawTerm) {
+        const shortTitle = item.shortTitle || item.shortName || '';
+        const fullName = item.fullName || '';
+        const badge = item.degreeBadge || '';
+        const desc = item.description || '';
 
-      return matchesSearch && matchesCategory;
+        const normShort = normalizeSearch(shortTitle);
+        const normFull = normalizeSearch(fullName);
+        const normBadge = normalizeSearch(badge);
+        const normDesc = normalizeSearch(desc);
+
+        matchesSearch =
+          shortTitle.toLowerCase().includes(rawTerm) ||
+          fullName.toLowerCase().includes(rawTerm) ||
+          badge.toLowerCase().includes(rawTerm) ||
+          desc.toLowerCase().includes(rawTerm) ||
+          normShort.includes(normalizedTerm) ||
+          normFull.includes(normalizedTerm) ||
+          normBadge.includes(normalizedTerm) ||
+          normDesc.includes(normalizedTerm);
+      }
+
+      // 2. Check Program Type Match
+      const matchesType =
+        selectedProgramType === 'all' ||
+        (item.programType || item.category || '').toLowerCase() === selectedProgramType.toLowerCase();
+
+      // 3. Check Status Match
+      const matchesStatus =
+        selectedStatus === 'all' ||
+        (item.status || '').toLowerCase() === selectedStatus.toLowerCase();
+
+      return matchesSearch && matchesType && matchesStatus;
     });
-  }, [programList, searchText, selectedCategory]);
+  }, [programs, searchText, selectedProgramType, selectedStatus]);
 
-  // Paginated Data
+  // Client-side pagination
+  const totalResults = filteredPrograms.length;
   const paginatedPrograms = useMemo(() => {
     const start = (currentPage - 1) * resultsPerPage;
     return filteredPrograms.slice(start, start + resultsPerPage);
-  }, [filteredPrograms, currentPage]);
+  }, [filteredPrograms, currentPage, resultsPerPage]);
 
-  const handleOpenAddDrawer = () => {
-    setSelectedProgramForEdit(null);
-    toggleDrawer();
+  const handleSearchSubmit = (e) => {
+    if (e) e.preventDefault();
+    const val = searchInputRef.current?.value || searchText || '';
+    setSearchText(val);
+    setCurrentPage(1);
+    fetchAcademicPrograms(val);
   };
 
-  const handleOpenEditDrawer = (item) => {
-    setSelectedProgramForEdit(item);
-    toggleDrawer();
+  const handleSearchInputChange = (e) => {
+    const val = e.target.value;
+    setSearchText(val);
+    setCurrentPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setSearchText('');
+    setSelectedProgramType('all');
+    setSelectedStatus('all');
+    setCurrentPage(1);
+    if (searchInputRef.current) searchInputRef.current.value = '';
+    fetchAcademicPrograms('');
   };
 
   const handleOpenViewModal = (item) => {
@@ -233,99 +174,127 @@ const AcademicPrograms = () => {
     setDetailModalOpen(true);
   };
 
-  const handleDeleteItem = (item) => {
-    setDeleteItemId(item.id);
-    setIsDeleteModalOpen(true);
-  };
-
-  const handleConfirmDelete = () => {
-    setProgramList((prev) => prev.filter((p) => p.id !== deleteItemId));
-    setIsDeleteModalOpen(false);
-    setDeleteItemId(null);
-    notifySuccess('Program deleted successfully!');
-  };
-
-  const handleSaveProgram = (programData) => {
-    setProgramList((prev) => {
-      const existsIndex = prev.findIndex((p) => p.id === programData.id);
-      if (existsIndex > -1) {
-        const updated = [...prev];
-        updated[existsIndex] = programData;
-        return updated;
-      }
-      return [programData, ...prev];
-    });
-  };
-
   return (
     <>
-      {/* Header Title & Add Button */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 my-6">
-        <div>
+      <MainModal id={serviceId} />
+
+      {/* Slide-over Form Drawer */}
+      <MainDrawer>
+        <AcademicProgramDrawer id={serviceId} />
+      </MainDrawer>
+
+      {/* Header Title + Breadcrumb & Add Button */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 my-2">
+        <div className="flex flex-col text-left w-full sm:w-auto">
           <PageTitle>Academic Programs</PageTitle>
-          <p className="text-xs text-gray-500 dark:text-gray-400 -mt-2">
-            Manage undergraduate, postgraduate, and diploma programs offered at NMC.
-          </p>
+          <Breadcrumb
+            items={[
+              { label: 'Masters', link: '/master' },
+              { label: 'Academic Programs' },
+            ]}
+          />
         </div>
 
         <Button
-          onClick={handleOpenAddDrawer}
-          className="bg-red-800 hover:bg-red-900 text-white font-semibold flex items-center gap-2 px-5 py-2.5 rounded-lg shadow-sm"
+          onClick={toggleDrawer}
+          className="w-full sm:w-auto rounded-md h-10 flex items-center justify-center gap-2"
         >
           <FiPlus className="w-5 h-5" />
           <span>Add Program</span>
         </Button>
       </div>
 
-      {/* Action Bar: Search Input & Category Filter */}
+      {/* Action Bar: Search Input & Category Filters */}
       <div className="w-full bg-white dark:bg-gray-800 rounded-lg shadow-xs mb-6 border border-gray-100 dark:border-gray-700 p-4 relative z-30">
-        <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
-          {/* Search Input */}
-          <div className="relative w-full md:w-80">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 items-center">
+          {/* Search Form */}
+          <form onSubmit={handleSearchSubmit} className="relative w-full">
             <input
+              ref={searchInputRef}
               type="text"
-              placeholder="Search by program name, description..."
+              placeholder="Search by program name or degree..."
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={handleSearchInputChange}
               className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:border-red-800 dark:text-gray-200 transition-colors"
             />
-            <FiSearch className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
+            <FiSearch className="absolute left-3 top-3.5 w-4 h-4 text-gray-400" />
+          </form>
+
+          {/* Program Type Filter */}
+          <div className="w-full">
+            <CustomSelect
+              options={PROGRAM_TYPE_OPTIONS}
+              value={selectedProgramType}
+              onChange={(val) => {
+                setSelectedProgramType(val);
+                setCurrentPage(1);
+              }}
+              placeholder="All Program Types"
+            />
           </div>
 
-          {/* CustomSelect Category Dropdown */}
-          <div className="w-full md:w-64">
+          {/* Status Filter */}
+          <div className="w-full">
             <CustomSelect
-              options={CATEGORY_OPTIONS}
-              value={selectedCategory}
-              onChange={(val) => setSelectedCategory(val)}
-              placeholder="All Programs"
+              options={STATUS_OPTIONS}
+              value={selectedStatus}
+              onChange={(val) => {
+                setSelectedStatus(val);
+                setCurrentPage(1);
+              }}
+              placeholder="All Statuses"
             />
+          </div>
+
+          {/* Reset / Search Trigger */}
+          <div className="flex items-center gap-2">
+            <Button
+              onClick={handleSearchSubmit}
+              className="w-full h-10 text-xs font-semibold rounded-lg"
+            >
+              Search
+            </Button>
+            <Button
+              onClick={handleResetFilters}
+              variant="outline"
+              className="h-10 px-3 rounded-lg flex items-center justify-center"
+              title="Reset Filters"
+            >
+              <FiRefreshCw className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </div>
 
-      {/* Program Data Table */}
-      <TableContainer className="mb-8 rounded-lg border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-xs relative z-10">
-        <Table>
-          <AcademicProgramTable
-            programs={paginatedPrograms}
-            currentPage={currentPage}
-            resultsPerPage={resultsPerPage}
-            onViewDetails={handleOpenViewModal}
-            onEdit={handleOpenEditDrawer}
-            onDelete={handleDeleteItem}
-          />
-        </Table>
+      {/* Data Table / Loading / NotFound States */}
+      {loading ? (
+        <Loading loading={loading} />
+      ) : filteredPrograms.length !== 0 ? (
+        <TableContainer className="mb-8 rounded-lg border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-xs relative z-10">
+          <Table>
+            <AcademicProgramTable
+              programs={paginatedPrograms}
+              currentPage={currentPage}
+              resultsPerPage={resultsPerPage}
+              onViewDetails={handleOpenViewModal}
+              onEdit={handleUpdate}
+              onDelete={handleModalOpen}
+            />
+          </Table>
 
-        <TableFooter>
-          <Pagination
-            totalResults={filteredPrograms.length}
-            resultsPerPage={resultsPerPage}
-            onChange={(p) => setCurrentPage(p)}
-            label="Programs Navigation"
-          />
-        </TableFooter>
-      </TableContainer>
+          <TableFooter>
+            <CustomPagination
+              totalResults={totalResults}
+              resultsPerPage={resultsPerPage}
+              currentPage={currentPage}
+              onChange={(p) => setCurrentPage(p)}
+              label="Academic Programs Navigation"
+            />
+          </TableFooter>
+        </TableContainer>
+      ) : (
+        <NotFound title="Academic Programs" />
+      )}
 
       {/* Program Detail Modal */}
       <AcademicProgramDetailModal
@@ -333,44 +302,6 @@ const AcademicPrograms = () => {
         onClose={() => setDetailModalOpen(false)}
         program={selectedProgramForView}
       />
-
-      {/* Slide-over Form Drawer */}
-      <MainDrawer isDrawerOpen={isDrawerOpen} closeDrawer={closeDrawer}>
-        <AcademicProgramDrawer
-          program={selectedProgramForEdit}
-          onSave={handleSaveProgram}
-        />
-      </MainDrawer>
-
-      {/* Delete Confirmation Modal */}
-      <Modal isOpen={isDeleteModalOpen} onClose={() => setIsDeleteModalOpen(false)}>
-        <ModalBody className="text-center custom-modal px-8 pt-6 pb-4">
-          <span className="flex justify-center text-3xl mb-6 text-red-500">
-            <FiTrash2 />
-          </span>
-          <h2 className="text-xl font-medium mb-1 text-gray-700 dark:text-gray-300">
-            Are You Sure?
-          </h2>
-          <p className="text-sm text-gray-500 dark:text-gray-400">
-            Do you really want to delete this program? This action cannot be undone.
-          </p>
-        </ModalBody>
-        <ModalFooter className="justify-center">
-          <Button
-            className="w-full sm:w-auto hover:bg-white hover:border-gray-50"
-            layout="outline"
-            onClick={() => setIsDeleteModalOpen(false)}
-          >
-            Cancel
-          </Button>
-          <Button
-            onClick={handleConfirmDelete}
-            className="w-full sm:w-auto bg-red-600 hover:bg-red-700 text-white"
-          >
-            Yes, Delete
-          </Button>
-        </ModalFooter>
-      </Modal>
     </>
   );
 };

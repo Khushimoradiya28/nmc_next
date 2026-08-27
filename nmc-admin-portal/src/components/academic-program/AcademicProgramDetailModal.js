@@ -1,38 +1,38 @@
 import React from 'react';
-import { FiX, FiClock, FiDollarSign, FiBookOpen, FiCode, FiBriefcase, FiAward, FiClipboard, FiLayers } from 'react-icons/fi';
+import { FiX, FiClock, FiDollarSign, FiBookOpen, FiList } from 'react-icons/fi';
 
-const ICON_MAP = {
-  briefcase: FiBriefcase,
-  code: FiCode,
-  book: FiBookOpen,
-  award: FiAward,
-  clipboard: FiClipboard,
-  layers: FiLayers,
+const formatFee = (val) => {
+  if (!val) return 'Contact for details';
+  const str = String(val).trim();
+  if (str.startsWith('₹') || str.startsWith('Rs.') || str.startsWith('Rs')) {
+    return str;
+  }
+  return `₹${str}`;
 };
 
-const getCategoryStyle = (category) => {
-  switch (category) {
-    case 'UG':
+const getProgramTypeStyle = (programType) => {
+  switch (programType?.toLowerCase()) {
+    case 'ug':
       return 'bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300';
-    case 'PG':
+    case 'pg':
       return 'bg-blue-100 text-blue-800 dark:bg-blue-950/60 dark:text-blue-300';
-    case 'Diploma':
+    case 'diploma':
       return 'bg-amber-100 text-amber-800 dark:bg-amber-950/60 dark:text-amber-300';
     default:
       return 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300';
   }
 };
 
-const getCategoryLabel = (category) => {
-  switch (category) {
-    case 'UG':
-      return 'UG DEGREE';
-    case 'PG':
-      return 'PG DEGREE';
-    case 'Diploma':
-      return 'DIPLOMA & VOCATIONAL';
+const getProgramTypeLabel = (programType) => {
+  switch (programType?.toLowerCase()) {
+    case 'ug':
+      return 'Undergraduate (UG)';
+    case 'pg':
+      return 'Postgraduate (PG)';
+    case 'diploma':
+      return 'Diploma / Vocational';
     default:
-      return category?.toUpperCase() || 'PROGRAM';
+      return programType?.toUpperCase() || 'PROGRAM';
   }
 };
 
@@ -41,9 +41,9 @@ const AcademicProgramDetailModal = ({ isOpen, onClose, program }) => {
 
   const highlightsList = Array.isArray(program.highlights)
     ? program.highlights
-    : (program.highlights || '').split(',').map((item) => item.trim()).filter(Boolean);
+    : (program.highlights || '').split('\n').map((item) => item.trim()).filter(Boolean);
 
-  const IconComponent = ICON_MAP[program.icon] || FiBookOpen;
+  const feeDisplay = formatFee(program.fees || program.fee);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto bg-black/60 backdrop-blur-xs animate-fadeIn">
@@ -59,18 +59,25 @@ const AcademicProgramDetailModal = ({ isOpen, onClose, program }) => {
           <FiX className="w-5 h-5" />
         </button>
 
-        {/* Top Header: Icon & Program Info */}
+        {/* Top Header: Badge & Program Info */}
         <div className="flex flex-col sm:flex-row gap-5 items-start sm:items-center">
           <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl bg-red-50 dark:bg-red-950/40 border border-red-100 dark:border-red-800/50 flex items-center justify-center shrink-0">
-            <IconComponent className="w-10 h-10 text-red-800 dark:text-red-400" />
+            <FiBookOpen className="w-10 h-10 text-red-800 dark:text-red-400" />
           </div>
 
           <div className="flex-1 pr-6">
-            <span className={`inline-block px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider mb-2 ${getCategoryStyle(program.category)}`}>
-              {getCategoryLabel(program.category)}
-            </span>
+            <div className="flex items-center gap-2 mb-2">
+              <span className={`inline-block px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider ${getProgramTypeStyle(program.programType || program.category)}`}>
+                {getProgramTypeLabel(program.programType || program.category)}
+              </span>
+              {program.degreeBadge && (
+                <span className="inline-block px-3 py-1 text-xs font-bold rounded-full uppercase tracking-wider bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300">
+                  {program.degreeBadge}
+                </span>
+              )}
+            </div>
             <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100 leading-tight">
-              {program.shortName}
+              {program.shortTitle || program.shortName}
             </h2>
             <p className="text-red-800 dark:text-red-400 font-bold text-sm sm:text-base mt-1">
               {program.fullName}
@@ -78,7 +85,7 @@ const AcademicProgramDetailModal = ({ isOpen, onClose, program }) => {
           </div>
         </div>
 
-        {/* Two Metric Summary Cards */}
+        {/* Metric Summary Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
           <div className="bg-blue-50/50 dark:bg-gray-700/40 border border-blue-100/80 dark:border-gray-600 rounded-2xl p-4">
             <span className="text-[10px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-widest block">
@@ -94,12 +101,12 @@ const AcademicProgramDetailModal = ({ isOpen, onClose, program }) => {
 
           <div className="bg-blue-50/50 dark:bg-gray-700/40 border border-blue-100/80 dark:border-gray-600 rounded-2xl p-4">
             <span className="text-[10px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-widest block">
-              FEE STRUCTURE
+              FEES STRUCTURE
             </span>
             <div className="flex items-center gap-2 mt-1">
               <FiDollarSign className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               <span className="text-base font-medium text-gray-900 dark:text-gray-100">
-                {program.fee || 'Contact for details'}
+                {feeDisplay}
               </span>
             </div>
           </div>
@@ -118,7 +125,8 @@ const AcademicProgramDetailModal = ({ isOpen, onClose, program }) => {
         {/* Highlights */}
         {highlightsList.length > 0 && (
           <div className="mb-6">
-            <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3">
+            <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-3 flex items-center gap-2">
+              <FiList className="w-4 h-4 text-red-800 dark:text-red-400" />
               Program Highlights
             </h3>
             <div className="space-y-2">
@@ -135,16 +143,6 @@ const AcademicProgramDetailModal = ({ isOpen, onClose, program }) => {
                 </div>
               ))}
             </div>
-          </div>
-        )}
-
-        {/* Apply Button Text */}
-        {program.applyButtonText && (
-          <div className="p-4 rounded-2xl bg-red-50/80 border border-red-200/80 text-red-900 dark:bg-red-950/40 dark:border-red-700/60 dark:text-red-200 flex items-center gap-3">
-            <FiBookOpen className="w-5 h-5 text-red-700 dark:text-red-400 shrink-0" />
-            <span className="text-xs sm:text-sm font-bold">
-              CTA Button: {program.applyButtonText}
-            </span>
           </div>
         )}
 

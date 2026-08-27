@@ -48,6 +48,7 @@ import { notifySuccess, notifyError } from "../../utils/toast";
 import BrandServices from "../../services/master/BrandService";
 import CategoryServices from "../../services/master/CategoryService";
 import CharacterServices from "../../services/master/CharacterService";
+import AcademicProgramServices from "../../services/AcademicProgramServices";
 import { SidebarContext } from "../../context/SidebarContext";
 import AgeServices from "../../services/master/AgeService";
 
@@ -78,13 +79,19 @@ const ShowHideButton = ({ id, status, type = "brand" }) => {
       apiCall = AgeServices.updateAge(id, { status: newStatus });
     }
 
+    if (type === "academicProgram") {
+      apiCall = AcademicProgramServices.updateProgram(id, {
+        status: newStatus === 1 ? 'active' : 'inactive',
+      });
+    }
+
     apiCall
       .then((res) => {
         setIsUpdate(true);
-        notifySuccess(res.message || "Status updated successfully");
+        notifySuccess(res?.message || "Status updated successfully");
       })
       .catch((err) => {
-        notifyError(err?.message || "Failed to update status");
+        notifyError(err?.response?.data?.message || err?.message || "Failed to update status");
       });
   };
 
@@ -104,3 +111,4 @@ const ShowHideButton = ({ id, status, type = "brand" }) => {
 };
 
 export default ShowHideButton;
+

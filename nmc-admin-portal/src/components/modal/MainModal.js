@@ -22,6 +22,7 @@ import CouponServices from '../../../src/services/CouponServices';
 import TestimonialServices from '../../services/TestimonialServices';
 import AwardServices from '../../services/AwardServices';
 import CourseServices from '../../services/CourseServices';
+import AcademicProgramServices from '../../services/AcademicProgramServices';
 import { SidebarContext } from '../../context/SidebarContext';
 import { notifySuccess, notifyError } from '../../utils/toast';
 
@@ -231,6 +232,16 @@ const MainModal = ({ id }) => {
           notifySuccess(res.message);
         })
         .catch((err) => notifyError(err.message));
+      closeModal();
+    }
+
+    if (location.pathname === '/master/academic-programs') {
+      AcademicProgramServices.deleteProgram(id)
+        .then((res) => {
+          setIsUpdate(true);
+          notifySuccess(res?.message || 'Academic program deleted successfully!');
+        })
+        .catch((err) => notifyError(err?.response?.data?.message || err.message));
       closeModal();
     }
 
