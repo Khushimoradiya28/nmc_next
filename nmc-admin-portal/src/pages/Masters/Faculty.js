@@ -1,10 +1,8 @@
-import React, { useState, useContext, useMemo } from 'react';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
 import {
   Table,
   TableContainer,
   TableFooter,
-  Card,
-  CardBody,
   Pagination,
   Button,
 } from '@windmill/react-ui';
@@ -18,122 +16,100 @@ import MainDrawer from '../../components/drawer/MainDrawer';
 import MainModal from '../../components/modal/MainModal';
 import CustomSelect from '../../components/form/CustomSelect';
 import { SidebarContext } from '../../context/SidebarContext';
+import FacultyServices from '../../services/FacultyServices';
+import { notifyError } from '../../utils/toast';
 
 const DEPARTMENT_OPTIONS = [
   { label: 'All Departments', value: 'all' },
   { label: 'B.B.A.', value: 'B.B.A.' },
   { label: 'B.Com / Commerce', value: 'B.Com' },
   { label: 'Economics', value: 'Economics' },
-  { label: 'B.C.A. & IT', value: 'B.C.A. & IT' },
-];
-
-const INITIAL_FACULTY_DATA = [
-  {
-    id: 1,
-    name: 'Dr. Samkit Shah',
-    badge: 'I/C PRINCIPAL',
-    designation: 'I/C Principal & Professor',
-    qualification: 'M.A., Ph.D. (Economics), M.Phil',
-    experience: '15+ Years of Academic Experience',
-    stream: 'Economics & Commerce',
-    biography: 'Distinguished academic scholar and administrator specializing in research methodology and economic policies.',
-    expertise: ['Economics', 'Commerce & Finance', 'Research Methodology'],
-    highlight: 'Published 25+ Research Papers in Peer-Reviewed International Journals',
-    image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80',
-  },
-  {
-    id: 2,
-    name: 'Mehulkumar Bhatt',
-    badge: 'SENIOR LEADERSHIP',
-    designation: 'I/C Principal & Administrator',
-    qualification: 'M.Com, M.Phil',
-    experience: '14+ Years Experience',
-    stream: 'Economics & Commerce',
-    biography: 'Leading corporate finance and administrative planning to enhance institutional excellence and student outcome.',
-    expertise: ['Corporate Finance', 'Administration', 'Managerial Economics'],
-    highlight: 'Pioneered Campus Digital Administrative Workflow Integration',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80',
-  },
-  {
-    id: 3,
-    name: 'Shah Keyurbhai',
-    badge: 'MANAGEMENT HEAD',
-    designation: 'I/C Principal & HOD',
-    qualification: 'M.B.A. (Finance), B.Com (H), D.B.M.',
-    experience: '12+ Years Experience',
-    stream: 'B.B.A.',
-    biography: 'Senior administrative leader guiding business administration streams, spearheading student entrepreneurship initiatives and quality assurance cells.',
-    expertise: ['Financial Analysis', 'Strategic Management', 'Business Analytics', 'Strategic Management', 'Security Analysis', 'Financial Modeling'],
-    highlight: 'Organized 10+ Entrepreneurship & Startup Incubation Workshops',
-    image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=400&q=80',
-  },
-  {
-    id: 4,
-    name: 'Ankita R. Patel',
-    badge: 'CHIEF COORDINATOR',
-    designation: 'Principal & Chief Co-ordinator',
-    qualification: 'M.C.A. (RDBMS, C-Language)',
-    experience: '14+ Years Experience',
-    stream: 'Computer Science & IT',
-    biography: 'Expert software engineer and educator leading RDBMS curriculum and technology mentorship programs.',
-    expertise: ['RDBMS', 'Software Engineering', 'IT Curriculum & Mentorship'],
-    highlight: 'Coordinated National Level Hackathons & IT Mentorship Drives',
-    image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=400&q=80',
-  },
+  { label: 'B.C.A. & IT', value: 'B.C.A' },
+  { label: 'Science & Bio-Tech', value: 'Science' },
 ];
 
 const Faculty = () => {
-  const { toggleDrawer, isDrawerOpen, closeDrawer, openModal } = useContext(SidebarContext);
+  const {
+    toggleDrawer,
+    isDrawerOpen,
+    closeDrawer,
+    openModal,
+    isUpdate,
+    setIsUpdate,
+  } = useContext(SidebarContext);
 
-  const [facultyList, setFacultyList] = useState(INITIAL_FACULTY_DATA);
+  const [serviceId, setServiceId] = useState(null);
+  const [facultyList, setFacultyList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [selectedDept, setSelectedDept] = useState('all');
 
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalRecords, setTotalRecords] = useState(0);
   const resultsPerPage = 10;
 
   // Selected faculty for Detail Modal
   const [detailModalOpen, setDetailModalOpen] = useState(false);
   const [selectedFacultyForView, setSelectedFacultyForView] = useState(null);
 
-  // Selected faculty for Drawer Edit
-  const [selectedFacultyForEdit, setSelectedFacultyForEdit] = useState(null);
-
-  // Delete modal state item ID
+  // Delete item ID for MainModal
   const [deleteItemId, setDeleteItemId] = useState(null);
 
-  // Search & Filtered Data
-  const filteredFaculties = useMemo(() => {
-    return facultyList.filter((item) => {
-      const matchesSearch =
-        !searchText ||
-        item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.designation.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.qualification.toLowerCase().includes(searchText.toLowerCase()) ||
-        item.badge.toLowerCase().includes(searchText.toLowerCase());
+  // Fetch Faculty List from Backend API
+  const fetchFacultyList = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await FacultyServices.getAllFaculty({
+        page: currentPage,
+        limit: resultsPerPage,
+        search: searchText,
+        department: selectedDept,
+      });
 
-      const matchesDept =
-        selectedDept === 'all' ||
-        item.stream?.toLowerCase() === selectedDept.toLowerCase() ||
-        (selectedDept === 'B.B.A.' && item.stream === 'B.B.A.');
+      const listData = res?.data || [];
+      const meta = res?.meta;
 
-      return matchesSearch && matchesDept;
-    });
-  }, [facultyList, searchText, selectedDept]);
+      setFacultyList(listData);
+      setTotalRecords(meta?.total_records ?? listData.length);
+    } catch (err) {
+      notifyError(err?.response?.data?.message || err?.message || 'Failed to fetch faculty list');
+      setFacultyList([]);
+      setTotalRecords(0);
+    } finally {
+      setLoading(false);
+      setIsUpdate(false);
+    }
+  }, [currentPage, resultsPerPage, searchText, selectedDept, setIsUpdate]);
 
-  // Paginated Data
-  const paginatedFaculties = useMemo(() => {
-    const start = (currentPage - 1) * resultsPerPage;
-    return filteredFaculties.slice(start, start + resultsPerPage);
-  }, [filteredFaculties, currentPage]);
+  useEffect(() => {
+    fetchFacultyList();
+  }, [fetchFacultyList]);
+
+  // Refetch when isUpdate flag changes
+  useEffect(() => {
+    if (isUpdate) {
+      fetchFacultyList();
+    }
+  }, [isUpdate, fetchFacultyList]);
+
+  // Reset to Page 1 when filter or search changes
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+    setCurrentPage(1);
+  };
+
+  const handleDeptChange = (val) => {
+    setSelectedDept(val);
+    setCurrentPage(1);
+  };
 
   const handleOpenAddDrawer = () => {
-    setSelectedFacultyForEdit(null);
+    setServiceId(null);
     toggleDrawer();
   };
 
   const handleOpenEditDrawer = (item) => {
-    setSelectedFacultyForEdit(item);
+    setServiceId(item.slug || item._id || item.id);
     toggleDrawer();
   };
 
@@ -143,20 +119,8 @@ const Faculty = () => {
   };
 
   const handleDeleteItem = (item) => {
-    setDeleteItemId(item.id);
+    setDeleteItemId(item.slug || item._id || item.id);
     openModal();
-  };
-
-  const handleSaveFaculty = (facultyData) => {
-    setFacultyList((prev) => {
-      const existsIndex = prev.findIndex((f) => f.id === facultyData.id);
-      if (existsIndex > -1) {
-        const updated = [...prev];
-        updated[existsIndex] = facultyData;
-        return updated;
-      }
-      return [facultyData, ...prev];
-    });
   };
 
   return (
@@ -186,9 +150,9 @@ const Faculty = () => {
           <div className="relative w-full md:w-80">
             <input
               type="text"
-              placeholder="Search by faculty name, qualification, subject..."
+              placeholder="Search by faculty name, qualification..."
               value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
+              onChange={handleSearchChange}
               className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:border-red-800 dark:text-gray-200 transition-colors"
             />
             <FiSearch className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
@@ -199,7 +163,7 @@ const Faculty = () => {
             <CustomSelect
               options={DEPARTMENT_OPTIONS}
               value={selectedDept}
-              onChange={(val) => setSelectedDept(val)}
+              onChange={handleDeptChange}
               placeholder="All Departments"
             />
           </div>
@@ -208,40 +172,50 @@ const Faculty = () => {
 
       {/* Faculty Data Table */}
       <TableContainer className="mb-8 rounded-lg border border-gray-100 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-xs relative z-10">
-        <Table>
-          <FacultyTable
-            faculties={paginatedFaculties}
-            currentPage={currentPage}
-            resultsPerPage={resultsPerPage}
-            onViewDetails={handleOpenViewModal}
-            onEdit={handleOpenEditDrawer}
-            onDelete={handleDeleteItem}
-          />
-        </Table>
+        {loading ? (
+          <div className="py-12 text-center text-gray-500 dark:text-gray-400 text-sm">
+            Loading faculty records...
+          </div>
+        ) : facultyList.length === 0 ? (
+          <div className="py-12 text-center text-gray-500 dark:text-gray-400 text-sm">
+            No faculty members found.
+          </div>
+        ) : (
+          <Table>
+            <FacultyTable
+              faculties={facultyList}
+              currentPage={currentPage}
+              resultsPerPage={resultsPerPage}
+              onViewDetails={handleOpenViewModal}
+              onEdit={handleOpenEditDrawer}
+              onDelete={handleDeleteItem}
+            />
+          </Table>
+        )}
 
-        <TableFooter>
-          <Pagination
-            totalResults={filteredFaculties.length}
-            resultsPerPage={resultsPerPage}
-            onChange={(p) => setCurrentPage(p)}
-            label="Faculty Navigation"
-          />
-        </TableFooter>
+        {totalRecords > 0 && (
+          <TableFooter>
+            <Pagination
+              totalResults={totalRecords}
+              resultsPerPage={resultsPerPage}
+              onChange={(p) => setCurrentPage(p)}
+              label="Faculty Navigation"
+            />
+          </TableFooter>
+        )}
       </TableContainer>
 
-      {/* Faculty Detail Modal matching screenshot #2 */}
+      {/* Faculty Detail Modal */}
       <FacultyDetailModal
         isOpen={detailModalOpen}
         onClose={() => setDetailModalOpen(false)}
         faculty={selectedFacultyForView}
+        idOrSlug={selectedFacultyForView?.slug || selectedFacultyForView?._id}
       />
 
       {/* Slide-over Form Drawer */}
       <MainDrawer isDrawerOpen={isDrawerOpen} closeDrawer={closeDrawer}>
-        <FacultyDrawer
-          faculty={selectedFacultyForEdit}
-          onSave={handleSaveFaculty}
-        />
+        <FacultyDrawer id={serviceId} />
       </MainDrawer>
 
       {/* Confirmation Modal */}

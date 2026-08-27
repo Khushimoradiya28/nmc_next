@@ -5,11 +5,11 @@ import { useForm } from 'react-hook-form';
 
 import Title from '../form/Title';
 import Error from '../form/Error';
-import DrawerButton from '../form/DrawerButton';
 import Uploader from '../image-uploader/Uploader';
 import CustomSelect from '../form/CustomSelect';
 import { SidebarContext } from '../../context/SidebarContext';
-import { notifySuccess } from '../../utils/toast';
+import FacultyServices from '../../services/FacultyServices';
+import { notifySuccess, notifyError } from '../../utils/toast';
 
 const BADGE_OPTIONS = [
   { label: 'I/C PRINCIPAL', value: 'I/C PRINCIPAL' },
@@ -29,8 +29,8 @@ const STREAM_OPTIONS = [
   { label: 'Science & Bio-Tech', value: 'Science' },
 ];
 
-const FacultyDrawer = ({ faculty, onSave }) => {
-  const { closeDrawer, isDrawerOpen } = useContext(SidebarContext);
+const FacultyDrawer = ({ id }) => {
+  const { closeDrawer, isDrawerOpen, setIsUpdate } = useContext(SidebarContext);
 
   const [imageUrl, setImageUrl] = useState('');
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -43,32 +43,23 @@ const FacultyDrawer = ({ faculty, onSave }) => {
     register,
     handleSubmit,
     setValue,
+    setError,
     clearErrors,
     reset,
     formState: { errors },
   } = useForm();
 
+  // Reset form when adding new or when drawer opens/closes
   useEffect(() => {
-    if (faculty && isDrawerOpen) {
-      setValue('name', faculty.name || '');
-      setValue('designation', faculty.designation || '');
-      setValue('qualification', faculty.qualification || '');
-      setValue('experience', faculty.experience || '');
-      setValue('biography', faculty.biography || '');
-      setValue('expertise', Array.isArray(faculty.expertise) ? faculty.expertise.join(', ') : faculty.expertise || '');
-      setValue('highlight', faculty.highlight || '');
-      setSelectedBadge(faculty.badge || 'MANAGEMENT HEAD');
-      setSelectedStream(faculty.stream || 'B.B.A.');
-      setImageUrl(faculty.image || '');
-    } else if (!faculty && isDrawerOpen) {
+    if (!id && isDrawerOpen) {
       reset({
-        name: '',
+        fullName: '',
         designation: '',
-        qualification: '',
+        qualifications: '',
         experience: '',
-        biography: '',
+        overview: '',
         expertise: '',
-        highlight: '',
+        keyHighlight: '',
       });
       setSelectedBadge('MANAGEMENT HEAD');
       setSelectedStream('B.B.A.');
@@ -76,36 +67,108 @@ const FacultyDrawer = ({ faculty, onSave }) => {
       setUploadedFile(null);
       clearErrors();
     }
-  }, [faculty, isDrawerOpen, reset, setValue, clearErrors]);
+  }, [id, isDrawerOpen, reset, clearErrors]);
+
+  // Fetch existing faculty data for Edit mode
+  useEffect(() => {
+    if (!id || !isDrawerOpen) return;
+
+    FacultyServices.getFacultyByIdOrSlug(id)
+      .then((res) => {
+        const data = res?.data || res;
+        if (data) {
+          setValue('fullName', data.fullName || data.name || '');
+          setValue('designation', data.designation || '');
+          setValue('qualifications', data.qualifications || data.qualification || '');
+          setValue('experience', data.experience || '');
+          setValue('overview', data.overview || data.biography || '');
+          setValue(
+            'expertise',
+            Array.isArray(data.expertise)
+              ? data.expertise.join(', ')
+              : data.expertise || ''
+          );
+          setValue('keyHighlight', data.keyHighlight || data.highlight || '');
+
+          const rawDept = data.department || data.stream || '';
+          const matchedStream = STREAM_OPTIONS.find(
+            (opt) =>
+              rawDept.toLowerCase().includes(opt.value.toLowerCase()) ||
+              opt.label.toLowerCase().includes(rawDept.toLowerCase())
+          );
+          setSelectedStream(matchedStream ? matchedStream.value : 'B.B.A.');
+
+          const rawBadge = data.badgeTag || data.badge || '';
+          const matchedBadge = BADGE_OPTIONS.find(
+            (opt) =>
+              rawBadge.toLowerCase().includes(opt.value.toLowerCase()) ||
+              opt.label.toLowerCase().includes(rawBadge.toLowerCase())
+          );
+          setSelectedBadge(matchedBadge ? matchedBadge.value : 'MANAGEMENT HEAD');
+          setImageUrl(data.photo_url || data.image_url || data.photo || '');
+          setUploadedFile(null);
+        }
+      })
+      .catch((err) => {
+        notifyError(err?.response?.data?.message || err.message || 'Failed to fetch faculty details');
+      });
+  }, [id, isDrawerOpen, setValue]);
 
   const onSubmit = async (data) => {
     try {
       setIsSubmitting(true);
+      clearErrors();
 
-      const facultyData = {
-        id: faculty?.id || Date.now(),
-        name: data.name?.trim(),
-        badge: selectedBadge,
-        designation: data.designation?.trim(),
-        qualification: data.qualification?.trim(),
-        experience: data.experience?.trim(),
-        stream: selectedStream,
-        biography: data.biography?.trim(),
-        expertise: data.expertise
-          ? data.expertise.split(',').map((s) => s.trim()).filter(Boolean)
-          : [],
-        highlight: data.highlight?.trim(),
-        image: imageUrl || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80',
-      };
+      const fullName = (data.fullName || '').trim();
+      const designation = (data.designation || '').trim();
+      const qualifications = (data.qualifications || '').trim();
+      const experience = (data.experience || '').trim();
+      const overview = (data.overview || '').trim();
+      const expertise = (data.expertise || '').trim();
+      const keyHighlight = (data.keyHighlight || '').trim();
 
-      if (onSave) {
-        onSave(facultyData);
+      const formData = new FormData();
+      formData.append('fullName', fullName);
+      formData.append('badgeTag', selectedBadge);
+      formData.append('designation', designation);
+      formData.append('qualifications', qualifications);
+      formData.append('department', selectedStream);
+      formData.append('experience', experience);
+      formData.append('overview', overview);
+      formData.append('expertise', expertise);
+      formData.append('keyHighlight', keyHighlight);
+
+      if (uploadedFile && typeof uploadedFile === 'object') {
+        formData.append('photo', uploadedFile);
+      } else if (imageUrl) {
+        formData.append('photo', imageUrl);
       }
 
-      notifySuccess(faculty?.id ? 'Faculty updated successfully!' : 'Faculty added successfully!');
+      let res;
+      if (id) {
+        res = await FacultyServices.updateFaculty(id, formData);
+        notifySuccess(res?.message || 'Faculty member updated successfully!');
+      } else {
+        res = await FacultyServices.addFaculty(formData);
+        notifySuccess(res?.message || 'Faculty member added successfully!');
+      }
+
+      setIsUpdate(true);
       closeDrawer();
     } catch (err) {
-      console.error(err);
+      const responseData = err?.response?.data;
+      if (err?.response?.status === 422 && responseData?.error) {
+        const errorObj = responseData.error;
+        Object.keys(errorObj).forEach((field) => {
+          const message = Array.isArray(errorObj[field])
+            ? errorObj[field][0]
+            : errorObj[field];
+          setError(field, { type: 'manual', message });
+        });
+        notifyError(responseData.message || 'Please fill in all required fields.');
+      } else {
+        notifyError(responseData?.message || err?.message || 'Failed to save faculty member.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -115,7 +178,7 @@ const FacultyDrawer = ({ faculty, onSave }) => {
     <div className="flex flex-col w-full h-full justify-between bg-white dark:bg-gray-800">
       {/* Drawer Header */}
       <div className="w-full relative p-6 border-b border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
-        {faculty?.id ? (
+        {id ? (
           <Title title="Update Faculty Member" description="Update faculty details below" />
         ) : (
           <Title title="Add Faculty Member" description="Add a new professor or faculty member below" />
@@ -129,33 +192,34 @@ const FacultyDrawer = ({ faculty, onSave }) => {
             {/* Photo Upload */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Faculty Photo
+                Faculty Photo <span className="text-red-500">*</span>
               </label>
               <Uploader
                 imageUrl={imageUrl}
                 setImageUrl={setImageUrl}
                 setUploadedFile={setUploadedFile}
               />
+              <Error errorName={errors.photo} />
             </div>
 
-            {/* Name */}
+            {/* Full Name */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
                 Full Name <span className="text-red-500">*</span>
               </label>
               <Input
-                {...register('name', { required: 'Name is required' })}
+                {...register('fullName', { required: 'Full Name is mandatory' })}
                 type="text"
-                placeholder="e.g. Shah Keyurbhai"
+                placeholder="e.g. Dr. Samkit Shah"
                 className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
               />
-              <Error errorName={errors.name} />
+              <Error errorName={errors.fullName} />
             </div>
 
-            {/* Category / Badge Tag Dropdown */}
+            {/* Leadership Badge Tag Dropdown */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Leadership Badge Tag
+                Leadership Badge Tag <span className="text-red-500">*</span>
               </label>
               <CustomSelect
                 options={BADGE_OPTIONS}
@@ -163,39 +227,41 @@ const FacultyDrawer = ({ faculty, onSave }) => {
                 onChange={(val) => setSelectedBadge(val)}
                 placeholder="Select Badge Tag"
               />
+              <Error errorName={errors.badgeTag} />
             </div>
 
-            {/* Title / Designation */}
+            {/* Designation & Role */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
                 Designation & Role <span className="text-red-500">*</span>
               </label>
               <Input
-                {...register('designation', { required: 'Designation is required' })}
+                {...register('designation', { required: 'Designation is mandatory' })}
                 type="text"
-                placeholder="e.g. I/C Principal & HOD"
+                placeholder="e.g. I/C Principal & Professor"
                 className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
               />
               <Error errorName={errors.designation} />
             </div>
 
-            {/* Qualification */}
+            {/* Qualifications */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Qualification Degrees
+                Qualifications <span className="text-red-500">*</span>
               </label>
               <Input
-                {...register('qualification')}
+                {...register('qualifications', { required: 'Qualifications is mandatory' })}
                 type="text"
-                placeholder="e.g. M.B.A. (Finance), B.Com (H), D.B.M."
+                placeholder="e.g. M.A., Ph.D. (Economics), M.Phil"
                 className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
               />
+              <Error errorName={errors.qualifications} />
             </div>
 
             {/* Department Stream Dropdown */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Department Stream
+                Department Stream <span className="text-red-500">*</span>
               </label>
               <CustomSelect
                 options={STREAM_OPTIONS}
@@ -203,58 +269,63 @@ const FacultyDrawer = ({ faculty, onSave }) => {
                 onChange={(val) => setSelectedStream(val)}
                 placeholder="Select Stream"
               />
+              <Error errorName={errors.department} />
             </div>
 
             {/* Teaching Experience */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Teaching Experience
+                Teaching Experience <span className="text-red-500">*</span>
               </label>
               <Input
-                {...register('experience')}
+                {...register('experience', { required: 'Experience is mandatory' })}
                 type="text"
-                placeholder="e.g. 12+ Years Experience"
+                placeholder="e.g. 15+ Years of Academic Experience"
                 className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
               />
+              <Error errorName={errors.experience} />
             </div>
 
-            {/* Academic Overview & Biography */}
+            {/* Academic Overview / Biography */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Academic Biography / Overview
+                Overview / Biography <span className="text-red-500">*</span>
               </label>
               <Textarea
-                {...register('biography')}
+                {...register('overview', { required: 'Overview is mandatory' })}
                 rows="3"
-                placeholder="Brief academic profile and achievements..."
+                placeholder="Distinguished academic scholar and administrator specializing in research methodology..."
                 className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
               />
+              <Error errorName={errors.overview} />
             </div>
 
-            {/* Expertise & Subjects (Comma-separated) */}
+            {/* Areas of Expertise (Comma-separated) */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Areas of Expertise (Comma-separated)
+                Areas of Expertise (Comma-separated) <span className="text-red-500">*</span>
               </label>
               <Input
-                {...register('expertise')}
+                {...register('expertise', { required: 'Expertise is mandatory' })}
                 type="text"
-                placeholder="Financial Analysis, Strategic Management, Business Analytics"
+                placeholder="Economics, Commerce & Finance, Research Methodology"
                 className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
               />
+              <Error errorName={errors.expertise} />
             </div>
 
             {/* Key Highlight */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Key Highlight Banner Text
+                Key Highlight Banner Text <span className="text-red-500">*</span>
               </label>
               <Input
-                {...register('highlight')}
+                {...register('keyHighlight', { required: 'Key Highlight is mandatory' })}
                 type="text"
-                placeholder="e.g. Organized 10+ Entrepreneurship & Startup Incubation Workshops"
+                placeholder="e.g. Published 25+ Research Papers in Peer-Reviewed International Journals"
                 className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
               />
+              <Error errorName={errors.keyHighlight} />
             </div>
           </div>
 
@@ -269,7 +340,7 @@ const FacultyDrawer = ({ faculty, onSave }) => {
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting} className="w-full sm:w-auto bg-red-800 hover:bg-red-900 text-white">
-              {faculty?.id ? 'Update Faculty' : 'Save Faculty'}
+              {id ? 'Update Faculty' : 'Save Faculty'}
             </Button>
           </div>
         </form>

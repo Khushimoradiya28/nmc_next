@@ -8,6 +8,7 @@ import {
   Avatar,
 } from '@windmill/react-ui';
 import { FiEye, FiEdit, FiTrash2 } from 'react-icons/fi';
+import DateBox from '../form/DateBox';
 
 const FacultyTable = ({
   faculties = [],
@@ -29,14 +30,29 @@ const FacultyTable = ({
           <TableCell>Badge / Category</TableCell>
           <TableCell>Designation & Qualification</TableCell>
           <TableCell>Experience & Stream</TableCell>
+          <TableCell>Time Stamp</TableCell>
           <TableCell className="text-right">Actions</TableCell>
         </tr>
       </TableHeader>
 
       <TableBody>
         {displayFaculties.map((item, i) => {
+          const fullName = item.fullName || item.name || 'Faculty Member';
+          const avatarUrl =
+            item.photo_webp_url ||
+            item.photo_url ||
+            item.image ||
+            item.photo ||
+            'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
+          const badge = item.badgeTag || item.badge || 'FACULTY';
+          const designation = item.designation || '';
+          const qualification = item.qualifications || item.qualification || '';
+          const experience = item.experience || 'N/A';
+          const department = item.department || item.stream || 'B.B.A.';
+          const highlight = item.keyHighlight || item.highlight || '';
+
           return (
-            <TableRow key={item.id || i}>
+            <TableRow key={item._id || item.slug || item.id || i}>
               {/* Sr No */}
               <TableCell>
                 <span className="text-xs font-semibold text-gray-500">
@@ -48,18 +64,18 @@ const FacultyTable = ({
               <TableCell>
                 <div className="flex items-center gap-3">
                   <Avatar
-                    src={item.image || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80'}
-                    alt={item.name}
+                    src={avatarUrl}
+                    alt={fullName}
                     size="regular"
                     className="shrink-0 rounded-xl"
                   />
                   <div>
                     <span className="text-sm font-bold text-gray-900 dark:text-gray-100 block">
-                      {item.name}
+                      {fullName}
                     </span>
-                    {item.highlight && (
+                    {highlight && (
                       <span className="text-[11px] text-amber-600 dark:text-amber-400 truncate max-w-xs block font-medium">
-                        ✨ {item.highlight}
+                        ✨ {highlight}
                       </span>
                     )}
                   </div>
@@ -72,7 +88,7 @@ const FacultyTable = ({
                   type="danger"
                   className="bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 font-bold px-2.5 py-1 text-[11px] rounded-full uppercase"
                 >
-                  {item.badge || 'FACULTY'}
+                  {badge}
                 </Badge>
               </TableCell>
 
@@ -80,10 +96,10 @@ const FacultyTable = ({
               <TableCell>
                 <div className="flex flex-col">
                   <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">
-                    {item.designation}
+                    {designation}
                   </span>
                   <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                    {item.qualification}
+                    {qualification}
                   </span>
                 </div>
               </TableCell>
@@ -92,12 +108,20 @@ const FacultyTable = ({
               <TableCell>
                 <div className="flex flex-col">
                   <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">
-                    {item.experience || 'N/A'}
+                    {experience}
                   </span>
                   <span className="text-[11px] font-bold text-red-800 dark:text-red-400">
-                    Stream: {item.stream || 'B.B.A.'}
+                    Stream: {department}
                   </span>
                 </div>
+              </TableCell>
+
+              {/* Time Stamp */}
+              <TableCell>
+                <DateBox
+                  created_at={item.created_at || item.createdAt}
+                  updated_at={item.updated_at || item.updatedAt}
+                />
               </TableCell>
 
               {/* Actions */}
@@ -117,7 +141,7 @@ const FacultyTable = ({
                   <button
                     type="button"
                     onClick={() => onEdit && onEdit(item)}
-                    className="p-2 text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
+                    className="p-2 text-gray-500 hover:text-red-800 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 rounded-lg transition-colors"
                     title="Edit Faculty Member"
                   >
                     <FiEdit className="w-4 h-4" />

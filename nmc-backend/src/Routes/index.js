@@ -9,6 +9,7 @@ const testimonialRoutes = require("./testimonialRoutes");
 const certificateCourseRoutes = require("./certificateCourseRoutes");
 const awardRoutes = require("./awardRoutes");
 const academicProgramRoutes = require("./academicProgramRoutes");
+const facultyRoutes = require("./facultyRoutes");
 
 // All routes grouped under /api
 router.use("/auth", authRoutes);
@@ -24,4 +25,10 @@ router.use("/award", awardRoutes);
 router.use("/academic-programs", academicProgramRoutes);
 router.use("/academic-program", academicProgramRoutes);
 
+// Faculty & Master Faculty Routes
+router.use("/faculty", facultyRoutes);
+router.use("/faculties", facultyRoutes);
+router.use("/master/faculty", facultyRoutes);
+
 module.exports = router;
+
