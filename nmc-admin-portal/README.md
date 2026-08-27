@@ -56,3 +56,42 @@ Ye rules niche diye gaye sabhi modules ke liye apply hote hain:
 1. **Professional Certificate Courses** (`/api/certificate-courses`)
 2. **Awards & Certificates** (`/api/awards`)
 3. **Testimonials - Dignitary & Students** (`/api/testimonials`)
+4. **Academic Programs (Master Courses)** (`/api/academic-programs`)
+
+---
+
+## 📌 7. Global API Development & Validation Rules (Mandatory)
+
+### 🔹 Rule A: Requirements & Reusable API Architecture
+- **Check Requirements First**: Har API development se pehle requirement analyse karke clean aur reusable pattern follow karein (e.g. standard pagination, search filters, lookup by slug/ID, soft-delete, active/inactive toggles).
+- **Reusable Operations**:
+  - `GET /api/module` (with `page`, `limit`, `search`, `status`, `category` filters)
+  - `GET /api/module/:slug` (supports both MongoDB `_id` and unique `slug`)
+  - `POST /api/module` (full create with automated slug generation)
+  - `PUT /api/module/:slug` (partial/full update with validation)
+  - `DELETE /api/module/:slug` (safe soft delete with `is_deleted: true`)
+
+### 🔹 Rule B: Strict Input Validation & Handled Status Codes (422 vs 400 vs 404)
+Har API me input fields ko standard HTTP status codes ke sath validate karna mandatory hai:
+- **Blank / Missing / Invalid Data (`422 Unprocessable Entity`)**: Jab client request syntax (JSON) valid ho lekin payload ke andar mandatory fields blank string `""`, missing, whitespace, ya invalid enum/data type hon, toh server **`422 Unprocessable Entity`** return karega:
+  ```json
+  {
+    "status": 422,
+    "success": false,
+    "message": "Validation error: Unable to process input fields",
+    "errors": [
+      "shortTitle is required and cannot be blank (e.g. B.B.A.).",
+      "fees is required and cannot be blank (e.g. ₹8,000 / Sem)."
+    ]
+  }
+  ```
+- **Malformed Request Syntax (`400 Bad Request`)**: `400 Bad Request` sirf tab use hoga jab client request body syntactically invalid/broken ho (e.g., corrupted JSON string, bad header format) jise server decode na kar sake.
+- **Resource Not Found (`404 Not Found`)**: Agar update/delete/get me given ID/Slug database me exist nahi karta ya soft-deleted hai, toh **`404 Not Found`** return hoga.
+- **Proper Status Codes Standard**:
+  - `200 OK`: Successful fetch / update / delete.
+  - `201 Created`: Successful creation.
+  - `422 Unprocessable Entity`: Validation error (blank fields, invalid enum/data format).
+  - `400 Bad Request`: Malformed syntax / client-side parsing error.
+  - `404 Not Found`: Resource not found.
+  - `500 Internal Server Error`: Unexpected server/database exceptions.
+

@@ -2,8 +2,8 @@
 const crypto = require("crypto");
 const config = require("../Config/app");
 
-const SECRET_KEY = Buffer.from(config.SECRET_KEY, "hex"); // 32 bytes key
-const IV = Buffer.from(config.IV, "hex"); // 16 bytes IV
+const SECRET_KEY = config.SECRET_KEY ? Buffer.from(config.SECRET_KEY, "hex") : Buffer.alloc(32);
+const IV = config.IV ? Buffer.from(config.IV, "hex") : Buffer.alloc(16);
 
 function encrypt(text) {
   const cipher = crypto.createCipheriv("aes-256-cbc", SECRET_KEY, IV);
