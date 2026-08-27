@@ -57,7 +57,7 @@
     align-items: center;
     gap: 0.25rem;
     list-style: none;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     padding: 0;
     margin: 0;
@@ -265,6 +265,17 @@
 
     .heroNavLink {
         padding: .5rem .50rem;
+    }
+}
+
+@media (max-width: 1300px) {
+    .heroNavLink {
+        padding: 0.5rem 0.35rem;
+        font-size: 0.7rem;
+    }
+
+    .heroNavMenu {
+        gap: 0.1rem;
     }
 }
 

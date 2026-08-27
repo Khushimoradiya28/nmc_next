@@ -61,6 +61,42 @@
     transform: translateY(-2px);
 }
 
+/* Contact Us Phone Icon Button */
+.contactBtn {
+    position: fixed;
+    bottom: 5.5rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #8a0000 0%, #630000 100%);
+    border: none;
+    cursor: pointer;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 30px rgba(138, 0, 0, 0.25);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px) scale(0.85);
+    transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    text-decoration: none;
+    color: #ffffff;
+}
+
+.contactBtn.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.contactBtn:hover {
+    transform: translateY(-5px) scale(1.08);
+    box-shadow: 0 14px 40px rgba(138, 0, 0, 0.35);
+    background: linear-gradient(135deg, #a30000 0%, #750000 100%);
+}
+
 
 @media (max-width: 1216px) {
     .backToTopBtn {
@@ -68,6 +104,18 @@
         height: 35px;
         bottom: 4.25rem;
         right: 1rem;
+    }
+
+    .contactBtn {
+        width: 35px;
+        height: 35px;
+        bottom: 7.5rem;
+        right: 1rem;
+    }
+
+    .contactBtn svg {
+        width: 16px;
+        height: 16px;
     }
 
     .progressRingSvg {

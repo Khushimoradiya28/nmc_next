@@ -104,20 +104,17 @@ export default function Header() {
                 </svg>
               </span>
               <ul className={styles.heroDropdownMenu}>
-                <li><Link href="/about" onClick={closeMobileNav}>About Us</Link></li>
-                <li><Link href="/committee-cells-clubs" onClick={closeMobileNav}>Committee, Cells &amp; Clubs</Link></li>
-                <li><Link href="/journal-details" onClick={closeMobileNav}>Journal Details</Link></li>
+                <li><Link href="/about#overview" onClick={closeMobileNav}>College Overview</Link></li>
+                <li><Link href="/about#history" onClick={closeMobileNav}>History &amp; Legacy</Link></li>
+                <li><Link href="/about#vision-mission" onClick={closeMobileNav}>Vision &amp; Mission</Link></li>
+                <li><Link href="/about#founders" onClick={closeMobileNav}>Founding Fathers</Link></li>
+                <li><Link href="/about#chairman" onClick={closeMobileNav}>Chairman&apos;s Message</Link></li>
+                <li><Link href="/about#affiliation" onClick={closeMobileNav}>Affiliation &amp; Recognition</Link></li>
+                <li><Link href="/about#song" onClick={closeMobileNav}>NMC Song</Link></li>
+                <li><Link href="/about#brochure" onClick={closeMobileNav}>NMC Brochure</Link></li>
+                <li><Link href="/about#awards" onClick={closeMobileNav}>Awards</Link></li>
+                <li><Link href="/about#future" onClick={closeMobileNav}>Future Vision</Link></li>
               </ul>
-            </li>
-
-            <li>
-              <Link 
-                href="/gallery" 
-                className={`${styles.heroNavLink} ${pathname === '/gallery' ? styles.activeLink : ''}`}
-                onClick={closeMobileNav}
-              >
-                GALLERY
-              </Link>
             </li>
 
             <li className={styles.heroNavDropdown}>
@@ -127,6 +124,16 @@ export default function Header() {
                 onClick={closeMobileNav}
               >
                 COURSES 
+              </Link>
+            </li>
+
+            <li>
+              <Link 
+                href="/gallery" 
+                className={`${styles.heroNavLink} ${pathname === '/gallery' ? styles.activeLink : ''}`}
+                onClick={closeMobileNav}
+              >
+                GALLERY
               </Link>
             </li>
 
@@ -209,6 +216,17 @@ export default function Header() {
                 HAPPENINGS
               </Link>
             </li>
+
+            <li>
+              <Link 
+                href="/journal-details" 
+                className={`${styles.heroNavLink} ${pathname === '/journal-details' ? styles.activeLink : ''}`}
+                onClick={closeMobileNav}
+              >
+                JOURNAL DETAILS
+              </Link>
+            </li>
+
             <li className={`${styles.heroNavDropdown} ${openDropdown === 'iqac' ? styles.dropdownOpen : ''}`}>
               <span 
                 className={`${styles.heroNavLink} ${pathname.startsWith('/iqac') ? styles.activeLink : ''}`}
@@ -225,12 +243,13 @@ export default function Header() {
                 <li><Link href="/iqac/composition-of-iqac" onClick={closeMobileNav}>Composition of IQAC</Link></li>
                 <li><Link href="/iqac/strategies-benefits-functions" onClick={closeMobileNav}>Strategies / Benefits / Functions</Link></li>
                 <li><Link href="/iqac/conferences-fdp-workshops" onClick={closeMobileNav}>Conferences / FDP / workshops</Link></li>
+                <li><Link href="/committee-cells-clubs" onClick={closeMobileNav}>Committee, Cells &amp; Clubs</Link></li>
                 <li><Link href="/iqac/naac" onClick={closeMobileNav}>NAAC</Link></li>
                 <li><Link href="/iqac/nirf" onClick={closeMobileNav}>NIRF</Link></li>
               </ul>
             </li>
 
-            <li>
+            {/* <li>
               <Link 
                 href="/contact" 
                 className={`${styles.heroNavLink} ${pathname.startsWith('/contact') ? styles.activeLink : ''}`}
@@ -238,7 +257,7 @@ export default function Header() {
               >
                 CONTACT US
               </Link>
-            </li>
+            </li> */}
           </ul>
         </nav>
 

@@ -2,7 +2,7 @@ import React from "react";
 import PageTitle from "../components/Typography/PageTitle";
 import CardItem from "../components/dashboard/MasterCardItem";
 import { NavLink } from "react-router-dom";
-import { FiUser, FiAward } from "react-icons/fi";
+import { FiUser, FiAward, FiBookOpen } from "react-icons/fi";
 
 const Masters = () => {
   return (
@@ -21,6 +21,13 @@ const Masters = () => {
           <CardItem
             title="Professors & Faculty"
             Icon={FiAward}
+            className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
+          />
+        </NavLink>
+        <NavLink to="/master/academic-programs">
+          <CardItem
+            title="Academic Programs"
+            Icon={FiBookOpen}
             className="text-red-800 dark:text-red-100 bg-red-100 dark:bg-red-800"
           />
         </NavLink>

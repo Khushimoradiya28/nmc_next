@@ -30,6 +30,7 @@ const Age = lazy(() => import('../pages/Masters/Age'));
 
 const Skill = lazy(() => import('../pages/Masters/Skill'))
 const Faculty = lazy(() => import('../pages/Masters/Faculty'))
+const AcademicPrograms = lazy(() => import('../pages/Masters/AcademicPrograms'))
 const ProductDetail = lazy(() => import('../components/drawer/ProductDetailDrawer'))
 const OrderDetails = lazy(() => import('../components/drawer/OrderDetailDrawer'))
 const PriceManagement = lazy(() => import('../pages/PriceManagement'))
@@ -122,6 +123,10 @@ const routes = [
   {
     path: '/master/faculty',
     component: Faculty,
+  },
+  {
+    path: '/master/academic-programs',
+    component: AcademicPrograms,
   },
   {
     path: '/master/brand',
