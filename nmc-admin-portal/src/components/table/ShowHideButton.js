@@ -49,6 +49,7 @@ import BrandServices from "../../services/master/BrandService";
 import CategoryServices from "../../services/master/CategoryService";
 import CharacterServices from "../../services/master/CharacterService";
 import AcademicProgramServices from "../../services/AcademicProgramServices";
+import FacultyServices from "../../services/FacultyServices";
 import { SidebarContext } from "../../context/SidebarContext";
 import AgeServices from "../../services/master/AgeService";
 
@@ -83,6 +84,13 @@ const ShowHideButton = ({ id, status, type = "brand" }) => {
       apiCall = AcademicProgramServices.updateProgram(id, {
         status: newStatus === 1 ? 'active' : 'inactive',
       });
+    }
+
+    if (type === "faculty") {
+      const facultyFormData = new FormData();
+      facultyFormData.append("status", newStatus === 1 ? "active" : "inactive");
+      facultyFormData.append("is_active", newStatus);
+      apiCall = FacultyServices.updateFaculty(id, facultyFormData);
     }
 
     apiCall

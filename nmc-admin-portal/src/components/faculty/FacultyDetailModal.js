@@ -37,10 +37,26 @@ const FacultyDetailModal = ({ isOpen, onClose, faculty: initialFaculty, idOrSlug
   const qualification = faculty?.qualifications || faculty?.qualification || '';
   const badgeTag = faculty?.badgeTag || faculty?.badge || '';
   const department = faculty?.department || faculty?.stream || 'B.B.A.';
-  const experience = faculty?.experience || 'N/A';
+  const formatExperience = (exp) => {
+    if (!exp || exp === 'N/A') return 'N/A';
+    const str = String(exp).trim();
+    if (str.toLowerCase().includes('year')) {
+      return str;
+    }
+    return `${str} Years Experience`;
+  };
+
+  const formattedExperience = formatExperience(faculty?.experience);
   const overview = faculty?.overview || faculty?.biography || '';
   const keyHighlight = faculty?.keyHighlight || faculty?.highlight || '';
   const photoUrl = faculty?.photo_webp_url || faculty?.photo_url || faculty?.image || faculty?.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
+
+  const rawStreams = faculty?.coursesStreams || faculty?.courses_streams || faculty?.streams || faculty?.courseStreams;
+  const courseStreamsList = Array.isArray(rawStreams)
+    ? rawStreams.map((s) => (typeof s === 'string' ? s : s?.value || s?.label || s?.shortTitle || ''))
+    : typeof rawStreams === 'string' && rawStreams
+    ? rawStreams.split(',').map((s) => s.trim()).filter(Boolean)
+    : faculty?.department ? [faculty.department] : [];
 
   const expertiseList = Array.isArray(faculty?.expertise)
     ? faculty.expertise
@@ -75,19 +91,14 @@ const FacultyDetailModal = ({ isOpen, onClose, faculty: initialFaculty, idOrSlug
               />
 
               <div className="flex-1 pr-6">
-                {badgeTag && (
+                {designation && (
                   <span className="inline-block px-3 py-1 bg-red-800 text-white text-xs font-bold rounded-full uppercase tracking-wider mb-2">
-                    {badgeTag}
+                    {designation}
                   </span>
                 )}
                 <h2 className="text-2xl sm:text-3xl font-medium text-gray-900 dark:text-gray-100 leading-tight">
                   {fullName}
                 </h2>
-                {designation && (
-                  <p className="text-red-800 dark:text-red-400 font-bold text-sm sm:text-base mt-1">
-                    {designation}
-                  </p>
-                )}
                 {qualification && (
                   <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm mt-1">
                     {qualification}
@@ -96,23 +107,23 @@ const FacultyDetailModal = ({ isOpen, onClose, faculty: initialFaculty, idOrSlug
               </div>
             </div>
 
-            {/* Two Metric Summary Cards */}
+            {/* Metric Summary Card: Teaching Experience & Teaching Streams */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 my-6">
               <div className="bg-blue-50/50 dark:bg-gray-700/40 border border-blue-100/80 dark:border-gray-600 rounded-2xl p-4">
                 <span className="text-[10px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-widest block">
                   TEACHING EXPERIENCE
                 </span>
                 <span className="text-base font-medium text-gray-900 dark:text-gray-100 mt-1 block">
-                  {experience}
+                  {formattedExperience}
                 </span>
               </div>
 
               <div className="bg-blue-50/50 dark:bg-gray-700/40 border border-blue-100/80 dark:border-gray-600 rounded-2xl p-4">
                 <span className="text-[10px] font-bold text-gray-400 dark:text-gray-400 uppercase tracking-widest block">
-                  DEPARTMENT STREAMS
+                  TEACHING STREAMS
                 </span>
-                <span className="text-base font-medium text-gray-900 dark:text-gray-100 mt-1 block">
-                  {department}
+                <span className="text-base font-medium text-gray-900 dark:text-gray-100 mt-1 block truncate">
+                  {courseStreamsList.length > 0 ? courseStreamsList.join(', ') : 'General'}
                 </span>
               </div>
             </div>
@@ -126,6 +137,25 @@ const FacultyDetailModal = ({ isOpen, onClose, faculty: initialFaculty, idOrSlug
                 <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-300 leading-relaxed">
                   {overview}
                 </p>
+              </div>
+            )}
+
+            {/* Course Stream Categories */}
+            {courseStreamsList.length > 0 && (
+              <div className="mb-5">
+                <h3 className="text-sm font-medium text-gray-900 dark:text-gray-100 mb-2">
+                  Assigned Course Streams
+                </h3>
+                <div className="flex flex-wrap gap-2">
+                  {courseStreamsList.map((st, idx) => (
+                    <span
+                      key={idx}
+                      className="px-3 py-1 rounded-lg border border-amber-300 bg-amber-50/80 text-amber-900 text-xs font-bold dark:border-amber-700/60 dark:bg-amber-950/40 dark:text-amber-300"
+                    >
+                      {st}
+                    </span>
+                  ))}
+                </div>
               </div>
             )}
 

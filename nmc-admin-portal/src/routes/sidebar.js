@@ -5,6 +5,8 @@ import {
   FiMessageSquare,
   FiAward,
   FiBookOpen,
+  FiUsers,
+  FiUserCheck,
 } from 'react-icons/fi';
 
 /**
@@ -41,10 +43,25 @@ const sidebar = [
     name: 'Professional Certificate Courses',
   },
   {
-    path: '/master',
-    icon: FiList,
-    name: 'Master',
+    path: '/master/faculty',
+    icon: FiUserCheck,
+    name: 'Professors & Faculty',
   },
+  {
+    path: '/master/academic-programs',
+    icon: FiBookOpen,
+    name: 'Academic Programs',
+  },
+  {
+    path: '/master/user',
+    icon: FiUsers,
+    name: 'Users',
+  },
+  // {
+  //   path: '/master',
+  //   icon: FiList,
+  //   name: 'Master',
+  // },
 ];
 
 export default sidebar;

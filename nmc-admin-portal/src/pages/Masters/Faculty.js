@@ -17,16 +17,8 @@ import MainModal from '../../components/modal/MainModal';
 import CustomSelect from '../../components/form/CustomSelect';
 import { SidebarContext } from '../../context/SidebarContext';
 import FacultyServices from '../../services/FacultyServices';
+import AcademicProgramServices from '../../services/AcademicProgramServices';
 import { notifyError } from '../../utils/toast';
-
-const DEPARTMENT_OPTIONS = [
-  { label: 'All Departments', value: 'all' },
-  { label: 'B.B.A.', value: 'B.B.A.' },
-  { label: 'B.Com / Commerce', value: 'B.Com' },
-  { label: 'Economics', value: 'Economics' },
-  { label: 'B.C.A. & IT', value: 'B.C.A' },
-  { label: 'Science & Bio-Tech', value: 'Science' },
-];
 
 const Faculty = () => {
   const {
@@ -43,10 +35,32 @@ const Faculty = () => {
   const [loading, setLoading] = useState(true);
   const [searchText, setSearchText] = useState('');
   const [selectedDept, setSelectedDept] = useState('all');
+  const [filterOptions, setFilterOptions] = useState([{ label: 'All Streams / Programs', value: 'all' }]);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [totalRecords, setTotalRecords] = useState(0);
   const resultsPerPage = 10;
+
+  // Fetch dynamic streams from Academic Programs for table filter
+  useEffect(() => {
+    AcademicProgramServices.getAllPrograms({ page: 1, limit: 100 })
+      .then((res) => {
+        const list = res?.data || res?.programs || (Array.isArray(res) ? res : []);
+        if (Array.isArray(list)) {
+          const opts = [{ label: 'All Streams / Programs', value: 'all' }];
+          const seen = new Set();
+          list.forEach((item) => {
+            const short = (item.shortTitle || item.shortName || item.fullName || '').trim();
+            if (short && !seen.has(short.toLowerCase())) {
+              seen.add(short.toLowerCase());
+              opts.push({ label: short, value: short });
+            }
+          });
+          setFilterOptions(opts);
+        }
+      })
+      .catch((err) => console.error('Filter options error:', err));
+  }, []);
 
   // Selected faculty for Detail Modal
   const [detailModalOpen, setDetailModalOpen] = useState(false);
@@ -66,11 +80,18 @@ const Faculty = () => {
         department: selectedDept,
       });
 
-      const listData = res?.data || [];
-      const meta = res?.meta;
+      const listData =
+        res?.data?.faculties ||
+        res?.data?.faculty ||
+        res?.data ||
+        res?.faculties ||
+        res?.faculty ||
+        (Array.isArray(res) ? res : []);
+      const meta = res?.meta || res?.data?.meta;
 
-      setFacultyList(listData);
-      setTotalRecords(meta?.total_records ?? listData.length);
+      const finalArray = Array.isArray(listData) ? listData : [];
+      setFacultyList(finalArray);
+      setTotalRecords(meta?.total_records ?? meta?.total ?? finalArray.length);
     } catch (err) {
       notifyError(err?.response?.data?.message || err?.message || 'Failed to fetch faculty list');
       setFacultyList([]);
@@ -150,7 +171,7 @@ const Faculty = () => {
           <div className="relative w-full md:w-80">
             <input
               type="text"
-              placeholder="Search by faculty name, qualification..."
+              placeholder="Search by name, designation & role..."
               value={searchText}
               onChange={handleSearchChange}
               className="w-full pl-10 pr-4 py-2.5 text-sm bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg focus:outline-none focus:border-red-800 dark:text-gray-200 transition-colors"
@@ -158,13 +179,13 @@ const Faculty = () => {
             <FiSearch className="absolute left-3 top-3 w-4 h-4 text-gray-400" />
           </div>
 
-          {/* CustomSelect Department Dropdown */}
+          {/* CustomSelect Department/Stream Dropdown */}
           <div className="w-full md:w-64">
             <CustomSelect
-              options={DEPARTMENT_OPTIONS}
+              options={filterOptions}
               value={selectedDept}
               onChange={handleDeptChange}
-              placeholder="All Departments"
+              placeholder="All Streams / Programs"
             />
           </div>
         </div>

@@ -4,7 +4,7 @@ const FacultyServices = {
   // 1. GET Table List
   getAllFaculty: async ({ page = 1, limit = 10, search = '', department = '' } = {}) => {
     let url = `/master/faculty?page=${page}&limit=${limit}`;
-    if (search) url += `&search=${encodeURIComponent(search)}`;
+    if (search && search.trim()) url += `&search=${encodeURIComponent(search.trim())}`;
     if (department && department !== 'all') url += `&department=${encodeURIComponent(department)}`;
     return requests.get(url);
   },

@@ -2,42 +2,28 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { Textarea, Input, Button } from '@windmill/react-ui';
 import { useForm } from 'react-hook-form';
+import Select from 'react-select';
 
 import Title from '../form/Title';
 import Error from '../form/Error';
 import Uploader from '../image-uploader/Uploader';
-import CustomSelect from '../form/CustomSelect';
 import { SidebarContext } from '../../context/SidebarContext';
+import { ThemeContext } from '../../context/ThemeContext';
 import FacultyServices from '../../services/FacultyServices';
+import AcademicProgramServices from '../../services/AcademicProgramServices';
 import { notifySuccess, notifyError } from '../../utils/toast';
-
-const BADGE_OPTIONS = [
-  { label: 'I/C PRINCIPAL', value: 'I/C PRINCIPAL' },
-  { label: 'SENIOR LEADERSHIP', value: 'SENIOR LEADERSHIP' },
-  { label: 'MANAGEMENT HEAD', value: 'MANAGEMENT HEAD' },
-  { label: 'CHIEF COORDINATOR', value: 'CHIEF COORDINATOR' },
-  { label: 'B.B.A.', value: 'B.B.A.' },
-  { label: 'PROFESSOR', value: 'PROFESSOR' },
-];
-
-const STREAM_OPTIONS = [
-  { label: 'B.B.A.', value: 'B.B.A.' },
-  { label: 'B.Com (Commerce)', value: 'B.Com' },
-  { label: 'M.Com (Commerce)', value: 'M.Com' },
-  { label: 'Economics', value: 'Economics' },
-  { label: 'B.C.A. & IT (Computer Applications)', value: 'B.C.A. & IT' },
-  { label: 'Science & Bio-Tech', value: 'Science' },
-];
 
 const FacultyDrawer = ({ id }) => {
   const { closeDrawer, isDrawerOpen, setIsUpdate } = useContext(SidebarContext);
+  const { theme } = useContext(ThemeContext);
+  const isDark = theme === 'dark' || theme === true;
 
   const [imageUrl, setImageUrl] = useState('');
   const [uploadedFile, setUploadedFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [selectedBadge, setSelectedBadge] = useState('MANAGEMENT HEAD');
-  const [selectedStream, setSelectedStream] = useState('B.B.A.');
+  const [programStreamOptions, setProgramStreamOptions] = useState([]);
+  const [selectedCoursesStreams, setSelectedCoursesStreams] = useState([]);
 
   const {
     register,
@@ -48,6 +34,32 @@ const FacultyDrawer = ({ id }) => {
     reset,
     formState: { errors },
   } = useForm();
+
+  // Fetch Academic Programs to populate stream categories dynamically
+  useEffect(() => {
+    AcademicProgramServices.getAllPrograms({ page: 1, limit: 100 })
+      .then((res) => {
+        const list = res?.data || res?.programs || (Array.isArray(res) ? res : []);
+        if (Array.isArray(list)) {
+          const uniqueStreams = [];
+          const seen = new Set();
+          list.forEach((item) => {
+            const short = (item.shortTitle || item.shortName || item.fullName || '').trim();
+            if (short && !seen.has(short.toLowerCase())) {
+              seen.add(short.toLowerCase());
+              uniqueStreams.push({
+                value: short,
+                label: short,
+              });
+            }
+          });
+          setProgramStreamOptions(uniqueStreams);
+        }
+      })
+      .catch((err) => {
+        console.error('Error fetching academic program streams:', err);
+      });
+  }, []);
 
   // Reset form when adding new or when drawer opens/closes
   useEffect(() => {
@@ -60,9 +72,9 @@ const FacultyDrawer = ({ id }) => {
         overview: '',
         expertise: '',
         keyHighlight: '',
+        status: 'active',
       });
-      setSelectedBadge('MANAGEMENT HEAD');
-      setSelectedStream('B.B.A.');
+      setSelectedCoursesStreams([]);
       setImageUrl('');
       setUploadedFile(null);
       clearErrors();
@@ -89,22 +101,45 @@ const FacultyDrawer = ({ id }) => {
               : data.expertise || ''
           );
           setValue('keyHighlight', data.keyHighlight || data.highlight || '');
+          setValue('status', data.status === 'inactive' || data.status === 0 || data.status === false ? 'inactive' : 'active');
 
-          const rawDept = data.department || data.stream || '';
-          const matchedStream = STREAM_OPTIONS.find(
-            (opt) =>
-              rawDept.toLowerCase().includes(opt.value.toLowerCase()) ||
-              opt.label.toLowerCase().includes(rawDept.toLowerCase())
-          );
-          setSelectedStream(matchedStream ? matchedStream.value : 'B.B.A.');
+          // Populate Courses / Streams multiple selection
+          const rawCoursesStreams =
+            data.coursesStreams ||
+            data.courses_streams ||
+            data.streams ||
+            data.courseStreams ||
+            data.department ||
+            [];
 
-          const rawBadge = data.badgeTag || data.badge || '';
-          const matchedBadge = BADGE_OPTIONS.find(
-            (opt) =>
-              rawBadge.toLowerCase().includes(opt.value.toLowerCase()) ||
-              opt.label.toLowerCase().includes(rawBadge.toLowerCase())
-          );
-          setSelectedBadge(matchedBadge ? matchedBadge.value : 'MANAGEMENT HEAD');
+          let formattedSelectedStreams = [];
+
+          if (typeof rawCoursesStreams === 'string') {
+            try {
+              const parsed = JSON.parse(rawCoursesStreams);
+              if (Array.isArray(parsed)) {
+                formattedSelectedStreams = parsed.map((s) =>
+                  typeof s === 'string' ? s.trim() : s?.value || s?.label || s?.shortTitle || ''
+                );
+              } else {
+                formattedSelectedStreams = rawCoursesStreams
+                  .split(',')
+                  .map((s) => s.trim())
+                  .filter(Boolean);
+              }
+            } catch {
+              formattedSelectedStreams = rawCoursesStreams
+                .split(',')
+                .map((s) => s.trim())
+                .filter(Boolean);
+            }
+          } else if (Array.isArray(rawCoursesStreams)) {
+            formattedSelectedStreams = rawCoursesStreams.map((s) =>
+              typeof s === 'string' ? s.trim() : s?.value || s?.label || s?.shortTitle || ''
+            );
+          }
+
+          setSelectedCoursesStreams(formattedSelectedStreams.filter(Boolean));
           setImageUrl(data.photo_url || data.image_url || data.photo || '');
           setUploadedFile(null);
         }
@@ -127,16 +162,25 @@ const FacultyDrawer = ({ id }) => {
       const expertise = (data.expertise || '').trim();
       const keyHighlight = (data.keyHighlight || '').trim();
 
+      const primaryDepartment = selectedCoursesStreams.length > 0 ? selectedCoursesStreams.join(', ') : 'General';
+      const statusValue = data.status || 'active';
+      const isActiveValue = statusValue === 'active';
+
       const formData = new FormData();
       formData.append('fullName', fullName);
-      formData.append('badgeTag', selectedBadge);
+      formData.append('badgeTag', designation);
       formData.append('designation', designation);
       formData.append('qualifications', qualifications);
-      formData.append('department', selectedStream);
+      formData.append('department', primaryDepartment);
+      formData.append('coursesStreams', JSON.stringify(selectedCoursesStreams));
+      formData.append('streams', JSON.stringify(selectedCoursesStreams));
       formData.append('experience', experience);
       formData.append('overview', overview);
       formData.append('expertise', expertise);
       formData.append('keyHighlight', keyHighlight);
+      formData.append('status', statusValue);
+      formData.append('isActive', isActiveValue);
+      formData.append('is_active', isActiveValue ? 1 : 0);
 
       if (uploadedFile && typeof uploadedFile === 'object') {
         formData.append('photo', uploadedFile);
@@ -216,18 +260,117 @@ const FacultyDrawer = ({ id }) => {
               <Error errorName={errors.fullName} />
             </div>
 
-            {/* Leadership Badge Tag Dropdown */}
+            {/* Teaching Streams / Courses Multi-Selection (Dynamic from Academic Programs) */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Leadership Badge Tag <span className="text-red-500">*</span>
+                Teaching Streams / Courses
               </label>
-              <CustomSelect
-                options={BADGE_OPTIONS}
-                value={selectedBadge}
-                onChange={(val) => setSelectedBadge(val)}
-                placeholder="Select Badge Tag"
+              <Select
+                isMulti
+                closeMenuOnSelect={false}
+                options={programStreamOptions}
+                value={
+                  selectedCoursesStreams.map((val) => {
+                    const matched = programStreamOptions.find(
+                      (opt) =>
+                        opt.value?.toLowerCase().trim() === val?.toLowerCase().trim() ||
+                        opt.label?.toLowerCase().trim() === val?.toLowerCase().trim()
+                    );
+                    return matched || { value: val, label: val };
+                  })
+                }
+                onChange={(selected) => {
+                  const values = selected ? selected.map((item) => item.value) : [];
+                  setSelectedCoursesStreams(values);
+                }}
+                placeholder="Select streams (e.g. B.B.A., B.C.A., M.Com)..."
+                menuPortalTarget={typeof document !== 'undefined' ? document.body : null}
+                menuPosition="fixed"
+                styles={{
+                  menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+                  control: (base, state) => ({
+                    ...base,
+                    backgroundColor: isDark ? '#374151' : '#F9FAFB',
+                    borderColor: state.isFocused
+                      ? '#991b1b'
+                      : isDark
+                      ? '#4B5563'
+                      : '#E5E7EB',
+                    borderRadius: '0.375rem',
+                    minHeight: '42px',
+                    boxShadow: state.isFocused ? '0 0 0 1px #991b1b' : 'none',
+                    '&:hover': {
+                      borderColor: '#991b1b',
+                    },
+                  }),
+                  multiValue: (base) => ({
+                    ...base,
+                    backgroundColor: isDark ? '#4B5563' : '#FEE2E2',
+                    borderRadius: '0.25rem',
+                  }),
+                  multiValueLabel: (base) => ({
+                    ...base,
+                    color: isDark ? '#F3F4F6' : '#991B1B',
+                    fontWeight: '600',
+                    fontSize: '0.75rem',
+                    padding: '2px 6px',
+                  }),
+                  multiValueRemove: (base) => ({
+                    ...base,
+                    color: isDark ? '#F3F4F6' : '#991B1B',
+                    '&:hover': {
+                      backgroundColor: '#DC2626',
+                      color: '#ffffff',
+                    },
+                  }),
+                  menu: (base) => ({
+                    ...base,
+                    backgroundColor: isDark ? '#1F2937' : '#FFFFFF',
+                    border: `1px solid ${isDark ? '#374151' : '#E5E7EB'}`,
+                    boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)',
+                    zIndex: 9999,
+                  }),
+                  option: (base, state) => ({
+                    ...base,
+                    backgroundColor: state.isSelected
+                      ? '#991B1B'
+                      : state.isFocused
+                      ? isDark
+                        ? '#374151'
+                        : '#FEF2F2'
+                      : 'transparent',
+                    color: state.isSelected
+                      ? '#FFFFFF'
+                      : isDark
+                      ? '#E5E7EB'
+                      : '#374151',
+                    fontSize: '0.875rem',
+                    fontWeight: state.isSelected ? '600' : 'normal',
+                    cursor: 'pointer',
+                    '&:active': {
+                      backgroundColor: '#991B1B',
+                      color: '#FFFFFF',
+                    },
+                  }),
+                  placeholder: (base) => ({
+                    ...base,
+                    color: isDark ? '#9CA3AF' : '#9CA3AF',
+                    fontSize: '0.875rem',
+                  }),
+                  input: (base) => ({
+                    ...base,
+                    color: isDark ? '#E5E7EB' : '#1F2937',
+                    caretColor: '#991B1B',
+                    margin: '0px',
+                    padding: '0px',
+                    '& input': {
+                      outline: 'none !important',
+                      boxShadow: 'none !important',
+                      caretColor: '#991B1B !important',
+                    },
+                  }),
+                }}
               />
-              <Error errorName={errors.badgeTag} />
             </div>
 
             {/* Designation & Role */}
@@ -258,31 +401,22 @@ const FacultyDrawer = ({ id }) => {
               <Error errorName={errors.qualifications} />
             </div>
 
-            {/* Department Stream Dropdown */}
-            <div>
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Department Stream <span className="text-red-500">*</span>
-              </label>
-              <CustomSelect
-                options={STREAM_OPTIONS}
-                value={selectedStream}
-                onChange={(val) => setSelectedStream(val)}
-                placeholder="Select Stream"
-              />
-              <Error errorName={errors.department} />
-            </div>
-
             {/* Teaching Experience */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
-                Teaching Experience <span className="text-red-500">*</span>
+                Teaching Experience (In Years) <span className="text-red-500">*</span>
               </label>
-              <Input
-                {...register('experience', { required: 'Experience is mandatory' })}
-                type="text"
-                placeholder="e.g. 15+ Years of Academic Experience"
-                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
-              />
+              <div className="relative flex items-center">
+                <Input
+                  {...register('experience', { required: 'Teaching Experience is mandatory' })}
+                  type="text"
+                  placeholder="e.g. 15"
+                  className="w-full pr-24 px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
+                />
+                <span className="absolute right-3 text-xs font-semibold text-gray-500 dark:text-gray-400 pointer-events-none bg-gray-100 dark:bg-gray-600 px-2 py-1 rounded">
+                  Years
+                </span>
+              </div>
               <Error errorName={errors.experience} />
             </div>
 
@@ -326,6 +460,20 @@ const FacultyDrawer = ({ id }) => {
                 className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
               />
               <Error errorName={errors.keyHighlight} />
+            </div>
+
+            {/* Status (Active / Inactive) */}
+            <div>
+              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-2">
+                Display Status
+              </label>
+              <select
+                {...register('status')}
+                className="w-full px-3 py-2.5 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50 font-medium"
+              >
+                <option value="active">Active (Visible on Website)</option>
+                <option value="inactive">Inactive (Hidden from Website)</option>
+              </select>
             </div>
           </div>
 

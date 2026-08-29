@@ -100,10 +100,8 @@ exports.getFacultyMembers = async (req, res, next) => {
 
     const filter = { is_deleted: false };
 
-    if (status) {
+    if (status && status.toLowerCase().trim() !== "all") {
       filter.status = status.toLowerCase().trim();
-    } else {
-      filter.status = "active";
     }
 
     if (department && department.trim()) {
