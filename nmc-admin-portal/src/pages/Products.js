@@ -39,8 +39,12 @@ const Products = () => {
   else if (typeParam === "awards") pageHeading = "Awards & Certificates";
   else if (typeParam === "courses") pageHeading = "Professional Certificate Courses";
 
-  const {
+    const {
+    isDrawerOpen,
     toggleDrawer,
+    closeDrawer,
+    isModalOpen,
+    toggleModal,
     isUpdate,
     setIsUpdate,
     filtertoggleDrawer,
@@ -49,7 +53,23 @@ const Products = () => {
     setCategoryType,
   } = useContext(SidebarContext);
 
-  const { serviceId, handleModalOpen, handleUpdate } = useToggleDrawer();
+  const [editItemId, setEditItemId] = useState(null);
+  const [deleteItemId, setDeleteItemId] = useState(null);
+
+  const handleOpenAddDrawer = () => {
+    setEditItemId(null);
+    if (!isDrawerOpen) toggleDrawer();
+  };
+
+  const handleOpenEditDrawer = (id) => {
+    setEditItemId(id);
+    if (!isDrawerOpen) toggleDrawer();
+  };
+
+  const handleOpenDeleteModal = (id) => {
+    setDeleteItemId(id);
+    toggleModal();
+  };
 
   const [filters, setFilters] = useState({
     categoryidlist: "",
@@ -179,17 +199,17 @@ const Products = () => {
 
   return (
     <>
-      <MainModal id={serviceId} />
+      <MainModal id={deleteItemId} />
 
       <MainDrawer>
         {typeParam === "testimonial" ? (
-          <TestimonialDrawer id={serviceId} />
+          <TestimonialDrawer id={editItemId} />
         ) : typeParam === "awards" ? (
-          <AwardDrawer id={serviceId} />
+          <AwardDrawer id={editItemId} />
         ) : typeParam === "courses" ? (
-          <CourseDrawer id={serviceId} />
+          <CourseDrawer id={editItemId} />
         ) : (
-          <ProductDrawer id={serviceId} />
+          <ProductDrawer id={editItemId} />
         )}
       </MainDrawer>
 
@@ -337,24 +357,24 @@ const Products = () => {
                 testimonials={dataTable}
                 currentPage={currentPage}
                 resultsPerPage={resultsPerPage}
-                onEdit={handleUpdate}
-                onDelete={handleModalOpen}
+                onEdit={handleOpenEditDrawer}
+                onDelete={handleOpenDeleteModal}
               />
             ) : typeParam === "awards" ? (
               <AwardTable
                 awards={dataTable}
                 currentPage={currentPage}
                 resultsPerPage={resultsPerPage}
-                onEdit={handleUpdate}
-                onDelete={handleModalOpen}
+                onEdit={handleOpenEditDrawer}
+                onDelete={handleOpenDeleteModal}
               />
             ) : typeParam === "courses" ? (
               <CourseTable
                 courses={dataTable}
                 currentPage={currentPage}
                 resultsPerPage={resultsPerPage}
-                onEdit={handleUpdate}
-                onDelete={handleModalOpen}
+                onEdit={handleOpenEditDrawer}
+                onDelete={handleOpenDeleteModal}
               />
             ) : (
               <ProductTable

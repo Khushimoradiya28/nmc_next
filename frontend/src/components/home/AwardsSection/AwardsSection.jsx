@@ -128,9 +128,8 @@ export default function AwardsSection() {
     };
   }, [currentIndex, isHovered, isSliderActive, totalAwards]);
 
-  if (awardsData.length === 0 && !loading) {
-    return null; // Or empty if nothing exists
-  }
+  // When no awards exist, we still render the section with clean empty placeholder without breaking section layout
+
 
   return (
     <section className={`${styles.sectionPadding} ${styles.awardsSection} section-padding awards-section`} id="awards">
@@ -143,7 +142,8 @@ export default function AwardsSection() {
           </p>
         </div>
 
-        <div className={`${styles.awardsSliderWrap} awards-slider-wrap`}>
+        {awardsData.length > 0 ? (
+          <div className={`${styles.awardsSliderWrap} awards-slider-wrap`}>
           {isSliderActive && (
             <button
               className={`${styles.awardsArrow} ${styles.awardsArrowLeft} awards-arrow awards-arrow-left`}
@@ -224,6 +224,41 @@ export default function AwardsSection() {
             </button>
           )}
         </div>
+        ) : !loading ? (
+          <div style={{
+            textAlign: 'center',
+            padding: '3.5rem 1.5rem',
+            background: 'rgba(255, 255, 255, 0.7)',
+            backdropFilter: 'blur(10px)',
+            borderRadius: '16px',
+            border: '1px dashed #e2e8f0',
+            maxWidth: '520px',
+            margin: '1.5rem auto 0',
+          }}>
+            <div style={{
+              width: '56px',
+              height: '56px',
+              borderRadius: '50%',
+              background: '#fef2f2',
+              color: '#8a0000',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              margin: '0 auto 1rem',
+            }}>
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <circle cx="12" cy="8" r="7" />
+                <polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88" />
+              </svg>
+            </div>
+            <h4 style={{ fontSize: '1.1rem', fontWeight: '700', color: '#1e293b', marginBottom: '0.35rem' }}>
+              No Awards & Certificates Found
+            </h4>
+            <p style={{ fontSize: '0.88rem', color: '#64748b', margin: 0 }}>
+              Currently, there are no active awards or certificates to display.
+            </p>
+          </div>
+        ) : null}
 
       </div>
     </section>

@@ -25,7 +25,7 @@ const Faculty = () => {
     toggleDrawer,
     isDrawerOpen,
     closeDrawer,
-    openModal,
+    toggleModal,
     isUpdate,
     setIsUpdate,
   } = useContext(SidebarContext);
@@ -141,7 +141,7 @@ const Faculty = () => {
 
   const handleDeleteItem = (item) => {
     setDeleteItemId(item.slug || item._id || item.id);
-    openModal();
+    toggleModal();
   };
 
   return (

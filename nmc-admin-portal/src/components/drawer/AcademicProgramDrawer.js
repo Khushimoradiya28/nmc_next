@@ -307,10 +307,10 @@ const AcademicProgramDrawer = ({ id }) => {
             {/* Highlights (1 point per line) */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
-                Key Highlights (1 point per line)
+                Key Highlights (1 point per line) <span className="text-red-500">*</span>
               </label>
               <Textarea
-                {...register('highlightsText')}
+                {...register('highlightsText', { required: 'Key Highlights is mandatory' })}
                 name="highlightsText"
                 rows="4"
                 placeholder={"Strategic Marketing & Human Resources\nFinancial Analysis & Corporate Law\nExecutive Presentation & 100% Internships"}

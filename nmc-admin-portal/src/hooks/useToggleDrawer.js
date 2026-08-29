@@ -2,15 +2,14 @@ import { useContext, useEffect, useState } from 'react';
 import { SidebarContext } from '../context/SidebarContext';
 
 const useToggleDrawer = () => {
-  const [serviceId, setServiceId] = useState('');
-  const { toggleDrawer, isDrawerOpen, toggleModal } =
-    useContext(SidebarContext);
+  const [serviceId, setServiceId] = useState(null);
+  const { toggleDrawer, isDrawerOpen, toggleModal } = useContext(SidebarContext);
   const [drawerView, setDrawerView] = useState('USER'); // USER or PASSWORD
 
   const handleUpdate = (id) => {
-    setServiceId(id);
+    setServiceId(id || null);
     toggleDrawer();
-    setDrawerView("USER");
+    setDrawerView('USER');
   };
 
   const handleModalOpen = (id) => {
@@ -20,20 +19,20 @@ const useToggleDrawer = () => {
 
   const handlePasswordDrawer = (id) => {
     setServiceId(id);
-    setDrawerView("PASSWORD");
+    setDrawerView('PASSWORD');
     toggleDrawer();
   };
 
   useEffect(() => {
     if (!isDrawerOpen) {
-      setServiceId();
-      setDrawerView("USER");
+      setServiceId(null);
+      setDrawerView('USER');
     }
   }, [isDrawerOpen]);
 
   const handleOrderDrawer = (id) => {
     setServiceId(id);
-    setDrawerView("ORDER");
+    setDrawerView('ORDER');
     toggleDrawer();
   };
 
@@ -43,7 +42,7 @@ const useToggleDrawer = () => {
     handleModalOpen,
     handleUpdate,
     handlePasswordDrawer,
-    handleOrderDrawer
+    handleOrderDrawer,
   };
 };
 
