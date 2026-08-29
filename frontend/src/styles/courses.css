@@ -587,3 +587,60 @@ prog-card-btn:hover svg {
         padding: .6rem 1rem;
     }
 }
+
+/* ==========================================================================
+   EQUAL UNIFORM HEIGHT ENFORCEMENT FOR PROGRAM CARDS
+   ========================================================================== */
+.programs-grid {
+  align-items: stretch !important;
+}
+
+.prog-card-luxury {
+  height: 100% !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+}
+
+.prog-card-inner {
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
+.prog-title {
+  min-height: 2.8rem !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 2 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.prog-summary {
+  min-height: 4rem !important;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.prog-points-list {
+  flex: 1 1 auto !important;
+  min-height: 5.5rem !important;
+  margin-bottom: 1.5rem !important;
+}
+
+.prog-points-list li span {
+  display: -webkit-box !important;
+  -webkit-line-clamp: 1 !important;
+  -webkit-box-orient: vertical !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.prog-meta-strip {
+  margin-top: auto !important;
+}

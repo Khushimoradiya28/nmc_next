@@ -1,322 +1,179 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Header from "@/components/layout/Header/Header";
 import Footer from "@/components/layout/Footer/Footer";
+import AcademicProgramServices from "@/services/AcademicProgramServices";
 
-// 9 detailed courses mapped to the filter categories
-const COURSES_DATA = [
-  {
-    id: 1,
-    category: "ug",
-    acronym: "B.B.A.",
-    acronymClass: "",
-    tag: "UG Degree",
-    iconColor: "prog-ibadge-ruby",
-    title: "Bachelor of Business Administration",
-    summary:
-      "Comprehensive corporate leadership training covering marketing strategy, corporate finance, and business management.",
-    points: [
-      "Strategic Marketing & Human Resources",
-      "Financial Analysis & Corporate Law",
-      "Executive Presentation & Internships",
-    ],
-    duration: "3 Years (6 Sems)",
-    fee: "₹8,000 / Sem",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      >
-        <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
-        <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
-      </svg>
-    ),
-  },
-  {
-    id: 2,
-    category: "ug",
-    acronym: "B.C.A.",
-    acronymClass: "acronym-azure",
-    tag: "UG Degree",
-    iconColor: "prog-ibadge-azure",
-    title: "Bachelor of Computer Applications",
-    summary:
-      "Modern computing curriculum with hands-on software development, database engineering, and full-stack web technologies.",
-    points: [
-      "C++, Java, Python & Full-Stack Web",
-      "Database Systems & Cloud Infrastructure",
-      "High-Speed Computer Lab Workstations",
-    ],
-    duration: "3 Years (6 Sems)",
-    fee: "₹15,000 / Sem",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      >
+// Helper to get matching acronym badge CSS class based on acronym
+const getAcronymClass = (programType, acronym = "", index = 0) => {
+  const norm = (acronym || "").toUpperCase().trim();
+  if (norm.includes("B.C.A") || norm.includes("DNYS")) return "acronym-azure";
+  if (norm.includes("B.A.") || norm.includes("M.A.") || norm.includes("DFD")) return "acronym-gold";
+  if (norm.includes("B.COM") || norm.includes("M.COM")) return "acronym-purple";
+  if (norm.includes("M.S.W.") || norm.includes("B.B.A.")) return "";
+  
+  const classes = ["", "acronym-azure", "acronym-gold", "acronym-purple"];
+  return classes[index % classes.length];
+};
+
+// Helper to get matching icon badge based on acronym
+const getIconColor = (category, acronym = "", index = 0) => {
+  const norm = (acronym || "").toUpperCase().trim();
+  if (norm.includes("B.C.A") || norm.includes("DNYS")) return "prog-ibadge-azure";
+  if (norm.includes("B.A.") || norm.includes("M.A.") || norm.includes("DFD")) return "prog-ibadge-gold";
+  if (norm.includes("B.COM") || norm.includes("M.COM")) return "prog-ibadge-purple";
+  return "prog-ibadge-ruby";
+};
+
+// Helper to get matching fee badge CSS class
+const getFeeClass = (category, acronym = "", index = 0) => {
+  const norm = (acronym || "").toUpperCase().trim();
+  if (category === "ug" && norm.includes("B.C.A.")) return "fee-azure";
+  if (norm.includes("B.A.")) return "fee-gold";
+  if (category === "ug") return "fee-ruby";
+  if (category === "pg" && norm.includes("M.COM")) return "fee-purple";
+  if (category === "pg" && norm.includes("M.S.W.")) return "fee-ruby";
+  if (category === "pg") return "fee-gold";
+  if (norm.includes("DFD")) return "fee-gold";
+  if (category === "diploma") return "fee-azure";
+  
+  const feeClasses = ["fee-ruby", "fee-azure", "fee-gold", "fee-purple"];
+  return feeClasses[index % feeClasses.length];
+};
+
+// Helper to format fee string with Rupee symbol
+const formatFee = (feeRaw) => {
+  if (!feeRaw) return "Affordable Fee";
+  const str = String(feeRaw).trim();
+  if (str.toLowerCase() === "affordable fee" || str.toLowerCase().includes("standard") || str.toLowerCase().includes("norms")) {
+    return str;
+  }
+  const clean = str.replace(/^[?\s]+/, "");
+  if (clean.startsWith("₹")) return clean;
+  if (/^\d/.test(clean)) return "₹" + clean;
+  return clean;
+};
+
+// Default icon renderer
+const renderIcon = (acronym = "") => {
+  const norm = (acronym || "").toUpperCase().trim();
+  if (norm.includes("B.C.A") || norm.includes("IT")) {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
         <polyline points="16 18 22 12 16 6" />
         <polyline points="8 6 2 12 8 18" />
       </svg>
-    ),
-  },
-  {
-    id: 3,
-    category: "ug",
-    acronym: "B.A.",
-    acronymClass: "acronym-gold",
-    tag: "UG Degree",
-    iconColor: "prog-ibadge-gold",
-    title: "Bachelor of Arts",
-    summary:
-      "Rich humanities program fostering critical thought, communication skills, and social-cultural awareness.",
-    points: [
-      "Gujarati, English & Hindi Literature",
-      "Sociology, Psychology & History",
-      "Competitive Exam Coaching Alignment",
-    ],
-    duration: "3 Years (6 Sems)",
-    fee: "Affordable Fee",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      >
+    );
+  }
+  if (norm.includes("B.A.") || norm.includes("M.A.")) {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
       </svg>
-    ),
-  },
-  {
-    id: 4,
-    category: "ug",
-    acronym: "B.COM",
-    acronymClass: "acronym-purple",
-    tag: "UG Degree",
-    iconColor: "prog-ibadge-purple",
-    title: "Bachelor of Commerce",
-    summary:
-      "Rigorous curriculum in advanced corporate accounting, tax law, banking operations, and financial auditing.",
-    points: [
-      "Financial Accounting & GST Taxation",
-      "Commercial Law & Banking Practices",
-      "Tally Prime & E-Commerce Labs",
-    ],
-    duration: "3 Years (6 Sems)",
-    fee: "MKBU Standard",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      >
-        <line x1="18" y1="20" x2="18" y2="10" />
-        <line x1="12" y1="20" x2="12" y2="4" />
-        <line x1="6" y1="20" x2="6" y2="14" />
-      </svg>
-    ),
-  },
-  {
-    id: 5,
-    category: "pg",
-    acronym: "M.A.",
-    acronymClass: "acronym-gold",
-    tag: "PG Degree",
-    iconColor: "prog-ibadge-gold",
-    title: "Master of Arts",
-    summary:
-      "Postgraduate literary scholarship and advanced research in Gujarati literature, philosophy, and cultural analysis.",
-    points: [
-      "Advanced Literary Criticism & Research",
-      "Dissertation & Seminar Presentations",
-      "Academic & Teaching Career Pathways",
-    ],
-    duration: "2 Years (4 Sems)",
-    fee: "PG Norms",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      >
-        <path d="M12 2L2 7l10 5 10-5-10-5z" />
-        <path d="M2 17l10 5 10-5M2 12l10 5 10-5" />
-      </svg>
-    ),
-  },
-  {
-    id: 6,
-    category: "pg",
-    acronym: "M.COM",
-    acronymClass: "acronym-purple",
-    tag: "PG Degree",
-    iconColor: "prog-ibadge-purple",
-    title: "Master of Commerce",
-    summary:
-      "Specialized postgraduate training in strategic finance, corporate restructuring, international trade, and economics.",
-    points: [
-      "Strategic Financial Management & Auditing",
-      "Creative Commerce Club Research",
-      "UGC NET / SLET Examination Guidance",
-    ],
-    duration: "2 Years (4 Sems)",
-    fee: "Govt. Scale",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      >
-        <path d="M21.21 15.89A10 10 0 1 1 8 2.83" />
-        <path d="M22 12A10 10 0 0 0 12 2v10z" />
-      </svg>
-    ),
-  },
-  {
-    id: 7,
-    category: "pg",
-    acronym: "M.S.W.",
-    acronymClass: "",
-    tag: "PG Degree",
-    iconColor: "prog-ibadge-ruby",
-    title: "Master of Social Work",
-    summary:
-      "Professional postgraduate degree preparing women leaders for social policy, NGO management, and healthcare advocacy.",
-    points: [
-      "NGO Administration & Community Organizing",
-      "Concurrent Fieldwork & Rural Camps",
-      "Human Rights & Social Welfare Policy",
-    ],
-    duration: "2 Years (4 Sems)",
-    fee: "Fieldwork Focus",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      >
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-    ),
-  },
-  {
-    id: 8,
-    category: "diploma",
-    acronym: "DFD & CFD",
-    acronymClass: "acronym-gold",
-    tag: "Fashion Diploma",
-    iconColor: "prog-ibadge-gold",
-    title: "Diploma in Fashion Designing",
-    summary:
-      "Hands-on fashion industry program in garment construction, illustration, boutique styling, and apparel entrepreneurship.",
-    points: [
-      "Pattern Making & Garment Construction",
-      "Textile Science, Embroidery & Styling",
-      "Dedicated Fashion Design Studio & Labs",
-    ],
-    duration: "1 Year / 6 Months",
-    fee: "Practical Studio",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      >
+    );
+  }
+  if (norm.includes("DFD") || norm.includes("FASHION")) {
+    return (
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
         <circle cx="6" cy="6" r="3" />
         <circle cx="6" cy="18" r="3" />
         <line x1="20" y1="4" x2="8.12" y2="15.88" />
         <line x1="14.47" y1="14.48" x2="20" y2="20" />
         <line x1="8.12" y1="8.12" x2="12" y2="12" />
       </svg>
-    ),
-  },
-  {
-    id: 9,
-    category: "diploma",
-    acronym: "DNYS",
-    acronymClass: "acronym-azure",
-    tag: "Health Diploma",
-    iconColor: "prog-ibadge-azure",
-    title: "Diploma in Naturopathy & Yoga Sciences",
-    summary:
-      "Comprehensive vocational diploma in holistic healthcare, therapeutic yoga, herbal nutrition, and natural wellness counseling.",
-    points: [
-      "Yogic Therapy & Holistic Health Science",
-      "Herbal Dietetics & Natural Healing",
-      "Certified Naturopathy Practitioner Diploma",
-    ],
-    duration: "1 Year Diploma",
-    fee: "Wellness Cert.",
-    icon: (
-      <svg
-        width="20"
-        height="20"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="2.5"
-      >
-        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-      </svg>
-    ),
-  },
-];
+    );
+  }
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+      <rect x="2" y="7" width="20" height="14" rx="2" ry="2" />
+      <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16" />
+    </svg>
+  );
+};
 
 export default function CoursesPage() {
+  const [coursesData, setCoursesData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeFilter, setActiveFilter] = useState("all");
+  const [filterOpen, setFilterOpen] = useState(false);
+
+  // Fetch dynamic programs from API
+  useEffect(() => {
+    const fetchPrograms = async () => {
+      try {
+        setLoading(true);
+        const res = await AcademicProgramServices.getAllPrograms({ status: "active", limit: 100 });
+        const list = res?.data || res?.programs || (Array.isArray(res) ? res : []);
+        
+        if (Array.isArray(list)) {
+          const formatted = list.map((item, idx) => {
+            const rawCat = (item.programType || item.category || "ug").toLowerCase().trim();
+            const cat = rawCat === "undergraduate" ? "ug" : rawCat === "postgraduate" ? "pg" : rawCat === "diploma & vocational" ? "diploma" : rawCat;
+            const acronym = item.shortTitle || item.shortName || item.acronym || "";
+            const defaultTag = cat === "ug" ? "UG Degree" : cat === "pg" ? "PG Degree" : "Diploma";
+            
+            let points = [];
+            if (Array.isArray(item.highlights)) {
+              points = item.highlights.filter(Boolean);
+            } else if (typeof item.highlights === "string" && item.highlights.trim()) {
+              try {
+                const parsed = JSON.parse(item.highlights);
+                points = Array.isArray(parsed) ? parsed.filter(Boolean) : item.highlights.split("\n").map(s => s.trim()).filter(Boolean);
+              } catch {
+                points = item.highlights.split("\n").map(s => s.trim()).filter(Boolean);
+              }
+            }
+
+            return {
+              id: item._id || item.slug || item.id || idx,
+              category: cat,
+              acronym: acronym || "DEGREE",
+              acronymClass: getAcronymClass(cat, acronym, idx),
+              tag: item.degreeBadge || defaultTag,
+              iconColor: getIconColor(cat, acronym, idx),
+              title: item.fullName || item.title || "",
+              summary: item.description || item.summary || "",
+              points: points.length > 0 ? points : ["Comprehensive Curriculum & Practical Training"],
+              duration: item.duration || "3 Years (6 Sems)",
+              fee: formatFee(item.fees || item.fee),
+              feeClass: getFeeClass(cat, acronym, idx),
+              icon: renderIcon(acronym),
+            };
+          });
+          setCoursesData(formatted);
+        }
+      } catch (err) {
+        console.error("Error fetching academic programs:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPrograms();
+  }, []);
 
   // Filter items dynamically
-  const filteredCourses =
-    activeFilter === "all"
-      ? COURSES_DATA
-      : COURSES_DATA.filter((course) => course.category === activeFilter);
+  const filteredCourses = useMemo(() => {
+    if (activeFilter === "all") return coursesData;
+    return coursesData.filter((c) => c.category === activeFilter);
+  }, [coursesData, activeFilter]);
 
   // Count items for each category
-  const allCount = COURSES_DATA.length;
-  const ugCount = COURSES_DATA.filter((c) => c.category === "ug").length;
-  const pgCount = COURSES_DATA.filter((c) => c.category === "pg").length;
-  const diplomaCount = COURSES_DATA.filter(
-    (c) => c.category === "diploma",
-  ).length;
+  const allCount = coursesData.length;
+  const ugCount = coursesData.filter((c) => c.category === "ug").length;
+  const pgCount = coursesData.filter((c) => c.category === "pg").length;
+  const diplomaCount = coursesData.filter((c) => c.category === "diploma").length;
 
-  const [filterOpen, setFilterOpen] = useState(false);
   const FILTER_OPTIONS = [
     { value: "all", label: "All Programs", count: allCount },
     { value: "ug", label: "Undergraduate (UG)", count: ugCount },
     { value: "pg", label: "Postgraduate (PG)", count: pgCount },
     { value: "diploma", label: "Diploma & Vocational", count: diplomaCount },
   ];
+
   const activeOption =
     FILTER_OPTIONS.find((o) => o.value === activeFilter) || FILTER_OPTIONS[0];
 
@@ -334,10 +191,10 @@ export default function CoursesPage() {
             <Image
               src="/assets/home/hero/1.png"
               alt="Courses Banner"
-              width={1400}
-              height={700}
+              fill
               className="hero-bg-img"
               priority
+              unoptimized
             />
           </div>
           <div
@@ -450,7 +307,8 @@ export default function CoursesPage() {
             {/* Enhanced Category Filter Bar */}
             <div className="program-filter-bar">
               <button
-                className={`prog-filter-btn ${activeFilter === "all" ? "active" : ""}`} data-filter="all"
+                className={`prog-filter-btn ${activeFilter === "all" ? "active" : ""}`}
+                data-filter="all"
                 onClick={() => setActiveFilter("all")}
               >
                 <svg
@@ -470,7 +328,8 @@ export default function CoursesPage() {
                 <span className="prog-count-pill">{allCount}</span>
               </button>
               <button
-                className={`prog-filter-btn ${activeFilter === "ug" ? "active" : ""}`} data-filter="ug"
+                className={`prog-filter-btn ${activeFilter === "ug" ? "active" : ""}`}
+                data-filter="ug"
                 onClick={() => setActiveFilter("ug")}
               >
                 <svg
@@ -488,7 +347,8 @@ export default function CoursesPage() {
                 <span className="prog-count-pill">{ugCount}</span>
               </button>
               <button
-                className={`prog-filter-btn ${activeFilter === "pg" ? "active" : ""}`} data-filter="pg"
+                className={`prog-filter-btn ${activeFilter === "pg" ? "active" : ""}`}
+                data-filter="pg"
                 onClick={() => setActiveFilter("pg")}
               >
                 <svg
@@ -505,7 +365,8 @@ export default function CoursesPage() {
                 <span className="prog-count-pill">{pgCount}</span>
               </button>
               <button
-                className={`prog-filter-btn ${activeFilter === "diploma" ? "active" : ""}`} data-filter="diploma"
+                className={`prog-filter-btn ${activeFilter === "diploma" ? "active" : ""}`}
+                data-filter="diploma"
                 onClick={() => setActiveFilter("diploma")}
               >
                 <svg
@@ -539,6 +400,9 @@ export default function CoursesPage() {
                       >
                         {course.tag}
                       </span>
+                      <div className={`prog-icon-badge ${course.iconColor}`}>
+                        {course.icon}
+                      </div>
                     </div>
 
                     <div
@@ -550,7 +414,7 @@ export default function CoursesPage() {
                     <p className="prog-summary">{course.summary}</p>
 
                     <ul className="prog-points-list">
-                      {course.points.map((pt, i) => (
+                      {course.points.slice(0, 3).map((pt, i) => (
                         <li key={i}>
                           <svg
                             width="14"
@@ -583,7 +447,7 @@ export default function CoursesPage() {
                         <span>{course.duration}</span>
                       </div>
                       <div
-                        className={`prog-fee-badge ${course.category === "ug" && course.acronym === "B.C.A." ? "fee-azure" : course.acronym === "B.A." ? "fee-gold" : course.category === "ug" ? "fee-ruby" : course.category === "pg" && course.acronym === "M.COM" ? "fee-purple" : course.category === "pg" && course.acronym === "M.S.W." ? "fee-ruby" : course.category === "pg" ? "fee-gold" : course.acronym === "DFD & CFD" ? "fee-gold" : "fee-azure"}`}
+                        className={`prog-fee-badge ${course.feeClass}`}
                       >
                         {course.fee}
                       </div>
