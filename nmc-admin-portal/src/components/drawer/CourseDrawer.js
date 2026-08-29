@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+﻿import React, { useState, useEffect, useContext } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import { Textarea, Input } from '@windmill/react-ui';
 import { useForm } from 'react-hook-form';
+import { Input, Textarea } from '@windmill/react-ui';
 
 import Title from '../form/Title';
 import Error from '../form/Error';
@@ -22,12 +22,22 @@ const CourseDrawer = ({ id }) => {
     register,
     handleSubmit,
     setValue,
-    clearErrors,
     reset,
+    clearErrors,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      title: '',
+      category: '',
+      badge: '',
+      duration: '',
+      fees: '',
+      description: '',
+      highlightsText: '',
+    },
+  });
 
-  // Reset form when drawer opens to add new
+  // Reset or Populate form on open
   useEffect(() => {
     if (!id && isDrawerOpen) {
       setImageUrl('');
@@ -40,78 +50,82 @@ const CourseDrawer = ({ id }) => {
         fees: '',
         description: '',
         highlightsText: '',
-        enrollUrl: '',
       });
       clearErrors();
     }
   }, [id, isDrawerOpen, reset, clearErrors]);
 
-  // Fetch existing course for update mode
   useEffect(() => {
     if (!id || !isDrawerOpen) return;
 
     CourseServices.getCourseById(id)
       .then((res) => {
-        const data = res?.data || res;
-        if (data) {
-          reset({
-            title: data.title || '',
-            category: data.category || '',
-            badge: data.badge || '',
-            duration: data.duration || '',
-            fees: data.fees || '',
-            description: data.description || '',
-            enrollUrl: data.enrollUrl || '',
-            highlightsText: Array.isArray(data.highlights) ? data.highlights.join('\n') : '',
-          });
+        const item = res?.data || res?.course || res;
+        if (!item) return;
 
-          // Backend returns imageUrl, image, image_url, or images
-          const fetchedImage =
-            data.imageUrl ||
-            data.image ||
-            data.image_url ||
-            (Array.isArray(data.images) && data.images[0]) ||
-            '';
-          setImageUrl(fetchedImage);
-          setUploadedFile(null);
-          clearErrors();
-        }
+        const fetchedImage =
+          item.imageUrl ||
+          item.image_url ||
+          item.image ||
+          item.image_webp ||
+          '';
+
+        setImageUrl(fetchedImage);
+        setUploadedFile(null);
+
+        const highlightsArr = Array.isArray(item.highlights)
+          ? item.highlights
+          : [];
+
+        reset({
+          title: item.title || '',
+          category: item.category || '',
+          badge: item.badge || item.tag || '',
+          duration: item.duration || '',
+          fees: item.fees || '',
+          description: item.description || '',
+          highlightsText: highlightsArr.join('\n'),
+        });
       })
       .catch((err) => {
-        notifyError(err.message || 'Failed to fetch course details');
+        notifyError(
+          err.response?.data?.message ||
+            err.message ||
+            'Failed to fetch course details'
+        );
       });
-  }, [id, isDrawerOpen, reset, clearErrors]);
+  }, [id, isDrawerOpen, reset]);
 
-
-  // Submit handler matching exact user specification
   const onSubmit = async (data) => {
+    if (!id && !uploadedFile && !imageUrl) {
+      notifyError('Please upload a course cover image');
+      return;
+    }
+
+    setIsSubmitting(true);
     try {
-      setIsSubmitting(true);
-
-      const highlightsArray = data.highlightsText
-        ? data.highlightsText
-            .split('\n')
-            .map((h) => h.trim())
-            .filter((h) => h.length > 0)
-        : [];
-
       const formData = new FormData();
-      formData.append('title', data.title ? data.title.trim() : '');
-      formData.append('category', data.category ? data.category.trim() : '');
-      formData.append('description', data.description ? data.description.trim() : '');
-      formData.append('duration', data.duration ? data.duration.trim() : '');
-      formData.append('fees', data.fees ? data.fees.trim() : '');
-      if (data.badge) formData.append('badge', data.badge.trim());
-      if (data.enrollUrl) formData.append('enrollUrl', data.enrollUrl.trim());
-      if (highlightsArray.length > 0) formData.append('highlights', JSON.stringify(highlightsArray));
 
-      // If user uploaded a new file
+      formData.append('title', data.title?.trim() || '');
+      formData.append('category', data.category?.trim() || '');
+      formData.append('badge', data.badge?.trim() || '');
+      formData.append('duration', data.duration?.trim() || '');
+      formData.append('fees', data.fees?.trim() || '');
+      formData.append('description', data.description?.trim() || '');
+
+      // Parse highlights by line
+      const lines = (data.highlightsText || '')
+        .split('\n')
+        .map((l) => l.trim())
+        .filter(Boolean);
+
+      formData.append('highlights', JSON.stringify(lines));
+
       if (uploadedFile) {
-        formData.append('image', uploadedFile); // File instance from input
+        formData.append('image', uploadedFile);
       } else if (imageUrl && typeof imageUrl === 'string' && !imageUrl.startsWith('blob:')) {
         formData.append('imageUrl', imageUrl);
       }
-
 
       if (id) {
         const res = await CourseServices.updateCourse(id, formData);
@@ -168,15 +182,18 @@ const CourseDrawer = ({ id }) => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
-                  Category Badge
+                  Category Badge <span className="text-red-500">*</span>
                 </label>
                 <Input
-                  {...register('category')}
+                  {...register('category', {
+                    required: 'Category badge is required',
+                  })}
                   name="category"
                   type="text"
                   placeholder="e.g. ACCOUNTING & FINANCE"
                   className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
                 />
+                <Error errorName={errors.category} />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
@@ -196,42 +213,34 @@ const CourseDrawer = ({ id }) => {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
-                  Duration
+                  Duration <span className="text-red-500">*</span>
                 </label>
                 <Input
-                  {...register('duration')}
+                  {...register('duration', {
+                    required: 'Duration is required',
+                  })}
                   name="duration"
                   type="text"
                   placeholder="e.g. 6 Months"
                   className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
                 />
+                <Error errorName={errors.duration} />
               </div>
               <div>
                 <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
-                  Fees
+                  Fees <span className="text-red-500">*</span>
                 </label>
                 <Input
-                  {...register('fees')}
+                  {...register('fees', {
+                    required: 'Fees is required',
+                  })}
                   name="fees"
                   type="text"
-                  placeholder="e.g. Rs. 8,000/Sem."
+                  placeholder="e.g. Rs. 8,000/Sem. or 1000"
                   className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
                 />
+                <Error errorName={errors.fees} />
               </div>
-            </div>
-
-            {/* Enroll / Admission Link URL */}
-            <div>
-              <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
-                Enroll / Admission URL
-              </label>
-              <Input
-                {...register('enrollUrl')}
-                name="enrollUrl"
-                type="text"
-                placeholder="e.g. https://admission.example.com"
-                className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
-              />
             </div>
 
             {/* Description */}
@@ -254,21 +263,24 @@ const CourseDrawer = ({ id }) => {
             {/* Highlights (Bullet Points) */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
-                Key Highlights (1 point per line)
+                Key Highlights (1 point per line) <span className="text-red-500">*</span>
               </label>
               <Textarea
-                {...register('highlightsText')}
+                {...register('highlightsText', {
+                  required: 'Key highlights are required (at least 1 point)',
+                })}
                 name="highlightsText"
                 rows="3"
                 placeholder="TallyPrime & Inventory Management&#10;GST Invoicing, E-Way & Tax Audits&#10;Practical Accounting Live Projects"
                 className="w-full px-3 py-2 border border-gray-200 dark:border-gray-600 rounded-md focus:border-red-800 focus:outline-none dark:bg-gray-700 dark:text-gray-200 text-sm bg-gray-50"
               />
+              <Error errorName={errors.highlightsText} />
             </div>
 
             {/* Course Image */}
             <div>
               <label className="block text-xs font-semibold text-gray-600 dark:text-gray-400 uppercase tracking-wider mb-1">
-                Course Cover Image
+                Course Cover Image <span className="text-red-500">*</span>
               </label>
               <Uploader
                 imageUrl={imageUrl}

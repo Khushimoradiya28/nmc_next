@@ -1,4 +1,4 @@
-const Award = require("../Model/award");
+﻿const Award = require("../Model/award");
 const moment = require("moment-timezone");
 const config = require("../Config/app");
 const fs = require("fs");
@@ -66,10 +66,8 @@ exports.getAwards = async (req, res, next) => {
 
     const filter = { is_deleted: false };
 
-    if (status) {
+    if (status && status !== "all") {
       filter.status = status.toLowerCase().trim();
-    } else {
-      filter.status = "active";
     }
 
     if (slug) {
@@ -409,3 +407,4 @@ exports.deleteAward = async (req, res, next) => {
     next(error);
   }
 };
+

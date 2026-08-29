@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import {
   TableCell,
   TableBody,
@@ -6,6 +6,7 @@ import {
   TableHeader,
 } from '@windmill/react-ui';
 import EditDeleteButton from '../table/EditDeleteButton';
+import ShowHideButton from '../table/ShowHideButton';
 import DateBox from '../form/DateBox';
 import ExpandableText from '../common/ExpandableText';
 import { Fancybox } from '@fancyapps/ui';
@@ -29,7 +30,6 @@ const AwardTable = ({
     };
   }, []);
 
-
   return (
     <>
       <TableHeader>
@@ -39,6 +39,7 @@ const AwardTable = ({
           <TableCell>Award Title</TableCell>
           <TableCell className="w-64">Description / Subtext</TableCell>
           <TableCell>Time Stamp</TableCell>
+          <TableCell className="text-center">Status</TableCell>
           <TableCell className="text-right">Actions</TableCell>
         </tr>
       </TableHeader>
@@ -49,6 +50,7 @@ const AwardTable = ({
           const actionId = item.slug || item._id || item.id;
           const rawImg = item.image_url || item.imageUrl || item.image || '';
           const fallbackImg = 'https://runrkids.s3.ap-south-1.amazonaws.com/media/default/default.png';
+          const statusVal = item.status === 'active' || item.status === 1 || item.status === true || item.is_active === true || item.is_active === 1 ? 1 : 0;
           
           let img = fallbackImg;
           if (rawImg) {
@@ -60,7 +62,6 @@ const AwardTable = ({
               img = `${backendBase}${cleanPath}`;
             }
           }
-
 
           return (
             <TableRow key={itemKey}>
@@ -90,7 +91,6 @@ const AwardTable = ({
                 </div>
               </TableCell>
 
-
               {/* Title */}
               <TableCell>
                 <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
@@ -108,6 +108,15 @@ const AwardTable = ({
                 <DateBox
                   created_at={item.createdAt || item.created_at}
                   updated_at={item.updatedAt || item.updated_at}
+                />
+              </TableCell>
+
+              {/* Status Toggle */}
+              <TableCell className="text-center">
+                <ShowHideButton
+                  id={actionId}
+                  status={statusVal}
+                  type="award"
                 />
               </TableCell>
 

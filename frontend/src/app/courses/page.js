@@ -450,7 +450,7 @@ export default function CoursesPage() {
             {/* Enhanced Category Filter Bar */}
             <div className="program-filter-bar">
               <button
-                className={`prog-filter-btn ${activeFilter === "all" ? "active" : ""}`}
+                className={`prog-filter-btn ${activeFilter === "all" ? "active" : ""}`} data-filter="all"
                 onClick={() => setActiveFilter("all")}
               >
                 <svg
@@ -470,7 +470,7 @@ export default function CoursesPage() {
                 <span className="prog-count-pill">{allCount}</span>
               </button>
               <button
-                className={`prog-filter-btn ${activeFilter === "ug" ? "active" : ""}`}
+                className={`prog-filter-btn ${activeFilter === "ug" ? "active" : ""}`} data-filter="ug"
                 onClick={() => setActiveFilter("ug")}
               >
                 <svg
@@ -488,7 +488,7 @@ export default function CoursesPage() {
                 <span className="prog-count-pill">{ugCount}</span>
               </button>
               <button
-                className={`prog-filter-btn ${activeFilter === "pg" ? "active" : ""}`}
+                className={`prog-filter-btn ${activeFilter === "pg" ? "active" : ""}`} data-filter="pg"
                 onClick={() => setActiveFilter("pg")}
               >
                 <svg
@@ -505,7 +505,7 @@ export default function CoursesPage() {
                 <span className="prog-count-pill">{pgCount}</span>
               </button>
               <button
-                className={`prog-filter-btn ${activeFilter === "diploma" ? "active" : ""}`}
+                className={`prog-filter-btn ${activeFilter === "diploma" ? "active" : ""}`} data-filter="diploma"
                 onClick={() => setActiveFilter("diploma")}
               >
                 <svg

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React, { useState } from 'react';
 import {
   TableCell,
   TableBody,
@@ -18,6 +18,40 @@ const formatFee = (val) => {
     return str;
   }
   return `₹${str}`;
+};
+
+const ProgramHighlightsCell = ({ highlights = [] }) => {
+  const [expanded, setExpanded] = useState(false);
+  const list = Array.isArray(highlights) ? highlights : [];
+
+  if (list.length === 0) {
+    return <span className="text-xs text-gray-400">-</span>;
+  }
+
+  const displayedList = expanded ? list : list.slice(0, 2);
+  const remainingCount = list.length - 2;
+
+  return (
+    <div className="flex flex-col gap-0.5 max-w-xs whitespace-normal break-words">
+      {displayedList.map((h, idx) => (
+        <span key={idx} className="text-[11px] text-gray-600 dark:text-gray-300 leading-snug">
+          ✓ {h}
+        </span>
+      ))}
+      {remainingCount > 0 && (
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded((prev) => !prev);
+          }}
+          className="text-[11px] font-semibold text-red-800 hover:text-red-900 dark:text-red-400 dark:hover:text-red-300 mt-0.5 text-left focus:outline-none cursor-pointer hover:underline inline-block"
+        >
+          {expanded ? 'Show Less' : `+${remainingCount} more`}
+        </button>
+      )}
+    </div>
+  );
 };
 
 const AcademicProgramTable = ({
@@ -114,7 +148,7 @@ const AcademicProgramTable = ({
                 {getProgramTypeBadge(item.programType || item.category)}
               </TableCell>
 
-              {/* Duration & Fees with static ₹ symbol */}
+              {/* Duration & Fees */}
               <TableCell>
                 <div className="flex flex-col">
                   <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">
@@ -126,20 +160,9 @@ const AcademicProgramTable = ({
                 </div>
               </TableCell>
 
-              {/* Highlights */}
+              {/* Interactive Highlights (+more / Show Less toggle) */}
               <TableCell>
-                <div className="flex flex-col gap-0.5 max-w-xs">
-                  {(item.highlights || []).slice(0, 2).map((h, idx) => (
-                    <span key={idx} className="text-[11px] text-gray-600 dark:text-gray-300 truncate">
-                      ✓ {h}
-                    </span>
-                  ))}
-                  {(item.highlights || []).length > 2 && (
-                    <span className="text-[10px] text-gray-400">
-                      +{item.highlights.length - 2} more
-                    </span>
-                  )}
-                </div>
+                <ProgramHighlightsCell highlights={item.highlights} />
               </TableCell>
 
               {/* Time Stamp */}

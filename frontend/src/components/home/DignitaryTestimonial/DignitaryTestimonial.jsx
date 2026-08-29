@@ -1,10 +1,217 @@
-'use client';
+﻿'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './DignitaryTestimonial.module.css';
+import TestimonialServices from '@/services/TestimonialServices';
+
+const getInitials = (name) => {
+  if (!name) return 'D';
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length > 1) {
+    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+  }
+  return parts[0].substring(0, 2).toUpperCase();
+};
 
 export default function DignitaryTestimonial() {
+  const [activeTab, setActiveTab] = useState('dignitary');
+  const [dignitaries, setDignitaries] = useState([]);
+  const [students, setStudents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Slider state for Dignitary & Student
+  const [digIndex, setDigIndex] = useState(0);
+  const [stuIndex, setStuIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [slidesToShow, setSlidesToShow] = useState(3);
+
+  // Responsive slidesToShow detection
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setSlidesToShow(1);
+      } else if (window.innerWidth <= 1024) {
+        setSlidesToShow(2);
+      } else {
+        setSlidesToShow(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Fetch purely dynamic data from API
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        setLoading(true);
+        const [digRes, stuRes] = await Promise.allSettled([
+          TestimonialServices.getDignitaryTestimonials(),
+          TestimonialServices.getStudentTestimonials()
+        ]);
+
+        if (digRes.status === 'fulfilled' && Array.isArray(digRes.value?.data)) {
+          const formattedDig = digRes.value.data.map((item, index) => {
+            let rawAvatar = (item.avatarUrl || item.avatar || item.image || item.photo || '').trim();
+            if (rawAvatar.includes('/assets/')) {
+              rawAvatar = '/assets/' + rawAvatar.split('/assets/')[1];
+            } else if (rawAvatar.startsWith('blob:')) {
+              rawAvatar = '';
+            }
+
+            return {
+              id: item._id || item.guid || index,
+              title: item.title || '',
+              quote: item.quote ? (item.quote.startsWith('"') ? item.quote : `"${item.quote}"`) : '',
+              authorName: item.authorName || 'Dignitary',
+              designationSubtext: item.designationSubtext || '',
+              avatarUrl: rawAvatar,
+              initials: getInitials(item.authorName || 'Dignitary')
+            };
+          });
+          setDignitaries(formattedDig);
+        }
+
+        if (stuRes.status === 'fulfilled' && Array.isArray(stuRes.value?.data)) {
+          const avatarColors = [styles.studAvatarRed, styles.studAvatarGold, styles.studAvatarSky];
+          const formattedStu = stuRes.value.data.map((item, index) => {
+            return {
+              id: item._id || item.guid || index,
+              rating: item.rating || 5,
+              quote: item.quote ? (item.quote.startsWith('"') ? item.quote : `"${item.quote}"`) : '',
+              authorName: item.authorName || 'Student',
+              designationSubtext: item.designationSubtext || '',
+              avatarClass: avatarColors[index % avatarColors.length],
+              initials: getInitials(item.authorName || 'Student')
+            };
+          });
+          setStudents(formattedStu);
+        }
+      } catch (err) {
+        console.error('Error loading testimonials from API:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
+  const totalDignitaries = dignitaries.length;
+  const isDigSliderActive = totalDignitaries > 3;
+  const maxDigIndex = Math.max(0, totalDignitaries - slidesToShow);
+
+  const totalStudents = students.length;
+  const isStuSliderActive = totalStudents > 3;
+  const maxStuIndex = Math.max(0, totalStudents - slidesToShow);
+
+  // Auto-looping slider for Dignitaries
+  useEffect(() => {
+    if (!isDigSliderActive || isPaused || activeTab !== 'dignitary') return;
+
+    const interval = setInterval(() => {
+      setDigIndex((prev) => (prev >= maxDigIndex ? 0 : prev + 1));
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [isDigSliderActive, isPaused, activeTab, maxDigIndex]);
+
+  // Auto-looping slider for Students
+  useEffect(() => {
+    if (!isStuSliderActive || isPaused || activeTab !== 'student') return;
+
+    const interval = setInterval(() => {
+      setStuIndex((prev) => (prev >= maxStuIndex ? 0 : prev + 1));
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [isStuSliderActive, isPaused, activeTab, maxStuIndex]);
+
+  // Dignitary Navigation Handlers
+  const handleDigPrev = () => {
+    setDigIndex((prev) => (prev <= 0 ? maxDigIndex : prev - 1));
+  };
+  const handleDigNext = () => {
+    setDigIndex((prev) => (prev >= maxDigIndex ? 0 : prev + 1));
+  };
+
+  // Student Navigation Handlers
+  const handleStuPrev = () => {
+    setStuIndex((prev) => (prev <= 0 ? maxStuIndex : prev - 1));
+  };
+  const handleStuNext = () => {
+    setStuIndex((prev) => (prev >= maxStuIndex ? 0 : prev + 1));
+  };
+
+  // Card Renderers
+  const renderDignitaryCard = (dig) => (
+    <div key={dig.id} className={`${styles.digiCard} digi-card`}>
+      <div className={`${styles.digiCardInner} digi-card-inner`}>
+        <div className={`${styles.digiQuoteIcon} digi-quote-icon`}>
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
+            <path
+              d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+          </svg>
+        </div>
+        <h3 className={`${styles.digiCardTitle} digi-card-title`}>{dig.title}</h3>
+        <p className={`${styles.digiCardText} digi-card-text`}>{dig.quote}</p>
+        <div className={`${styles.digiCardAuthor} digi-card-author`}>
+          <div className={`${styles.digiAuthorImg} digi-author-img`}>
+            {dig.avatarUrl ? (
+              <Image 
+                src={dig.avatarUrl} 
+                alt={dig.authorName} 
+                width={600} 
+                height={400} 
+                unoptimized={dig.avatarUrl.startsWith('http')}
+              />
+            ) : (
+              <div style={{
+                width: '100%',
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                background: 'linear-gradient(135deg, #8a0000 0%, #b30000 100%)',
+                color: '#ffffff',
+                fontWeight: 800,
+                fontSize: '1.1rem',
+                fontFamily: 'var(--font-heading)'
+              }}>
+                {dig.initials}
+              </div>
+            )}
+          </div>
+          <div className={`${styles.digiAuthorInfo} digi-author-info`}>
+            <h4>{dig.authorName}</h4>
+            <span>{dig.designationSubtext}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+
+  const renderStudentCard = (stu) => (
+    <div key={stu.id} className={`${styles.studTestiCard} stud-testi-card`}>
+      <div className={`${styles.studTestiStars} stud-testi-stars`}>
+        {String.fromCharCode(9733).repeat(Math.max(1, Math.min(5, Number(stu.rating) || 5)))}
+      </div>
+      <p className={`${styles.studTestiQuote} stud-testi-quote`}>{stu.quote}</p>
+      <div className={`${styles.studTestiAuthor} stud-testi-author`}>
+        <div className={`${styles.studAvatar} ${stu.avatarClass || styles.studAvatarRed} stud-avatar`}>
+          {stu.initials}
+        </div>
+        <div>
+          <h4>{stu.authorName}</h4>
+          <span>{stu.designationSubtext}</span>
+        </div>
+      </div>
+    </div>
+  );
+
   return (
     <section className={`${styles.sectionPadding} ${styles.digiTestiSection} section-padding digi-testi-section`} id="testimonials">
       <div className={`${styles.container} container`}>
@@ -17,7 +224,15 @@ export default function DignitaryTestimonial() {
 
         {/* Tab Buttons */}
         <div className={`${styles.digiTabBar} digi-tab-bar`}>
-          <button className={`${styles.digiTab} digi-tab active`} data-panel="dignitaryPanel">
+          <button 
+            type="button"
+            className={`${styles.digiTab} digi-tab ${activeTab === 'dignitary' ? `${styles.active} active` : ''}`} 
+            data-panel="dignitaryPanel"
+            onClick={() => {
+              setActiveTab('dignitary');
+              setDigIndex(0);
+            }}
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
               strokeLinecap="round" strokeLinejoin="round">
               <path d="M22 10v6M2 10l10-5 10 5-10 5z" />
@@ -25,7 +240,15 @@ export default function DignitaryTestimonial() {
             </svg>
             Dignitary Testimonials
           </button>
-          <button className={`${styles.digiTab} digi-tab`} data-panel="studentsPanel">
+          <button 
+            type="button"
+            className={`${styles.digiTab} digi-tab ${activeTab === 'student' ? `${styles.active} active` : ''}`} 
+            data-panel="studentsPanel"
+            onClick={() => {
+              setActiveTab('student');
+              setStuIndex(0);
+            }}
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
               strokeLinecap="round" strokeLinejoin="round">
               <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -37,164 +260,148 @@ export default function DignitaryTestimonial() {
           </button>
         </div>
 
-        {/* Panel 1: Dignitary Dark Cards */}
-        <div className={`${styles.digiPanel} digi-panel active`} id="dignitaryPanel">
-          <div className={`${styles.digiCardsRow} digi-cards-row`}>
-            {/* Card 1 - Vice Chancellor */}
-            <div className={`${styles.digiCard} digi-card`}>
-              <div className={`${styles.digiCardInner} digi-card-inner`}>
-                <div className={`${styles.digiQuoteIcon} digi-quote-icon`}>
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                      d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                  </svg>
-                </div>
-                <h3 className={`${styles.digiCardTitle} digi-card-title`}>A BENCHMARK FOR WOMEN'S HIGHER EDUCATION.</h3>
-                <p className={`${styles.digiCardText} digi-card-text`}>"Nandkunvarba Mahila College has set a benchmark for women's higher education in
-                  Bhavnagar. Their commitment to free transportation, modern infrastructure, and high academic standard
-                  makes them a model institution for women's empowerment."</p>
-                <div className={`${styles.digiCardAuthor} digi-card-author`}>
-                  <div className={`${styles.digiAuthorImg} digi-author-img`}>
-                    <Image src="/assets/team/samkit.jpg" alt="Vice Chancellor" width={600} height={400} />
-                  </div>
-                  <div className={`${styles.digiAuthorInfo} digi-author-info`}>
-                    <h4>Vice Chancellor</h4>
-                    <span>M.K. Bhavnagar University</span>
-                  </div>
-                </div>
-              </div>
+        {/* Panel 1: Dignitary Cards */}
+        <div className={`${styles.digiPanel} digi-panel ${activeTab === 'dignitary' ? `${styles.active} active` : ''}`} id="dignitaryPanel">
+          {dignitaries.length === 0 && !loading ? (
+            <div className={styles.emptyState}>
+              <div className={styles.emptyIcon}>💬</div>
+              <p className={styles.emptyText}>No dignitary testimonials available at the moment.</p>
             </div>
+          ) : isDigSliderActive ? (
+            /* Responsive Auto-Looping Slider for > 3 Cards */
+            <div 
+              className={styles.sliderWrapper}
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
+              <div 
+                className={styles.sliderTrack}
+                style={{
+                  transform: `translateX(-${digIndex * (100 / slidesToShow)}%)`,
+                }}
+              >
+                {dignitaries.map((dig) => (
+                  <div key={dig.id} className={styles.sliderSlide}>
+                    {renderDignitaryCard(dig)}
+                  </div>
+                ))}
+              </div>
 
-            {/* Card 2 - Dr. Rajesh Patel */}
-            <div className={`${styles.digiCard} digi-card`}>
-              <div className={`${styles.digiCardInner} digi-card-inner`}>
-                <div className={`${styles.digiQuoteIcon} digi-quote-icon`}>
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                      d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+              {/* Slider Controls */}
+              <div className={styles.sliderControls}>
+                <button 
+                  type="button" 
+                  className={styles.sliderArrow} 
+                  onClick={handleDigPrev}
+                  aria-label="Previous Testimonial"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="15 18 9 12 15 6" />
                   </svg>
-                </div>
-                <h3 className={`${styles.digiCardTitle} digi-card-title`}>INNOVATIVE PROGRAMS & ZERO-COST FACILITIES.</h3>
-                <p className={`${styles.digiCardText} digi-card-text`}>"The college's dedication to women's education through innovative programs and
-                  zero-cost facilities is truly commendable. An institution that truly lives by its mission of empowering
-                  young women."</p>
-                <div className={`${styles.digiCardAuthor} digi-card-author`}>
-                  <div className={`${styles.digiAuthorImg} digi-author-img`}>
-                    <Image src="/assets/team/mehul.jpg" alt="Dr. Rajesh Patel" width={600} height={400} />
-                  </div>
-                  <div className={`${styles.digiAuthorInfo} digi-author-info`}>
-                    <h4>Dr. Rajesh Patel</h4>
-                    <span>Education Board Member</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+                </button>
 
-            {/* Card 3 - Shri Mehta */}
-            <div className={`${styles.digiCard} digi-card`}>
-              <div className={`${styles.digiCardInner} digi-card-inner`}>
-                <div className={`${styles.digiQuoteIcon} digi-quote-icon`}>
-                  <svg width="48" height="48" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                      d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                <div className={styles.sliderDots}>
+                  {Array.from({ length: maxDigIndex + 1 }).map((_, dotIdx) => (
+                    <button
+                      key={dotIdx}
+                      type="button"
+                      className={`${styles.sliderDot} ${digIndex === dotIdx ? styles.sliderDotActive : ''}`}
+                      onClick={() => setDigIndex(dotIdx)}
+                      aria-label={`Go to slide ${dotIdx + 1}`}
+                    />
+                  ))}
+                </div>
+
+                <button 
+                  type="button" 
+                  className={styles.sliderArrow} 
+                  onClick={handleDigNext}
+                  aria-label="Next Testimonial"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="9 18 15 12 9 6" />
                   </svg>
-                </div>
-                <h3 className={`${styles.digiCardTitle} digi-card-title`}>HOLISTIC EDUCATION & CAREER READINESS.</h3>
-                <p className={`${styles.digiCardText} digi-card-text`}>"NMC's approach to holistic women's education — combining academics with personality development and career skills — creates well-rounded graduates ready for the modern workforce."</p>
-                <div className={`${styles.digiCardAuthor} digi-card-author`}>
-                  <div className={`${styles.digiAuthorImg} digi-author-img`}>
-                    <Image src="/assets/team/ankita.jpg" alt="Shri Mehta" width={600} height={400} />
-                  </div>
-                  <div className={`${styles.digiAuthorInfo} digi-author-info`}>
-                    <h4>Shri Mehta</h4>
-                    <span>Trust Chairman</span>
-                  </div>
-                </div>
+                </button>
               </div>
             </div>
-          </div>
+          ) : (
+            /* Standard Grid for <= 3 Cards */
+            <div className={`${styles.digiCardsRow} digi-cards-row`}>
+              {dignitaries.map((dig) => renderDignitaryCard(dig))}
+            </div>
+          )}
         </div>
 
         {/* Panel 2: Student Cards */}
-        <div className={`${styles.digiPanel} digi-panel`} id="studentsPanel">
-          <div className={`${styles.studTestiGrid} stud-testi-grid`}>
-            <div className={`${styles.studTestiCard} stud-testi-card`}>
-              <div className={`${styles.studTestiStars} stud-testi-stars`}>{"\u2605\u2605\u2605\u2605\u2605"}</div>
-              <p className={`${styles.studTestiQuote} stud-testi-quote`}>"The free bus pick-up service gave my parents complete peace of mind, and the
-                BCA faculty supported me to launch my IT software career."</p>
-              <div className={`${styles.studTestiAuthor} stud-testi-author`}>
-                <div className={`${styles.studAvatar} ${styles.studAvatarRed} stud-avatar stud-avatar-red`}>PG</div>
-                <div>
-                  <h4>Priyaba Gohil</h4>
-                  <span>BCA Alumna (Batch 2024)</span>
-                </div>
-              </div>
+        <div className={`${styles.digiPanel} digi-panel ${activeTab === 'student' ? `${styles.active} active` : ''}`} id="studentsPanel">
+          {students.length === 0 && !loading ? (
+            <div className={styles.emptyState}>
+              <div className={styles.emptyIcon}>🎓</div>
+              <p className={styles.emptyText}>No student testimonials available at the moment.</p>
             </div>
+          ) : isStuSliderActive ? (
+            /* Responsive Auto-Looping Slider for > 3 Student Cards */
+            <div 
+              className={styles.sliderWrapper}
+              onMouseEnter={() => setIsPaused(true)}
+              onMouseLeave={() => setIsPaused(false)}
+            >
+              <div 
+                className={styles.sliderTrack}
+                style={{
+                  transform: `translateX(-${stuIndex * (100 / slidesToShow)}%)`,
+                }}
+              >
+                {students.map((stu) => (
+                  <div key={stu.id} className={styles.sliderSlide}>
+                    {renderStudentCard(stu)}
+                  </div>
+                ))}
+              </div>
 
-            <div className={`${styles.studTestiCard} stud-testi-card`}>
-              <div className={`${styles.studTestiStars} stud-testi-stars`}>{"\u2605\u2605\u2605\u2605\u2605"}</div>
-              <p className={`${styles.studTestiQuote} stud-testi-quote`}>"The free blazer gift made us feel like executive professionals right from day
-                one! Proud to be an NMCian."</p>
-              <div className={`${styles.studTestiAuthor} stud-testi-author`}>
-                <div className={`${styles.studAvatar} ${styles.studAvatarGold} stud-avatar stud-avatar-gold`}>KR</div>
-                <div>
-                  <h4>Kavita Rathod</h4>
-                  <span>BBA Student</span>
-                </div>
-              </div>
-            </div>
+              {/* Slider Controls */}
+              <div className={styles.sliderControls}>
+                <button 
+                  type="button" 
+                  className={styles.sliderArrow} 
+                  onClick={handleStuPrev}
+                  aria-label="Previous Student Testimonial"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="15 18 9 12 15 6" />
+                  </svg>
+                </button>
 
-            <div className={`${styles.studTestiCard} stud-testi-card`}>
-              <div className={`${styles.studTestiStars} stud-testi-stars`}>{"\u2605\u2605\u2605\u2605\u2605"}</div>
-              <p className={`${styles.studTestiQuote} stud-testi-quote`}>"MSW fieldwork training gave me real-world experience in community service. NMC
-                shaped my career path completely."</p>
-              <div className={`${styles.studTestiAuthor} stud-testi-author`}>
-                <div className={`${styles.studAvatar} ${styles.studAvatarSky} stud-avatar stud-avatar-sky`}>NP</div>
-                <div>
-                  <h4>Neha Parmar</h4>
-                  <span>MSW Graduate (2023)</span>
+                <div className={styles.sliderDots}>
+                  {Array.from({ length: maxStuIndex + 1 }).map((_, dotIdx) => (
+                    <button
+                      key={dotIdx}
+                      type="button"
+                      className={`${styles.sliderDot} ${stuIndex === dotIdx ? styles.sliderDotActive : ''}`}
+                      onClick={() => setStuIndex(dotIdx)}
+                      aria-label={`Go to slide ${dotIdx + 1}`}
+                    />
+                  ))}
                 </div>
-              </div>
-            </div>
 
-            <div className={`${styles.studTestiCard} stud-testi-card`}>
-              <div className={`${styles.studTestiStars} stud-testi-stars`}>{"\u2605\u2605\u2605\u2605\u2605"}</div>
-              <p className={`${styles.studTestiQuote} stud-testi-quote`}>"Fashion Designing course at NMC was incredible — the studio, faculty, and practical exposure prepared me for the industry."</p>
-              <div className={`${styles.studTestiAuthor} stud-testi-author`}>
-                <div className={`${styles.studAvatar} ${styles.studAvatarRed} stud-avatar stud-avatar-red`}>RJ</div>
-                <div>
-                  <h4>Riya Joshi</h4>
-                  <span>DFD Student</span>
-                </div>
+                <button 
+                  type="button" 
+                  className={styles.sliderArrow} 
+                  onClick={handleStuNext}
+                  aria-label="Next Student Testimonial"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                    <polyline points="9 18 15 12 9 6" />
+                  </svg>
+                </button>
               </div>
             </div>
-
-            <div className={`${styles.studTestiCard} stud-testi-card`}>
-              <div className={`${styles.studTestiStars} stud-testi-stars`}>{"\u2605\u2605\u2605\u2605\u2605"}</div>
-              <p className={`${styles.studTestiQuote} stud-testi-quote`}>"The computer lab facilities are excellent. I learned C++, Java, and Web
-                Development with full practical exposure."</p>
-              <div className={`${styles.studTestiAuthor} stud-testi-author`}>
-                <div className={`${styles.studAvatar} ${styles.studAvatarSky} stud-avatar stud-avatar-sky`}>SP</div>
-                <div>
-                  <h4>Shreya Patel</h4>
-                  <span>BCA Student (2025)</span>
-                </div>
-              </div>
+          ) : (
+            /* Standard Grid for <= 3 Student Cards */
+            <div className={`${styles.studTestiGrid} stud-testi-grid`}>
+              {students.map((stu) => renderStudentCard(stu))}
             </div>
-
-            <div className={`${styles.studTestiCard} stud-testi-card`}>
-              <div className={`${styles.studTestiStars} stud-testi-stars`}>{"\u2605\u2605\u2605\u2605\u2605"}</div>
-              <p className={`${styles.studTestiQuote} stud-testi-quote`}>"Commerce faculty here is amazing. Tally and GST certificate course gave me a
-                huge advantage in placement interviews."</p>
-              <div className={`${styles.studTestiAuthor} stud-testi-author`}>
-                <div className={`${styles.studAvatar} ${styles.studAvatarGold} stud-avatar stud-avatar-gold`}>DV</div>
-                <div>
-                  <h4>Divya Vaghela</h4>
-                  <span>B.Com Graduate (2024)</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
 
       </div>

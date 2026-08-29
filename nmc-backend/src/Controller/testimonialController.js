@@ -1,14 +1,27 @@
-const Testimonial = require("../Model/testimonial");
+﻿const Testimonial = require("../Model/testimonial");
 const moment = require("moment-timezone");
+const config = require("../Config/app");
+const { saveLocalAndCreateWebp, uploadToS3AndCreateWebp, deleteLocalImages, deleteS3Objects } = require("../Utils/imageProcessor");
 const { generateSlug } = require("../helper");
 
+const isProduction = () => config.NODE_ENV === "production";
+
 /**
- * Format testimonial record for client response with Asia/Kolkata timezone
+ * Format testimonial record for client response with Asia/Kolkata timezone and resolved URLs
  */
-const formatTestimonial = (item) => {
+const formatTestimonial = (item, req) => {
   const doc = item._doc || item;
+  let avatarUrl = doc.avatarUrl || "";
+
+  if (avatarUrl && !avatarUrl.startsWith("http://") && !avatarUrl.startsWith("https://") && !avatarUrl.startsWith("blob:") && req) {
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    const cleanPath = avatarUrl.startsWith("/") ? avatarUrl : `/${avatarUrl}`;
+    avatarUrl = `${baseUrl}${cleanPath}`;
+  }
+
   return {
     ...doc,
+    avatarUrl,
     created_at: moment(doc.created_at || doc.createdAt).tz("Asia/Kolkata").format("YYYY-MM-DD HH:mm:ss"),
     updated_at: moment(doc.updated_at || doc.updatedAt).tz("Asia/Kolkata").format("YYYY-MM-DD HH:mm:ss"),
   };
@@ -60,29 +73,29 @@ exports.getTestimonials = async (req, res, next) => {
     }
 
     const sortField = sort_by || "sortOrder";
-    const sortDirection = sort_order === "desc" ? -1 : 1;
+    const sortDirection = sort_order === "desc" ? -1 : (sort_by ? 1 : 1);
+    const sortOption = { [sortField]: sortDirection, created_at: -1 };
 
-    const pageLimit = limit ? parseInt(limit) : 0;
-    const pageOffset = offset ? parseInt(offset) : 0;
+    let query = Testimonial.find(filter).sort(sortOption);
 
-    let testimonialQuery = Testimonial.find(filter)
-      .populate("created_by", "first_name last_name email")
-      .populate("updated_by", "first_name last_name email")
-      .sort({ [sortField]: sortDirection, created_at: -1 })
-      .skip(pageOffset);
-
-    if (pageLimit > 0) {
-      testimonialQuery = testimonialQuery.limit(pageLimit);
+    if (offset && !isNaN(Number(offset))) {
+      query = query.skip(Number(offset));
     }
 
-    const testimonials = await testimonialQuery;
-    const totalCount = await Testimonial.countDocuments(filter);
+    if (limit && !isNaN(Number(limit))) {
+      query = query.limit(Number(limit));
+    }
+
+    const [testimonials, totalCount] = await Promise.all([
+      query.exec(),
+      Testimonial.countDocuments(filter),
+    ]);
 
     return res.status(200).json({
       status: 200,
       success: true,
       count: totalCount,
-      data: testimonials.map(formatTestimonial),
+      data: testimonials.map(item => formatTestimonial(item, req)),
     });
   } catch (error) {
     next(error);
@@ -121,13 +134,12 @@ exports.getTestimonialById = async (req, res, next) => {
     return res.status(200).json({
       status: 200,
       success: true,
-      data: formatTestimonial(testimonial),
+      data: formatTestimonial(testimonial, req),
     });
   } catch (error) {
     next(error);
   }
 };
-
 
 // @desc    Create new testimonial (maps both Student and Dignitary form fields)
 // @route   POST /api/testimonials
@@ -136,8 +148,6 @@ exports.createTestimonial = async (req, res, next) => {
     const body = req.body || {};
     const errors = {};
 
-    // 1. Normalize form field aliases
-    // Testimonial Type: 'student' or 'dignitary' (accepts 'Student Testimonials', 'Dignitary Testimonials')
     let rawType = body.type || body.testimonial_type || body.testimonialType;
     let type = "";
     if (rawType) {
@@ -153,25 +163,21 @@ exports.createTestimonial = async (req, res, next) => {
       errors.type = ["Testimonial type must be either 'student' or 'dignitary'."];
     }
 
-    // Name: Student Name / Dignitary Name
     const authorName = body.authorName || body.author_name || body.student_name || body.studentName || body.dignitary_name || body.dignitaryName || body.name;
     if (!authorName || !authorName.toString().trim()) {
       errors.authorName = [type === "student" ? "Student Name is mandatory." : "Dignitary Name is mandatory."];
     }
 
-    // Designation / Subtext: Course/Subtext or Designation/Subtext
     const designationSubtext = body.designationSubtext || body.designation_subtext || body.course || body.course_subtext || body.designation || body.subtext;
     if (!designationSubtext || !designationSubtext.toString().trim()) {
       errors.designationSubtext = [type === "student" ? "Course / Subtext is mandatory." : "Designation / Subtext is mandatory."];
     }
 
-    // Testimonial Quote
     const quote = body.quote || body.testimonial_quote || body.testimonialQuote || body.description;
     if (!quote || !quote.toString().trim()) {
       errors.quote = ["Testimonial Quote is mandatory."];
     }
 
-    // Type-specific field validations
     let title = body.title || body.headline || body.headline_title || body.headlineTitle || "";
     if (type === "dignitary") {
       if (!title || !title.toString().trim()) {
@@ -192,15 +198,9 @@ exports.createTestimonial = async (req, res, next) => {
         }
       }
     } else {
-      // Dignitary does not use rating
       rating = null;
     }
 
-
-    // Image / Photo
-    const avatarUrl = body.avatarUrl || body.avatar_url || body.student_photo || body.profile_photo || body.image || body.photo || "";
-
-    // Return all validation errors if any field is missing or invalid
     if (Object.keys(errors).length > 0) {
       return res.status(400).json({
         status: 400,
@@ -209,7 +209,22 @@ exports.createTestimonial = async (req, res, next) => {
       });
     }
 
-    // Determine created_by
+    let avatarUrl = "";
+    if (req.file) {
+      if (isProduction()) {
+        const uploadResult = await uploadToS3AndCreateWebp(req.file, "testimonials");
+        avatarUrl = uploadResult.originalKey;
+      } else {
+        const result = await saveLocalAndCreateWebp(req.file, "testimonials");
+        avatarUrl = result.originalPath;
+      }
+    } else if (body.avatarUrl || body.avatar_url || body.student_photo || body.profile_photo || body.image || body.photo) {
+      const rawAvatar = body.avatarUrl || body.avatar_url || body.student_photo || body.profile_photo || body.image || body.photo;
+      if (!rawAvatar.startsWith("blob:")) {
+        avatarUrl = rawAvatar.toString().trim();
+      }
+    }
+
     const created_by = req.user ? req.user._id : (body.created_by || null);
 
     const newTestimonial = new Testimonial({
@@ -219,8 +234,9 @@ exports.createTestimonial = async (req, res, next) => {
       designationSubtext: designationSubtext.toString().trim(),
       quote: quote.toString().trim(),
       rating,
-      avatarUrl: avatarUrl ? avatarUrl.toString().trim() : "",
+      avatarUrl,
       isActive: typeof body.isActive !== "undefined" ? (body.isActive === true || body.isActive === "true" || body.isActive === 1 || body.isActive === "1") : true,
+      status: body.status ? body.status.toLowerCase().trim() : "active",
       sortOrder: typeof body.sortOrder !== "undefined" ? Number(body.sortOrder) : 0,
       created_by,
       updated_by: created_by,
@@ -234,7 +250,7 @@ exports.createTestimonial = async (req, res, next) => {
       status: 201,
       success: true,
       message: "Testimonial created successfully",
-      data: formatTestimonial(newTestimonial),
+      data: formatTestimonial(newTestimonial, req),
     });
   } catch (error) {
     next(error);
@@ -266,11 +282,9 @@ exports.updateTestimonial = async (req, res, next) => {
       });
     }
 
-
     const body = req.body || {};
     const errors = {};
 
-    // Check Type if updating
     let targetType = existingTestimonial.type;
     if (body.type || body.testimonial_type || body.testimonialType) {
       const rawType = body.type || body.testimonial_type || body.testimonialType;
@@ -284,7 +298,6 @@ exports.updateTestimonial = async (req, res, next) => {
       }
     }
 
-    // Check Name if updating
     if (body.authorName !== undefined || body.author_name !== undefined || body.student_name !== undefined || body.dignitary_name !== undefined || body.name !== undefined) {
       const authorName = body.authorName || body.author_name || body.student_name || body.dignitary_name || body.name;
       if (!authorName || !authorName.toString().trim()) {
@@ -294,7 +307,6 @@ exports.updateTestimonial = async (req, res, next) => {
       }
     }
 
-    // Check Designation / Subtext if updating
     if (body.designationSubtext !== undefined || body.designation_subtext !== undefined || body.course !== undefined || body.designation !== undefined || body.subtext !== undefined) {
       const designationSubtext = body.designationSubtext || body.designation_subtext || body.course || body.designation || body.subtext;
       if (!designationSubtext || !designationSubtext.toString().trim()) {
@@ -304,7 +316,6 @@ exports.updateTestimonial = async (req, res, next) => {
       }
     }
 
-    // Check Quote if updating
     if (body.quote !== undefined || body.testimonial_quote !== undefined || body.description !== undefined) {
       const quote = body.quote || body.testimonial_quote || body.description;
       if (!quote || !quote.toString().trim()) {
@@ -314,7 +325,6 @@ exports.updateTestimonial = async (req, res, next) => {
       }
     }
 
-    // Check Title / Headline
     if (body.title !== undefined || body.headline !== undefined || body.headline_title !== undefined) {
       const title = body.title !== undefined ? body.title : (body.headline !== undefined ? body.headline : body.headline_title);
       if (targetType === "dignitary" && (!title || !title.toString().trim())) {
@@ -326,7 +336,6 @@ exports.updateTestimonial = async (req, res, next) => {
       errors.title = ["Headline / Title is mandatory for Dignitary Testimonials."];
     }
 
-    // Check Rating
     if (targetType === "dignitary") {
       existingTestimonial.rating = null;
     } else if (body.rating !== undefined) {
@@ -338,7 +347,6 @@ exports.updateTestimonial = async (req, res, next) => {
       }
     }
 
-
     if (Object.keys(errors).length > 0) {
       return res.status(400).json({
         status: 400,
@@ -347,14 +355,35 @@ exports.updateTestimonial = async (req, res, next) => {
       });
     }
 
-    // Update remaining attributes
     existingTestimonial.type = targetType;
-    if (body.avatarUrl !== undefined || body.avatar_url !== undefined || body.student_photo !== undefined || body.profile_photo !== undefined || body.image !== undefined) {
+
+    if (req.file) {
+      let newOriginal, newWebp;
+      if (isProduction()) {
+        const uploadResult = await uploadToS3AndCreateWebp(req.file, "testimonials");
+        newOriginal = uploadResult.originalKey;
+        newWebp = uploadResult.webpKey;
+        if (existingTestimonial.avatarUrl) await deleteS3Objects([existingTestimonial.avatarUrl]);
+      } else {
+        const result = await saveLocalAndCreateWebp(req.file, "testimonials");
+        newOriginal = result.originalPath;
+        newWebp = result.webpPath;
+        deleteLocalImages(existingTestimonial.avatarUrl);
+      }
+      existingTestimonial.avatarUrl = newOriginal;
+    } else if (body.avatarUrl !== undefined || body.avatar_url !== undefined || body.student_photo !== undefined || body.profile_photo !== undefined || body.image !== undefined) {
       const avatarUrl = body.avatarUrl !== undefined ? body.avatarUrl : (body.avatar_url !== undefined ? body.avatar_url : (body.student_photo !== undefined ? body.student_photo : (body.profile_photo !== undefined ? body.profile_photo : body.image)));
-      existingTestimonial.avatarUrl = avatarUrl ? avatarUrl.toString().trim() : "";
+      if (avatarUrl && !avatarUrl.startsWith("blob:")) {
+        existingTestimonial.avatarUrl = avatarUrl.toString().trim();
+      }
     }
+
     if (typeof body.isActive !== "undefined") {
       existingTestimonial.isActive = body.isActive === true || body.isActive === "true" || body.isActive === 1 || body.isActive === "1";
+      existingTestimonial.status = existingTestimonial.isActive ? "active" : "inactive";
+    } else if (body.status !== undefined) {
+      existingTestimonial.status = body.status.toString().toLowerCase().trim();
+      existingTestimonial.isActive = existingTestimonial.status === "active";
     }
     if (typeof body.sortOrder !== "undefined") {
       existingTestimonial.sortOrder = Number(body.sortOrder);
@@ -373,7 +402,7 @@ exports.updateTestimonial = async (req, res, next) => {
       status: 200,
       success: true,
       message: "Testimonial updated successfully",
-      data: formatTestimonial(existingTestimonial),
+      data: formatTestimonial(existingTestimonial, req),
     });
   } catch (error) {
     next(error);
@@ -406,7 +435,6 @@ exports.deleteTestimonial = async (req, res, next) => {
       });
     }
 
-    // Soft delete
     testimonial.is_deleted = true;
     testimonial.status = "inactive";
     testimonial.isActive = false;
@@ -429,5 +457,4 @@ exports.deleteTestimonial = async (req, res, next) => {
     next(error);
   }
 };
-
 

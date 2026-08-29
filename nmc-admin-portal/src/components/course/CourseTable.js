@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import {
   TableCell,
   TableBody,
@@ -7,6 +7,7 @@ import {
   Badge,
 } from '@windmill/react-ui';
 import EditDeleteButton from '../table/EditDeleteButton';
+import ShowHideButton from '../table/ShowHideButton';
 import DateBox from '../form/DateBox';
 import ExpandableText from '../common/ExpandableText';
 import { Fancybox } from '@fancyapps/ui';
@@ -30,7 +31,6 @@ const CourseTable = ({
     };
   }, []);
 
-
   return (
     <>
       <TableHeader>
@@ -41,6 +41,7 @@ const CourseTable = ({
           <TableCell>Highlights & Fees</TableCell>
           <TableCell className="w-56">Description</TableCell>
           <TableCell>Time Stamp</TableCell>
+          <TableCell className="text-center">Status</TableCell>
           <TableCell className="text-right">Actions</TableCell>
         </tr>
       </TableHeader>
@@ -52,6 +53,7 @@ const CourseTable = ({
           const badgeText = item.badge || item.tag;
           const rawImg = item.imageUrl || item.image_url || item.image || '';
           const fallbackImg = 'https://runrkids.s3.ap-south-1.amazonaws.com/media/default/default.png';
+          const statusVal = item.status === 'active' || item.status === 1 || item.status === true || item.is_active === true || item.is_active === 1 ? 1 : 0;
 
           let img = fallbackImg;
           if (rawImg) {
@@ -70,8 +72,6 @@ const CourseTable = ({
               img = `${backendBase}${cleanPath}`;
             }
           }
-
-
 
           return (
             <TableRow key={itemKey}>
@@ -101,7 +101,6 @@ const CourseTable = ({
                 </div>
               </TableCell>
 
-
               {/* Course Title + Category + Tag/Badge Badges */}
               <TableCell>
                 <div className="flex flex-col gap-1 max-w-xs">
@@ -116,7 +115,7 @@ const CourseTable = ({
                     )}
                     {badgeText && (
                       <Badge type="success" className="bg-emerald-50 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300 text-[10px] font-semibold">
-                        ⭐ {badgeText}
+                        ★ {badgeText}
                       </Badge>
                     )}
                   </div>
@@ -161,6 +160,15 @@ const CourseTable = ({
                 <DateBox
                   created_at={item.createdAt || item.created_at}
                   updated_at={item.updatedAt || item.updated_at}
+                />
+              </TableCell>
+
+              {/* Status Toggle */}
+              <TableCell className="text-center">
+                <ShowHideButton
+                  id={actionId}
+                  status={statusVal}
+                  type="certificateCourse"
                 />
               </TableCell>
 

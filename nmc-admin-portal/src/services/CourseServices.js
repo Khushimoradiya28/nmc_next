@@ -1,9 +1,12 @@
-import requests from './httpService';
+﻿import requests from './httpService';
 
 const CourseServices = {
-  // 1. Get All Courses List
-  getAllCourses: async ({ page = 1, limit = 10, search = '', status = 'active' } = {}) => {
-    return requests.get(`/certificate-courses?page=${page}&limit=${limit}&search=${search}&status=${status}`);
+  // 1. Get All Courses List (default fetch all including active & inactive in admin)
+  getAllCourses: async ({ page = 1, limit = 50, search = '', status = '' } = {}) => {
+    let url = `/certificate-courses?page=${page}&limit=${limit}`;
+    if (search && search.trim()) url += `&search=${encodeURIComponent(search.trim())}`;
+    if (status && status !== 'all') url += `&status=${encodeURIComponent(status)}`;
+    return requests.get(url);
   },
 
   // 2. Get Single Course by Slug or ID

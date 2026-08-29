@@ -1,5 +1,6 @@
-import React from 'react';
-import { FiX, FiClock, FiDollarSign, FiBookOpen, FiList } from 'react-icons/fi';
+﻿import React from 'react';
+import { FiX, FiClock, FiBookOpen, FiList } from 'react-icons/fi';
+import { TbCurrencyRupee } from 'react-icons/tb';
 
 const formatFee = (val) => {
   if (!val) return 'Contact for details';
@@ -104,7 +105,7 @@ const AcademicProgramDetailModal = ({ isOpen, onClose, program }) => {
               FEES STRUCTURE
             </span>
             <div className="flex items-center gap-2 mt-1">
-              <FiDollarSign className="w-4 h-4 text-gray-500 dark:text-gray-400" />
+              <TbCurrencyRupee className="w-4 h-4 text-gray-500 dark:text-gray-400" />
               <span className="text-base font-medium text-gray-900 dark:text-gray-100">
                 {feeDisplay}
               </span>

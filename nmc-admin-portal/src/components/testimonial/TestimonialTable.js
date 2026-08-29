@@ -1,13 +1,13 @@
-import React from 'react';
+﻿import React, { useState } from 'react';
 import {
   TableCell,
   TableBody,
   TableRow,
   TableHeader,
   Badge,
-  Avatar,
 } from '@windmill/react-ui';
 import EditDeleteButton from '../table/EditDeleteButton';
+import ShowHideButton from '../table/ShowHideButton';
 import ExpandableText from '../common/ExpandableText';
 import DateBox from '../form/DateBox';
 
@@ -24,6 +24,47 @@ const QuoteCell = ({ title, quote }) => {
   );
 };
 
+const resolveImageSrc = (imageUrl) => {
+  if (!imageUrl) return '';
+  const clean = imageUrl.trim();
+  if (clean.startsWith('http://') || clean.startsWith('https://') || clean.startsWith('blob:')) {
+    return clean;
+  }
+  const backendBase = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
+  let cleanPath = clean;
+  if (!clean.startsWith('/')) {
+    if (clean.startsWith('media/') || clean.startsWith('uploads/')) {
+      cleanPath = `/${clean}`;
+    } else {
+      cleanPath = `/media/certificate_courses/${clean}`;
+    }
+  }
+  return `${backendBase}${cleanPath}`;
+};
+
+const TestimonialAvatar = ({ item, getInitials }) => {
+  const [imgError, setImgError] = useState(false);
+  const rawAvatar = (item.avatarUrl || item.avatar || item.image || item.image_url || '').trim();
+  const avatarSrc = resolveImageSrc(rawAvatar);
+
+  if (item.type === 'dignitary' && rawAvatar && !imgError) {
+    return (
+      <img
+        src={avatarSrc}
+        alt={item.authorName || 'Avatar'}
+        className="w-8 h-8 rounded-full object-cover shrink-0 border border-gray-200 dark:border-gray-600 shadow-sm"
+        onError={() => setImgError(true)}
+      />
+    );
+  }
+
+  return (
+    <div className="w-8 h-8 rounded-full bg-red-800 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
+      {getInitials(item.authorName)}
+    </div>
+  );
+};
+
 const TestimonialTable = ({
   testimonials = [],
   currentPage = 1,
@@ -34,11 +75,9 @@ const TestimonialTable = ({
   const displayTestimonials = Array.isArray(testimonials) ? testimonials : [];
   const startIndex = (currentPage - 1) * resultsPerPage;
 
-
-  // Helper to generate initials from name (e.g. "Priyaba Gohil" -> "PG")
   const getInitials = (name) => {
-    if (!name) return 'ST';
-    const parts = name.trim().split(' ');
+    if (!name) return 'D';
+    const parts = name.trim().split(/\s+/).filter(Boolean);
     if (parts.length >= 2) {
       return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
     }
@@ -56,6 +95,7 @@ const TestimonialTable = ({
           <TableCell className="w-64">Title / Quote</TableCell>
           <TableCell>Rating</TableCell>
           <TableCell>Time Stamp</TableCell>
+          <TableCell className="text-center">Status</TableCell>
           <TableCell className="text-right">Actions</TableCell>
         </tr>
       </TableHeader>
@@ -64,6 +104,9 @@ const TestimonialTable = ({
         {displayTestimonials.map((item, i) => {
           const itemKey = item.slug || item._id || item.id || i;
           const actionId = item.slug || item._id || item.id;
+          const isActuallyActive = item.isActive === true || item.isActive === 'true' || item.isActive === 1 || item.isActive === '1';
+          const statusVal = isActuallyActive && item.status !== 'inactive' ? 1 : 0;
+
           return (
             <TableRow key={itemKey}>
               {/* Sr No */}
@@ -89,36 +132,12 @@ const TestimonialTable = ({
               {/* Author / Student */}
               <TableCell>
                 <div className="flex items-center gap-3">
-                  {item.type === 'dignitary' && (item.avatarUrl || item.avatar || item.image_url) ? (
-                    (() => {
-                      const rawAvatar = item.avatarUrl || item.avatar || item.image_url;
-                      let avatarSrc = rawAvatar;
-                      if (!rawAvatar.startsWith('http://') && !rawAvatar.startsWith('https://') && !rawAvatar.startsWith('blob:')) {
-                        const backendBase = (process.env.REACT_APP_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
-                        const cleanPath = rawAvatar.startsWith('/') ? rawAvatar : rawAvatar.startsWith('uploads/') ? `/${rawAvatar}` : `/uploads/${rawAvatar}`;
-                        avatarSrc = `${backendBase}${cleanPath}`;
-                      }
-                      return (
-                        <Avatar
-                          src={avatarSrc}
-                          alt={item.authorName || 'Avatar'}
-                          size="regular"
-                          className="shrink-0"
-                        />
-                      );
-
-                    })()
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-red-800 text-white font-bold text-xs flex items-center justify-center shrink-0 shadow-sm">
-                      {getInitials(item.authorName)}
-                    </div>
-                  )}
+                  <TestimonialAvatar item={item} getInitials={getInitials} />
                   <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">
                     {item.authorName || '-'}
                   </span>
                 </div>
               </TableCell>
-
 
               {/* Designation / Subtext */}
               <TableCell>
@@ -136,7 +155,7 @@ const TestimonialTable = ({
               <TableCell>
                 {item.type === 'student' ? (
                   <span className="text-xs font-semibold text-amber-500">
-                    {'⭐'.repeat(item.rating || 5)} ({item.rating || 5}/5)
+                    {'★'.repeat(item.rating || 5)} ({item.rating || 5}/5)
                   </span>
                 ) : (
                   <span className="text-xs text-gray-400">-</span>
@@ -148,6 +167,15 @@ const TestimonialTable = ({
                 <DateBox
                   created_at={item.createdAt || item.created_at}
                   updated_at={item.updatedAt || item.updated_at}
+                />
+              </TableCell>
+
+              {/* Status Toggle */}
+              <TableCell className="text-center">
+                <ShowHideButton
+                  id={actionId}
+                  status={statusVal}
+                  type="testimonial"
                 />
               </TableCell>
 
@@ -170,3 +198,4 @@ const TestimonialTable = ({
 };
 
 export default React.memo(TestimonialTable);
+

@@ -8,17 +8,7 @@ import {
   Avatar,
 } from '@windmill/react-ui';
 import { FiEye, FiEdit, FiTrash2 } from 'react-icons/fi';
-import ShowHideButton from '../table/ShowHideButton';
 import DateBox from '../form/DateBox';
-
-const formatExperience = (exp) => {
-  if (!exp) return '-';
-  const str = String(exp).trim();
-  if (str.toLowerCase().includes('year')) {
-    return str;
-  }
-  return `${str} Years Exp.`;
-};
 
 const FacultyTable = ({
   faculties = [],
@@ -37,12 +27,10 @@ const FacultyTable = ({
         <tr>
           <TableCell>Sr. No.</TableCell>
           <TableCell>Faculty Member</TableCell>
-          <TableCell>Designation & Role</TableCell>
-          <TableCell>Qualifications</TableCell>
-          <TableCell>Teaching Streams</TableCell>
-          <TableCell>Experience</TableCell>
+          <TableCell>Badge / Category</TableCell>
+          <TableCell>Designation & Qualification</TableCell>
+          <TableCell>Experience & Stream</TableCell>
           <TableCell>Time Stamp</TableCell>
-          <TableCell className="text-center">Status</TableCell>
           <TableCell className="text-right">Actions</TableCell>
         </tr>
       </TableHeader>
@@ -56,20 +44,12 @@ const FacultyTable = ({
             item.image ||
             item.photo ||
             'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80';
-          const designation = item.designation || item.badgeTag || item.badge || 'Faculty';
-          const qualification = item.qualifications || item.qualification || '-';
-          const experience = formatExperience(item.experience);
+          const badge = item.badgeTag || item.badge || 'FACULTY';
+          const designation = item.designation || '';
+          const qualification = item.qualifications || item.qualification || '';
+          const experience = item.experience || 'N/A';
+          const department = item.department || item.stream || 'B.B.A.';
           const highlight = item.keyHighlight || item.highlight || '';
-
-          const rawStreams = item.coursesStreams || item.courses_streams || item.streams || item.courseStreams;
-          let streamsList = [];
-          if (Array.isArray(rawStreams)) {
-            streamsList = rawStreams.map((s) => (typeof s === 'string' ? s : s?.value || s?.label || s?.shortTitle || ''));
-          } else if (typeof rawStreams === 'string' && rawStreams) {
-            streamsList = rawStreams.split(',').map((s) => s.trim()).filter(Boolean);
-          } else if (item.department) {
-            streamsList = item.department.split(',').map((s) => s.trim()).filter(Boolean);
-          }
 
           return (
             <TableRow key={item._id || item.slug || item.id || i}>
@@ -102,46 +82,38 @@ const FacultyTable = ({
                 </div>
               </TableCell>
 
-              {/* Designation & Role */}
+              {/* Badge Tag */}
               <TableCell>
                 <Badge
                   type="danger"
-                  className="bg-red-50 text-red-800 dark:bg-red-950/60 dark:text-red-300 font-bold px-2.5 py-1 text-[11px] rounded-full uppercase"
+                  className="bg-red-100 text-red-800 dark:bg-red-950/60 dark:text-red-300 font-bold px-2.5 py-1 text-[11px] rounded-full uppercase"
                 >
-                  {designation}
+                  {badge}
                 </Badge>
               </TableCell>
 
-              {/* Qualifications */}
+              {/* Designation & Qualification */}
               <TableCell>
-                <span className="text-xs text-gray-600 dark:text-gray-300 font-medium">
-                  {qualification}
-                </span>
-              </TableCell>
-
-              {/* Teaching Streams */}
-              <TableCell>
-                <div className="flex flex-wrap gap-1 max-w-[200px]">
-                  {streamsList.length > 0 ? (
-                    streamsList.map((st, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2 py-0.5 rounded text-[11px] font-semibold bg-amber-50 text-amber-800 border border-amber-200 dark:bg-amber-950/50 dark:text-amber-300 dark:border-amber-800"
-                      >
-                        {st}
-                      </span>
-                    ))
-                  ) : (
-                    <span className="text-xs text-gray-400">-</span>
-                  )}
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">
+                    {designation}
+                  </span>
+                  <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                    {qualification}
+                  </span>
                 </div>
               </TableCell>
 
-              {/* Experience */}
+              {/* Experience & Stream */}
               <TableCell>
-                <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">
-                  {experience}
-                </span>
+                <div className="flex flex-col">
+                  <span className="text-xs font-semibold text-gray-800 dark:text-gray-200">
+                    {experience}
+                  </span>
+                  <span className="text-[11px] font-bold text-red-800 dark:text-red-400">
+                    Stream: {department}
+                  </span>
+                </div>
               </TableCell>
 
               {/* Time Stamp */}
@@ -149,15 +121,6 @@ const FacultyTable = ({
                 <DateBox
                   created_at={item.created_at || item.createdAt}
                   updated_at={item.updated_at || item.updatedAt}
-                />
-              </TableCell>
-
-              {/* Status Toggle */}
-              <TableCell className="text-center">
-                <ShowHideButton
-                  id={item._id || item.slug || item.id}
-                  status={item.status === 'active' || item.status === 1 || item.status === true || item.status === '1' || item.is_active === 1 || item.is_active === true ? 1 : 0}
-                  type="faculty"
                 />
               </TableCell>
 

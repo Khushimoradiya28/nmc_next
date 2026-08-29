@@ -1,56 +1,171 @@
-'use client';
+﻿'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './CertificateCoursesSection.module.css';
+import CourseServices from '@/services/CourseServices';
 
-const coursesList = [
-  "Tally ERP & GST Accounting",
-  "Graphic Design & Photoshop",
-  "English & Corporate Soft Skills",
-  "Environmental & Mental Health",
-  "Computer Skills & MS Office Pro",
-  "Digital Marketing & SEO"
-];
+const resolveImageUrl = (img) => {
+  if (!img) return '';
+  const clean = img.trim();
+  if (clean.startsWith('http://') || clean.startsWith('https://')) {
+    return clean;
+  }
+  const backendBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
+  const cleanPath = clean.startsWith('/') ? clean : `/${clean}`;
+  return `${backendBase}${cleanPath}`;
+};
 
-const degreePrograms = [
-  "Bachelor of Business Administration (BBA)",
-  "Bachelor of Computer Application (BCA)",
-  "Bachelor of Arts (BA)",
-  "Bachelor of Commerce (BCom)",
-  "Master of Arts (MA)",
-  "Master of Commerce (MCom)",
-  "Master of Social Work (MSW)",
-  "Diploma in Fashion Designing (DFD)"
-];
+const formatDuration = (val) => {
+  if (!val) return '3 Months';
+  const str = String(val).trim();
+  if (str.toLowerCase().includes('month') || str.toLowerCase().includes('year') || str.toLowerCase().includes('week') || str.toLowerCase().includes('day')) {
+    // Capitalize properly e.g. "6 Months"
+    return str.charAt(0).toUpperCase() + str.slice(1);
+  }
+  return `${str} Months`;
+};
+
+const formatFees = (val) => {
+  if (!val) return '₹ Fees: Rs. 8,000/Sem.';
+  let str = String(val).trim();
+
+  // If user only typed number e.g. "1000" or "8000"
+  const isNumberOnly = /^[0-9,.]+$/.test(str);
+  if (isNumberOnly) {
+    const num = Number(str.replace(/,/g, ''));
+    const formattedNum = !isNaN(num) ? num.toLocaleString('en-IN') : str;
+    return `₹ Fees: Rs. ${formattedNum}/Sem.`;
+  }
+
+  // If user already typed "Fees: Rs. 8,000/Sem." or "Rs. 1000"
+  if (!str.startsWith('₹')) {
+    if (!str.toLowerCase().includes('fees:')) {
+      if (str.toLowerCase().startsWith('rs.') || str.toLowerCase().startsWith('rs')) {
+        str = `Fees: ${str}`;
+      } else {
+        str = `Fees: Rs. ${str}`;
+      }
+    }
+    if (!str.toLowerCase().includes('/sem') && !str.toLowerCase().includes('/year') && !str.toLowerCase().includes('/course')) {
+      str = `${str}/Sem.`;
+    }
+    return `₹ ${str}`;
+  }
+
+  return str;
+};
+
+const categoryBadgeStyles = [styles.tagRuby, styles.tagGold, styles.tagCyan, styles.tagRose, styles.tagEmerald];
 
 export default function CertificateCoursesSection() {
+  const [coursesData, setCoursesData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // Slider State
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+  const [slidesToShow, setSlidesToShow] = useState(3);
+
+  // Modal State
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedCert, setSelectedCert] = useState('Tally ERP & GST Accounting');
+  const [selectedCert, setSelectedCert] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [mainCourse, setMainCourse] = useState('Bachelor of Business Administration (BBA)');
+  const [mainCourse, setMainCourse] = useState('B.C.A. (Bachelor of Computer Applications)');
   const [message, setMessage] = useState('');
 
-  const openEnrollModal = (courseName) => {
-    // Open the global contact popup form
-    window.dispatchEvent(new CustomEvent('openContactPopup'));
+  // Responsive slidesToShow detection
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth <= 768) {
+        setSlidesToShow(1);
+      } else if (window.innerWidth <= 1024) {
+        setSlidesToShow(2);
+      } else {
+        setSlidesToShow(3);
+      }
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  // Fetch purely dynamic active certificate courses from API
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        setLoading(true);
+        const res = await CourseServices.getAllCourses({ status: 'active', limit: 50 });
+        if (res?.data && Array.isArray(res.data)) {
+          const formatted = res.data.map((item, idx) => {
+            const rawImg = item.imageUrl || item.image_url || item.image || '';
+            const highlights = Array.isArray(item.highlights) ? item.highlights : [];
+            return {
+              id: item._id || item.guid || idx,
+              title: item.title || '',
+              category: item.category || 'Skill Program',
+              badge: item.badge || item.tag || 'Popular',
+              description: item.description || '',
+              duration: formatDuration(item.duration),
+              fees: formatFees(item.fees),
+              highlights: highlights,
+              image: resolveImageUrl(rawImg),
+              slug: item.slug || ''
+            };
+          });
+          setCoursesData(formatted);
+        }
+      } catch (err) {
+        console.error('Error fetching certificate courses:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  const totalCourses = coursesData.length;
+  const isSliderActive = totalCourses > 3;
+  const maxIndex = Math.max(0, totalCourses - slidesToShow);
+
+  // Auto-looping slider (3.5s) when > 3 cards
+  useEffect(() => {
+    if (!isSliderActive || isPaused) return;
+
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+    }, 3500);
+
+    return () => clearInterval(interval);
+  }, [isSliderActive, isPaused, maxIndex]);
+
+  const handlePrev = () => {
+    setCurrentIndex((prev) => (prev <= 0 ? maxIndex : prev - 1));
+  };
+
+  const handleNext = () => {
+    setCurrentIndex((prev) => (prev >= maxIndex ? 0 : prev + 1));
+  };
+
+  const openEnrollModal = (courseTitle) => {
+    setSelectedCert(courseTitle);
+    setIsOpen(true);
   };
 
   const closeEnrollModal = () => {
     setIsOpen(false);
-    document.body.style.overflow = '';
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simulate submit
-    alert(`Registration Successful!\nName: ${firstName} ${lastName}\nCourse: ${selectedCert}\nDegree: ${mainCourse}`);
+    alert(`Thank you, ${firstName}! Your application for "${selectedCert}" has been submitted.`);
     closeEnrollModal();
-    // Reset form
     setFirstName('');
     setLastName('');
     setEmail('');
@@ -58,313 +173,184 @@ export default function CertificateCoursesSection() {
     setMessage('');
   };
 
+  const degreePrograms = [
+    'B.C.A. (Bachelor of Computer Applications)',
+    'B.B.A. (Bachelor of Business Administration)',
+    'B.Com. (Bachelor of Commerce)',
+    'B.A. (Bachelor of Arts)',
+    'B.Sc. Home Science',
+    'M.Com. (Master of Commerce)',
+    'M.S.W. (Master of Social Work)',
+    'D.F.D. (Diploma in Fashion Designing)',
+    'Other Diploma / Certificate'
+  ];
+
+  const renderCard = (course, index) => (
+    <div key={course.id} className={`${styles.certCardLuxury} cert-card-luxury`}>
+      <div className={`${styles.certCardMedia} cert-card-media`}>
+        {course.image ? (
+          <Image 
+            src={course.image} 
+            alt={course.title} 
+            width={600} 
+            height={400} 
+            className={`${styles.certCardImg} cert-card-img`}
+            unoptimized={course.image.startsWith('http')}
+          />
+        ) : (
+          <div style={{
+            width: '100%',
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'linear-gradient(135deg, #8a0000 0%, #b30000 100%)',
+            color: '#ffffff',
+            fontWeight: 800,
+            fontSize: '1.25rem'
+          }}>
+            🎓
+          </div>
+        )}
+        <span className={`${styles.certMediaBadge} ${categoryBadgeStyles[index % categoryBadgeStyles.length]} cert-media-badge`}>
+          {course.category}
+        </span>
+        {course.badge && (
+          <span className={`${styles.certHighlightPill} cert-highlight-pill`}>
+            ★ {course.badge}
+          </span>
+        )}
+      </div>
+
+      <div className={`${styles.certCardBody} cert-card-body`}>
+        <h3 className={`${styles.certCardTitle} cert-card-title`}>{course.title}</h3>
+        <p className={`${styles.certCardDesc} cert-card-desc`}>{course.description}</p>
+
+        {course.highlights && course.highlights.length > 0 && (
+          <ul className={`${styles.certBulletsList} cert-bullets-list`}>
+            {course.highlights.slice(0, 3).map((h, idx) => (
+              <li key={idx}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+                <span>{h}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+
+        <div className={`${styles.certMetaStrip} cert-meta-strip`}>
+          <span className={`${styles.certMetaItem} cert-meta-item`}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold-600)" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" />
+            </svg>
+            {course.duration}
+          </span>
+          <span className={`${styles.certMetaItem} ${styles.certMetaFees} cert-meta-item`}>
+            {course.fees}
+          </span>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => openEnrollModal(course.title)}
+          className={`${styles.certActionBtn} cert-action-btn`}
+        >
+          <span>Enroll in Course</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+
   return (
-    <section className={`${styles.sectionPadding} ${styles.certCoursesSection} section-padding cert-courses-section`} id="certificates">
+    <section className={`${styles.sectionPadding} ${styles.certSection} section-padding cert-section`} id="certificates">
       <div className={`${styles.container} container`}>
         <div className={`${styles.sectionHeader} section-header`}>
           <div className={`${styles.sectionSubtitle} section-subtitle`}>Career Acceleration</div>
           <h2 className={`${styles.sectionTitle} section-title`}>Professional <span>Certificate Courses</span></h2>
-          <p className={`${styles.sectionDescription} section-description`}>Industry-endorsed skill certifications to supercharge your employability alongside your degree curriculum.</p>
+          <p className={`${styles.sectionDescription} section-description`}>
+            Industry-endorsed skill certifications to supercharge your employability alongside your degree curriculum.
+          </p>
         </div>
 
-        <div className={`${styles.certSliderWrap} cert-slider-wrap`}>
-          <div className={`${styles.certCardsTrack} cert-cards-track`} id="certTrack">
-
-            {/* Course 1: Tally ERP & GST */}
-            <div className={`${styles.certCardLuxury} ${styles.spotlightActive} cert-card-luxury spotlight-active`}>
-              <div className={`${styles.certCardMedia} cert-card-media`}>
-                <Image src="/assets/courses/accounting_course.jpg" alt="Tally ERP & GST Accounting" width={600} height={400} className={`${styles.certCardImg} cert-card-img`} />
-                <span className={`${styles.certMediaBadge} ${styles.tagRuby} cert-media-badge tag-ruby`}>Accounting & Finance</span>
-                <span className={`${styles.certHighlightPill} cert-highlight-pill`}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg> Popular</span>
-              </div>
-              <div className={`${styles.certCardBody} cert-card-body`}>
-                <h3 className={`${styles.certCardTitle} cert-card-title`}>Tally ERP & GST Accounting</h3>
-                <p className={`${styles.certCardDesc} cert-card-desc`}>Comprehensive computerized accounting, corporate taxation, and live GST return filing practice.</p>
-
-                <ul className={`${styles.certBulletsList} cert-bullets-list`}>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>TallyPrime & Inventory Management</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>GST Invoicing, E-Way & Tax Audits</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Practical Accounting Live Projects</span>
-                  </li>
-                </ul>
-
-                <div className={`${styles.certMetaStrip} cert-meta-strip`}>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold-600)" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                    6 Months
-                  </span>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: 'var(--red-800)' }}>₹</span>
-                    Fees: Rs. 8,000/Sem.
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => openEnrollModal('Tally ERP & GST Accounting')}
-                  className={`${styles.certActionBtn} cert-action-btn`}
-                >
-                  <span>Enroll in Course</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Course 2: Graphic Design & Creative Media */}
-            <div className={`${styles.certCardLuxury} ${styles.spotlightActive} cert-card-luxury spotlight-active`}>
-              <div className={`${styles.certCardMedia} cert-card-media`}>
-                <Image src="/assets/courses/design_course.jpg" alt="Graphic Design & Photoshop" width={600} height={400} className={`${styles.certCardImg} cert-card-img`} />
-                <span className={`${styles.certMediaBadge} ${styles.tagAzure} cert-media-badge tag-azure`}>Design & Creative</span>
-                <span className={`${styles.certHighlightPill} cert-highlight-pill`}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" /></svg> High Demand</span>
-              </div>
-              <div className={`${styles.certCardBody} cert-card-body`}>
-                <h3 className={`${styles.certCardTitle} cert-card-title`}>Graphic Design & Photoshop</h3>
-                <p className={`${styles.certCardDesc} cert-card-desc`}>Visual brand identity design, photo retouching, digital advertising, and creative vector art.</p>
-
-                <ul className={`${styles.certBulletsList} cert-bullets-list`}>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Adobe Photoshop & Illustrator Core</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Brand Logos, Banners & UI Mockups</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Personal Design Portfolio Building</span>
-                  </li>
-                </ul>
-
-                <div className={`${styles.certMetaStrip} cert-meta-strip`}>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold-600)" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                    6 Months
-                  </span>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: 'var(--red-800)' }}>₹</span>
-                    Fees: Rs. 8,000/Sem.
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => openEnrollModal('Graphic Design & Photoshop')}
-                  className={`${styles.certActionBtn} cert-action-btn`}
-                >
-                  <span>Enroll in Course</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Course 3: English Communication & Soft Skills */}
-            <div className={`${styles.certCardLuxury} ${styles.spotlightActive} cert-card-luxury spotlight-active`}>
-              <div className={`${styles.certCardMedia} cert-card-media`}>
-                <Image src="/assets/courses/soft_skills_course.jpg" alt="English Communication" width={600} height={400} className={`${styles.certCardImg} cert-card-img`} />
-                <span className={`${styles.certMediaBadge} ${styles.tagGold} cert-media-badge tag-gold`}>Professional Growth</span>
-                <span className={`${styles.certHighlightPill} cert-highlight-pill`}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" /></svg> Essential</span>
-              </div>
-              <div className={`${styles.certCardBody} cert-card-body`}>
-                <h3 className={`${styles.certCardTitle} cert-card-title`}>English & Corporate Soft Skills</h3>
-                <p className={`${styles.certCardDesc} cert-card-desc`}>Public speaking, spoken English fluency, business etiquette, and interview personality mastery.</p>
-
-                <ul className={`${styles.certBulletsList} cert-bullets-list`}>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Spoken Fluency & Pronunciation Lab</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Corporate Email & Resume Writing</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Mock Interviews & Group Discussions</span>
-                  </li>
-                </ul>
-
-                <div className={`${styles.certMetaStrip} cert-meta-strip`}>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold-600)" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                    3 Months
-                  </span>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: 'var(--red-800)' }}>₹</span>
-                    Fees: Rs. 8,000/Sem.
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => openEnrollModal('English & Corporate Soft Skills')}
-                  className={`${styles.certActionBtn} cert-action-btn`}
-                >
-                  <span>Enroll in Course</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Course 4: Environmental & Mental Health */}
-            <div className={`${styles.certCardLuxury} ${styles.spotlightActive} cert-card-luxury spotlight-active`}>
-              <div className={`${styles.certCardMedia} cert-card-media`}>
-                <Image src="/assets/hero/nmc-collage.jpg" alt="Environmental & Mental Health" width={600} height={400} className={`${styles.certCardImg} cert-card-img`} />
-                <span className={`${styles.certMediaBadge} ${styles.tagEmerald} cert-media-badge tag-emerald`}>Health & Wellness</span>
-                <span className={`${styles.certHighlightPill} cert-highlight-pill`}>🌱 Holistic</span>
-              </div>
-              <div className={`${styles.certCardBody} cert-card-body`}>
-                <h3 className={`${styles.certCardTitle} cert-card-title`}>Environmental & Mental Health</h3>
-                <p className={`${styles.certCardDesc} cert-card-desc`}>Holistic wellness coaching, stress reduction methodologies, and environmental sustainability.</p>
-
-                <ul className={`${styles.certBulletsList} cert-bullets-list`}>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Mindfulness & Stress Management</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Ecological Sustainability Principles</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Community Wellness Counseling</span>
-                  </li>
-                </ul>
-
-                <div className={`${styles.certMetaStrip} cert-meta-strip`}>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold-600)" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                    3 Months
-                  </span>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: 'var(--red-800)' }}>₹</span>
-                    Fees: Rs. 8,000/Sem.
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => openEnrollModal('Environmental & Mental Health')}
-                  className={`${styles.certActionBtn} cert-action-btn`}
-                >
-                  <span>Enroll in Course</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Course 5: Basic Computer & MS Office */}
-            <div className={`${styles.certCardLuxury} ${styles.spotlightActive} cert-card-luxury spotlight-active`}>
-              <div className={`${styles.certCardMedia} cert-card-media`}>
-                <Image src="/assets/hero/banner1-800.png" alt="Computer Skills & MS Office" width={600} height={400} className={`${styles.certCardImg} cert-card-img`} />
-                <span className={`${styles.certMediaBadge} ${styles.tagPurple} cert-media-badge tag-purple`}>IT & Computing</span>
-                <span className={`${styles.certHighlightPill} cert-highlight-pill`}>💻 Foundation</span>
-              </div>
-              <div className={`${styles.certCardBody} cert-card-body`}>
-                <h3 className={`${styles.certCardTitle} cert-card-title`}>Computer Skills & MS Office Pro</h3>
-                <p className={`${styles.certCardDesc} cert-card-desc`}>Complete corporate computer proficiency in Microsoft Word, Excel formulas, and PowerPoint slides.</p>
-
-                <ul className={`${styles.certBulletsList} cert-bullets-list`}>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Advanced Excel, Pivot & VLOOKUP</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Executive Presentation Design</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Cloud Docs & Cyber Literacy</span>
-                  </li>
-                </ul>
-
-                <div className={`${styles.certMetaStrip} cert-meta-strip`}>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold-600)" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                    2 Months
-                  </span>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: 'var(--red-800)' }}>₹</span>
-                    Fees: Rs. 8,000/Sem.
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => openEnrollModal('Computer Skills & MS Office Pro')}
-                  className={`${styles.certActionBtn} cert-action-btn`}
-                >
-                  <span>Enroll in Course</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-                </button>
-              </div>
-            </div>
-
-            {/* Course 6: Digital Marketing Fundamentals */}
-            <div className={`${styles.certCardLuxury} ${styles.spotlightActive} cert-card-luxury spotlight-active`}>
-              <div className={`${styles.certCardMedia} cert-card-media`}>
-                <Image src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=400&fit=crop" alt="Digital Marketing Fundamentals" width={600} height={400} className={`${styles.certCardImg} cert-card-img`} />
-                <span className={`${styles.certMediaBadge} ${styles.tagRose} cert-media-badge tag-rose`}>Marketing & Growth</span>
-                <span className={`${styles.certHighlightPill} cert-highlight-pill`}>📈 Trending</span>
-              </div>
-              <div className={`${styles.certCardBody} cert-card-body`}>
-                <h3 className={`${styles.certCardTitle} cert-card-title`}>Digital Marketing & SEO</h3>
-                <p className={`${styles.certCardDesc} cert-card-desc`}>Social media campaigns, search engine optimization, content strategy, and Google analytics.</p>
-
-                <ul className={`${styles.certBulletsList} cert-bullets-list`}>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Google SEO & Keyword Research</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Instagram & Meta Ads Campaigning</span>
-                  </li>
-                  <li>
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3"><polyline points="20 6 9 17 4 12" /></svg>
-                    <span>Web Traffic & ROI Analytics</span>
-                  </li>
-                </ul>
-
-                <div className={`${styles.certMetaStrip} cert-meta-strip`}>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="var(--gold-600)" strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                    4 Months
-                  </span>
-                  <span className={`${styles.certMetaItem} cert-meta-item`}>
-                    <span style={{ fontWeight: 'bold', fontSize: '0.9rem', color: 'var(--red-800)' }}>₹</span>
-                    Fees: Rs. 8,000/Sem.
-                  </span>
-                </div>
-
-                <button
-                  type="button"
-                  onClick={() => openEnrollModal('Digital Marketing & SEO')}
-                  className={`${styles.certActionBtn} cert-action-btn`}
-                >
-                  <span>Enroll in Course</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6" /></svg>
-                </button>
-              </div>
-            </div>
-
+        {coursesData.length === 0 && !loading ? (
+          <div className={styles.emptyState}>
+            <p>No certificate courses available at the moment.</p>
           </div>
-        </div>
+        ) : isSliderActive ? (
+          /* Auto-Looping Slider for > 3 Cards */
+          <div 
+            className={styles.certSliderWrapper}
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            <div 
+              className={styles.certCardsTrack}
+              style={{
+                transform: `translateX(-${currentIndex * (100 / slidesToShow)}%)`,
+              }}
+            >
+              {coursesData.map((course, idx) => (
+                <div key={course.id} className={styles.certSlide}>
+                  {renderCard(course, idx)}
+                </div>
+              ))}
+            </div>
+
+            {/* Slider Controls */}
+            <div className={styles.certSliderControls}>
+              <button 
+                type="button" 
+                className={styles.certArrow} 
+                onClick={handlePrev}
+                aria-label="Previous Course"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <polyline points="15 18 9 12 15 6" />
+                </svg>
+              </button>
+
+              <div className={styles.certDots}>
+                {Array.from({ length: maxIndex + 1 }).map((_, dotIdx) => (
+                  <button
+                    key={dotIdx}
+                    type="button"
+                    className={`${styles.certDot} ${currentIndex === dotIdx ? styles.certDotActive : ''}`}
+                    onClick={() => setCurrentIndex(dotIdx)}
+                    aria-label={`Go to slide ${dotIdx + 1}`}
+                  />
+                ))}
+              </div>
+
+              <button 
+                type="button" 
+                className={styles.certArrow} 
+                onClick={handleNext}
+                aria-label="Next Course"
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        ) : (
+          /* Standard Grid for <= 3 Cards */
+          <div className={`${styles.certGridLuxury} cert-grid-luxury`}>
+            {coursesData.map((course, idx) => renderCard(course, idx))}
+          </div>
+        )}
 
         <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
           <Link href="/courses" className={`${styles.btn} ${styles.btnCrimson} btn btn-crimson`}>
             <span>View More</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z" /></svg>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z" />
+            </svg>
           </Link>
         </div>
       </div>
@@ -436,8 +422,8 @@ export default function CertificateCoursesSection() {
                   value={selectedCert}
                   onChange={(e) => setSelectedCert(e.target.value)}
                 >
-                  {coursesList.map((course, idx) => (
-                    <option key={idx} value={course}>{course}</option>
+                  {coursesData.map((course, idx) => (
+                    <option key={idx} value={course.title}>{course.title}</option>
                   ))}
                 </select>
               </div>

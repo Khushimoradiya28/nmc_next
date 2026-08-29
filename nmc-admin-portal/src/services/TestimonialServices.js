@@ -1,12 +1,14 @@
-import requests from './httpService';
+﻿import requests from './httpService';
 
 const TestimonialServices = {
   // 1. Get List (Filtered by type: 'student' or 'dignitary')
-  getTestimonials: async ({ type = 'student', search = '', isActive = '' } = {}) => {
-    let url = `/testimonials?type=${type}`;
-    if (search) url += `&search=${search}`;
-    if (isActive !== '') url += `&isActive=${isActive}`;
-    return requests.get(url);
+  getTestimonials: async ({ type = '', search = '', isActive = '' } = {}) => {
+    let url = `/testimonials?`;
+    const params = [];
+    if (type) params.push(`type=${encodeURIComponent(type)}`);
+    if (search) params.push(`search=${encodeURIComponent(search)}`);
+    if (isActive !== '') params.push(`isActive=${encodeURIComponent(isActive)}`);
+    return requests.get(url + params.join('&'));
   },
 
   getAllTestimonials: async (params = {}) => {
@@ -18,14 +20,16 @@ const TestimonialServices = {
     return requests.get(`/testimonials/${idOrSlug}`);
   },
 
-  // 3. Add Testimonial (JSON format)
+  // 3. Add Testimonial (FormData or JSON)
   addTestimonial: async (body) => {
-    return requests.post('/testimonials', body);
+    const isFormData = body instanceof FormData;
+    return requests.post('/testimonials', body, isFormData ? { 'Content-Type': 'multipart/form-data' } : {});
   },
 
   // 4. Update Testimonial (by Slug or ID)
   updateTestimonial: async (idOrSlug, body) => {
-    return requests.put(`/testimonials/${idOrSlug}`, body);
+    const isFormData = body instanceof FormData;
+    return requests.put(`/testimonials/${idOrSlug}`, body, isFormData ? { 'Content-Type': 'multipart/form-data' } : {});
   },
 
   // 5. Delete Testimonial (Soft Delete)

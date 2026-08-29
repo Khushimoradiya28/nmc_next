@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+﻿import React, { useState, useEffect, useContext } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import { Textarea, Input } from '@windmill/react-ui';
 import { useForm } from 'react-hook-form';
+import { Input, Textarea } from '@windmill/react-ui';
 
 import Title from '../form/Title';
 import Error from '../form/Error';
@@ -24,18 +24,21 @@ const TestimonialDrawer = ({ id }) => {
     register,
     handleSubmit,
     setValue,
-    clearErrors,
     reset,
     watch,
+    clearErrors,
     formState: { errors },
   } = useForm({
     defaultValues: {
       type: 'dignitary',
+      title: '',
+      authorName: '',
+      designationSubtext: '',
+      quote: '',
       rating: 5,
     },
   });
 
-  // Reset form when drawer opens to add new
   useEffect(() => {
     if (!id && isDrawerOpen) {
       setTestimonialType('dignitary');
@@ -48,25 +51,20 @@ const TestimonialDrawer = ({ id }) => {
         designationSubtext: '',
         quote: '',
         rating: 5,
-        avatarUrl: '',
       });
       clearErrors();
     }
   }, [id, isDrawerOpen, reset, clearErrors]);
 
-  // Fetch existing testimonial for update mode
   useEffect(() => {
     if (!id || !isDrawerOpen) return;
 
     TestimonialServices.getTestimonialById(id)
       .then((res) => {
         const item = res?.data || res;
-        if (!item) {
-          notifyError('Testimonial details not found!');
-          return;
-        }
+        if (!item) return;
 
-        const currentType = item.type || 'dignitary';
+        const currentType = (item.type || 'dignitary').toLowerCase();
         setTestimonialType(currentType);
 
         const fetchedAvatar =
@@ -86,62 +84,62 @@ const TestimonialDrawer = ({ id }) => {
           authorName: item.authorName || '',
           designationSubtext: item.designationSubtext || '',
           quote: item.quote || '',
-          rating: item.rating || 5,
-          avatarUrl: fetchedAvatar,
+          rating: item.rating ? Number(item.rating) : 5,
         });
       })
-      .catch((err) => notifyError(err.message || 'Failed to fetch testimonial data'));
+      .catch((err) => {
+        notifyError(
+          err?.response?.data?.message ||
+            err.message ||
+            'Failed to fetch testimonial details'
+        );
+      });
   }, [id, isDrawerOpen, reset]);
 
-  // Handle dropdown change for Testimonial Type
   const handleTypeChange = (selectedVal) => {
     setTestimonialType(selectedVal);
     setValue('type', selectedVal);
     clearErrors();
   };
 
-  // Form submission handler matching exact user specification
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      let payload;
+      const formData = new FormData();
+      formData.append('type', testimonialType);
+      formData.append('authorName', data.authorName?.trim() || '');
+      formData.append('designationSubtext', data.designationSubtext?.trim() || '');
+      formData.append('quote', data.quote?.trim() || '');
+      formData.append('isActive', 'true');
 
-      if (testimonialType === 'student') {
-        payload = {
-          type: 'student',
-          authorName: data.authorName?.trim() || '',
-          designationSubtext: data.designationSubtext?.trim() || '',
-          rating: Number(data.rating || 5),
-          quote: data.quote?.trim() || '',
-          avatarUrl: imageUrl || data.avatarUrl || '',
-          isActive: true,
-        };
+      if (testimonialType === 'dignitary') {
+        formData.append('title', data.title?.trim() || '');
       } else {
-        payload = {
-          type: 'dignitary',
-          title: data.title?.trim() || '',
-          authorName: data.authorName?.trim() || '',
-          designationSubtext: data.designationSubtext?.trim() || '',
-          quote: data.quote?.trim() || '',
-          avatarUrl: imageUrl || data.avatarUrl || '',
-          isActive: true,
-        };
+        formData.append('rating', String(data.rating || 5));
+      }
+
+      if (uploadedFile && typeof uploadedFile === 'object') {
+        formData.append('avatar', uploadedFile);
+      } else if (imageUrl && !imageUrl.startsWith('blob:')) {
+        formData.append('avatarUrl', imageUrl);
       }
 
       if (id) {
-        const res = await TestimonialServices.updateTestimonial(id, payload);
+        const res = await TestimonialServices.updateTestimonial(id, formData);
         notifySuccess(res?.message || 'Testimonial updated successfully!');
       } else {
-        const res = await TestimonialServices.addTestimonial(payload);
-        notifySuccess(res?.message || 'Testimonial created successfully!');
+        const res = await TestimonialServices.addTestimonial(formData);
+        notifySuccess(res?.message || 'Testimonial added successfully!');
       }
 
       setIsUpdate(true);
       closeDrawer();
     } catch (err) {
-      console.error('Testimonial submission error:', err);
-      const errMsg = err?.response?.data?.message || err?.message || 'Failed to save testimonial';
-      notifyError(errMsg);
+      notifyError(
+        err?.response?.data?.message ||
+          err.message ||
+          'An error occurred while saving the testimonial'
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -151,18 +149,17 @@ const TestimonialDrawer = ({ id }) => {
     <>
       <div className="w-full relative p-6 border-b border-gray-100 bg-gray-50 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
         <Title
-          title={id ? 'Update Testimonial' : 'Add Testimonial'}
+          title={id ? 'Edit Testimonial' : 'Add Testimonial'}
           description={
             id
-              ? 'Update testimonial information and details here'
-              : 'Select testimonial type and add all required details below'
+              ? 'Update existing dignitary or student testimonial'
+              : 'Add a new dignitary or student testimonial to the portal'
           }
         />
       </div>
 
       <Scrollbars className="w-full relative dark:bg-gray-700 dark:text-gray-200">
         <form onSubmit={handleSubmit(onSubmit)} className="block p-6 pb-36">
-          {/* Testimonial Type Dropdown */}
           <div className="mb-6 flex flex-col">
             <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
               Testimonial Type <span className="text-red-500">*</span>
@@ -183,7 +180,6 @@ const TestimonialDrawer = ({ id }) => {
 
           <hr className="mb-6 border-gray-200 dark:border-gray-600" />
 
-          {/* DIGNITARY TESTIMONIAL FIELDS */}
           {testimonialType === 'dignitary' && (
             <>
               <div className="mb-5 flex flex-col">
@@ -253,7 +249,6 @@ const TestimonialDrawer = ({ id }) => {
             </>
           )}
 
-          {/* STUDENT TESTIMONIAL FIELDS */}
           {testimonialType === 'student' && (
             <>
               <div className="mb-5 flex flex-col">
@@ -292,11 +287,11 @@ const TestimonialDrawer = ({ id }) => {
                   value={watch ? watch('rating') || 5 : 5}
                   onChange={(val) => setValue('rating', val)}
                   options={[
-                    { label: '5 Stars ⭐⭐⭐⭐⭐', value: 5 },
-                    { label: '4 Stars ⭐⭐⭐⭐', value: 4 },
-                    { label: '3 Stars ⭐⭐⭐', value: 3 },
-                    { label: '2 Stars ⭐⭐', value: 2 },
-                    { label: '1 Star ⭐', value: 1 },
+                    { label: '5 Stars ★★★★★', value: 5 },
+                    { label: '4 Stars ★★★★', value: 4 },
+                    { label: '3 Stars ★★★', value: 3 },
+                    { label: '2 Stars ★★', value: 2 },
+                    { label: '1 Star ★', value: 1 },
                   ]}
                 />
                 <Error errorName={errors.rating} />
