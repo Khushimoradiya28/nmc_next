@@ -850,20 +850,44 @@
     background: #f1f5f9;
     color: #475569;
     border: none;
+    padding: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.35rem;
-    font-weight: 700;
+    line-height: 1;
     cursor: pointer;
     z-index: 10;
-    transition: all 0.2s ease;
+    /* Only animate what actually changes so the hover stays smooth */
+    transition: background-color 0.25s ease,
+                color 0.25s ease,
+                box-shadow 0.25s ease,
+                transform 0.25s cubic-bezier(0.34, 1.4, 0.64, 1);
+}
+
+.modalCloseIcon {
+    display: block;
+    transition: transform 0.35s cubic-bezier(0.34, 1.4, 0.64, 1);
 }
 
 .modalCloseBtn:hover {
     background: #8a0000;
     color: #ffffff;
-    transform: rotate(90deg);
+    transform: scale(1.1);
+    box-shadow: 0 6px 18px rgba(138, 0, 0, 0.32);
+}
+
+/* Rotate the icon (not the button) so the spin is visible and stays centered */
+.modalCloseBtn:hover .modalCloseIcon {
+    transform: rotate(180deg);
+}
+
+.modalCloseBtn:active {
+    transform: scale(0.94);
+}
+
+.modalCloseBtn:focus-visible {
+    outline: 2px solid #8a0000;
+    outline-offset: 2px;
 }
 
 .modalHeaderRow {
@@ -1270,7 +1294,11 @@
         right: 0.85rem;
         width: 32px;
         height: 32px;
-        font-size: 1.2rem;
+    }
+
+    .modalCloseIcon {
+        width: 14px;
+        height: 14px;
     }
 
     .modalHeaderRow {
@@ -1448,6 +1476,19 @@
     box-shadow: 0 4px 14px rgba(138, 0, 0, 0.28);
 }
 
+.pageEllipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    height: 42px;
+    font-size: 1rem;
+    font-weight: 700;
+    color: #94a3b8;
+    user-select: none;
+    letter-spacing: 0.05em;
+}
+
 .pageNavBtn {
     font-family: inherit;
     display: inline-flex;
@@ -1476,4 +1517,41 @@
     opacity: 0.35;
     cursor: not-allowed;
     box-shadow: none;
+}
+
+/* Compact pagination for very small screens (<= 380px) —
+   placed after the base pagination rules so it actually overrides them */
+@media (max-width: 380px) {
+    .paginationControls {
+        gap: 0.35rem;
+        flex-wrap: nowrap;
+    }
+
+    .pageNumbers {
+        gap: 0.25rem;
+    }
+
+    .pageNumBtn,
+    .pageNavBtn {
+        width: 30px;
+        height: 30px;
+        font-size: 0.75rem;
+        border-radius: 0.5rem;
+        flex-shrink: 0;
+    }
+
+    .pageNavBtn svg {
+        width: 13px;
+        height: 13px;
+    }
+
+    .pageEllipsis {
+        min-width: 14px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+
+    .paginationInfo {
+        font-size: 0.8rem;
+    }
 }

@@ -592,7 +592,11 @@ export default function CoursesPage() {
                       </div>
                     </div>
                   </div>
-                  <button className="btn btn-crimson prog-card-btn open-reg-modal">
+                  <button
+                    type="button"
+                    className="btn btn-crimson prog-card-btn"
+                    onClick={() => window.dispatchEvent(new Event('openContactPopup'))}
+                  >
                     <span>Apply for {course.acronym}</span>
                     <svg
                       width="16"

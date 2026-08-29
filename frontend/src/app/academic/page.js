@@ -8,17 +8,37 @@ import Footer from '@/components/layout/Footer/Footer';
 import { ALL_FACULTY, DEPARTMENT_CATEGORIES } from '@/data/facultyData';
 import styles from './page.module.css';
 
-const ITEMS_PER_PAGE = 16; // 4 rows x 4 items per row on desktop layout
+// Always keep 3 rows of cards regardless of how many columns the grid shows.
+// Column counts are defined in page.module.css:
+//   > 1280px -> 4 cols | 1025-1280px -> 3 cols | 769-1024px -> 2 cols | <= 768px -> 1 col
+const getItemsPerPage = (width) => {
+  if (width > 1280) return 12; // 4 cols x 3 rows
+  if (width > 1024) return 9;  // 3 cols x 3 rows
+  return 6;                    // 2 cols x 3 rows (also used for single-column mobile)
+};
 
 export default function AcademicPage() {
   const [selectedDept, setSelectedDept] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(12);
+  const [isCompactPagination, setIsCompactPagination] = useState(false);
   const [activeModalTeacher, setActiveModalTeacher] = useState(null);
   const [isDeptOpen, setIsDeptOpen] = useState(false);
   const [isSearchActive, setIsSearchActive] = useState(false);
   const deptDropdownRef = React.useRef(null);
   const searchInputRef = React.useRef(null);
+
+  // Keep items-per-page in sync with the grid's column count so rows stay at 3
+  useEffect(() => {
+    const syncItemsPerPage = () => {
+      setItemsPerPage(getItemsPerPage(window.innerWidth));
+      setIsCompactPagination(window.innerWidth <= 768);
+    };
+    syncItemsPerPage();
+    window.addEventListener('resize', syncItemsPerPage);
+    return () => window.removeEventListener('resize', syncItemsPerPage);
+  }, []);
 
   // Close department dropdown on outside click
   useEffect(() => {
@@ -85,13 +105,35 @@ export default function AcademicPage() {
   }, [selectedDept, searchQuery]);
 
   // Total pages calculation
-  const totalPages = Math.ceil(filteredFaculty.length / ITEMS_PER_PAGE);
+  const totalPages = Math.ceil(filteredFaculty.length / itemsPerPage);
 
   // Paginated subset of faculty for the active page
   const paginatedFaculty = useMemo(() => {
-    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-    return filteredFaculty.slice(startIndex, startIndex + ITEMS_PER_PAGE);
-  }, [filteredFaculty, currentPage]);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    return filteredFaculty.slice(startIndex, startIndex + itemsPerPage);
+  }, [filteredFaculty, currentPage, itemsPerPage]);
+
+  // Clamp the active page when items-per-page changes on resize
+  useEffect(() => {
+    if (totalPages > 0 && currentPage > totalPages) {
+      setCurrentPage(totalPages);
+    }
+  }, [totalPages, currentPage]);
+
+  // On narrow screens collapse the page list to at most 5 slots, e.g. 1 2 3 … 8
+  const visiblePages = useMemo(() => {
+    const allPages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+    if (!isCompactPagination || totalPages <= 4) return allPages;
+
+    if (currentPage <= 3) {
+      return [1, 2, 3, 'gap-end', totalPages];
+    }
+    if (currentPage >= totalPages - 2) {
+      return [1, 'gap-start', totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, 'gap-start', currentPage, 'gap-end', totalPages];
+  }, [totalPages, currentPage, isCompactPagination]);
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -266,22 +308,13 @@ export default function AcademicPage() {
               <>
                 <div className={styles.facultyGrid}>
                   {paginatedFaculty.map((fac) => {
-                    const badgeClass =
-                      fac.badgeType === 'ruby'
-                        ? styles.badgeRuby
-                        : fac.badgeType === 'gold'
-                          ? styles.badgeGold
-                          : fac.badgeType === 'azure'
-                            ? styles.badgeAzure
-                            : styles.badgePurple;
-
                     return (
                       <article
                         key={fac.id}
                         className={styles.facultyCard}
                         onClick={() => setActiveModalTeacher(fac)}
                       >
-                        {/* Portrait Image & Floating Badges */}
+                        {/* Portrait Image */}
                         <div className={styles.cardMedia}>
                           <Image
                             src={fac.image}
@@ -290,9 +323,6 @@ export default function AcademicPage() {
                             sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1200px) 33vw, 25vw"
                             className={styles.portraitImg}
                           />
-                          <span className={`${styles.cardRoleBadge} ${badgeClass}`}>
-                            {fac.badge}
-                          </span>
                         </div>
 
                         {/* Card Content Information */}
@@ -338,7 +368,7 @@ export default function AcademicPage() {
                 {totalPages > 1 && (
                   <div className={styles.paginationWrapper}>
                     <div className={styles.paginationInfo}>
-                      Showing <span>{(currentPage - 1) * ITEMS_PER_PAGE + 1}–{Math.min(currentPage * ITEMS_PER_PAGE, filteredFaculty.length)}</span> of <span>{filteredFaculty.length}</span> Faculty Members
+                      Showing <span>{(currentPage - 1) * itemsPerPage + 1}–{Math.min(currentPage * itemsPerPage, filteredFaculty.length)}</span> of <span>{filteredFaculty.length}</span> Faculty Members
                     </div>
 
                     <div className={styles.paginationControls}>
@@ -355,17 +385,24 @@ export default function AcademicPage() {
                       </button>
 
                       <div className={styles.pageNumbers}>
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pg) => (
-                          <button
-                            key={pg}
-                            type="button"
-                            onClick={() => handlePageChange(pg)}
-                            className={`${styles.pageNumBtn} ${pg === currentPage ? styles.activePageBtn : ''}`}
-                            aria-label={`Page ${pg}`}
-                          >
-                            {pg}
-                          </button>
-                        ))}
+                        {visiblePages.map((pg) =>
+                          typeof pg === 'string' ? (
+                            <span key={pg} className={styles.pageEllipsis} aria-hidden="true">
+                              &hellip;
+                            </span>
+                          ) : (
+                            <button
+                              key={pg}
+                              type="button"
+                              onClick={() => handlePageChange(pg)}
+                              className={`${styles.pageNumBtn} ${pg === currentPage ? styles.activePageBtn : ''}`}
+                              aria-label={`Page ${pg}`}
+                              aria-current={pg === currentPage ? 'page' : undefined}
+                            >
+                              {pg}
+                            </button>
+                          )
+                        )}
                       </div>
 
                       <button
@@ -424,8 +461,22 @@ export default function AcademicPage() {
               onClick={() => setActiveModalTeacher(null)}
               className={styles.modalCloseBtn}
               aria-label="Close profile modal"
+              type="button"
             >
-              &times;
+              <svg
+                className={styles.modalCloseIcon}
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.6"
+                strokeLinecap="round"
+                aria-hidden="true"
+              >
+                <line x1="6" y1="6" x2="18" y2="18" />
+                <line x1="18" y1="6" x2="6" y2="18" />
+              </svg>
             </button>
 
             {/* Modal Header Row */}
