@@ -1,519 +1,354 @@
-const Faculty = require("../Model/faculty");
-const moment = require("moment-timezone");
+﻿const Faculty = require("../Model/Faculty");
 const config = require("../Config/app");
-const fs = require("fs");
-const path = require("path");
-const { saveLocalAndCreateWebp, uploadToS3AndCreateWebp, deleteLocalImages, deleteS3Objects } = require("../Utils/imageProcessor");
+const { generateSlug } = require("../helper");
+const {
+  saveLocalAndCreateWebp,
+  uploadToS3AndCreateWebp,
+  deleteLocalImages,
+  deleteS3Objects,
+} = require("../Utils/imageProcessor");
 
 const isProduction = () => config.NODE_ENV === "production";
 
 /**
- * Format faculty document with full image URLs and Asia/Kolkata timestamps
+ * Format faculty record for client response with full image URLs
  */
 const formatFaculty = (item, req) => {
   const doc = item._doc || item;
-  const baseUrl = `${req.protocol}://${req.get("host")}`;
+  let fullPhotoUrl = doc.photo_webp || doc.photo || doc.photo_url || doc.image_url || doc.image || "";
 
-  let imageUrl = doc.photo || "";
-  let webpUrl = doc.photo_webp || "";
-
-  if (doc.photo && !doc.photo.startsWith("http")) {
-    imageUrl = `${baseUrl}/${doc.photo.replace(/\\/g, "/")}`;
-  }
-  if (doc.photo_webp && !doc.photo_webp.startsWith("http")) {
-    webpUrl = `${baseUrl}/${doc.photo_webp.replace(/\\/g, "/")}`;
-  }
-
-  // Format expertise array
-  let expertiseArray = doc.expertise || [];
-  if (typeof expertiseArray === "string") {
-    try {
-      expertiseArray = JSON.parse(expertiseArray);
-    } catch (e) {
-      expertiseArray = expertiseArray.split(",").map((s) => s.trim()).filter(Boolean);
-    }
+  if (fullPhotoUrl && !fullPhotoUrl.startsWith("http")) {
+    const baseUrl = req ? `${req.protocol}://${req.get("host")}` : "http://localhost:5000";
+    fullPhotoUrl = `${baseUrl}/${fullPhotoUrl.replace(/\\/g, "/").replace(/^\/+/, "")}`;
   }
 
   return {
     ...doc,
-    expertise: expertiseArray,
-    photo_url: imageUrl,
-    image_url: imageUrl,
-    photo_webp_url: webpUrl,
-    image_webp_url: webpUrl,
-    created_at: moment(doc.created_at).tz("Asia/Kolkata").format("YYYY-MM-DD HH:mm:ss"),
-    updated_at: moment(doc.updated_at).tz("Asia/Kolkata").format("YYYY-MM-DD HH:mm:ss"),
+    photo: fullPhotoUrl,
+    photo_url: fullPhotoUrl,
+    photo_webp: fullPhotoUrl,
+    photo_webp_url: fullPhotoUrl,
+    image: fullPhotoUrl,
+    image_url: fullPhotoUrl,
+    image_webp_url: fullPhotoUrl,
   };
 };
 
-/**
- * Helper to delete temp local file on validation error
- */
-const deleteUploadedTemp = (file) => {
-  if (file && !isProduction()) {
-    const uploadedFilePath = path.join(__dirname, "../../", file.path);
-    if (fs.existsSync(uploadedFilePath)) {
-      try {
-        fs.unlinkSync(uploadedFilePath);
-      } catch (e) {
-        // ignore
-      }
-    }
-  }
-};
-
-/**
- * Helper to parse expertise from comma-separated string or array
- */
-const parseExpertise = (input) => {
-  if (!input) return [];
-  if (Array.isArray(input)) return input.map((item) => String(item).trim()).filter(Boolean);
-  if (typeof input === "string") {
-    try {
-      const parsed = JSON.parse(input);
-      if (Array.isArray(parsed)) return parsed.map((item) => String(item).trim()).filter(Boolean);
-    } catch (e) {
-      // Fallback: comma separated string
-    }
-    return input.split(",").map((item) => item.trim()).filter(Boolean);
-  }
-  return [];
-};
-
-// @desc    Get all faculty members with pagination, search, filters
-// @route   GET /api/faculty or GET /api/master/faculty
-exports.getFacultyMembers = async (req, res, next) => {
+// Get all faculty members with filtering, search, and pagination
+exports.getFacultyMembers = async (req, res) => {
   try {
-    const queryParams = req.method === "POST" ? req.body : req.query;
     const {
       page = 1,
-      limit = 10,
-      search,
-      status,
-      department,
-      badgeTag,
-      badge,
-      slug,
-      sort_by,
-      sort_order,
-    } = queryParams || {};
+      limit = 50,
+      search = "",
+      department = "",
+      status = "",
+      sortBy = "sortOrder",
+      sortOrder = "asc",
+    } = req.query;
 
-    const filter = { is_deleted: false };
+    const query = { is_deleted: false };
 
-    if (status && status.toLowerCase().trim() !== "all") {
-      filter.status = status.toLowerCase().trim();
+    // Status filter
+    if (status && status !== "all") {
+      if (status === "active") {
+        query.$or = [{ status: "active" }, { isActive: true }, { is_active: 1 }];
+      } else if (status === "inactive") {
+        query.$or = [{ status: "inactive" }, { isActive: false }, { is_active: 0 }];
+      } else {
+        query.status = status;
+      }
     }
 
-    if (department && department.trim()) {
-      filter.department = { $regex: department.trim(), $options: "i" };
+    // Department filter
+    if (department && department !== "all") {
+      query.department = { $regex: new RegExp(department, "i") };
     }
 
-    const selectedBadge = badgeTag || badge;
-    if (selectedBadge && selectedBadge.trim()) {
-      filter.badgeTag = { $regex: selectedBadge.trim(), $options: "i" };
-    }
-
-    if (slug) {
-      filter.slug = slug.toLowerCase().trim();
-    }
-
+    // Search filter
     if (search && search.trim()) {
-      const searchRegex = { $regex: search.trim(), $options: "i" };
-      filter.$or = [
+      const searchRegex = new RegExp(search.trim(), "i");
+      query.$or = [
         { fullName: searchRegex },
         { designation: searchRegex },
         { qualifications: searchRegex },
         { department: searchRegex },
-        { overview: searchRegex },
         { keyHighlight: searchRegex },
-        { slug: searchRegex },
       ];
     }
 
-    const pageNum = Math.max(1, parseInt(page) || 1);
-    const pageLimit = Math.max(1, parseInt(limit) || 10);
-    const skip = (pageNum - 1) * pageLimit;
+    const sortOptions = {};
+    sortOptions[sortBy] = sortOrder === "desc" ? -1 : 1;
+    if (sortBy !== "created_at") {
+      sortOptions.created_at = -1;
+    }
 
-    const sortField = sort_by || "sortOrder";
-    const sortDirection = sort_order === "desc" ? -1 : 1;
+    const pageNum = parseInt(page, 10);
+    const limitNum = parseInt(limit, 10);
+    const skip = (pageNum - 1) * limitNum;
 
-    const [facultyList, totalCount] = await Promise.all([
-      Faculty.find(filter)
-        .populate("created_by", "first_name last_name email")
-        .populate("updated_by", "first_name last_name email")
-        .sort({ [sortField]: sortDirection, created_at: -1 })
-        .skip(skip)
-        .limit(pageLimit),
-      Faculty.countDocuments(filter),
+    const [facultyList, total] = await Promise.all([
+      Faculty.find(query).sort(sortOptions).skip(skip).limit(limitNum).lean(),
+      Faculty.countDocuments(query),
     ]);
 
-    const totalPages = Math.ceil(totalCount / pageLimit) || 1;
+    const formattedList = facultyList.map((item) => formatFaculty(item, req));
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       status: 200,
       message: "Faculty members fetched successfully",
-      data: facultyList.map((item) => formatFaculty(item, req)),
+      data: formattedList,
       meta: {
-        total_records: totalCount,
+        total_records: total,
         current_page: pageNum,
-        total_pages: totalPages,
-        limit: pageLimit,
+        total_pages: Math.ceil(total / limitNum),
+        limit: limitNum,
       },
     });
   } catch (error) {
-    next(error);
+    console.error("Error in getFacultyMembers:", error);
+    res.status(500).json({
+      success: false,
+      status: 500,
+      message: "Error fetching faculty members",
+      error: error.message,
+    });
   }
 };
 
-// @desc    Get single faculty member by ID or Slug
-// @route   GET /api/faculty/:idOrSlug or GET /api/master/faculty/:idOrSlug
-exports.getFacultyByIdOrSlug = async (req, res, next) => {
+exports.getAllFaculty = exports.getFacultyMembers;
+
+// Get single faculty member by ID or slug
+exports.getFacultyByIdOrSlug = async (req, res) => {
   try {
     const { idOrSlug } = req.params;
 
-    if (!idOrSlug) {
-      return res.status(400).json({
-        success: false,
-        status: 400,
-        message: "Validation failed.",
-        error: { id: ["Faculty ID or slug is required."] },
-      });
+    let faculty;
+    if (idOrSlug.match(/^[0-9a-fA-F]{24}$/)) {
+      faculty = await Faculty.findOne({ _id: idOrSlug, is_deleted: false }).lean();
+    } else {
+      faculty = await Faculty.findOne({
+        $or: [{ slug: idOrSlug }, { guid: idOrSlug }],
+        is_deleted: false,
+      }).lean();
     }
-
-    const isMongoId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
-    const query = isMongoId
-      ? { _id: idOrSlug, is_deleted: false }
-      : { slug: idOrSlug.toLowerCase(), is_deleted: false };
-
-    const faculty = await Faculty.findOne(query)
-      .populate("created_by", "first_name last_name email")
-      .populate("updated_by", "first_name last_name email");
 
     if (!faculty) {
       return res.status(404).json({
         success: false,
         status: 404,
         message: "Faculty member not found",
-        error: {},
       });
     }
 
-    return res.status(200).json({
+    res.status(200).json({
       success: true,
       status: 200,
-      message: "Faculty member fetched successfully",
       data: formatFaculty(faculty, req),
     });
   } catch (error) {
-    next(error);
+    console.error("Error in getFacultyByIdOrSlug:", error);
+    res.status(500).json({
+      success: false,
+      status: 500,
+      message: "Error fetching faculty member",
+      error: error.message,
+    });
   }
 };
 
-// @desc    Create new faculty member (Supports FormData with image upload or photo path)
-// @route   POST /api/faculty or POST /api/master/faculty
-exports.createFaculty = async (req, res, next) => {
+// Create new faculty member
+exports.createFaculty = async (req, res) => {
   try {
-    const body = req.body || {};
-    const errors = {};
+    const facultyData = { ...req.body };
 
-    const fullName = (body.fullName || body.name || "").toString().trim();
-    const designation = (body.designation || body.role || "").toString().trim();
-    const badgeTag = (body.badgeTag || body.badge || "").toString().trim();
-    const qualifications = (body.qualifications || body.qualification || "").toString().trim();
-    const department = (body.department || body.stream || "").toString().trim();
-    const experience = (body.experience || "").toString().trim();
-    const overview = (body.overview || body.biography || "").toString().trim();
-    const keyHighlight = (body.keyHighlight || body.highlightBannerText || "").toString().trim();
-    const parsedExpertise = parseExpertise(body.expertise);
-
-    let photoPath = (body.photo || body.image || "").toString().trim();
-    let webpPath = "";
-
-    // Field-by-field mandatory validation
-    if (!fullName) {
-      errors.fullName = ["Full Name is mandatory."];
-    }
-    if (!designation) {
-      errors.designation = ["Designation & Role is mandatory."];
-    }
-    if (!badgeTag) {
-      errors.badgeTag = ["Badge Tag is mandatory."];
-    }
-    if (!qualifications) {
-      errors.qualifications = ["Qualifications is mandatory."];
-    }
-    if (!department) {
-      errors.department = ["Department/Stream is mandatory."];
-    }
-    if (!experience) {
-      errors.experience = ["Experience is mandatory."];
-    }
-    if (!overview) {
-      errors.overview = ["Overview/Biography is mandatory."];
-    }
-    if (!keyHighlight) {
-      errors.keyHighlight = ["Key Highlight is mandatory."];
-    }
-    if (!parsedExpertise || parsedExpertise.length === 0) {
-      errors.expertise = ["Expertise areas are mandatory."];
-    }
-    if (!req.file && !photoPath) {
-      errors.photo = ["Faculty Photo is mandatory."];
-    }
-
-    if (Object.keys(errors).length > 0) {
-      deleteUploadedTemp(req.file);
-      const errorList = Object.values(errors).flat();
-      return res.status(422).json({
-        status: 422,
-        success: false,
-        message: "Validation error: Unable to process input fields",
-        error: errors,
-        errors: errorList,
-      });
-    }
-
-    // Handle Multer image upload
+    // Image Upload processing (matches req.file from multer)
     if (req.file) {
       if (isProduction()) {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "faculty");
-        photoPath = uploadResult.originalKey;
-        webpPath = uploadResult.webpKey;
+        const processed = await uploadToS3AndCreateWebp(req.file, "faculty");
+        facultyData.photo = processed.originalLocation || processed.originalKey;
+        facultyData.photo_webp = processed.webpLocation || processed.webpKey;
       } else {
-        const result = await saveLocalAndCreateWebp(req.file, "faculty");
-        photoPath = result.originalPath;
-        webpPath = result.webpPath;
+        const processed = await saveLocalAndCreateWebp(req.file, "faculty");
+        facultyData.photo = processed.originalPath || processed.originalRelativePath;
+        facultyData.photo_webp = processed.webpPath || processed.webpRelativePath;
+      }
+    } else if (facultyData.photo && typeof facultyData.photo === "string" && facultyData.photo.startsWith("http")) {
+      // Keep existing photo if passed as URL string
+      facultyData.photo_webp = facultyData.photo;
+    }
+
+    if (typeof facultyData.expertise === "string") {
+      try {
+        facultyData.expertise = JSON.parse(facultyData.expertise);
+      } catch {
+        facultyData.expertise = facultyData.expertise.split("\n").map((s) => s.trim()).filter(Boolean);
       }
     }
 
-    const created_by = req.user ? req.user._id : (body.created_by || null);
+    if (facultyData.status) {
+      facultyData.isActive = facultyData.status === "active";
+      facultyData.is_active = facultyData.status === "active" ? 1 : 0;
+    }
 
-    const newFaculty = new Faculty({
-      fullName,
-      designation,
-      photo: photoPath,
-      photo_webp: webpPath,
-      badgeTag,
-      qualifications,
-      department,
-      experience,
-      overview,
-      expertise: parsedExpertise,
-      keyHighlight,
-      sortOrder: typeof body.sortOrder !== "undefined" ? Number(body.sortOrder) : 0,
-      status: body.status && ["active", "inactive"].includes(body.status.toLowerCase()) ? body.status.toLowerCase() : "active",
-      created_by,
-      updated_by: created_by,
-      created_at: moment().tz("Asia/Kolkata").toDate(),
-      updated_at: moment().tz("Asia/Kolkata").toDate(),
-    });
+    if (facultyData.fullName && !facultyData.slug) {
+      let generatedSlug = generateSlug(facultyData.fullName.trim());
+      let uniqueSlug = generatedSlug;
+      let counter = 1;
+      while (await Faculty.findOne({ slug: uniqueSlug })) {
+        uniqueSlug = `${generatedSlug}-${counter}`;
+        counter++;
+      }
+      facultyData.slug = uniqueSlug;
+    }
 
-    await newFaculty.save();
+    const faculty = new Faculty(facultyData);
+    await faculty.save();
 
-    return res.status(201).json({
+    res.status(201).json({
       success: true,
       status: 201,
       message: "Faculty member created successfully",
-      data: formatFaculty(newFaculty, req),
+      data: formatFaculty(faculty, req),
     });
   } catch (error) {
-    deleteUploadedTemp(req.file);
-    next(error);
+    console.error("Error in createFaculty:", error);
+    res.status(400).json({
+      success: false,
+      status: 400,
+      message: "Error creating faculty member",
+      error: error.message,
+    });
   }
 };
 
-// @desc    Update existing faculty member by slug or ID
-// @route   PUT /api/faculty/:idOrSlug or PUT /api/master/faculty/:idOrSlug
-exports.updateFaculty = async (req, res, next) => {
+// Update faculty member
+exports.updateFaculty = async (req, res) => {
   try {
-    const idOrSlug = req.params.idOrSlug || req.params.id || (req.body && (req.body.slug || req.body.id));
+    const { idOrSlug } = req.params;
+    const updateData = { ...req.body };
 
-    if (!idOrSlug) {
-      deleteUploadedTemp(req.file);
-      return res.status(400).json({
-        success: false,
-        status: 400,
-        message: "Validation failed.",
-        error: { id: ["Faculty ID or slug is required for updating."] },
+    let faculty;
+    if (idOrSlug.match(/^[0-9a-fA-F]{24}$/)) {
+      faculty = await Faculty.findOne({ _id: idOrSlug, is_deleted: false });
+    } else {
+      faculty = await Faculty.findOne({
+        $or: [{ slug: idOrSlug }, { guid: idOrSlug }],
+        is_deleted: false,
       });
     }
 
-    const isMongoId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
-    const query = isMongoId
-      ? { _id: idOrSlug, is_deleted: false }
-      : { slug: idOrSlug.toLowerCase(), is_deleted: false };
-
-    const existingFaculty = await Faculty.findOne(query);
-    if (!existingFaculty) {
-      deleteUploadedTemp(req.file);
-      return res.status(404).json({
-        success: false,
-        status: 404,
-        message: "Faculty member not found",
-        error: {},
-      });
-    }
-
-    const body = req.body || {};
-    const errors = {};
-
-    if (body.fullName !== undefined || body.name !== undefined) {
-      const val = (body.fullName || body.name || "").toString().trim();
-      if (!val) {
-        errors.fullName = ["Full Name cannot be blank."];
-      } else {
-        existingFaculty.fullName = val;
-      }
-    }
-
-    if (body.designation !== undefined || body.role !== undefined) {
-      const val = (body.designation || body.role || "").toString().trim();
-      if (!val) {
-        errors.designation = ["Designation & Role cannot be blank."];
-      } else {
-        existingFaculty.designation = val;
-      }
-    }
-
-    if (body.status !== undefined) {
-      const statusLower = body.status.toString().toLowerCase().trim();
-      if (!["active", "inactive"].includes(statusLower)) {
-        errors.status = ["Status must be either 'active' or 'inactive'."];
-      } else {
-        existingFaculty.status = statusLower;
-      }
-    }
-
-    if (Object.keys(errors).length > 0) {
-      deleteUploadedTemp(req.file);
-      const errorList = Object.values(errors).flat();
-      return res.status(422).json({
-        status: 422,
-        success: false,
-        message: "Validation error: Unable to process input fields",
-        error: errors,
-        errors: errorList,
-      });
-    }
-
-    // Handle photo replacement
-    if (req.file) {
-      let newOriginal, newWebp;
-      if (isProduction()) {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "faculty");
-        newOriginal = uploadResult.originalKey;
-        newWebp = uploadResult.webpKey;
-        if (existingFaculty.photo) await deleteS3Objects([existingFaculty.photo, existingFaculty.photo_webp].filter(Boolean));
-      } else {
-        const result = await saveLocalAndCreateWebp(req.file, "faculty");
-        newOriginal = result.originalPath;
-        newWebp = result.webpPath;
-        deleteLocalImages(existingFaculty.photo, existingFaculty.photo_webp);
-      }
-      existingFaculty.photo = newOriginal;
-      existingFaculty.photo_webp = newWebp;
-    } else if (body.photo || body.image) {
-      existingFaculty.photo = (body.photo || body.image).toString().trim();
-    }
-
-    if (body.badgeTag !== undefined || body.badge !== undefined) {
-      existingFaculty.badgeTag = (body.badgeTag || body.badge || "").toString().trim();
-    }
-    if (body.qualifications !== undefined || body.qualification !== undefined) {
-      existingFaculty.qualifications = (body.qualifications || body.qualification || "").toString().trim();
-    }
-    if (body.department !== undefined || body.stream !== undefined) {
-      existingFaculty.department = (body.department || body.stream || "").toString().trim();
-    }
-    if (body.experience !== undefined) {
-      existingFaculty.experience = body.experience.toString().trim();
-    }
-    if (body.overview !== undefined || body.biography !== undefined) {
-      existingFaculty.overview = (body.overview || body.biography || "").toString().trim();
-    }
-    if (body.expertise !== undefined) {
-      existingFaculty.expertise = parseExpertise(body.expertise);
-    }
-    if (body.keyHighlight !== undefined || body.highlightBannerText !== undefined) {
-      existingFaculty.keyHighlight = (body.keyHighlight || body.highlightBannerText || "").toString().trim();
-    }
-    if (typeof body.sortOrder !== "undefined") {
-      existingFaculty.sortOrder = Number(body.sortOrder);
-    }
-
-    if (req.user) {
-      existingFaculty.updated_by = req.user._id;
-    } else if (body.updated_by) {
-      existingFaculty.updated_by = body.updated_by;
-    }
-
-    existingFaculty.updated_at = moment().tz("Asia/Kolkata").toDate();
-
-    await existingFaculty.save();
-
-    return res.status(200).json({
-      success: true,
-      status: 200,
-      message: "Faculty member updated successfully",
-      data: formatFaculty(existingFaculty, req),
-    });
-  } catch (error) {
-    deleteUploadedTemp(req.file);
-    next(error);
-  }
-};
-
-// @desc    Soft delete faculty member by slug or ID
-// @route   DELETE /api/faculty/:idOrSlug or DELETE /api/master/faculty/:idOrSlug
-exports.deleteFaculty = async (req, res, next) => {
-  try {
-    const idOrSlug = req.params.idOrSlug || req.params.id || (req.body && (req.body.slug || req.body.id));
-
-    if (!idOrSlug) {
-      return res.status(400).json({
-        success: false,
-        status: 400,
-        message: "Validation failed.",
-        error: { id: ["Faculty ID or slug is required for deletion."] },
-      });
-    }
-
-    const isMongoId = /^[0-9a-fA-F]{24}$/.test(idOrSlug);
-    const query = isMongoId
-      ? { _id: idOrSlug, is_deleted: false }
-      : { slug: idOrSlug.toLowerCase(), is_deleted: false };
-
-    const faculty = await Faculty.findOne(query);
     if (!faculty) {
       return res.status(404).json({
         success: false,
         status: 404,
-        message: "Faculty member not found or already deleted",
-        error: {},
+        message: "Faculty member not found",
       });
     }
 
-    // Soft delete according to Global Rule 5
-    faculty.is_deleted = true;
-    faculty.status = "inactive";
-    faculty.isActive = false;
-    faculty.updated_at = moment().tz("Asia/Kolkata").toDate();
-    if (req.user) faculty.updated_by = req.user._id;
+    // Image Upload processing for update
+    if (req.file) {
+      if (isProduction()) {
+        if (faculty.photo) await deleteS3Objects([faculty.photo]);
+        if (faculty.photo_webp) await deleteS3Objects([faculty.photo_webp]);
 
+        const processed = await uploadToS3AndCreateWebp(req.file, "faculty");
+        updateData.photo = processed.originalLocation || processed.originalKey;
+        updateData.photo_webp = processed.webpLocation || processed.webpKey;
+      } else {
+        if (faculty.photo) deleteLocalImages(faculty.photo);
+        if (faculty.photo_webp) deleteLocalImages(faculty.photo_webp);
+
+        const processed = await saveLocalAndCreateWebp(req.file, "faculty");
+        updateData.photo = processed.originalPath || processed.originalRelativePath;
+        updateData.photo_webp = processed.webpPath || processed.webpRelativePath;
+      }
+    } else {
+      const explicitImg = (updateData.photo || updateData.photo_url || updateData.image || "").toString().trim();
+      if (explicitImg && explicitImg.startsWith("http")) {
+        updateData.photo = explicitImg;
+        updateData.photo_webp = explicitImg;
+      }
+    }
+
+    if (typeof updateData.expertise === "string") {
+      try {
+        updateData.expertise = JSON.parse(updateData.expertise);
+      } catch {
+        updateData.expertise = updateData.expertise.split("\n").map((s) => s.trim()).filter(Boolean);
+      }
+    }
+
+    if (updateData.status) {
+      updateData.isActive = updateData.status === "active";
+      updateData.is_active = updateData.status === "active" ? 1 : 0;
+    } else if (updateData.is_active !== undefined) {
+      const isActive = updateData.is_active === 1 || updateData.is_active === "1" || updateData.is_active === true;
+      updateData.isActive = isActive;
+      updateData.status = isActive ? "active" : "inactive";
+    }
+
+    Object.assign(faculty, updateData);
+    faculty.updated_at = new Date();
     await faculty.save();
 
-    return res.status(200).json({
+    res.status(200).json({
+      success: true,
+      status: 200,
+      message: "Faculty member updated successfully",
+      data: formatFaculty(faculty, req),
+    });
+  } catch (error) {
+    console.error("Error in updateFaculty:", error);
+    res.status(400).json({
+      success: false,
+      status: 400,
+      message: "Error updating faculty member",
+      error: error.message,
+    });
+  }
+};
+
+// Soft delete faculty member
+exports.deleteFaculty = async (req, res) => {
+  try {
+    const { idOrSlug } = req.params;
+
+    let faculty;
+    if (idOrSlug.match(/^[0-9a-fA-F]{24}$/)) {
+      faculty = await Faculty.findOne({ _id: idOrSlug, is_deleted: false });
+    } else {
+      faculty = await Faculty.findOne({
+        $or: [{ slug: idOrSlug }, { guid: idOrSlug }],
+        is_deleted: false,
+      });
+    }
+
+    if (!faculty) {
+      return res.status(404).json({
+        success: false,
+        status: 404,
+        message: "Faculty member not found",
+      });
+    }
+
+    faculty.is_deleted = true;
+    faculty.updated_at = new Date();
+    await faculty.save();
+
+    res.status(200).json({
       success: true,
       status: 200,
       message: "Faculty member deleted successfully",
-      data: {
-        id: faculty._id,
-        slug: faculty.slug,
-        is_deleted: true,
-      },
     });
   } catch (error) {
-    next(error);
+    console.error("Error in deleteFaculty:", error);
+    res.status(500).json({
+      success: false,
+      status: 500,
+      message: "Error deleting faculty member",
+      error: error.message,
+    });
   }
 };

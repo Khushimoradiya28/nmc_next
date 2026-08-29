@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import {
   TableCell,
   TableBody,
@@ -8,6 +8,7 @@ import {
   Avatar,
 } from '@windmill/react-ui';
 import { FiEye, FiEdit, FiTrash2 } from 'react-icons/fi';
+import ShowHideButton from '../table/ShowHideButton';
 import DateBox from '../form/DateBox';
 
 const FacultyTable = ({
@@ -31,12 +32,14 @@ const FacultyTable = ({
           <TableCell>Designation & Qualification</TableCell>
           <TableCell>Experience & Stream</TableCell>
           <TableCell>Time Stamp</TableCell>
+          <TableCell className="text-center">Status</TableCell>
           <TableCell className="text-right">Actions</TableCell>
         </tr>
       </TableHeader>
 
       <TableBody>
         {displayFaculties.map((item, i) => {
+          const actionId = item._id || item.slug || item.id || item.guid;
           const fullName = item.fullName || item.name || 'Faculty Member';
           const avatarUrl =
             item.photo_webp_url ||
@@ -50,9 +53,18 @@ const FacultyTable = ({
           const experience = item.experience || 'N/A';
           const department = item.department || item.stream || 'B.B.A.';
           const highlight = item.keyHighlight || item.highlight || '';
+          const statusVal =
+            item.status === 'active' ||
+            item.status === 1 ||
+            item.status === true ||
+            item.status === '1' ||
+            item.is_active === 1 ||
+            item.is_active === true
+              ? 1
+              : 0;
 
           return (
-            <TableRow key={item._id || item.slug || item.id || i}>
+            <TableRow key={actionId || i}>
               {/* Sr No */}
               <TableCell>
                 <span className="text-xs font-semibold text-gray-500">
@@ -75,7 +87,7 @@ const FacultyTable = ({
                     </span>
                     {highlight && (
                       <span className="text-[11px] text-amber-600 dark:text-amber-400 truncate max-w-xs block font-medium">
-                        ✨ {highlight}
+                        ✓ {highlight}
                       </span>
                     )}
                   </div>
@@ -121,6 +133,15 @@ const FacultyTable = ({
                 <DateBox
                   created_at={item.created_at || item.createdAt}
                   updated_at={item.updated_at || item.updatedAt}
+                />
+              </TableCell>
+
+              {/* Status Toggle Switch */}
+              <TableCell className="text-center">
+                <ShowHideButton
+                  id={actionId}
+                  status={statusVal}
+                  type="faculty"
                 />
               </TableCell>
 

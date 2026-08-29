@@ -1,23 +1,46 @@
-"use client";
+'use client';
 
 import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
-import { ALL_FACULTY, DEPARTMENT_CATEGORIES } from '@/data/facultyData';
+import FacultyServices from '@/services/FacultyServices';
 import styles from './page.module.css';
 
-// Always keep 3 rows of cards regardless of how many columns the grid shows.
-// Column counts are defined in page.module.css:
-//   > 1280px -> 4 cols | 1025-1280px -> 3 cols | 769-1024px -> 2 cols | <= 768px -> 1 col
+const resolveImageUrl = (img) => {
+  if (!img) return '';
+  const clean = String(img).trim();
+  if (clean.startsWith('http://') || clean.startsWith('https://')) return clean;
+  const backendBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace(/\/api\/?$/, '');
+  const cleanPath = clean.startsWith('/') ? clean : '/' + clean;
+  return backendBase + cleanPath;
+};
+
+const getInitials = (name) => {
+  if (!name) return 'FM';
+  const parts = String(name).replace(/^(Dr\.|Prof\.|Mr\.|Mrs\.|Ms\.)\s*/i, '').trim().split(' ');
+  if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
+  return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+};
+
+const formatExp = (exp) => {
+  if (!exp) return '1+ Years Experience';
+  // Extract strictly the number
+  const digits = String(exp).replace(/[^0-9]/g, '').trim();
+  const num = digits || '1';
+  return `${num}+ Years Experience`;
+};
+
 const getItemsPerPage = (width) => {
-  if (width > 1280) return 12; // 4 cols x 3 rows
-  if (width > 1024) return 9;  // 3 cols x 3 rows
-  return 6;                    // 2 cols x 3 rows (also used for single-column mobile)
+  if (width > 1280) return 12;
+  if (width > 1024) return 9;
+  return 6;
 };
 
 export default function AcademicPage() {
+  const [facultyList, setFacultyList] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedDept, setSelectedDept] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -25,11 +48,118 @@ export default function AcademicPage() {
   const [isCompactPagination, setIsCompactPagination] = useState(false);
   const [activeModalTeacher, setActiveModalTeacher] = useState(null);
   const [isDeptOpen, setIsDeptOpen] = useState(false);
-  const [isSearchActive, setIsSearchActive] = useState(false);
   const deptDropdownRef = React.useRef(null);
-  const searchInputRef = React.useRef(null);
 
-  // Keep items-per-page in sync with the grid's column count so rows stay at 3
+  // Fetch pure dynamic active faculty from backend API
+  useEffect(() => {
+    const fetchFacultyData = async () => {
+      try {
+        setLoading(true);
+        const res = await FacultyServices.getAllFaculty({ status: 'active', limit: 100 });
+        const items = res?.data || (Array.isArray(res) ? res : []);
+        if (Array.isArray(items)) {
+          const formatted = items.map((item, idx) => {
+            const rawImg = item.photo_webp_url || item.photo_url || item.image || item.photo || '';
+            let depts = [];
+            const rawDept = item.department || item.coursesStreams || item.courses_streams || item.streams || item.courseStreams || '';
+            if (Array.isArray(rawDept)) {
+              depts = rawDept.map((s) => (typeof s === 'string' ? s : s?.value || s?.label || s?.shortTitle || '')).filter(Boolean);
+            } else if (typeof rawDept === 'string' && rawDept.trim()) {
+              try {
+                const parsed = JSON.parse(rawDept);
+                if (Array.isArray(parsed)) {
+                  depts = parsed.map((s) => (typeof s === 'string' ? s : s?.value || s?.label || s?.shortTitle || '')).filter(Boolean);
+                } else {
+                  depts = rawDept.split(',').map((s) => s.trim()).filter(Boolean);
+                }
+              } catch {
+                depts = rawDept.split(',').map((s) => s.trim()).filter(Boolean);
+              }
+            }
+
+            const rawSpecs = item.specializations || item.areasOfExpertise || item.expertise || [];
+            let specs = [];
+            if (Array.isArray(rawSpecs)) {
+              rawSpecs.forEach((s) => {
+                const val = typeof s === 'string' ? s : s?.value || s?.label || '';
+                if (val) {
+                  // Split each item by comma if present
+                  val.split(',').forEach((part) => {
+                    const clean = part.trim();
+                    if (clean && !specs.includes(clean)) specs.push(clean);
+                  });
+                }
+              });
+            } else if (typeof rawSpecs === 'string' && rawSpecs.trim()) {
+              rawSpecs.split(',').forEach((part) => {
+                const clean = part.trim();
+                if (clean && !specs.includes(clean)) specs.push(clean);
+              });
+            }
+
+            const rawSubjs = item.subjects || item.teachingSubjects || [];
+            let subjs = [];
+            if (Array.isArray(rawSubjs)) {
+              rawSubjs.forEach((s) => {
+                const val = typeof s === 'string' ? s : s?.value || s?.label || '';
+                if (val) {
+                  val.split(',').forEach((part) => {
+                    const clean = part.trim();
+                    if (clean && !subjs.includes(clean)) subjs.push(clean);
+                  });
+                }
+              });
+            } else if (typeof rawSubjs === 'string' && rawSubjs.trim()) {
+              rawSubjs.split(',').forEach((part) => {
+                const clean = part.trim();
+                if (clean && !subjs.includes(clean)) subjs.push(clean);
+              });
+            }
+
+            return {
+              id: item._id || item.slug || item.id || idx,
+              name: item.fullName || item.name || 'Faculty Member',
+              role: item.designation || item.role || item.badgeTag || item.badge || 'Faculty',
+              qualification: item.qualifications || item.qualification || '',
+              experience: formatExp(item.experience),
+              image: resolveImageUrl(rawImg),
+              departments: depts.length > 0 ? depts : ['General'],
+              specializations: specs.length > 0 ? specs : (subjs.length > 0 ? subjs : ['Academic Instruction']),
+              subjects: subjs,
+              bio: item.overview || item.bio || item.biography || item.description || item.quote || 'Dedicated educator conveying insights and guiding academic excellence.',
+              achievements: item.keyHighlight || item.highlight || item.achievements || '',
+              slug: item.slug || ''
+            };
+          });
+          setFacultyList(formatted);
+        }
+      } catch (err) {
+        console.error('Error fetching dynamic faculty:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFacultyData();
+  }, []);
+
+  // Compute dynamic department categories from active faculty
+  const dynamicDeptCategories = useMemo(() => {
+    const set = new Set();
+    facultyList.forEach((fac) => {
+      fac.departments.forEach((d) => {
+        if (d && d !== 'General') set.add(d);
+      });
+    });
+
+    const list = [{ value: 'all', label: 'All Departments' }];
+    Array.from(set).sort().forEach((d) => {
+      list.push({ value: d, label: d });
+    });
+    return list;
+  }, [facultyList]);
+
+  // Keep items-per-page in sync with the grid's column count
   useEffect(() => {
     const syncItemsPerPage = () => {
       setItemsPerPage(getItemsPerPage(window.innerWidth));
@@ -53,56 +183,59 @@ export default function AcademicPage() {
     };
   }, []);
 
-  // Lock body scroll and prevent Lenis interference when modal is open
+  // Lock body scroll when modal is open
   useEffect(() => {
     if (activeModalTeacher) {
       document.body.style.overflow = 'hidden';
-      if (window.__lenis) {
-        window.__lenis.stop();
-      }
+      if (window.__lenis) window.__lenis.stop();
     } else {
       document.body.style.overflow = '';
-      if (window.__lenis) {
-        window.__lenis.start();
-      }
+      if (window.__lenis) window.__lenis.start();
     }
     return () => {
       document.body.style.overflow = '';
-      if (window.__lenis) {
-        window.__lenis.start();
-      }
+      if (window.__lenis) window.__lenis.start();
     };
   }, [activeModalTeacher]);
 
   // Compute department counts for interactive badges
   const deptCounts = useMemo(() => {
-    const counts = { all: ALL_FACULTY.length };
-    DEPARTMENT_CATEGORIES.forEach(dept => {
+    const counts = { all: facultyList.length };
+    dynamicDeptCategories.forEach((dept) => {
       if (dept.value !== 'all') {
-        counts[dept.value] = ALL_FACULTY.filter(fac => fac.departments.includes(dept.value)).length;
+        counts[dept.value] = facultyList.filter((fac) =>
+          fac.departments.some((d) => d.toLowerCase().trim() === dept.value.toLowerCase().trim())
+        ).length;
       }
     });
     return counts;
-  }, []);
+  }, [facultyList, dynamicDeptCategories]);
 
   // Filter faculty members based on selected department and search query
   const filteredFaculty = useMemo(() => {
-    return ALL_FACULTY.filter(faculty => {
-      const matchesDept = selectedDept === 'all' || faculty.departments.includes(selectedDept);
+    return facultyList.filter((faculty) => {
+      const isAllDept = !selectedDept || selectedDept === 'all';
+      const matchesDept =
+        isAllDept ||
+        faculty.departments.some(
+          (d) =>
+            d.toLowerCase().trim() === selectedDept.toLowerCase().trim() ||
+            selectedDept.toLowerCase().trim().includes(d.toLowerCase().trim())
+        );
 
       if (!matchesDept) return false;
       if (!searchQuery.trim()) return true;
 
       const q = searchQuery.toLowerCase().trim();
-      const matchName = faculty.name.toLowerCase().includes(q);
-      const matchRole = faculty.role.toLowerCase().includes(q);
-      const matchQual = faculty.qualification.toLowerCase().includes(q);
-      const matchSpec = faculty.specializations.some(s => s.toLowerCase().includes(q));
-      const matchSubj = faculty.subjects ? faculty.subjects.some(s => s.toLowerCase().includes(q)) : false;
+      const matchName = (faculty.name || '').toLowerCase().includes(q);
+      const matchRole = (faculty.role || '').toLowerCase().includes(q);
+      const matchQual = (faculty.qualification || '').toLowerCase().includes(q);
+      const matchSpec = Array.isArray(faculty.specializations) && faculty.specializations.some((s) => (s || '').toLowerCase().includes(q));
+      const matchSubj = Array.isArray(faculty.subjects) && faculty.subjects.some((s) => (s || '').toLowerCase().includes(q));
 
       return matchName || matchRole || matchQual || matchSpec || matchSubj;
     });
-  }, [selectedDept, searchQuery]);
+  }, [facultyList, selectedDept, searchQuery]);
 
   // Total pages calculation
   const totalPages = Math.ceil(filteredFaculty.length / itemsPerPage);
@@ -113,25 +246,11 @@ export default function AcademicPage() {
     return filteredFaculty.slice(startIndex, startIndex + itemsPerPage);
   }, [filteredFaculty, currentPage, itemsPerPage]);
 
-  // Clamp the active page when items-per-page changes on resize
-  useEffect(() => {
-    if (totalPages > 0 && currentPage > totalPages) {
-      setCurrentPage(totalPages);
-    }
-  }, [totalPages, currentPage]);
-
-  // On narrow screens collapse the page list to at most 5 slots, e.g. 1 2 3 … 8
   const visiblePages = useMemo(() => {
     const allPages = Array.from({ length: totalPages }, (_, i) => i + 1);
-
     if (!isCompactPagination || totalPages <= 4) return allPages;
-
-    if (currentPage <= 3) {
-      return [1, 2, 3, 'gap-end', totalPages];
-    }
-    if (currentPage >= totalPages - 2) {
-      return [1, 'gap-start', totalPages - 2, totalPages - 1, totalPages];
-    }
+    if (currentPage <= 3) return [1, 2, 3, 'gap-end', totalPages];
+    if (currentPage >= totalPages - 2) return [1, 'gap-start', totalPages - 2, totalPages - 1, totalPages];
     return [1, 'gap-start', currentPage, 'gap-end', totalPages];
   }, [totalPages, currentPage, isCompactPagination]);
 
@@ -139,17 +258,8 @@ export default function AcademicPage() {
     if (newPage >= 1 && newPage <= totalPages) {
       setCurrentPage(newPage);
       const section = document.getElementById('faculty-directory');
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
+      if (section) section.scrollIntoView({ behavior: 'smooth' });
     }
-  };
-
-  const handleResetFilters = () => {
-    setSelectedDept('all');
-    setSearchQuery('');
-    setIsSearchActive(false);
-    setCurrentPage(1);
   };
 
   return (
@@ -158,20 +268,25 @@ export default function AcademicPage() {
       <main>
 
         {/* HERO BANNER SECTION */}
-        <section className="hero-fullscreen" id="home" style={{ minHeight: "50vh", height: "50vh" }}>
-          <div className="hero-bg-image">
+        <section className={styles.heroBanner} id="home">
+          <div className={styles.heroBgMedia}>
             <Image
               src="/assets/hero/academic-hero-ai.jpg"
               alt="Academic Mentors and College Campus"
               fill
               priority
               unoptimized
-              className="hero-bg-img"
+              className={styles.heroBgImage}
             />
           </div>
-          <div className="hero-overlay" style={{ background: "linear-gradient(to right, rgba(0,0,0,0.8), rgba(0,0,0,0.4))" }}></div>
-          <div className="hero-content container" style={{ paddingTop: "100px", display: "flex", alignItems: "flex-end", height: "100%", paddingBottom: "80px" }}>
-            <h1 className="hero-main-title"><em>Academic Mentors</em></h1>
+          <div className={styles.heroOverlayGradient}></div>
+          <div className={styles.heroOverlayMesh}></div>
+          <div className={styles.container}>
+            <div className={styles.heroContentContainer}>
+              <h1 className={styles.heroTitle}>
+                <span className={styles.heroTitleHighlight}>Academic Mentors</span>
+              </h1>
+            </div>
           </div>
         </section>
 
@@ -190,7 +305,7 @@ export default function AcademicPage() {
               </p>
             </div>
 
-            {/* Senior UI/UX Pro Command Hub (Search + Department Filter) */}
+            {/* Senior UI/UX Command Hub */}
             <div className={styles.commandHubWrapper}>
               <div className={styles.commandHubBar}>
 
@@ -220,7 +335,6 @@ export default function AcademicPage() {
                       }}
                       className={styles.hubSearchClearBtn}
                       aria-label="Clear search query"
-                      title="Clear search"
                     >
                       &times;
                     </button>
@@ -241,7 +355,7 @@ export default function AcademicPage() {
                     aria-label="Filter faculty by department"
                   >
                     <span className={styles.hubDeptLabelText}>
-                      {DEPARTMENT_CATEGORIES.find(d => d.value === selectedDept)?.label || 'All Departments'}
+                      {dynamicDeptCategories.find((d) => d.value === selectedDept)?.label || 'All Departments'}
                       <span className={styles.hubDeptCountText}>({deptCounts[selectedDept] || 0})</span>
                     </span>
                     <svg className={`${styles.hubArrowIcon} ${isDeptOpen ? styles.arrowRotated : ''}`} width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -251,21 +365,9 @@ export default function AcademicPage() {
 
                   {/* Minimalist Themed Dropdown Menu */}
                   {isDeptOpen && (
-                    <div
-                      className={styles.customDeptMenu}
-                      role="listbox"
-                      aria-label="Department Filter Options"
-                      data-lenis-prevent="true"
-                      onWheel={(e) => e.stopPropagation()}
-                      onTouchMove={(e) => e.stopPropagation()}
-                    >
-                      <div
-                        className={styles.deptMenuList}
-                        data-lenis-prevent="true"
-                        onWheel={(e) => e.stopPropagation()}
-                        onTouchMove={(e) => e.stopPropagation()}
-                      >
-                        {DEPARTMENT_CATEGORIES.map((dept) => {
+                    <div className={styles.customDeptMenu} role="listbox" aria-label="Department Filter Options">
+                      <div className={styles.deptMenuList}>
+                        {dynamicDeptCategories.map((dept) => {
                           const isSelected = selectedDept === dept.value;
                           const count = deptCounts[dept.value] || 0;
                           return (
@@ -307,130 +409,142 @@ export default function AcademicPage() {
             {filteredFaculty.length > 0 ? (
               <>
                 <div className={styles.facultyGrid}>
-                  {paginatedFaculty.map((fac) => {
-                    return (
-                      <article
-                        key={fac.id}
-                        className={styles.facultyCard}
-                        onClick={() => setActiveModalTeacher(fac)}
-                      >
-                        {/* Portrait Image */}
-                        <div className={styles.cardMedia}>
+                  {paginatedFaculty.map((fac) => (
+                    <article
+                      key={fac.id}
+                      className={styles.facultyCard}
+                      onClick={() => setActiveModalTeacher(fac)}
+                    >
+                      {/* Portrait Image */}
+                      <div className={styles.cardMedia}>
+                        {fac.image ? (
                           <Image
                             src={fac.image}
                             alt={`${fac.name} - ${fac.role}`}
                             fill
                             sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1200px) 33vw, 25vw"
                             className={styles.portraitImg}
+                            unoptimized={fac.image.startsWith('http')}
                           />
+                        ) : (
+                          <div style={{
+                            width: '100%',
+                            height: '100%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: 'linear-gradient(135deg, #8a0000 0%, #b30000 100%)',
+                            color: '#ffffff',
+                            fontWeight: 800,
+                            fontSize: '2.2rem'
+                          }}>
+                            {getInitials(fac.name)}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* Card Content Information */}
+                      <div className={styles.cardContent}>
+                        <span className={styles.cardRole}>{fac.role}</span>
+                        <h3 className={styles.cardName}>{fac.name}</h3>
+                        <p className={styles.cardQual}>{fac.qualification}</p>
+
+                        {/* Micro Specialization Tags */}
+                        <div className={styles.cardSpecTags}>
+                          {fac.specializations.slice(0, 3).map((spec, idx) => (
+                            <span key={idx} className={styles.cardSpecTag}>
+                              {spec}
+                            </span>
+                          ))}
                         </div>
 
-                        {/* Card Content Information */}
-                        <div className={styles.cardContent}>
-                          <span className={styles.cardRole}>{fac.role}</span>
-                          <h3 className={styles.cardName}>{fac.name}</h3>
-                          <p className={styles.cardQual}>{fac.qualification}</p>
-
-                          {/* Micro Specialization Tags */}
-                          <div className={styles.cardSpecTags}>
-                            {fac.specializations.slice(0, 3).map((spec, idx) => (
-                              <span key={idx} className={styles.cardSpecTag}>
-                                {spec}
-                              </span>
-                            ))}
-                          </div>
-
-                          {/* Card Footer */}
-                          <div className={styles.cardFooterRow}>
-                            <span className={styles.cardExp}>{fac.experience}</span>
-                            <button
-                              type="button"
-                              className={styles.viewProfileTrigger}
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                setActiveModalTeacher(fac);
-                              }}
-                              aria-label={`View profile for ${fac.name}`}
-                            >
-                              Details
-                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                                <polyline points="9 18 15 12 9 6"></polyline>
-                              </svg>
-                            </button>
-                          </div>
+                        {/* Card Footer */}
+                        <div className={styles.cardFooterRow}>
+                          <span className={styles.cardExp}>{fac.experience}</span>
+                          <button
+                            type="button"
+                            className={styles.viewProfileTrigger}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setActiveModalTeacher(fac);
+                            }}
+                            aria-label={`View profile for ${fac.name}`}
+                          >
+                            Details
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                          </button>
                         </div>
-                      </article>
-                    );
-                  })}
+                      </div>
+                    </article>
+                  ))}
                 </div>
 
-                {/* Modern Luxury Pagination Bar */}
+                {/* Pagination */}
                 {totalPages > 1 && (
-                  <div className={styles.paginationWrapper}>
-                    <div className={styles.paginationInfo}>
-                      Showing <span>{(currentPage - 1) * itemsPerPage + 1}–{Math.min(currentPage * itemsPerPage, filteredFaculty.length)}</span> of <span>{filteredFaculty.length}</span> Faculty Members
-                    </div>
-
-                    <div className={styles.paginationControls}>
+                  <nav className={styles.paginationWrap} aria-label="Faculty Directory Pagination">
+                    <div className={styles.paginationInner}>
                       <button
                         type="button"
                         onClick={() => handlePageChange(currentPage - 1)}
                         disabled={currentPage === 1}
-                        className={`${styles.pageNavBtn} ${currentPage === 1 ? styles.pageNavDisabled : ''}`}
-                        aria-label="Previous page"
+                        className={`${styles.pageBtn} ${styles.pageArrowBtn} ${currentPage === 1 ? styles.pageBtnDisabled : ''}`}
                       >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="15 18 9 12 15 6"></polyline>
                         </svg>
+                        <span className={styles.pageBtnText}>Prev</span>
                       </button>
 
-                      <div className={styles.pageNumbers}>
-                        {visiblePages.map((pg) =>
-                          typeof pg === 'string' ? (
-                            <span key={pg} className={styles.pageEllipsis} aria-hidden="true">
-                              &hellip;
-                            </span>
-                          ) : (
+                      <div className={styles.pageNumberList}>
+                        {visiblePages.map((pg, idx) => {
+                          if (pg === 'gap-start' || pg === 'gap-end') {
+                            return <span key={`gap-${idx}`} className={styles.pageEllipsis}>&hellip;</span>;
+                          }
+                          const isCurrent = pg === currentPage;
+                          return (
                             <button
                               key={pg}
                               type="button"
                               onClick={() => handlePageChange(pg)}
-                              className={`${styles.pageNumBtn} ${pg === currentPage ? styles.activePageBtn : ''}`}
-                              aria-label={`Page ${pg}`}
-                              aria-current={pg === currentPage ? 'page' : undefined}
+                              className={`${styles.pageBtn} ${styles.pageNumBtn} ${isCurrent ? styles.pageBtnActive : ''}`}
                             >
                               {pg}
                             </button>
-                          )
-                        )}
+                          );
+                        })}
                       </div>
 
                       <button
                         type="button"
                         onClick={() => handlePageChange(currentPage + 1)}
                         disabled={currentPage === totalPages}
-                        className={`${styles.pageNavBtn} ${currentPage === totalPages ? styles.pageNavDisabled : ''}`}
-                        aria-label="Next page"
+                        className={`${styles.pageBtn} ${styles.pageArrowBtn} ${currentPage === totalPages ? styles.pageBtnDisabled : ''}`}
                       >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <span className={styles.pageBtnText}>Next</span>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <polyline points="9 18 15 12 9 6"></polyline>
                         </svg>
                       </button>
                     </div>
-                  </div>
+                  </nav>
                 )}
               </>
             ) : (
-              /* Empty State */
+              /* Clean Empty State */
               <div className={styles.emptyStateContainer}>
-                <div className={styles.emptyStateIcon}>ðŸ”Â</div>
+                <div className={styles.emptyStateIcon}>
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    <line x1="8" y1="11" x2="14" y2="11"></line>
+                  </svg>
+                </div>
                 <h3 className={styles.emptyStateTitle}>No Faculty Members Found</h3>
                 <p className={styles.emptyStateText}>
                   We couldn&rsquo;t find any professors matching your current search criteria. Try modifying your search keywords or choosing another department.
                 </p>
-                <button onClick={handleResetFilters} className={styles.emptyStateActionBtn}>
-                  Show All Faculty Members
-                </button>
               </div>
             )}
 
@@ -439,55 +553,47 @@ export default function AcademicPage() {
 
       </main>
 
-      {/* INTERACTIVE FULL PROFILE MODAL */}
+      {/* DETAILED PROFILE MODAL */}
       {activeModalTeacher && (
         <div
           className={styles.modalBackdrop}
           onClick={() => setActiveModalTeacher(null)}
           role="dialog"
           aria-modal="true"
-          aria-labelledby="faculty-modal-title"
-          data-lenis-prevent
         >
-          <div
-            className={styles.modalDialog}
-            onClick={(e) => e.stopPropagation()}
-            onWheel={(e) => e.stopPropagation()}
-            onTouchMove={(e) => e.stopPropagation()}
-            data-lenis-prevent
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setActiveModalTeacher(null)}
-              className={styles.modalCloseBtn}
-              aria-label="Close profile modal"
-              type="button"
-            >
-              <svg
-                className={styles.modalCloseIcon}
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.6"
-                strokeLinecap="round"
-                aria-hidden="true"
-              >
+          <div className={styles.modalDialog} onClick={(e) => e.stopPropagation()}>
+            <button onClick={() => setActiveModalTeacher(null)} className={styles.modalCloseBtn} type="button">
+              <svg className={styles.modalCloseIcon} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round">
                 <line x1="6" y1="6" x2="18" y2="18" />
                 <line x1="18" y1="6" x2="6" y2="18" />
               </svg>
             </button>
 
-            {/* Modal Header Row */}
             <div className={styles.modalHeaderRow}>
               <div className={styles.modalMediaWrap}>
-                <Image
-                  src={activeModalTeacher.image}
-                  alt={activeModalTeacher.name}
-                  fill
-                  className={styles.modalPortraitImg}
-                />
+                {activeModalTeacher.image ? (
+                  <Image
+                    src={activeModalTeacher.image}
+                    alt={activeModalTeacher.name}
+                    fill
+                    className={styles.modalPortraitImg}
+                    unoptimized={activeModalTeacher.image.startsWith('http')}
+                  />
+                ) : (
+                  <div style={{
+                    width: '100%',
+                    height: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    background: 'linear-gradient(135deg, #8a0000 0%, #b30000 100%)',
+                    color: '#ffffff',
+                    fontWeight: 800,
+                    fontSize: '2.2rem'
+                  }}>
+                    {getInitials(activeModalTeacher.name)}
+                  </div>
+                )}
               </div>
 
               <div className={styles.modalHeaderInfo}>
@@ -496,18 +602,13 @@ export default function AcademicPage() {
                     <span key={i} className={styles.modalDeptBadge}>{dept}</span>
                   ))}
                 </div>
-                <h2 id="faculty-modal-title" className={styles.modalName}>
-                  {activeModalTeacher.name}
-                </h2>
+                <h2 className={styles.modalName}>{activeModalTeacher.name}</h2>
                 <div className={styles.modalRole}>{activeModalTeacher.role}</div>
                 <div className={styles.modalQual}>{activeModalTeacher.qualification}</div>
               </div>
             </div>
 
-            {/* Modal Body */}
             <div className={styles.modalBody}>
-
-              {/* Meta Grid */}
               <div className={styles.modalMetaGrid}>
                 <div className={styles.modalMetaCard}>
                   <span className={styles.modalMetaLabel}>Teaching Experience</span>
@@ -519,29 +620,28 @@ export default function AcademicPage() {
                 </div>
               </div>
 
-              {/* Biography Section */}
               <div className={styles.modalSectionBlock}>
                 <h4 className={styles.modalSectionTitle}>Academic Overview &amp; Biography</h4>
                 <p className={styles.modalBioText}>{activeModalTeacher.bio}</p>
               </div>
 
-              {/* Specializations */}
               <div className={styles.modalSectionBlock}>
                 <h4 className={styles.modalSectionTitle}>Areas of Expertise &amp; Subjects</h4>
                 <div className={styles.modalSubjectTags}>
-                  {activeModalTeacher.specializations.map((spec, i) => (
-                    <span key={i} className={styles.modalSubjectTag}>{spec}</span>
-                  ))}
-                  {activeModalTeacher.subjects && activeModalTeacher.subjects.map((subj, i) => (
-                    <span key={`sub-${i}`} className={styles.modalSubjectTag}>{subj}</span>
+                  {Array.from(new Set([
+                    ...(activeModalTeacher.specializations || []),
+                    ...(activeModalTeacher.subjects || [])
+                  ])).filter(Boolean).map((tag, i) => (
+                    <span key={i} className={styles.modalSubjectTag}>
+                      {tag}
+                    </span>
                   ))}
                 </div>
               </div>
 
-              {/* Accolades & Research */}
               {activeModalTeacher.achievements && (
                 <div className={styles.modalAchievementBox}>
-                  <span className={styles.modalAchieveIcon} aria-hidden="true">
+                  <span className={styles.modalAchieveIcon}>
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path>
                       <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path>
@@ -556,7 +656,6 @@ export default function AcademicPage() {
                   </p>
                 </div>
               )}
-
             </div>
           </div>
         </div>

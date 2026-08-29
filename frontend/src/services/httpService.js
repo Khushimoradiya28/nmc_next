@@ -1,4 +1,4 @@
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+﻿const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
 
 const handleResponse = async (response) => {
   if (!response.ok) {
@@ -30,7 +30,7 @@ export const requests = {
         'Content-Type': 'application/json',
         Accept: 'application/json',
       },
-      next: { revalidate: 60 } // Next.js ISR / cache support
+      cache: 'no-store'
     });
 
     return handleResponse(response);

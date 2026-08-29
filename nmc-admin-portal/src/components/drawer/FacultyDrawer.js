@@ -92,7 +92,7 @@ const FacultyDrawer = ({ id }) => {
           setValue('fullName', data.fullName || data.name || '');
           setValue('designation', data.designation || '');
           setValue('qualifications', data.qualifications || data.qualification || '');
-          setValue('experience', data.experience || '');
+          setValue('experience', String(data.experience || '').replace(/[^0-9]/g, ''));
           setValue('overview', data.overview || data.biography || '');
           setValue(
             'expertise',
@@ -157,7 +157,9 @@ const FacultyDrawer = ({ id }) => {
       const fullName = (data.fullName || '').trim();
       const designation = (data.designation || '').trim();
       const qualifications = (data.qualifications || '').trim();
-      const experience = (data.experience || '').trim();
+      // Strictly extract only digits for years of experience (prevent +, years, symbols)
+      const rawExpDigits = String(data.experience || '').replace(/[^0-9]/g, '');
+      const experience = rawExpDigits || '1';
       const overview = (data.overview || '').trim();
       const expertise = (data.expertise || '').trim();
       const keyHighlight = (data.keyHighlight || '').trim();
