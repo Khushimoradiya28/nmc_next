@@ -539,9 +539,6 @@ export default function CoursesPage() {
                       >
                         {course.tag}
                       </span>
-                      <div className={`prog-icon-badge ${course.iconColor}`}>
-                        {course.icon}
-                      </div>
                     </div>
 
                     <div
