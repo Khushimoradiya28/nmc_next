@@ -487,25 +487,8 @@ var initNMCSystem = () => {
 
   /* ==========================================================================
      10. FORM SUBMISSION HANDLERS
+     (Handled individually by each React component — no global override here)
      ========================================================================== */
-  document.querySelectorAll('form').forEach(form => {
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const submitBtn = form.querySelector('button[type="submit"]');
-      if (submitBtn) {
-        const oldText = submitBtn.innerHTML;
-        submitBtn.disabled = true;
-        submitBtn.innerHTML = `<span>Connecting to Official Portal...</span>`;
-
-        setTimeout(() => {
-          window.open('https://forms.gle/TBNKycyc6AjfipWc8', '_blank');
-          submitBtn.disabled = false;
-          submitBtn.innerHTML = oldText;
-          if (regModal) regModal.classList.remove('active');
-        }, 600);
-      }
-    });
-  });
 
   /* ==========================================================================
      11. HORIZONTAL CAROUSEL CONTROLS

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import styles from './PopupForm.module.css';
+import ContactServices from '@/services/ContactServices';
 
 // Custom Select Component
 function CustomSelect({ name, value, onChange, options, placeholder, icon }) {
@@ -132,6 +133,9 @@ export default function PopupForm() {
     message: ''
   });
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
   const pathname = usePathname();
 
   // Open popup 7 seconds after every page navigation
@@ -173,20 +177,51 @@ export default function PopupForm() {
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (fieldErrors[name]) setFieldErrors(prev => { const n = { ...prev }; delete n[name]; return n; });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.firstName && formData.message) {
+    const errors = {};
+    if (!formData.firstName.trim()) errors.firstName = 'First name is required.';
+    if (!formData.lastName.trim())  errors.lastName  = 'Last name is required.';
+    if (!formData.reason.trim())    errors.reason    = 'Reason is required.';
+    if (!formData.course)           errors.course    = 'Please select a course.';
+    if (!formData.teacher)          errors.teacher   = 'Please select a teacher/department.';
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;  // Stop — nothing happens until required fields are filled
+    }
+    setFieldErrors({});
+    setApiError('');
+    setLoading(true);
+    try {
+      await ContactServices.submitInquiry({
+        firstName: formData.firstName,
+        lastName:  formData.lastName,
+        website:   formData.website,
+        reason:    formData.reason,
+        course:    formData.course,
+        teacher:   formData.teacher,
+        message:   formData.message,
+      });
       setSubmitted(true);
       setTimeout(() => {
         setFormData({ firstName: '', lastName: '', website: '', reason: '', course: '', teacher: '', message: '' });
         setSubmitted(false);
         setIsOpen(false);
       }, 4000);
+    } catch (err) {
+      setApiError(err.message || 'Failed to submit. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
+
+  // Inline error label style
+  const errLabel = { display: 'block', color: '#dc2626', fontSize: '0.76rem', fontWeight: 600, marginTop: '0.3rem' };
 
   if (!isOpen) return null;
 
@@ -246,7 +281,7 @@ export default function PopupForm() {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className={styles.popupForm}>
+              <form onSubmit={handleSubmit} className={styles.popupForm} noValidate>
                 <div className={styles.formGrid}>
                   {/* First Name */}
                   <div className={styles.formGroup}>
@@ -264,9 +299,9 @@ export default function PopupForm() {
                         placeholder="Your First Name"
                         value={formData.firstName}
                         onChange={handleChange}
-                        required
                       />
                     </div>
+                    {fieldErrors.firstName && <span style={errLabel}>⚠ {fieldErrors.firstName}</span>}
                   </div>
 
                   {/* Last Name */}
@@ -287,6 +322,7 @@ export default function PopupForm() {
                         onChange={handleChange}
                       />
                     </div>
+                    {fieldErrors.lastName && <span style={errLabel}>⚠ {fieldErrors.lastName}</span>}
                   </div>
 
                   {/* Website */}
@@ -328,6 +364,7 @@ export default function PopupForm() {
                         onChange={handleChange}
                       />
                     </div>
+                    {fieldErrors.reason && <span style={errLabel}>⚠ {fieldErrors.reason}</span>}
                   </div>
 
                   {/* Choose Course - Custom Select */}
@@ -345,7 +382,9 @@ export default function PopupForm() {
                         </svg>
                       }
                     />
+                    {fieldErrors.course && <span style={errLabel}>⚠ {fieldErrors.course}</span>}
                   </div>
+
 
                   {/* Choose Teacher - Custom Select */}
                   <div className={styles.formGroupFull}>
@@ -364,6 +403,8 @@ export default function PopupForm() {
                         </svg>
                       }
                     />
+                    <input type="hidden" name="teacher" value={formData.teacher} />
+                    {fieldErrors.teacher && <span style={errLabel}>⚠ {fieldErrors.teacher}</span>}
                   </div>
 
                   {/* Message */}
@@ -380,21 +421,25 @@ export default function PopupForm() {
                         placeholder="Your message"
                         value={formData.message}
                         onChange={handleChange}
-                        required
                       ></textarea>
                     </div>
                   </div>
 
                   {/* Submit Button */}
                   <div className={styles.formGroupFull}>
-                    <button type="submit" className={styles.submitBtn}>
+                    {apiError && (
+                      <p style={{ color: '#dc2626', fontSize: '0.82rem', marginBottom: '0.75rem', fontWeight: 600 }}>
+                        ⚠ {apiError}
+                      </p>
+                    )}
+                    <button type="submit" className={styles.submitBtn} disabled={loading} style={{ opacity: loading ? 0.7 : 1 }}>
                       <span className={styles.submitBtnIcon}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <line x1="22" y1="2" x2="11" y2="13"></line>
                           <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                         </svg>
                       </span>
-                      <span>Send Your Message</span>
+                      <span>{loading ? 'Sending...' : 'Send Your Message'}</span>
                     </button>
                   </div>
                 </div>

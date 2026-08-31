@@ -2,6 +2,7 @@
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './page.module.css';
+import ContactServices from '@/services/ContactServices';
 
 // Custom Scrollbar Dropdown wrapper
 function ScrollableDropdown({ children, onWheel }) {
@@ -90,9 +91,12 @@ export default function ContactForm() {
     message: ''
   });
 
+  const [fieldErrors, setFieldErrors] = useState({});
   const [courseOpen, setCourseOpen] = useState(false);
   const [teacherOpen, setTeacherOpen] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState('');
 
   const courseRef = useRef(null);
   const teacherRef = useRef(null);
@@ -111,7 +115,9 @@ export default function ContactForm() {
   }, []);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (fieldErrors[name]) setFieldErrors(prev => { const n = { ...prev }; delete n[name]; return n; });
   };
 
   const handleSelectCourse = (value) => {
@@ -124,16 +130,46 @@ export default function ContactForm() {
     setTeacherOpen(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.firstName && formData.message) {
+    // Validate mandatory fields
+    const errors = {};
+    if (!formData.firstName.trim()) errors.firstName = 'First name is required.';
+    if (!formData.lastName.trim())  errors.lastName  = 'Last name is required.';
+    if (!formData.reason.trim())    errors.reason    = 'Reason is required.';
+    if (!formData.course)           errors.course    = 'Please select a course.';
+    if (!formData.teacher)          errors.teacher   = 'Please select a teacher/department.';
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;  // Stop — do nothing until required fields are filled
+    }
+    setFieldErrors({});
+    setApiError('');
+    setLoading(true);
+    try {
+      await ContactServices.submitInquiry({
+        firstName: formData.firstName,
+        lastName:  formData.lastName,
+        website:   formData.website,
+        reason:    formData.reason,
+        course:    formData.course,
+        teacher:   formData.teacher,
+        message:   formData.message,
+      });
       setSubmitted(true);
       setTimeout(() => {
         setFormData({ firstName: '', lastName: '', website: '', reason: '', course: '', teacher: '', message: '' });
         setSubmitted(false);
       }, 6000);
+    } catch (err) {
+      setApiError(err.message || 'Failed to submit. Please try again.');
+    } finally {
+      setLoading(false);
     }
   };
+
+  // Inline error label style
+  const errLabel = { display: 'block', color: '#dc2626', fontSize: '0.76rem', fontWeight: 600, marginTop: '0.3rem' };
 
   const selectedCourseObj = COURSE_OPTIONS.find(c => c.value === formData.course);
   const selectedTeacherObj = TEACHER_OPTIONS.find(t => t.value === formData.teacher);
@@ -156,7 +192,7 @@ export default function ContactForm() {
         Once we receive your information our representative will get back to you within 24 hours.
       </p>
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} noValidate>
         <div className={styles.formGrid}>
           {/* First Name */}
           <div className={styles.formGroup}>
@@ -174,9 +210,9 @@ export default function ContactForm() {
                 placeholder="Your First Name"
                 value={formData.firstName}
                 onChange={handleChange}
-                required
               />
             </div>
+            {fieldErrors.firstName && <span style={errLabel}>⚠ {fieldErrors.firstName}</span>}
           </div>
 
           {/* Last Name */}
@@ -197,6 +233,7 @@ export default function ContactForm() {
                 onChange={handleChange}
               />
             </div>
+            {fieldErrors.lastName && <span style={errLabel}>⚠ {fieldErrors.lastName}</span>}
           </div>
 
           {/* Website */}
@@ -238,6 +275,7 @@ export default function ContactForm() {
                 onChange={handleChange}
               />
             </div>
+            {fieldErrors.reason && <span style={errLabel}>⚠ {fieldErrors.reason}</span>}
           </div>
 
           {/* Choose Course Dropdown */}
@@ -301,6 +339,7 @@ export default function ContactForm() {
               )}
             </div>
             <input type="hidden" name="course" value={formData.course} />
+            {fieldErrors.course && <span style={errLabel}>⚠ {fieldErrors.course}</span>}
           </div>
 
           {/* Choose Teacher Dropdown */}
@@ -366,6 +405,7 @@ export default function ContactForm() {
               )}
             </div>
             <input type="hidden" name="teacher" value={formData.teacher} />
+            {fieldErrors.teacher && <span style={errLabel}>⚠ {fieldErrors.teacher}</span>}
           </div>
 
           {/* Message */}
@@ -382,21 +422,25 @@ export default function ContactForm() {
                 placeholder="Your message"
                 value={formData.message}
                 onChange={handleChange}
-                required
               ></textarea>
             </div>
           </div>
 
           {/* Submit Button */}
           <div className={styles.formGroupFull}>
-            <button type="submit" className={styles.submitBtn}>
+            {apiError && (
+              <p style={{ color: '#dc2626', fontSize: '0.82rem', marginBottom: '0.75rem', fontWeight: 600 }}>
+                ⚠ {apiError}
+              </p>
+            )}
+            <button type="submit" className={styles.submitBtn} disabled={loading} style={{ opacity: loading ? 0.7 : 1 }}>
               <span className={styles.submitBtnIcon}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <line x1="22" y1="2" x2="11" y2="13"></line>
                   <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                 </svg>
               </span>
-              <span>Send Your Message</span>
+              <span>{loading ? 'Sending...' : 'Send Your Message'}</span>
             </button>
           </div>
         </div>
