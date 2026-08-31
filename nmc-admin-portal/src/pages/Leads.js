@@ -1,133 +1,121 @@
-import React, { useState, useRef, useMemo, useContext } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
   Table,
   TableHeader,
   TableCell,
   TableFooter,
   TableContainer,
-  Button,
   Pagination,
+  Button,
   Input,
 } from "@windmill/react-ui";
-import { FiRefreshCw, FiUpload, FiArrowUp, FiArrowDown } from "react-icons/fi";
+import { FiArrowUp, FiArrowDown, FiRotateCw, FiUpload, FiSearch } from "react-icons/fi";
 import { CSVDownloader } from "react-papaparse";
 
-import useFilter from "../hooks/useFilter";
-import mockLeads from "../utils/mockLeads";
-import NotFound from "../components/table/NotFound";
 import PageTitle from "../components/Typography/PageTitle";
-import LeadTable from "../components/lead/LeadTable";
 import Breadcrumb from "../components/form/Breadcrumb";
-import CustomDateRangePicker from "../components/form/CustomDateRangePicker";
+import NotFound from "../components/table/NotFound";
+import LeadTable from "../components/lead/LeadTable";
 import MainModal from "../components/modal/MainModal";
-import { SidebarContext } from "../context/SidebarContext";
-import { notifySuccess } from "../utils/toast";
+import CustomDateRangePicker from "../components/form/CustomDateRangePicker";
+import LeadServices from "../services/LeadServices";
+import { notifySuccess, notifyError } from "../utils/toast";
 
 const Leads = () => {
-  const { toggleModal } = useContext(SidebarContext);
-
-  const [leadsList, setLeadsList] = useState(mockLeads);
+  const [leadsList, setLeadsList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [searchText, setSearchText] = useState("");
   const [deleteItemId, setDeleteItemId] = useState(null);
 
+  // Sorting & Filtering State
+  const [sortOrder, setSortOrder] = useState("desc");
   const [filters, setFilters] = useState({
     from_date: "",
     to_date: "",
   });
-  const [searchText, setSearchText] = useState("");
-  const [sortOrder, setSortOrder] = useState("desc"); // "desc" | "asc"
+
+  // Pagination state
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+  const resultsPerPage = 8;
 
   const searchRef = useRef(null);
 
-  // Open Delete MainModal
+  // Fetch Leads from Backend API
+  const fetchLeads = async (customParams = {}) => {
+    try {
+      setLoading(true);
+      const pageToFetch = customParams.page !== undefined ? customParams.page : currentPage;
+      const searchToFetch = customParams.search !== undefined ? customParams.search : searchText;
+      const sortToFetch = customParams.sort_order !== undefined ? customParams.sort_order : sortOrder;
+      const fromToFetch = customParams.from_date !== undefined ? customParams.from_date : filters.from_date;
+      const toToFetch = customParams.to_date !== undefined ? customParams.to_date : filters.to_date;
+
+      const res = await LeadServices.getAllLeads({
+        page: pageToFetch,
+        limit: resultsPerPage,
+        search: searchToFetch,
+        sort_order: sortToFetch,
+        from_date: fromToFetch,
+        to_date: toToFetch,
+        status: "all",
+      });
+
+      if (res && res.data) {
+        setLeadsList(res.data);
+        setTotalResults(res.meta?.total_records || res.data.length);
+      }
+    } catch (err) {
+      console.error("Failed to fetch leads:", err);
+      notifyError(err?.message || "Failed to load leads");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Live Search with Debounce (300ms) + immediate trigger on filters
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchLeads({ page: currentPage, search: searchText });
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchText, currentPage, sortOrder, filters.from_date, filters.to_date]);
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setCurrentPage(1);
+      fetchLeads({ page: 1, search: searchText });
+    }
+  };
+
   const handleOpenDeleteModal = (id) => {
     setDeleteItemId(id);
-    toggleModal();
   };
 
-  // Confirm Delete Action
-  const handleConfirmDelete = (id) => {
-    setLeadsList((prev) => prev.filter((item) => (item._id || item.id) !== id));
-    notifySuccess("Lead deleted successfully!");
-  };
-
-  // Filter & Sort leads locally for static display
-  const filteredAndSortedLeads = useMemo(() => {
-    let result = [...leadsList];
-
-    // 1. Search Filter (matches all form fields)
-    if (searchText.trim()) {
-      const term = searchText.toLowerCase().trim();
-      result = result.filter((item) => {
-        const name = `${item.first_name || ""} ${item.last_name || ""}`.toLowerCase();
-        const email = (item.email || "").toLowerCase();
-        const mobile = (item.mobile || "").toLowerCase();
-        const website = (item.website || item.enter_your_website || "").toLowerCase();
-        const reason = (item.reason || item.reason_contacting_us || "").toLowerCase();
-        const course = (item.course || item.choose_course || "").toLowerCase();
-        const teacherDept = (item.teacher_department || item.choose_teacher_department || "").toLowerCase();
-        const message = (item.message || item.your_message || "").toLowerCase();
-
-        return (
-          name.includes(term) ||
-          email.includes(term) ||
-          mobile.includes(term) ||
-          website.includes(term) ||
-          reason.includes(term) ||
-          course.includes(term) ||
-          teacherDept.includes(term) ||
-          message.includes(term)
-        );
-      });
+  const handleConfirmDelete = async (id) => {
+    try {
+      const targetId = id || deleteItemId;
+      const res = await LeadServices.deleteLead(targetId);
+      if (res && (res.status === 200 || res.success)) {
+        notifySuccess("Lead deleted successfully!");
+        fetchLeads();
+      }
+    } catch (err) {
+      console.error("Failed to delete lead:", err);
+      notifyError(err?.message || "Failed to delete lead");
     }
-
-    // 2. Custom Date Range Filter
-    if (filters.from_date) {
-      const from = new Date(filters.from_date);
-      from.setHours(0, 0, 0, 0);
-      result = result.filter((item) => {
-        const itemDate = new Date(item.created_at || item.createdAt);
-        return itemDate >= from;
-      });
-    }
-
-    if (filters.to_date) {
-      const to = new Date(filters.to_date);
-      to.setHours(23, 59, 59, 999);
-      result = result.filter((item) => {
-        const itemDate = new Date(item.created_at || item.createdAt);
-        return itemDate <= to;
-      });
-    }
-
-    // 3. Date Sort Order
-    result.sort((a, b) => {
-      const dateA = new Date(a.created_at || a.createdAt);
-      const dateB = new Date(b.created_at || b.createdAt);
-      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
-    });
-
-    return result;
-  }, [leadsList, searchText, filters.from_date, filters.to_date, sortOrder]);
-
-  // Hook pagination logic
-  const {
-    handleChangePage,
-    totalResults,
-    resultsPerPage,
-    dataTable,
-    serviceData,
-    currentPage,
-  } = useFilter(filteredAndSortedLeads);
-
-  const handleInputChange = (e) => {
-    setSearchText(e.target.value);
   };
 
   const toggleSortOrder = () => {
-    setSortOrder((prev) => (prev === "desc" ? "asc" : "desc"));
+    const newSort = sortOrder === "desc" ? "asc" : "desc";
+    setSortOrder(newSort);
+    setCurrentPage(1);
   };
 
-  const handleResetAll = () => {
+  const handleResetAll = async () => {
+    setIsRefreshing(true);
     setSearchText("");
     if (searchRef.current) {
       searchRef.current.value = "";
@@ -137,101 +125,132 @@ const Leads = () => {
       to_date: "",
     });
     setSortOrder("desc");
+    setCurrentPage(1);
+    await fetchLeads({
+      page: 1,
+      search: "",
+      sort_order: "desc",
+      from_date: "",
+      to_date: "",
+    });
+    notifySuccess("Leads filters reset & refreshed!");
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 600);
   };
 
-  // CSV Export formatting
+  // CSV Export data
   const exportData = useMemo(() => {
-    return filteredAndSortedLeads.map((item, index) => ({
-      "Sr. No.": index + 1,
+    return leadsList.map((item, index) => ({
+      "Sr. No.": (currentPage - 1) * resultsPerPage + index + 1,
       Name: `${item.first_name || ""} ${item.last_name || ""}`.trim(),
-      Website: item.website || item.enter_your_website || "",
-      "Reason Contacting Us": item.reason || item.reason_contacting_us || "",
-      Course: item.course || item.choose_course || "",
-      "Teacher / Department": item.teacher_department || item.choose_teacher_department || "",
-      Message: item.message || item.your_message || "",
-      "Created At": item.created_at || item.createdAt || "",
+      Website: item.website || "",
+      "Reason Contacting Us": item.reason || "",
+      Course: item.course || "",
+      "Teacher / Department": item.teacher || item.teacher_department || "",
+      Message: item.message || "",
+      "Created At": item.created_at || "",
     }));
-  }, [filteredAndSortedLeads]);
+  }, [leadsList, currentPage, resultsPerPage]);
 
   return (
     <>
-      <Breadcrumb title="Leads" />
-      <PageTitle>Leads</PageTitle>
+      <Breadcrumb title="Contact Us Leads" />
+      <PageTitle>Contact Us Leads</PageTitle>
 
-      {/* Control Bar: Search, Custom Date Range, Sort Toggle & CSV Export */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xs mb-5 border border-gray-100 dark:border-gray-700">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          {/* Global Search Bar */}
-          <div className="w-full sm:w-48 lg:w-56">
+      {/* Control Bar: Matching Gallery / Faculty Design Standards Exactly */}
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xs mb-6 border border-gray-100 dark:border-gray-700">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+          {/* Left: Professional Search Bar with Search Icon */}
+          <div className="relative flex-grow max-w-md">
             <Input
               ref={searchRef}
-              onChange={handleInputChange}
-              className="block w-full px-3 py-1 text-sm dark:text-gray-300 rounded-md 
-                focus:border-gray-200 border-gray-200 dark:border-gray-600 
-                focus:ring focus:ring-red-300 dark:bg-gray-700 bg-gray-100 h-10 pl-3"
+              value={searchText}
+              onChange={(e) => {
+                setSearchText(e.target.value);
+                setCurrentPage(1);
+              }}
+              onKeyDown={handleSearchKeyDown}
+              className="border h-10 text-xs focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md pl-10 pr-4"
               type="search"
-              name="search"
-              placeholder="Search leads..."
+              placeholder="Search leads... (Press Enter)"
+            />
+            <FiSearch
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+              size={14}
             />
           </div>
 
-          {/* Custom Reusable Date Range Picker */}
-          <CustomDateRangePicker
-            fromDate={filters.from_date}
-            toDate={filters.to_date}
-            onFromDateChange={(val) => setFilters((prev) => ({ ...prev, from_date: val }))}
-            onToDateChange={(val) => setFilters((prev) => ({ ...prev, to_date: val }))}
-          />
+          {/* Right: Date Range + Sort + Refresh + CSV Export (Perfect compact gap-3 grouping) */}
+          <div className="flex flex-wrap items-center gap-3">
+            {/* Custom Reusable Date Range Picker */}
+            <CustomDateRangePicker
+              fromDate={filters.from_date}
+              toDate={filters.to_date}
+              onFromDateChange={(val) => {
+                setFilters((prev) => ({ ...prev, from_date: val }));
+                setCurrentPage(1);
+              }}
+              onToDateChange={(val) => {
+                setFilters((prev) => ({ ...prev, to_date: val }));
+                setCurrentPage(1);
+              }}
+            />
 
-          {/* Ascending / Descending Date Sort Toggle */}
-          <Button
-            onClick={toggleSortOrder}
-            className="rounded-md h-10 px-3 flex items-center justify-center gap-1 text-sm font-semibold"
-            variant="outline"
-            title={`Sort Date ${sortOrder === "desc" ? "Descending (Newest First)" : "Ascending (Oldest First)"}`}
-          >
-            {sortOrder === "desc" ? (
-              <>
-                <FiArrowDown size={14} className="text-white" />
-                <span className="text-[14px]">Newest</span>
-              </>
-            ) : (
-              <>
-                <FiArrowUp size={14} className="text-white" />
-                <span className="text-[14px]">Oldest</span>
-              </>
-            )}
-          </Button>
-
-          {/* Reset Search & Date Filters */}
-          <Button
-            onClick={handleResetAll}
-            className="rounded-md h-10 px-3 flex items-center justify-center"
-            variant="outline"
-            title="Reset Search & Filters"
-          >
-            <FiRefreshCw size={16} />
-          </Button>
-
-          {/* Export CSV */}
-          <CSVDownloader
-            data={exportData}
-            filename={`leads_${new Date().toISOString().slice(0, 10)}`}
-          >
-            <Button
-              className="rounded-md h-10 px-3 flex items-center justify-center"
-              variant="outline"
-              disabled={!exportData.length}
-              title="Export CSV"
+            {/* Ascending / Descending Date Sort Toggle */}
+            <button
+              type="button"
+              onClick={toggleSortOrder}
+              className="bg-red-700 hover:bg-red-800 active:scale-95 text-white h-10 px-3.5 rounded-md flex items-center justify-center gap-1.5 text-xs font-semibold shrink-0 shadow-xs transition-all duration-200 focus:outline-none cursor-pointer"
+              title={`Sort Date ${sortOrder === "desc" ? "Descending (Newest First)" : "Ascending (Oldest First)"}`}
             >
-              <FiUpload size={16} />
-            </Button>
-          </CSVDownloader>
+              {sortOrder === "desc" ? (
+                <>
+                  <FiArrowDown size={14} className="text-white" />
+                  <span>Newest</span>
+                </>
+              ) : (
+                <>
+                  <FiArrowUp size={14} className="text-white" />
+                  <span>Oldest</span>
+                </>
+              )}
+            </button>
+
+            {/* Reset Search & Date Filters Button with 360 Spin Animation */}
+            <button
+              type="button"
+              onClick={handleResetAll}
+              disabled={isRefreshing || loading}
+              className="bg-red-700 hover:bg-red-800 active:scale-95 text-white h-10 w-10 rounded-md flex items-center justify-center transition-all duration-200 focus:outline-none shadow-xs hover:shadow-md cursor-pointer shrink-0 disabled:opacity-75"
+              title="Reset Search & Filters"
+            >
+              <FiRotateCw
+                size={15}
+                className={"text-white transition-transform duration-500 " + (isRefreshing ? "animate-spin" : "hover:rotate-45")}
+              />
+            </button>
+
+            {/* Export CSV Button */}
+            <CSVDownloader
+              data={exportData}
+              filename={`contact_leads_${new Date().toISOString().slice(0, 10)}`}
+            >
+              <button
+                type="button"
+                className="bg-red-700 hover:bg-red-800 active:scale-95 text-white h-10 w-10 rounded-md flex items-center justify-center transition-all duration-200 focus:outline-none shadow-xs hover:shadow-md cursor-pointer shrink-0 disabled:opacity-50"
+                disabled={!exportData.length}
+                title="Export CSV"
+              >
+                <FiUpload size={15} className="text-white" />
+              </button>
+            </CSVDownloader>
+          </div>
         </div>
       </div>
 
-      {serviceData.length !== 0 ? (
-        <TableContainer className="mb-8 rounded-b-lg">
+      {leadsList && leadsList.length > 0 ? (
+        <TableContainer className="mb-8 rounded-lg border border-gray-200 dark:border-gray-700 shadow-xs">
           <Table>
             <TableHeader>
               <tr>
@@ -247,7 +266,7 @@ const Leads = () => {
               </tr>
             </TableHeader>
             <LeadTable
-              products={dataTable}
+              products={leadsList}
               currentPage={currentPage}
               resultsPerPage={resultsPerPage}
               onDelete={handleOpenDeleteModal}
@@ -257,13 +276,15 @@ const Leads = () => {
             <Pagination
               totalResults={totalResults}
               resultsPerPage={resultsPerPage}
-              onChange={handleChangePage}
+              onChange={(p) => setCurrentPage(p)}
               label="Leads Page Navigation"
             />
           </TableFooter>
         </TableContainer>
       ) : (
-        <NotFound title="Lead" />
+        <div className="py-12 bg-white dark:bg-gray-800">
+          <NotFound title="No Contact Us Leads Found" />
+        </div>
       )}
 
       {/* Common Project Delete Modal */}

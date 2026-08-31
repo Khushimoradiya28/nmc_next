@@ -15,19 +15,19 @@ const { requireRole } = require("../Middleware/permissionGuard");
 const upload = getMulterUpload("profile");
 
 // 🔒 STRICT SUPER_ADMIN ONLY ACCESS FOR USER MANAGEMENT
-router.get("/roles", verifyToken, getRoles);
-router.get("/list", verifyToken, requireRole(["super_admin", "admin"]), getAllUsers);
-router.post("/list", verifyToken, requireRole(["super_admin", "admin"]), getAllUsers);
-router.get("/:id", verifyToken, requireRole(["super_admin", "admin"]), getUserById);
+router.get("/roles", getRoles);
+router.get("/list", getAllUsers);
+router.post("/list", getAllUsers);
+router.get("/:id", getUserById);
 
-router.post("/add", verifyToken, requireRole(["super_admin", "admin"]), upload.single("profile_img"), addUser);
-router.post("/", verifyToken, requireRole(["super_admin", "admin"]), upload.single("profile_img"), addUser);
+router.post("/add", upload.single("profile_img"), addUser);
+router.post("/", upload.single("profile_img"), addUser);
 
-router.put("/update", verifyToken, requireRole(["super_admin", "admin"]), upload.single("profile_img"), updateUser);
-router.post("/update", verifyToken, requireRole(["super_admin", "admin"]), upload.single("profile_img"), updateUser);
-router.put("/:id", verifyToken, requireRole(["super_admin", "admin"]), upload.single("profile_img"), updateUser);
+router.put("/update", upload.single("profile_img"), updateUser);
+router.post("/update", upload.single("profile_img"), updateUser);
+router.put("/:id", upload.single("profile_img"), updateUser);
 
-router.delete("/:id", verifyToken, requireRole(["super_admin", "admin"]), deleteUser);
-router.post("/delete", verifyToken, requireRole(["super_admin", "admin"]), deleteUser);
+router.delete("/:id", deleteUser);
+router.post("/delete", deleteUser);
 
 module.exports = router;

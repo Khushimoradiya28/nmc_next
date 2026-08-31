@@ -1,20 +1,16 @@
-import React, { useContext, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   Table,
   TableHeader,
   TableCell,
   TableFooter,
   TableContainer,
-  Card,
-  CardBody,
-  Button,
   Pagination,
   Input,
+  Button,
 } from '@windmill/react-ui';
-import { FiPlus } from 'react-icons/fi';
+import { FiPlus, FiSearch } from 'react-icons/fi';
 
-import useAsync from '../../hooks/useAsync';
-import useFilter from '../../hooks/useFilter';
 import NotFound from '../../components/table/NotFound';
 import Loading from '../../components/preloader/Loading';
 import MasterUserService from '../../services/master/MasterUserService';
@@ -23,27 +19,57 @@ import { SidebarContext } from '../../context/SidebarContext';
 import MasterUserTable from '../../components/master/masteruser/MasterUserTable';
 import MainDrawer from '../../components/drawer/MainDrawer';
 import MasterUserDrawer from '../../components/master/drawer/MasterUserDrawer';
-import Breadcrumb from "../../components/form/Breadcrumb";
-const Brands = () => {
-  const { toggleDrawer, setIsUpdate } = useContext(SidebarContext);
-  const { data, loading } = useAsync(() => MasterUserService.getAllBrands({ search: searchText }));
-  const brandList = data?.data || [];
-  const searchRef = useRef(null);
-  const [searchText, setSearchText] = useState("");
+import Breadcrumb from '../../components/form/Breadcrumb';
+import { notifyError } from '../../utils/toast';
 
-  const {
-    handleChangePage,
-    totalResults,
-    resultsPerPage,
-    dataTable,
-    serviceData,
-    currentPage,
-  } = useFilter(brandList);
+const MasterUser = () => {
+  const { toggleDrawer, isUpdate, setIsUpdate } = useContext(SidebarContext);
+  const [usersList, setUsersList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [searchText, setSearchText] = useState('');
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
+  const resultsPerPage = 8;
 
-  const handleInputChange = (e) => {
-    setSearchText(e.target.value);
-    setIsUpdate(true);
+  // Direct, reliable API fetch without fragile legacy useFilter hook
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const res = await MasterUserService.getAllBrands({
+        page: currentPage,
+        limit: resultsPerPage,
+        search: searchText,
+        status: 'all',
+      });
+
+      if (res && res.data) {
+        setUsersList(res.data);
+        setTotalResults(res.meta?.total_records || res.data.length);
+      }
+    } catch (err) {
+      console.error('Failed to load users:', err);
+      notifyError(err?.message || 'Failed to load users');
+    } finally {
+      setLoading(false);
+    }
   };
+
+  // Fetch when page, search or isUpdate changes
+  useEffect(() => {
+    fetchUsers();
+    if (isUpdate) {
+      setIsUpdate(false);
+    }
+  }, [currentPage, isUpdate]);
+
+  // Live debounced search
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      fetchUsers();
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchText]);
 
   return (
     <>
@@ -52,51 +78,50 @@ const Brands = () => {
       </MainDrawer>
 
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 my-2">
-
         {/* Title + Breadcrumb */}
         <div className="flex flex-col text-left w-full sm:w-auto">
           <PageTitle>Users</PageTitle>
-
           <Breadcrumb
             items={[
-              { label: "Masters", link: "/master" },
-              { label: "Users" }
+              { label: 'Masters', link: '/master' },
+              { label: 'Users' },
             ]}
           />
         </div>
 
-        {/* Search + Add Btn */}
-        <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-          <div className="w-full sm:w-64">
+        {/* Search + Add User Button */}
+        <div className="flex flex-col sm:flex-row items-center gap-3 w-full sm:w-auto">
+          <div className="relative w-full sm:w-72">
             <Input
-              ref={searchRef}
-              onChange={handleInputChange}
-              className="block w-full px-3 py-1 text-sm dark:text-gray-300 rounded-md 
-              focus:border-gray-200 border-gray-200 dark:border-gray-600 
-              focus:ring focus:ring-green-300 dark:bg-gray-700 bg-gray-100 h-10 pl-4"
+              value={searchText}
+              onChange={(e) => {
+                setSearchText(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="border h-10 text-xs focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md pl-10 pr-4"
               type="search"
-              name="search"
-              placeholder="Search by User name"
+              placeholder="Search by name, email or mobile..."
+            />
+            <FiSearch
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+              size={14}
             />
           </div>
 
           <Button
             onClick={toggleDrawer}
-            className="w-full sm:w-auto rounded-md h-10"
+            className="bg-red-700 hover:bg-red-800 text-white rounded-md text-xs font-semibold h-10 px-4 flex items-center justify-center gap-2 transition-colors shrink-0 shadow-xs cursor-pointer"
           >
-            <span className="mr-3">
-              <FiPlus />
-            </span>
-            Add User
+            <FiPlus size={16} />
+            <span>Add User</span>
           </Button>
         </div>
-
       </div>
 
       {loading ? (
         <Loading loading={loading} />
-      ) : serviceData.length !== 0 ? (
-        <TableContainer className="rounded-b-lg">
+      ) : usersList && usersList.length > 0 ? (
+        <TableContainer className="mb-8 rounded-lg border border-gray-200 dark:border-gray-700 shadow-xs">
           <Table>
             <TableHeader>
               <tr>
@@ -105,27 +130,33 @@ const Brands = () => {
                 <TableCell className="text-center">Name</TableCell>
                 <TableCell className="text-center">Information</TableCell>
                 <TableCell className="text-center">User Role</TableCell>
-                {/* <TableCell>Status</TableCell>                 */}
+                <TableCell className="text-center">Status</TableCell>
                 <TableCell className="text-center">Date</TableCell>
                 <TableCell className="text-center">Actions</TableCell>
               </tr>
             </TableHeader>
-            <MasterUserTable brand={dataTable} currentPage={currentPage} resultsPerPage={resultsPerPage}/>
+            <MasterUserTable
+              brand={usersList}
+              currentPage={currentPage}
+              resultsPerPage={resultsPerPage}
+            />
           </Table>
           <TableFooter>
             <Pagination
               totalResults={totalResults}
               resultsPerPage={resultsPerPage}
-              onChange={handleChangePage}
+              onChange={(p) => setCurrentPage(p)}
               label="User Page Navigation"
             />
           </TableFooter>
         </TableContainer>
       ) : (
-        <NotFound title="User" />
+        <div className="py-12 bg-white dark:bg-gray-800 rounded-lg">
+          <NotFound title="No Users Found" />
+        </div>
       )}
     </>
   );
 };
 
-export default Brands;
+export default MasterUser;

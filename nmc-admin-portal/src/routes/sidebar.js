@@ -27,7 +27,7 @@ const sidebar = [
   {
     path: '/leads',
     icon: FiCompass,
-    name: 'Leads',
+    name: 'Contact Us Leads',
   },
   {
     path: '/admissions',

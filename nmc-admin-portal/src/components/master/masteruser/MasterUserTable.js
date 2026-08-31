@@ -1,11 +1,7 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import {
-  TableCell,
-  TableBody,
-  TableRow,
-} from '@windmill/react-ui';
+import React, { useEffect, useState, useContext } from 'react';
+import { TableCell, TableBody, TableRow } from '@windmill/react-ui';
 import { FiLock } from 'react-icons/fi';
+import { BsToggleOn, BsToggleOff } from 'react-icons/bs';
 
 import MainModal from '../../modal/MainModal';
 import MainDrawer from '../../drawer/MainDrawer';
@@ -15,135 +11,151 @@ import Tooltip from '../../tooltip/Tooltip';
 import useToggleDrawer from '../../../hooks/useToggleDrawer';
 import DateBox from '../../form/DateBox';
 import MasterUserPasswordDrawer from '../drawer/MasterUserPasswordDrawer';
-import { Fancybox } from "@fancyapps/ui";
-import "@fancyapps/ui/dist/fancybox/fancybox.css";
+import LetterAvatar from '../../common/LetterAvatar';
+import MasterUserService from '../../../services/master/MasterUserService';
+import { SidebarContext } from '../../../context/SidebarContext';
+import { notifySuccess, notifyError } from '../../../utils/toast';
+import { Fancybox } from '@fancyapps/ui';
+import '@fancyapps/ui/dist/fancybox/fancybox.css';
 
-const BrandTable = ({ brand, currentPage = 1, resultsPerPage = 10 }) => {
+const BrandTable = ({ brand = [], currentPage = 1, resultsPerPage = 10 }) => {
   const { serviceId, drawerView, handleModalOpen, handleUpdate, handlePasswordDrawer } = useToggleDrawer();
+  const { setIsUpdate } = useContext(SidebarContext);
+  const [userList, setUserList] = useState(brand);
 
-  // Calculate the starting index for the current page
+  useEffect(() => {
+    setUserList(brand);
+  }, [brand]);
+
   const startIndex = (currentPage - 1) * resultsPerPage;
 
   useEffect(() => {
-    Fancybox.bind("[data-fancybox]", {
-      // Your custom options
-      // Example:
-      // dragToClose: false,
-    });
-
+    Fancybox.bind('[data-fancybox]', {});
     return () => {
-      Fancybox.unbind("[data-fancybox]");
+      Fancybox.unbind('[data-fancybox]');
       Fancybox.close();
     };
   }, []);
 
+  const handleToggleStatus = async (item) => {
+    const id = item._id || item.id;
+    const currentStatus = String(item.status || '1');
+    const newStatus = currentStatus === '1' || currentStatus === 'active' ? '0' : '1';
+
+    try {
+      const res = await MasterUserService.updateStatus(id, newStatus);
+      if (res && (res.status === 200 || res.success)) {
+        setUserList((prev) =>
+          prev.map((u) => ((u._id || u.id) === id ? { ...u, status: newStatus } : u))
+        );
+        notifySuccess(`User status updated to ${newStatus === '1' ? 'Active' : 'Inactive'}!`);
+        setIsUpdate(true);
+      }
+    } catch (err) {
+      console.error('Failed to toggle status:', err);
+      notifyError(err?.response?.data?.message || err?.message || 'Failed to update status');
+    }
+  };
+
   return (
     <>
       <MainModal id={serviceId} />
-      {/* <MainDrawer>
-        <MasterUserDrawer id={serviceId} />
-      </MainDrawer> */}
 
       {/* Main Drawer */}
       <MainDrawer>
-        {drawerView === "USER" && <MasterUserDrawer id={serviceId} />}
-        {drawerView === "PASSWORD" && <MasterUserPasswordDrawer userId={serviceId} />}
+        {drawerView === 'USER' && <MasterUserDrawer id={serviceId} />}
+        {drawerView === 'PASSWORD' && <MasterUserPasswordDrawer userId={serviceId} />}
       </MainDrawer>
 
       <TableBody>
-        {brand?.filter((item) => item.status == 1)
-          .map((item, i) => (
-            <TableRow key={i}>
+        {userList?.map((item, i) => {
+          const fullName = `${item.first_name || ''} ${item.last_name || ''}`.trim() || 'User';
+          const profileImg = item.profile_img_webp_url || item.profile_img_url || item.profile_img || '';
+          const isActive = String(item.status) === '1' || item.status === 'active' || item.status === true;
+
+          return (
+            <TableRow key={item._id || i}>
+              {/* 1. Sr. No */}
               <TableCell className="text-center">
-                <span className="text-xs uppercase font-semibold">
-                  {startIndex + i + 1}
-                </span>
+                <span className="text-xs uppercase font-semibold">{startIndex + i + 1}</span>
               </TableCell>
+
+              {/* 2. User Image / Letter Avatar */}
               <TableCell className="text-center">
                 <div className="flex items-center justify-center">
-                  <div className="relative inline-block w-12 h-12">
-                    <a
-                      data-fancybox
-                      href={item.profile_img}
-                    >
-                      <img
-                        src={item.profile_img}
-                        alt={item.first_name}
-                        className="object-cover w-full h-full"
-                      />
-                    </a>
-                    <div className="absolute inset-0 shadow-inner pointer-events-none"></div>
-                  </div>
+                  {profileImg ? (
+                    <div className="relative inline-block w-11 h-11 rounded-full overflow-hidden shadow-xs">
+                      <a data-fancybox href={profileImg}>
+                        <img src={profileImg} alt={fullName} className="object-cover w-full h-full" />
+                      </a>
+                    </div>
+                  ) : (
+                    <LetterAvatar name={fullName} size={42} />
+                  )}
                 </div>
               </TableCell>
+
+              {/* 3. Name */}
               <TableCell className="text-center">
-                <h2 className="text-sm font-medium">{item.first_name} {item.last_name}</h2>
+                <h2 className="text-sm font-medium text-gray-900 dark:text-gray-100">{fullName}</h2>
               </TableCell>
+
+              {/* 4. Information */}
               <TableCell className="text-center">
-                <h2 className="text-sm font-medium">
-                  {item.email}
-                  <br />
-                  {item.mobile}
+                <h2 className="text-xs font-medium text-gray-600 dark:text-gray-400">
+                  <span className="block font-semibold text-gray-800 dark:text-gray-200">{item.email}</span>
+                  <span>{item.mobile || '-'}</span>
                 </h2>
               </TableCell>
-              <TableCell className="text-center">
-                <h2 className="text-sm font-medium"> {item.role_name || "-"}</h2>
-              </TableCell>
-              {/* <TableCell>
-              <h2 className="text-sm font-medium">
-                {item.status == 1 ? "Active" : "Inactive"}
-              </h2>
-            </TableCell> */}
 
+              {/* 5. User Role */}
+              <TableCell className="text-center">
+                <span className="inline-block px-2.5 py-0.5 text-xs font-medium rounded-full bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300 capitalize">
+                  {item.role_name || item.role?.role_name || '-'}
+                </span>
+              </TableCell>
+
+              {/* 6. Active / Inactive Toggle Switch */}
+              <TableCell className="text-center">
+                <button
+                  type="button"
+                  onClick={() => handleToggleStatus(item)}
+                  className="cursor-pointer text-2xl inline-flex items-center justify-center focus:outline-none transition-transform active:scale-95"
+                  title={isActive ? 'Deactivate User' : 'Activate User'}
+                >
+                  {isActive ? (
+                    <BsToggleOn className="text-red-700 hover:text-red-800" />
+                  ) : (
+                    <BsToggleOff className="text-gray-400 hover:text-gray-600" />
+                  )}
+                </button>
+              </TableCell>
+
+              {/* 7. Date */}
               <TableCell>
                 <div className="flex justify-center">
                   <DateBox created_at={item.created_at} updated_at={item.updated_at} />
                 </div>
               </TableCell>
 
-              {/* <TableCell>
-              <EditDeleteButton
-                id={item._id}
-                handleUpdate={handleUpdate}
-                handleModalOpen={handleModalOpen}
-              />
-              <FiEye
-                size={18}
-                className="cursor-pointer text-blue-600 hover:text-blue-800"
-                onClick={() => handlePasswordDrawer(item._id)}
-              />
-            </TableCell> */}
+              {/* 8. Actions */}
               <TableCell className="text-center">
                 <div className="flex justify-center space-x-3">
-                  {/* Password Eye Icon */}
                   <div
                     onClick={() => handlePasswordDrawer(item._id)}
-                    className="p-2 cursor-pointer text-gray-400 hover:text-blue-600"
+                    className="p-2 cursor-pointer text-gray-400 hover:text-blue-600 transition-colors"
                   >
-                    <Tooltip
-                      id="password"
-                      Icon={FiLock}
-                      title="Update Password"
-                      bgColor="#2563EB"
-                    />
+                    <Tooltip id="password" Icon={FiLock} title="Update Password" bgColor="#2563EB" />
                   </div>
-                  {/* Edit/Delete Buttons */}
-                  <EditDeleteButton
-                    id={item._id}
-                    handleUpdate={handleUpdate}
-                    handleModalOpen={handleModalOpen}
-                  />
+                  <EditDeleteButton id={item._id} handleUpdate={handleUpdate} handleModalOpen={handleModalOpen} />
                 </div>
               </TableCell>
-
-
             </TableRow>
-          ))}
-
+          );
+        })}
       </TableBody>
     </>
   );
 };
-
 
 export default React.memo(BrandTable);

@@ -1,16 +1,13 @@
 import { useContext, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
-import { useLocation } from 'react-router';
 
 import { AdminContext } from '../context/AdminContext';
-import { SidebarContext } from '../context/SidebarContext';
 import { notifyError, notifySuccess } from '../utils/toast';
 import MasterUserService from '../services/master/MasterUserService';
 import AllUserRoles from '../services/master/UserRoleService';
 
-
-const useProfileSubmit = (id) => {
+const useProfileSubmit = () => {
   const {
     register,
     handleSubmit,
@@ -19,19 +16,16 @@ const useProfileSubmit = (id) => {
     formState: { errors },
   } = useForm();
 
-  const { state } = useContext(AdminContext);
-  const token = Cookies.get('token');
+  const { state, dispatch } = useContext(AdminContext);
+  const token = Cookies.get('adminToken') || Cookies.get('token');
 
   const [roles, setRoles] = useState([]);
   const [imageUrl, setImageUrl] = useState('');
   const [uploadedFile, setUploadedFile] = useState(null);
 
-
-
-  // 🔹 Fetch roles
+  // 1. Fetch roles
   useEffect(() => {
     let isMounted = true;
-
     AllUserRoles.getAllUserRoles()
       .then((res) => {
         if (isMounted) setRoles(res?.data || []);
@@ -43,13 +37,26 @@ const useProfileSubmit = (id) => {
     };
   }, []);
 
-  // 🔹 Fetch user & prefill form
+  // 2. Fetch logged in user & prefill form dynamically
   useEffect(() => {
-    if (!id) return;
+    const adminInfo = state?.adminInfo || (Cookies.get('adminInfo') ? JSON.parse(Cookies.get('adminInfo')) : null);
+    const activeUserId = adminInfo?._id || adminInfo?.id || Cookies.get('adminUserId');
 
-    const loadUser = async () => {
-      try {
-        const res = await MasterUserService.getAllBrands({ _id: id });
+    // Immediate optimistic populate from session state
+    if (adminInfo) {
+      setValue('first_name', adminInfo.first_name || '');
+      setValue('last_name', adminInfo.last_name || '');
+      setValue('email', adminInfo.email || '');
+      setValue('mobile', adminInfo.mobile || '');
+      setValue('role', adminInfo.role?._id || adminInfo.role || '');
+      setImageUrl(adminInfo.profile_img_webp_url || adminInfo.profile_img_url || adminInfo.profile_img || adminInfo.image || '');
+    }
+
+    if (!activeUserId) return;
+
+    // Fetch fresh details from backend
+    MasterUserService.getAllBrands({ _id: activeUserId, limit: 1 })
+      .then((res) => {
         const user = res?.data?.[0];
         if (!user) return;
 
@@ -58,63 +65,66 @@ const useProfileSubmit = (id) => {
         setValue('email', user.email || '');
         setValue('mobile', user.mobile || '');
         setValue('role', user.role?._id || user.role || '');
-        setImageUrl(user.profile_img || '');   // existing image
-        setUploadedFile(null);           // reset file
-      } catch {
-        notifyError('Failed to load user data');
-      }
-    };
+        setImageUrl(user.profile_img_webp_url || user.profile_img_url || user.profile_img || '');
+        setUploadedFile(null);
+      })
+      .catch((err) => {
+        console.error('Failed to load fresh user data:', err);
+      });
+  }, [state?.adminInfo, setValue]);
 
-    loadUser();
-  }, [id, setValue]);
-
-
-  // 🔹 Submit update
-  // const onSubmit = async (data) => {
-  //   try {
-  //     const formData = new FormData();
-
-  //     formData.append('first_name', data.first_name);
-  //     formData.append('last_name', data.last_name);
-  //     formData.append('email', data.email);
-  //     formData.append('mobile', data.mobile);
-  //     formData.append('role', data.role);
-
-  //     if (uploadedFile) {
-  //       formData.append('image', uploadedFile); // SAME as Brand
-  //     }
-
-  //     await MasterUserService.updateBrand(id, formData, token);
-  //     notifySuccess('Profile updated successfully');
-  //   } catch {
-  //     notifyError('Profile update failed');
-  //   }
-  // };
-
+  // 3. Submit dynamic update
   const onSubmit = async (data) => {
+    const adminInfo = state?.adminInfo || (Cookies.get('adminInfo') ? JSON.parse(Cookies.get('adminInfo')) : null);
+    const activeUserId = adminInfo?._id || adminInfo?.id || Cookies.get('adminUserId');
+
+    if (!data.first_name || !/^[A-Za-z\s]+$/.test(data.first_name.trim())) {
+      notifyError('First name must contain letters only!');
+      return;
+    }
+    if (!data.last_name || !/^[A-Za-z\s]+$/.test(data.last_name.trim())) {
+      notifyError('Last name must contain letters only!');
+      return;
+    }
+    if (!data.mobile || !/^\d{10}$/.test(data.mobile.trim())) {
+      notifyError('Mobile number must be exactly 10 digits!');
+      return;
+    }
+
     try {
       const formData = new FormData();
-
-      formData.append('first_name', data.first_name);
-      formData.append('last_name', data.last_name);
-      formData.append('email', data.email);
-      formData.append('mobile', data.mobile);
-      formData.append('role', data.role);
+      formData.append('first_name', data.first_name.trim());
+      formData.append('last_name', data.last_name.trim());
+      formData.append('email', data.email.trim());
+      formData.append('mobile', data.mobile.trim());
+      if (data.role) formData.append('role_id', data.role);
 
       if (uploadedFile) {
         formData.append('profile_img', uploadedFile);
       }
 
-      await MasterUserService.updateBrand(id, formData, token);
+      const res = await MasterUserService.updateBrand(activeUserId, formData, token);
 
-      notifySuccess('Profile updated successfully');
+      if (res) {
+        notifySuccess(res.message || 'Profile updated successfully');
+
+        // Update local session cookie so header avatar refreshes immediately
+        const updatedAdminInfo = {
+          ...(adminInfo || {}),
+          first_name: data.first_name.trim(),
+          last_name: data.last_name.trim(),
+          email: data.email.trim(),
+          mobile: data.mobile.trim(),
+          ...(res.data?.profile_img_url ? { profile_img_url: res.data.profile_img_url, image: res.data.profile_img_url } : {}),
+        };
+        Cookies.set('adminInfo', JSON.stringify(updatedAdminInfo));
+        dispatch({ type: 'USER_LOGIN', payload: updatedAdminInfo });
+      }
     } catch (err) {
-      notifyError('Profile update failed');
+      notifyError(err?.response?.data?.message || err?.message || 'Profile update failed');
       console.error(err);
     }
   };
-
-
 
   return {
     register,
@@ -129,9 +139,6 @@ const useProfileSubmit = (id) => {
     watch,
     setValue,
   };
-
-
 };
-
 
 export default useProfileSubmit;

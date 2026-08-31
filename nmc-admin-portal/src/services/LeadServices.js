@@ -1,60 +1,31 @@
 import requests from './httpService';
 
 const LeadServices = {
-  //  getAllLeads(data) {
-  //   return requests.post('/leads/list', data);
-  // },
-
-  getAllLeads(body) {
-    const payload = {
-      status: 1,
-      ...body
-    };
-    return requests.post('/leads/list', payload);
+  // 1. Get All Contact Leads
+  getAllLeads: async ({ page = 1, limit = 50, search = '', status = '', from_date = '', to_date = '', sort_order = 'desc' } = {}) => {
+    let url = '/contact?page=' + page + '&limit=' + limit;
+    if (search && search.trim()) url += '&search=' + encodeURIComponent(search.trim());
+    if (status && status !== 'all') url += '&status=' + encodeURIComponent(status);
+    if (from_date) url += '&from_date=' + encodeURIComponent(from_date);
+    if (to_date) url += '&to_date=' + encodeURIComponent(to_date);
+    if (sort_order) url += '&sort_order=' + encodeURIComponent(sort_order);
+    return requests.get(url);
   },
 
-  getStockOutProducts() {
-    return requests.get('/products/stock-out');
+  // 2. Get Single Lead by ID
+  getLeadById: async (id) => {
+    return requests.get('/contact/' + id);
   },
 
-  getProductById(id) {
-    return requests.post(`/products/${id}`);
+  // 3. Update Lead Status
+  updateLeadStatus: async (id, status) => {
+    return requests.put('/contact/' + id, { status });
   },
 
-  // addProduct(body) {
-  //   return requests.post('/products/add', body);
-  // },
-
-  addProduct(formData) {
-    return requests.post('/product/add', formData,
-      {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
+  // 4. Delete Lead (Soft Delete)
+  deleteLead: async (id) => {
+    return requests.delete('/contact/' + id);
   },
-
-  addAllProducts(body) {
-    return requests.post('/products/all', body);
-  },
-
-  updateProduct(id, body) {
-    return requests.put(`/products/${id}`, body);
-  },
-
-  updateStatus(id, body) {
-    return requests.put(`/products/status/${id}`, body);
-  },
-  getBrandById(id) {
-    return requests.post('/product/list', { _id: id });
-  },
-
-
-  // deleteData(id) {
-  //   return requests.delete(`/products/${id}`);
-  // },
-  // FIXED NAME ↓↓↓
-  deleteData(id) {
-    return requests.post('/product/delete', { id });
-  }
 };
 
 export default LeadServices;

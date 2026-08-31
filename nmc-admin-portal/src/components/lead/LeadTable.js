@@ -9,7 +9,7 @@ import { FiGlobe, FiTrash2 } from 'react-icons/fi';
 import DateBox from '../form/DateBox';
 import ExpandableText from '../common/ExpandableText';
 
-const LeadTable = ({ products, currentPage = 1, resultsPerPage = 10, onDelete }) => {
+const LeadTable = ({ products, currentPage = 1, resultsPerPage = 8, onDelete }) => {
   const startIndex = (currentPage - 1) * resultsPerPage;
 
   return (
@@ -17,12 +17,12 @@ const LeadTable = ({ products, currentPage = 1, resultsPerPage = 10, onDelete })
       {products?.map((product, i) => {
         const firstName = product.first_name || "";
         const lastName = product.last_name || "";
-        const fullName = `${firstName} ${lastName}`.trim() || "N/A";
+        const fullName = `${firstName} ${lastName}`.trim() || product.full_name || "N/A";
 
         const website = product.website || product.enter_your_website || "";
         const reason = product.reason || product.reason_contacting_us || "-";
         const course = product.course || product.choose_course || "-";
-        const teacherDept = product.teacher_department || product.choose_teacher_department || "-";
+        const teacherDept = product.teacher || product.teacher_department || product.choose_teacher_department || "-";
         const message = product.message || product.your_message || "-";
 
         return (

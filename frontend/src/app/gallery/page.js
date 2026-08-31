@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import Image from 'next/image';
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
 import ActivityHero from '@/components/activities/ActivityHero/ActivityHero';
 import { motion, AnimatePresence } from 'framer-motion';
 import styles from './GalleryCatalog.module.css';
+import GalleryServices from '@/services/GalleryServices';
 
-// Inline Icon Components (matching sports page)
+// Inline Icon Components
 const IconChevronLeft = ({ size = 24, ...props }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" {...props}>
     <polyline points="15 18 9 12 15 6" />
@@ -28,143 +28,18 @@ const IconX = ({ size = 24, ...props }) => (
   </svg>
 );
 
-const GALLERY_ITEMS = [
-  {
-    id: 1,
-    category: 'campus',
-    type: 'image',
-    src: '/assets/home/hero/2.jpg',
-    badge: 'Campus',
-    title: 'Main Academic Campus'
-  },
-  {
-    id: 2,
-    category: 'videos',
-    type: 'video',
-    src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    thumbnail: '/assets/home/hero/1.png',
-    badge: 'Video Tour',
-    title: 'Campus Life & Facilities'
-  },
-  {
-    id: 3,
-    category: 'campus',
-    type: 'image',
-    src: '/assets/home/gallery/2.jpg',
-    badge: 'IT Lab',
-    title: 'High-Tech IT & BCA Lab'
-  },
-  {
-    id: 4,
-    category: 'campus',
-    type: 'image',
-    src: '/assets/home/gallery/3.jpg',
-    badge: 'Studio',
-    title: 'Fashion Designing Studio'
-  },
-  {
-    id: 5,
-    category: 'events',
-    type: 'image',
-    src: '/assets/home/hero/6.png',
-    badge: 'Events',
-    title: 'Annual Cultural Day'
-  },
-  {
-    id: 6,
-    category: 'campus',
-    type: 'image',
-    src: '/assets/home/gallery/1.jpg',
-    badge: 'Auditorium',
-    title: 'A/C Seminar Auditorium'
-  },
-  {
-    id: 7,
-    category: 'events',
-    type: 'image',
-    src: '/assets/home/overview/1.jpg',
-    badge: 'Workshops',
-    title: 'Interactive Workshops'
-  },
-  {
-    id: 8,
-    category: 'events',
-    type: 'image',
-    src: '/assets/home/hero/5.png',
-    badge: 'Celebration',
-    title: 'Graduation & Honors'
-  },
-  {
-    id: 9,
-    category: 'campus',
-    type: 'image',
-    src: '/assets/home/hero/2.jpg',
-    badge: 'Library',
-    title: 'Central Digital Library'
-  },
-  {
-    id: 10,
-    category: 'videos',
-    type: 'video',
-    src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    thumbnail: '/assets/home/hero/6.png',
-    badge: 'Video Tour',
-    title: 'Cultural Day Highlights'
-  },
-  {
-    id: 11,
-    category: 'campus',
-    type: 'image',
-    src: '/assets/home/gallery/2.jpg',
-    badge: 'Science Lab',
-    title: 'Biotech & Chemistry Lab'
-  },
-  {
-    id: 12,
-    category: 'events',
-    type: 'image',
-    src: '/assets/home/overview/1.jpg',
-    badge: 'Sports Day',
-    title: 'Annual Sports Day'
-  },
-  {
-    id: 13,
-    category: 'campus',
-    type: 'image',
-    src: '/assets/home/hero/2.jpg',
-    badge: 'Cafeteria',
-    title: 'Student Cafeteria Lounge'
-  },
-  {
-    id: 14,
-    category: 'videos',
-    type: 'video',
-    src: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
-    thumbnail: '/assets/home/overview/1.jpg',
-    badge: 'Video Tour',
-    title: 'Annual Sports Highlights'
-  },
-  {
-    id: 15,
-    category: 'events',
-    type: 'image',
-    src: '/assets/home/hero/5.png',
-    badge: 'Exhibition',
-    title: 'Handicraft & Art Expo'
-  },
-  {
-    id: 16,
-    category: 'campus',
-    type: 'image',
-    src: '/assets/home/gallery/3.jpg',
-    badge: 'Classrooms',
-    title: 'Smart Tech Classrooms'
-  }
-];
+const normalizeCategory = (cat, mediaType) => {
+  if (mediaType === 'video' || cat === 'video_highlights') return 'videos';
+  if (cat === 'campus_labs' || cat === 'campus') return 'campus';
+  if (cat === 'events_culture' || cat === 'events') return 'events';
+  return 'campus';
+};
 
 const ITEMS_PER_PAGE = 9; // 3x3 layout
 
 export default function GalleryPage() {
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('all');
   const [lightboxIndex, setLightboxIndex] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
@@ -179,13 +54,63 @@ export default function GalleryPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
+  // Fetch dynamic items strictly from Admin API
+  useEffect(() => {
+    let isMounted = true;
+
+    const fetchGalleries = async () => {
+      try {
+        const res = await GalleryServices.getActiveGalleries();
+        if (isMounted) {
+          if (res && res.data && Array.isArray(res.data) && res.data.length > 0) {
+            const formatted = res.data.map((item, idx) => {
+              const catKey = normalizeCategory(item.category, item.media_type);
+              const isVideo = item.media_type === 'video' || catKey === 'videos';
+              const mediaSrc = item.media_url || item.media_file_webp_url || item.video_url || item.media_file || '';
+              
+              let badgeLabel = 'Campus';
+              if (isVideo) badgeLabel = 'Video Tour';
+              else if (catKey === 'events') badgeLabel = 'Events';
+              else if (item.category === 'campus_labs') badgeLabel = 'Campus & Labs';
+
+              return {
+                id: item._id || idx,
+                category: catKey,
+                type: isVideo ? 'video' : 'image',
+                src: mediaSrc,
+                badge: badgeLabel,
+                title: item.title || 'Campus Gallery',
+              };
+            });
+            setGalleryItems(formatted);
+          } else {
+            setGalleryItems([]);
+          }
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error('Failed to load gallery items:', err);
+        if (isMounted) {
+          setGalleryItems([]);
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchGalleries();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
   // Filter items based on active tab
   const filteredItems = activeTab === 'all'
-    ? GALLERY_ITEMS
-    : GALLERY_ITEMS.filter(item => item.category === activeTab);
+    ? galleryItems
+    : galleryItems.filter(item => item.category === activeTab);
 
   // Pagination calculation
-  const totalPages = Math.ceil(filteredItems.length / ITEMS_PER_PAGE);
+  const totalPages = Math.max(1, Math.ceil(filteredItems.length / ITEMS_PER_PAGE));
   const paginatedItems = filteredItems.slice(
     (currentPage - 1) * ITEMS_PER_PAGE,
     currentPage * ITEMS_PER_PAGE
@@ -223,7 +148,7 @@ export default function GalleryPage() {
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                   <rect x="3" y="3" width="7" height="7" /><rect x="14" y="3" width="7" height="7" /><rect x="14" y="14" width="7" height="7" /><rect x="3" y="14" width="7" height="7" />
                 </svg>
-                All Media ({GALLERY_ITEMS.length})
+                All Media ({galleryItems.length})
               </button>
 
               <button 
@@ -271,37 +196,66 @@ export default function GalleryPage() {
               </p>
             </div>
 
-            {/* Interactive Grid matching Sports Gallery */}
-            <div className={styles.galleryGrid}>
-              {paginatedItems.map((item, idx) => {
-                const globalIndex = (currentPage - 1) * ITEMS_PER_PAGE + idx;
-                return (
-                  <div
-                    key={item.id}
-                    className={styles.galleryItem}
-                    onClick={() => setLightboxIndex(globalIndex)}
-                  >
-                    <Image
-                      src={item.type === 'video' ? item.thumbnail : item.src}
-                      alt={item.title}
-                      width={600}
-                      height={400}
-                      className={styles.galleryImg}
-                    />
+            {/* Interactive Grid matching Exact Original CSS */}
+            {filteredItems.length > 0 ? (
+              <div className={styles.galleryGrid}>
+                {paginatedItems.map((item, idx) => {
+                  const globalIndex = (currentPage - 1) * ITEMS_PER_PAGE + idx;
+                  const isVideo = item.type === 'video';
 
-                    {/* Badge */}
-                    <span className={`${styles.mediaBadge} ${item.type === 'video' ? styles.videoBadge : ''}`}>
-                      {item.badge}
-                    </span>
+                  return (
+                    <div
+                      key={item.id}
+                      className={styles.galleryItem}
+                      onClick={() => setLightboxIndex(globalIndex)}
+                    >
+                      {/* Video vs Image Rendering */}
+                      {isVideo ? (
+                        <video
+                          src={item.src}
+                          className={styles.galleryImg}
+                          muted
+                          playsInline
+                          preload="metadata"
+                          onMouseOver={(e) => e.target.play().catch(() => {})}
+                          onMouseOut={(e) => e.target.pause()}
+                        />
+                      ) : (
+                        <img
+                          src={item.src}
+                          alt={item.title}
+                          className={styles.galleryImg}
+                          loading="lazy"
+                        />
+                      )}
 
-                    {/* Hover Overlay: Exact Sports Style with ONLY Center Button */}
-                    <div className={styles.galleryHoverOverlay}>
-                      <span>{item.type === 'video' ? 'Watch Video' : 'View Image'}</span>
+                      {/* Badge */}
+                      <span className={`${styles.mediaBadge} ${isVideo ? styles.videoBadge : ''}`}>
+                        {item.badge}
+                      </span>
+
+                      {/* Video Center Play Indicator */}
+                      {isVideo && (
+                        <div className={styles.videoPlayBtn} aria-label="Play video">
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="6 3 20 12 6 21 6 3" />
+                          </svg>
+                        </div>
+                      )}
+
+                      {/* Hover Overlay: Exact Original CSS Classes */}
+                      <div className={styles.galleryHoverOverlay}>
+                        <span>{isVideo ? 'Watch Video' : 'View Image'}</span>
+                      </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="py-20 text-center text-gray-500">
+                <p className="text-lg font-medium">No media found in this category.</p>
+              </div>
+            )}
 
             {/* Pagination */}
             {totalPages > 1 && (
@@ -351,7 +305,7 @@ export default function GalleryPage() {
           </div>
         </section>
 
-        {/* Lightbox Modal (Exact Sports Gallery Style - Clean & No Extra Box) */}
+        {/* Lightbox Modal (Exact Original Style) */}
         <AnimatePresence>
           {lightboxIndex !== null && activeMediaItem && (
             <motion.div
@@ -393,13 +347,23 @@ export default function GalleryPage() {
 
                   <div className={styles.lightboxImgWrapper}>
                     {activeMediaItem.type === 'video' ? (
-                      <iframe
-                        src={activeMediaItem.src}
-                        title={activeMediaItem.title}
-                        className={styles.lightboxVideoFrame}
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                      ></iframe>
+                      activeMediaItem.src.includes('embed') || activeMediaItem.src.includes('youtube') ? (
+                        <iframe
+                          src={activeMediaItem.src}
+                          title={activeMediaItem.title}
+                          className={styles.lightboxVideoFrame}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                          allowFullScreen
+                        ></iframe>
+                      ) : (
+                        <video
+                          src={activeMediaItem.src}
+                          controls
+                          autoPlay
+                          className={styles.lightboxImg}
+                          style={{ maxHeight: '80vh', maxWidth: '100%', objectFit: 'contain' }}
+                        />
+                      )
                     ) : (
                       <img
                         src={activeMediaItem.src}

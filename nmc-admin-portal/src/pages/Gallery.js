@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from "react";
+import React, { useState, useEffect, useContext } from 'react';
 import {
   TableContainer,
   Table,
@@ -6,134 +6,171 @@ import {
   TableCell,
   TableFooter,
   Pagination,
-  Input,
   Button,
-} from "@windmill/react-ui";
-import {
-  FiPlus,
-  FiSearch,
-  FiRotateCw,
-} from "react-icons/fi";
-import PageTitle from "../components/Typography/PageTitle";
-import NotFound from "../components/table/NotFound";
-import GalleryTable from "../components/gallery/GalleryTable";
-import GalleryDrawer from "../components/drawer/GalleryDrawer";
-import MainDrawer from "../components/drawer/MainDrawer";
-import MainModal from "../components/modal/MainModal";
-import CustomSelect from "../components/form/CustomSelect";
-import { SidebarContext } from "../context/SidebarContext";
-import mockGallery from "../utils/mockGallery";
-import { notifySuccess } from "../utils/toast";
+  Input,
+} from '@windmill/react-ui';
+import { FiPlus, FiSearch, FiRotateCw } from 'react-icons/fi';
+
+import PageTitle from '../components/Typography/PageTitle';
+import NotFound from '../components/table/NotFound';
+import GalleryTable from '../components/gallery/GalleryTable';
+import GalleryDrawer from '../components/drawer/GalleryDrawer';
+import MainDrawer from '../components/drawer/MainDrawer';
+import MainModal from '../components/modal/MainModal';
+import CustomSelect from '../components/form/CustomSelect';
+import { SidebarContext } from '../context/SidebarContext';
+import GalleryService from '../services/GalleryService';
+import { notifySuccess, notifyError } from '../utils/toast';
 
 const categoryFilterOptions = [
-  { label: "All Categories", value: "All" },
-  { label: "Campus & Labs", value: "Campus & Labs" },
-  { label: "Events & Culture", value: "Events & Culture" },
-  { label: "Video Highlights", value: "Video Highlights" },
+  { value: 'All', label: 'All Categories' },
+  { value: 'campus_labs', label: 'Campus & Labs' },
+  { value: 'events_culture', label: 'Events & Culture' },
+  { value: 'video_highlights', label: 'Video Highlights' },
 ];
 
 const mediaTypeFilterOptions = [
-  { label: "All Media Types", value: "All" },
-  { label: "Photos", value: "image" },
-  { label: "Videos", value: "video" },
+  { value: 'All', label: 'All Media Types' },
+  { value: 'image', label: 'Photo (Images)' },
+  { value: 'video', label: 'Video Tours' },
 ];
 
 const Gallery = () => {
   const { toggleDrawer, isDrawerOpen, toggleModal } = useContext(SidebarContext);
 
-  // State management
-  const [galleryList, setGalleryList] = useState(mockGallery);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("All");
-  const [selectedMediaType, setSelectedMediaType] = useState("All");
-  
-  // Local edit & delete item state
+  const [galleryList, setGalleryList] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedMediaType, setSelectedMediaType] = useState('All');
+
   const [editItem, setEditItem] = useState(null);
   const [deleteItemId, setDeleteItemId] = useState(null);
 
-  // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
   const resultsPerPage = 8;
 
-  // Toggle active/inactive status
-  const handleToggleStatus = (id) => {
-    setGalleryList((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, status: !item.status } : item
-      )
-    );
+  const fetchGallery = async (customParams = {}) => {
+    try {
+      setLoading(true);
+      const pageToFetch = customParams.page !== undefined ? customParams.page : currentPage;
+      const searchToFetch = customParams.search !== undefined ? customParams.search : searchQuery;
+      const categoryToFetch = customParams.category !== undefined ? customParams.category : selectedCategory;
+      const mediaTypeToFetch = customParams.media_type !== undefined ? customParams.media_type : selectedMediaType;
+
+      const res = await GalleryService.getAllGallery({
+        page: pageToFetch,
+        limit: resultsPerPage,
+        search: searchToFetch,
+        category: categoryToFetch,
+        media_type: mediaTypeToFetch,
+        status: 'all',
+      });
+
+      if (res && res.data) {
+        setGalleryList(res.data);
+        setTotalResults(res.meta?.total_records || res.data.length);
+      }
+    } catch (err) {
+      console.error('Failed to fetch gallery:', err);
+      notifyError(err?.message || 'Failed to load gallery');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Open MainModal for delete
+  useEffect(() => {
+    fetchGallery();
+  }, [currentPage, selectedCategory, selectedMediaType]);
+
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      setCurrentPage(1);
+      fetchGallery({ page: 1, search: searchQuery });
+    }
+  };
+
+  const handleToggleStatus = async (item) => {
+    try {
+      const id = item._id || item.id;
+      const newStatus = item.status === 'active' ? 'inactive' : 'active';
+      const res = await GalleryService.updateGalleryStatus(id, newStatus);
+      if (res && (res.status === 200 || res.success)) {
+        setGalleryList((prev) =>
+          prev.map((g) =>
+            (g._id || g.id) === id
+              ? { ...g, status: newStatus, isActive: newStatus === 'active' }
+              : g
+          )
+        );
+        notifySuccess('Gallery item status updated to ' + newStatus + '!');
+      }
+    } catch (err) {
+      console.error('Failed to toggle status:', err);
+      notifyError(err?.message || 'Failed to update status');
+    }
+  };
+
   const handleOpenDeleteModal = (id) => {
     setDeleteItemId(id);
     toggleModal();
   };
 
-  // Perform Delete Callback
-  const handleConfirmDelete = (id) => {
-    setGalleryList((prev) => prev.filter((item) => item.id !== id));
-    notifySuccess("Gallery item deleted successfully!");
-  };
-
-  // Save (Add or Update) item callback from drawer
-  const handleSaveDrawer = (savedData) => {
-    if (editItem) {
-      setGalleryList((prev) =>
-        prev.map((item) => (item.id === savedData.id ? savedData : item))
-      );
-      notifySuccess("Gallery item updated successfully!");
-    } else {
-      setGalleryList((prev) => [savedData, ...prev]);
-      notifySuccess("Gallery item added successfully!");
+  const handleConfirmDelete = async (id) => {
+    try {
+      const targetId = id || deleteItemId;
+      const res = await GalleryService.deleteGallery(targetId);
+      if (res && (res.status === 200 || res.success)) {
+        notifySuccess('Gallery item deleted successfully!');
+        fetchGallery();
+      }
+    } catch (err) {
+      console.error('Failed to delete gallery item:', err);
+      notifyError(err?.message || 'Failed to delete gallery item');
     }
-    toggleDrawer();
-    setEditItem(null);
   };
 
-  // Reset all search & category filters
-  const handleResetFilters = () => {
-    setSearchQuery("");
-    setSelectedCategory("All");
-    setSelectedMediaType("All");
+  const handleSaveDrawer = async (savedData) => {
+    try {
+      if (editItem) {
+        const id = editItem._id || editItem.id;
+        await GalleryService.updateGallery(id, savedData);
+        notifySuccess('Gallery item updated successfully!');
+      } else {
+        await GalleryService.addGallery(savedData);
+        notifySuccess('Gallery item added successfully!');
+      }
+      fetchGallery();
+      toggleDrawer();
+      setEditItem(null);
+    } catch (err) {
+      console.error('Failed to save gallery item:', err);
+      notifyError(err?.response?.data?.message || err?.message || 'Failed to save gallery item');
+    }
+  };
+
+  const handleResetFilters = async () => {
+    setIsRefreshing(true);
+    setSearchQuery('');
+    setSelectedCategory('All');
+    setSelectedMediaType('All');
     setCurrentPage(1);
+    await fetchGallery({ page: 1, search: '', category: 'All', media_type: 'All' });
+    notifySuccess('Gallery filters reset & refreshed!');
+    setTimeout(() => {
+      setIsRefreshing(false);
+    }, 600);
   };
-
-  // Filter Logic
-  const filteredItems = useMemo(() => {
-    return galleryList.filter((item) => {
-      // 1. Search Query Filter (Title or Description)
-      const query = searchQuery.toLowerCase().trim();
-      const matchesSearch =
-        !query ||
-        (item.title && item.title.toLowerCase().includes(query)) ||
-        (item.description && item.description.toLowerCase().includes(query));
-
-      // 2. Category Filter
-      const matchesCategory =
-        selectedCategory === "All" || item.category === selectedCategory;
-
-      // 3. Media Type Filter
-      const matchesMediaType =
-        selectedMediaType === "All" || item.mediaType === selectedMediaType;
-
-      return matchesSearch && matchesCategory && matchesMediaType;
-    });
-  }, [galleryList, searchQuery, selectedCategory, selectedMediaType]);
-
-  // Paginated Items
-  const paginatedItems = useMemo(() => {
-    const startIndex = (currentPage - 1) * resultsPerPage;
-    return filteredItems.slice(startIndex, startIndex + resultsPerPage);
-  }, [filteredItems, currentPage, resultsPerPage]);
 
   return (
     <>
       {/* Page Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4">
+      <div className='flex flex-col sm:flex-row sm:items-center sm:justify-between mb-6 gap-4'>
         <div>
           <PageTitle>Photo & Video Gallery</PageTitle>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
+          <p className='text-xs text-gray-500 dark:text-gray-400'>
             Manage photo and video gallery items, categories, and site visibility.
           </p>
         </div>
@@ -142,7 +179,7 @@ const Gallery = () => {
             setEditItem(null);
             toggleDrawer();
           }}
-          className="bg-red-700 hover:bg-red-800 text-white rounded-md text-xs font-semibold px-4 py-2.5 flex items-center justify-center gap-2 transition-colors shrink-0 shadow-sm"
+          className='bg-red-700 hover:bg-red-800 text-white rounded-md text-xs font-semibold px-4 py-2.5 flex items-center justify-center gap-2 transition-colors shrink-0 shadow-sm'
         >
           <FiPlus size={16} /> Add Gallery Media
         </Button>
@@ -162,26 +199,27 @@ const Gallery = () => {
       </MainDrawer>
 
       {/* Control Bar: Search & Custom Dropdowns */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xs border border-gray-100 dark:border-gray-700 mb-6">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
+      <div className='bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xs border border-gray-100 dark:border-gray-700 mb-6'>
+        <div className='flex flex-col lg:flex-row lg:items-center justify-between gap-3'>
           {/* Search Input */}
-          <div className="relative flex-grow max-w-md">
+          <div className='relative flex-grow max-w-md'>
             <Input
-              type="search"
+              type='search'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search gallery media..."
-              className="border h-10 text-xs focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md pl-10 pr-4"
+              onKeyDown={handleSearchKeyDown}
+              placeholder='Search gallery media... (Press Enter)'
+              className='border h-10 text-xs focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md pl-10 pr-4'
             />
             <FiSearch
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
+              className='absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none'
               size={14}
             />
           </div>
 
           {/* Custom Select Category & Media Type Dropdowns */}
-          <div className="flex flex-wrap items-center gap-3">
-            <div className="w-44">
+          <div className='flex flex-wrap items-center gap-3'>
+            <div className='w-44'>
               <CustomSelect
                 options={categoryFilterOptions}
                 value={selectedCategory}
@@ -189,13 +227,13 @@ const Gallery = () => {
                   setSelectedCategory(val);
                   setCurrentPage(1);
                 }}
-                placeholder="Category"
-                heightClass="h-10"
-                textSize="text-xs"
+                placeholder='Category'
+                heightClass='h-10'
+                textSize='text-xs'
               />
             </div>
 
-            <div className="w-40">
+            <div className='w-40'>
               <CustomSelect
                 options={mediaTypeFilterOptions}
                 value={selectedMediaType}
@@ -203,26 +241,30 @@ const Gallery = () => {
                   setSelectedMediaType(val);
                   setCurrentPage(1);
                 }}
-                placeholder="Media Type"
-                heightClass="h-10"
-                textSize="text-xs"
+                placeholder='Media Type'
+                heightClass='h-10'
+                textSize='text-xs'
               />
             </div>
 
             {/* Reset Filters */}
             <button
               onClick={handleResetFilters}
-              className="bg-red-700 hover:bg-red-800 text-white h-10 w-10 rounded-md flex items-center justify-center transition-colors focus:outline-none"
-              title="Reset Filters"
+              disabled={isRefreshing || loading}
+              className='bg-red-700 hover:bg-red-800 active:scale-95 text-white h-10 w-10 rounded-md flex items-center justify-center transition-all duration-200 focus:outline-none shadow-xs hover:shadow-md cursor-pointer disabled:opacity-75'
+              title='Reset Filters & Refresh List'
             >
-              <FiRotateCw size={14} className="text-white" />
+              <FiRotateCw
+                size={16}
+                className={'text-white transition-transform duration-500 ' + (isRefreshing ? 'animate-spin' : 'hover:rotate-45')}
+              />
             </button>
           </div>
         </div>
       </div>
 
       {/* Main Table Container */}
-      <TableContainer className="mb-8 rounded-lg border border-gray-200 dark:border-gray-700 shadow-xs">
+      <TableContainer className='mb-8 rounded-lg border border-gray-200 dark:border-gray-700 shadow-xs'>
         <Table>
           <TableHeader>
             <tr>
@@ -231,15 +273,15 @@ const Gallery = () => {
               <TableCell>Details</TableCell>
               <TableCell>Category</TableCell>
               <TableCell>Media Type</TableCell>
-              <TableCell className="text-center">Status</TableCell>
+              <TableCell className='text-center'>Status</TableCell>
               <TableCell>Time Stamp</TableCell>
-              <TableCell className="text-right">Actions</TableCell>
+              <TableCell className='text-right'>Actions</TableCell>
             </tr>
           </TableHeader>
 
-          {paginatedItems.length > 0 ? (
+          {galleryList && galleryList.length > 0 ? (
             <GalleryTable
-              items={paginatedItems}
+              items={galleryList}
               onEdit={(item) => {
                 setEditItem(item);
                 toggleDrawer();
@@ -250,18 +292,18 @@ const Gallery = () => {
           ) : null}
         </Table>
 
-        {paginatedItems.length === 0 && (
-          <div className="py-12 bg-white dark:bg-gray-800">
-            <NotFound title="No Gallery Items Found" />
+        {(!galleryList || galleryList.length === 0) && !loading && (
+          <div className='py-12 bg-white dark:bg-gray-800'>
+            <NotFound title='No Gallery Items Found' />
           </div>
         )}
 
         <TableFooter>
           <Pagination
-            totalResults={filteredItems.length}
+            totalResults={totalResults}
             resultsPerPage={resultsPerPage}
             onChange={(p) => setCurrentPage(p)}
-            label="Gallery Navigation"
+            label='Gallery Navigation'
           />
         </TableFooter>
       </TableContainer>

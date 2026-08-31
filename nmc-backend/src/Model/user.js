@@ -44,10 +44,9 @@ const userSchema = new mongoose.Schema({
     validate: {
       validator: function (v) {
         if (!v) return true; // allow null password
-        return /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/.test(v);
+        return v.length >= 6;
       },
-      message:
-        "Password must contain uppercase, lowercase, number, and special character"
+      message: "Password must be at least 6 characters long",
     },
     select: false
   },

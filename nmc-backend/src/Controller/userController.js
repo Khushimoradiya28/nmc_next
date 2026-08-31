@@ -93,6 +93,16 @@ exports.getAllUsers = async (req, res, next) => {
 
     const query = {};
 
+    const targetId = queryParams?._id || queryParams?.id;
+    if (targetId) {
+      const isMongoId = /^[0-9a-fA-F]{24}$/.test(targetId.toString().trim());
+      if (isMongoId) {
+        query._id = targetId.toString().trim();
+      } else {
+        query.guid = targetId.toString().trim();
+      }
+    }
+
     if (status && status !== "all") {
       query.status = status.toString().trim();
     }
@@ -203,9 +213,29 @@ exports.addUser = async (req, res, next) => {
     const password = body.password ? body.password.toString().trim() : "";
     const roleInput = body.role_name || body.role_id || body.role;
 
+    const first_name = body.first_name ? body.first_name.toString().trim() : "";
+    const last_name = body.last_name ? body.last_name.toString().trim() : "";
+
+    if (!first_name) {
+      errors.push("first_name is required and cannot be blank.");
+    } else if (!/^[A-Za-z\s]+$/.test(first_name)) {
+      errors.push("first_name must contain letters only.");
+    }
+
+    if (!last_name) {
+      errors.push("last_name is required and cannot be blank.");
+    } else if (!/^[A-Za-z\s]+$/.test(last_name)) {
+      errors.push("last_name must contain letters only.");
+    }
+
     if (!email) errors.push("email is required and cannot be blank.");
-    if (!password) errors.push("password is required and cannot be blank (min 8 chars).");
-    if (password && password.length < 8) errors.push("password must be at least 8 characters long.");
+    if (!mobile) {
+      errors.push("mobile is required and cannot be blank.");
+    } else if (!/^\d{10}$/.test(mobile)) {
+      errors.push("mobile must be exactly 10 digits.");
+    }
+    if (!password) errors.push("password is required and cannot be blank (min 6 chars).");
+    if (password && password.length < 6) errors.push("password must be at least 6 characters long.");
     if (!roleInput) errors.push("role_name or role_id is required ('super_admin', 'department', 'content').");
 
     // Resolve Role
@@ -366,6 +396,24 @@ exports.updateUser = async (req, res, next) => {
         errors.push("Invalid role specified.");
       } else {
         existingUser.role = roleDoc._id;
+      }
+    }
+
+    if (body.first_name !== undefined && body.first_name.toString().trim()) {
+      const fn = body.first_name.toString().trim();
+      if (!/^[A-Za-z\s]+$/.test(fn)) {
+        errors.push("first_name must contain letters only.");
+      } else {
+        existingUser.first_name = fn;
+      }
+    }
+
+    if (body.last_name !== undefined && body.last_name.toString().trim()) {
+      const ln = body.last_name.toString().trim();
+      if (!/^[A-Za-z\s]+$/.test(ln)) {
+        errors.push("last_name must contain letters only.");
+      } else {
+        existingUser.last_name = ln;
       }
     }
 

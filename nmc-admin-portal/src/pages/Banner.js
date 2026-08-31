@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from "react";
+﻿import React, { useState, useEffect, useContext } from "react";
 import {
   TableContainer,
   Table,
@@ -17,62 +17,108 @@ import BannerDrawer from "../components/drawer/BannerDrawer";
 import MainDrawer from "../components/drawer/MainDrawer";
 import MainModal from "../components/modal/MainModal";
 import { SidebarContext } from "../context/SidebarContext";
-import mockBanners from "../utils/mockBanners";
-import { notifySuccess } from "../utils/toast";
+import BannerServices from "../services/BannerServices";
+import { notifySuccess, notifyError } from "../utils/toast";
 
 const Banner = () => {
   const { toggleDrawer, isDrawerOpen, toggleModal } = useContext(SidebarContext);
 
   // State management
-  const [bannerList, setBannerList] = useState(mockBanners);
+  const [bannerList, setBannerList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [editItem, setEditItem] = useState(null);
   const [deleteItemId, setDeleteItemId] = useState(null);
 
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalResults, setTotalResults] = useState(0);
   const resultsPerPage = 8;
 
-  // Toggle active/inactive status
-  const handleToggleStatus = (id) => {
-    setBannerList((prev) =>
-      prev.map((item) =>
-        item.id === id ? { ...item, status: !item.status } : item
-      )
-    );
+  // 1. Fetch Banners List from Backend API
+  const fetchBanners = async () => {
+    try {
+      setLoading(true);
+      const res = await BannerServices.getAllBanners({
+        page: currentPage,
+        limit: resultsPerPage,
+        status: "all",
+      });
+
+      if (res && res.data) {
+        setBannerList(res.data);
+        setTotalResults(res.meta?.total_records || res.data.length);
+      }
+    } catch (err) {
+      console.error("Failed to fetch banners:", err);
+      notifyError(err?.message || "Failed to load banners");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // Open Delete MainModal
+  useEffect(() => {
+    fetchBanners();
+  }, [currentPage]);
+
+  // 2. Toggle active/inactive status
+  const handleToggleStatus = async (item) => {
+    try {
+      const id = item._id || item.id;
+      const newStatus = item.status === "active" ? "inactive" : "active";
+      
+      const res = await BannerServices.updateBannerStatus(id, newStatus);
+      if (res && (res.status === 200 || res.success)) {
+        setBannerList((prev) =>
+          prev.map((b) => ((b._id || b.id) === id ? { ...b, status: newStatus, isActive: newStatus === "active" } : b))
+        );
+        notifySuccess("Banner status updated to " + newStatus + "!");
+      }
+    } catch (err) {
+      console.error("Failed to toggle status:", err);
+      notifyError(err?.message || "Failed to update banner status");
+    }
+  };
+
+  // 3. Open Delete Modal
   const handleOpenDeleteModal = (id) => {
     setDeleteItemId(id);
     toggleModal();
   };
 
-  // Perform Delete Action
-  const handleConfirmDelete = (id) => {
-    setBannerList((prev) => prev.filter((item) => item.id !== id));
-    notifySuccess("Banner slide deleted successfully!");
-  };
-
-  // Save (Add or Update) item callback from drawer
-  const handleSaveDrawer = (savedData) => {
-    if (editItem) {
-      setBannerList((prev) =>
-        prev.map((item) => (item.id === savedData.id ? savedData : item))
-      );
-      notifySuccess("Banner slide updated successfully!");
-    } else {
-      setBannerList((prev) => [savedData, ...prev]);
-      notifySuccess("Banner slide added successfully!");
+  // 4. Perform Delete Action
+  const handleConfirmDelete = async (id) => {
+    try {
+      const targetId = id || deleteItemId;
+      const res = await BannerServices.deleteBanner(targetId);
+      if (res && (res.status === 200 || res.success)) {
+        notifySuccess("Banner deleted successfully!");
+        fetchBanners();
+      }
+    } catch (err) {
+      console.error("Failed to delete banner:", err);
+      notifyError(err?.message || "Failed to delete banner");
     }
-    toggleDrawer();
-    setEditItem(null);
   };
 
-  // Paginated Items
-  const paginatedItems = useMemo(() => {
-    const startIndex = (currentPage - 1) * resultsPerPage;
-    return bannerList.slice(startIndex, startIndex + resultsPerPage);
-  }, [bannerList, currentPage, resultsPerPage]);
+  // 5. Save (Add or Update) item callback from drawer
+  const handleSaveDrawer = async (savedData) => {
+    try {
+      if (editItem) {
+        const id = editItem._id || editItem.id;
+        await BannerServices.updateBanner(id, savedData);
+        notifySuccess("Banner updated successfully!");
+      } else {
+        await BannerServices.addBanner(savedData);
+        notifySuccess("Banner added successfully!");
+      }
+      fetchBanners();
+      toggleDrawer();
+      setEditItem(null);
+    } catch (err) {
+      console.error("Failed to save banner:", err);
+      notifyError(err?.response?.data?.message || err?.message || "Failed to save banner");
+    }
+  };
 
   return (
     <>
@@ -122,9 +168,9 @@ const Banner = () => {
             </tr>
           </TableHeader>
 
-          {paginatedItems.length > 0 ? (
+          {bannerList && bannerList.length > 0 ? (
             <BannerTable
-              banners={paginatedItems}
+              banners={bannerList}
               onEdit={(item) => {
                 setEditItem(item);
                 toggleDrawer();
@@ -135,7 +181,7 @@ const Banner = () => {
           ) : null}
         </Table>
 
-        {paginatedItems.length === 0 && (
+        {(!bannerList || bannerList.length === 0) && !loading && (
           <div className="py-12 bg-white dark:bg-gray-800">
             <NotFound title="No Banner Images Found" />
           </div>
@@ -143,7 +189,7 @@ const Banner = () => {
 
         <TableFooter>
           <Pagination
-            totalResults={bannerList.length}
+            totalResults={totalResults}
             resultsPerPage={resultsPerPage}
             onChange={(p) => setCurrentPage(p)}
             label="Banner Navigation"

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+﻿import React, { useState, useEffect } from "react";
 import { Scrollbars } from "react-custom-scrollbars-2";
 import { Input } from "@windmill/react-ui";
 import Title from "../form/Title";
@@ -8,7 +8,7 @@ const BannerDrawer = ({ open, onClose, onSave, editData }) => {
   const [formData, setFormData] = useState({
     title: "",
     image: "",
-    status: true,
+    status: "active",
   });
 
   const [uploadedFile, setUploadedFile] = useState(null);
@@ -17,15 +17,15 @@ const BannerDrawer = ({ open, onClose, onSave, editData }) => {
     if (editData) {
       setFormData({
         title: editData.title || "",
-        image: editData.image || "",
-        status: editData.status !== undefined ? editData.status : true,
+        image: editData.image_webp_url || editData.image_url || editData.image || "",
+        status: editData.status || (editData.isActive ? "active" : "inactive"),
       });
       setUploadedFile(null);
     } else {
       setFormData({
         title: "",
         image: "",
-        status: true,
+        status: "active",
       });
       setUploadedFile(null);
     }
@@ -53,16 +53,21 @@ const BannerDrawer = ({ open, onClose, onSave, editData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (onSave) {
-      onSave({
-        ...formData,
-        id: editData ? editData.id : Date.now(),
-        image: formData.image || "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?auto=format&fit=crop&w=800&q=80",
-        updated_at: new Date().toISOString().replace("T", " ").substring(0, 16),
-        created_at: editData ? editData.created_at : new Date().toISOString().replace("T", " ").substring(0, 16),
-      });
+    
+    // Prepare FormData for Backend Multer Upload
+    const submission = new FormData();
+    submission.append("title", formData.title || "");
+    submission.append("status", formData.status || "active");
+
+    if (uploadedFile) {
+      submission.append("image", uploadedFile);
+    } else if (editData && formData.image) {
+      submission.append("image", editData.image || formData.image);
     }
-    if (onClose) onClose();
+
+    if (onSave) {
+      onSave(submission);
+    }
   };
 
   return (
@@ -113,7 +118,7 @@ const BannerDrawer = ({ open, onClose, onSave, editData }) => {
                 />
               </label>
               <span className="text-xs text-gray-500 dark:text-gray-400 ml-3 truncate max-w-[220px]">
-                {uploadedFile ? uploadedFile.name : "No file chosen"}
+                {uploadedFile ? uploadedFile.name : (editData ? "Existing Image Selected" : "No file chosen")}
               </span>
             </div>
 
@@ -129,7 +134,7 @@ const BannerDrawer = ({ open, onClose, onSave, editData }) => {
           </div>
 
           {/* Fixed Bottom Action Bar */}
-          <DrawerButton id={editData?.id} title="Banner Image" />
+          <DrawerButton id={editData?._id || editData?.id} title="Banner Image" />
         </form>
       </Scrollbars>
     </div>

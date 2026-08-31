@@ -3,54 +3,92 @@
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './Hero.module.css';
-
-// Background slider images. Only these change — the rest of the hero stays fixed.
-const HERO_SLIDES = [
-  '/assets/home/hero/new-banner.png',
-  '/assets/activities/activities_banner.jpg',
-  '/assets/orient/welcome.jpg',
-  '/assets/events_gallery/womens_day.jpg',
-];
+import BannerServices from '@/services/BannerServices';
 
 export default function Hero() {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [slides, setSlides] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Auto-advance the background image slider
+  // Fetch dynamic banners from Admin API strictly
   useEffect(() => {
-    if (HERO_SLIDES.length <= 1) return;
+    let isMounted = true;
+
+    const fetchBanners = async () => {
+      try {
+        const res = await BannerServices.getActiveBanners();
+        if (isMounted) {
+          if (res && res.data && Array.isArray(res.data) && res.data.length > 0) {
+            const apiImages = res.data
+              .map((b) => b.image_webp_url || b.image_url || b.image_webp || b.image || b.banner_img_webp_url || b.banner_img_url || b.banner_img)
+              .filter(Boolean);
+
+            setSlides(apiImages);
+          } else {
+            setSlides([]);
+          }
+          setLoading(false);
+        }
+      } catch (err) {
+        console.error("Failed to load banners from backend:", err);
+        if (isMounted) {
+          setSlides([]);
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchBanners();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  // Auto-advance the background image slider only when 2 or more slides exist
+  useEffect(() => {
+    if (slides.length <= 1) {
+      setActiveSlide(0);
+      return;
+    }
     const timer = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+      setActiveSlide((prev) => (prev + 1) % slides.length);
     }, 5000);
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   const openApplyModal = (e) => {
     e.preventDefault();
-    // Reuse the existing modal popup (PopupForm) via its global event
     window.dispatchEvent(new Event('openContactPopup'));
   };
 
   return (
     <section className={`${styles.heroFullscreen} hero-fullscreen home-hero-fullscreen`} id="home">
-      {/* Background image slider — only the image changes */}
+      {/* Background image slider — strictly render only active banners from DB */}
       <div className={`${styles.heroBgImage} hero-bg-image`} style={{ transform: 'scaleX(-1)' }}>
-        {HERO_SLIDES.map((src, idx) => (
-          <div
-            key={src}
-            className={`${styles.heroSlide} ${idx === activeSlide ? styles.heroSlideActive : ''}`}
-            aria-hidden={idx !== activeSlide}
-          >
-            <Image
-              src={src}
-              alt="NMC Campus Life"
-              width={1920}
-              height={1080}
-              priority={idx === 0}
-              className={`${styles.heroBgImg} hero-bg-img`}
-            />
-          </div>
-        ))}
+        {slides.length > 0 ? (
+          slides.map((src, idx) => (
+            <div
+              key={src + idx}
+              className={`${styles.heroSlide} ${idx === activeSlide ? styles.heroSlideActive : ''}`}
+              aria-hidden={idx !== activeSlide}
+            >
+              <Image
+                src={src}
+                alt="NMC Campus Life Banner"
+                width={1920}
+                height={1080}
+                priority={idx === 0}
+                unoptimized={true}
+                className={`${styles.heroBgImg} hero-bg-img`}
+              />
+            </div>
+          ))
+        ) : (
+          <div className="w-full h-full bg-gradient-to-br from-red-950 via-gray-900 to-black"></div>
+        )}
       </div>
+
       <div className={`${styles.heroOverlay} hero-overlay`}></div>
       <div className={`${styles.heroContent} container`}>
         <div className={`${styles.heroTagPill} hero-tag-pill`}>

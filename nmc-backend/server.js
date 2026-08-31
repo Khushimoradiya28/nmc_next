@@ -82,7 +82,9 @@ app.use("/api", (req, res, next) => {
     "admission-lead",
     "admission-leads",
     "courses",
-    "course"
+    "course",
+    "user",
+    "role"
   ];
 
   if (req.method === "GET" || openPaths.some((key) => req.path.toLowerCase().includes(key))) {

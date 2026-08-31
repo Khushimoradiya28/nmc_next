@@ -3,14 +3,14 @@ import requests from './masterService.js';
 const MasterUserService = {
   getAllBrands(body) {
     const payload = {
-      status: 1,
+      status: 'all',
       ...body
     };
     return requests.post('/user/list', payload);
   },
   getAllCustomer(body) {
     const payload = {
-      status: 1,
+      status: 'all',
       ...body
     };
     return requests.post('/user/customer-order-list', payload);
@@ -23,27 +23,33 @@ const MasterUserService = {
   },
 
   getBrandById(id) {
-    return requests.post('/user/list', { _id: id });
+    return requests.post('/user/list', { _id: id, status: 'all' });
   },
 
   updateBrand(id, body, token) {
-    body.append("id", id);
+    if (body instanceof FormData) {
+      body.append("id", id);
+      return requests.post('/user/update', body, {
+        headers: {
+          "Authorization": token ? `Bearer ${token}` : undefined,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+    }
 
-    return requests.post('/user/update', body, {
-      headers: {
-        "Authorization": `Bearer ${token}`,
-        "Content-Type": "multipart/form-data",
-      },
-    });
+    const payload = { id, ...body };
+    return requests.post('/user/update', payload);
   },
 
-  // FIXED NAME ↓↓↓
+  updateStatus(id, status) {
+    return requests.post('/user/update', { id, status });
+  },
+
   deleteData(id) {
     return requests.post('/user/delete', { id });
   },
 
   changePassword(userId, payload) {
-    // payload should contain: old_password, new_password, confirm_password
     return requests.post('/auth/change-password', { id: userId, ...payload });
   }
 };

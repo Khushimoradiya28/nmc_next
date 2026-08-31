@@ -512,3 +512,36 @@
     right: 10px;
   }
 }
+/* Floating Video Play Button */
+.videoPlayBtn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 56px;
+  height: 56px;
+  background: rgba(176, 0, 0, 0.92);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  box-shadow: 0 8px 25px rgba(176, 0, 0, 0.45);
+  border: 2.5px solid rgba(255, 255, 255, 0.85);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 6;
+  pointer-events: none;
+}
+
+.videoPlayBtn svg {
+  margin-left: 3px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.galleryItem:hover .videoPlayBtn {
+  transform: translate(-50%, -50%) scale(1.15);
+  background: #B00000;
+  box-shadow: 0 12px 30px rgba(176, 0, 0, 0.6);
+}

@@ -224,6 +224,21 @@ exports.login = async (req, res) => {
 
     user.password = undefined;
 
+    const baseUrl = `${req.protocol}://${req.get("host")}`;
+    let profileImgUrl = null;
+    let profileImgWebpUrl = null;
+
+    if (user.profile_img) {
+      profileImgUrl = user.profile_img.startsWith("http")
+        ? user.profile_img
+        : `${baseUrl}/${user.profile_img.replace(/\\/g, "/")}`;
+    }
+    if (user.profile_img_webp) {
+      profileImgWebpUrl = user.profile_img_webp.startsWith("http")
+        ? user.profile_img_webp
+        : `${baseUrl}/${user.profile_img_webp.replace(/\\/g, "/")}`;
+    }
+
     res.status(200).json({
       status: 200,
       success: true,
@@ -232,6 +247,9 @@ exports.login = async (req, res) => {
       user: {
         ...user.toObject(),
         role_name: roleName,
+        profile_img_url: profileImgUrl,
+        profile_img_webp_url: profileImgWebpUrl,
+        image: profileImgWebpUrl || profileImgUrl || user.profile_img || null,
       },
     });
 
@@ -267,13 +285,10 @@ exports.changePassword = async (req, res, next) => {
       });
     }
 
-    // const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const pwdRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$/;
-    if (!pwdRegex.test(new_password)) {
+    if (new_password.length < 6) {
       return res.status(400).json({
         status: 400,
-        message:
-          "Password must be at least 8 characters and contain uppercase, lowercase, number, and special character",
+        message: "Password must be at least 6 characters long",
       });
     }
 
