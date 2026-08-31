@@ -13,6 +13,9 @@ const Masters = lazy(() => import('../pages/Master'));
 const OrderInvoice = lazy(() => import('../pages/OrderInvoice'));
 const Coupons = lazy(() => import('../pages/Coupons'));
 const Leads = lazy(() => import('../pages/Leads'));
+const Admissions = lazy(() => import('../pages/Admissions'));
+const Banner = lazy(() => import('../pages/Banner'));
+const Gallery = lazy(() => import('../pages/Gallery'));
 // const OrderDetails = lazy(() => import('../pages/OrderDetails'));
 // const Setting = lazy(() => import("../pages/Setting"));
 const Page404 = lazy(() => import('../pages/404'));
@@ -102,6 +105,18 @@ const routes = [
   {
     path: '/leads',
     component: Leads,
+  },
+  {
+    path: '/admissions',
+    component: Admissions,
+  },
+  {
+    path: '/banner',
+    component: Banner,
+  },
+  {
+    path: '/gallery',
+    component: Gallery,
   },
 
   { path: '/setting', component: EditProfile },

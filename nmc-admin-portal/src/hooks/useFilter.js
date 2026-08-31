@@ -92,8 +92,13 @@ const useFilter = (data) => {
       setTotalOrder(totalOrder);
     }
 
-    //products filtering
-    if (location.search.includes('type=testimonial') || location.search.includes('type=awards') || location.search.includes('type=courses')) {
+    //products & custom module filtering
+    if (
+      location.pathname.includes('/leads') ||
+      location.search.includes('type=testimonial') ||
+      location.search.includes('type=awards') ||
+      location.search.includes('type=courses')
+    ) {
       return Array.isArray(services) ? services : [];
     }
 

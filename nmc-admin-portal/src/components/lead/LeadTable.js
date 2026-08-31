@@ -1,196 +1,117 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import {
   TableCell,
   TableBody,
   TableRow,
-  Badge,
-  Avatar,
 } from '@windmill/react-ui';
-import { FiMail, FiPhone } from 'react-icons/fi';
+import { FiGlobe, FiTrash2 } from 'react-icons/fi';
 
-import Tooltip from '../tooltip/Tooltip';
-import MainModal from '../modal/MainModal';
-import MainDrawer from '../drawer/MainDrawer';
-import ProductDrawer from '../drawer/ProductDrawer';
-import ShowHideButton from '../table/ShowHideButton';
-import EditDeleteButton from '../table/EditDeleteButton';
-import useToggleDrawer from '../../hooks/useToggleDrawer';
 import DateBox from '../form/DateBox';
-import { FiEye } from 'react-icons/fi';
+import ExpandableText from '../common/ExpandableText';
 
-const LeadTable = ({ products, currentPage = 1, resultsPerPage = 10 }) => {
-
-  const { serviceId, handleModalOpen, handleUpdate } = useToggleDrawer();
-  // Calculate the starting index for the current page
+const LeadTable = ({ products, currentPage = 1, resultsPerPage = 10, onDelete }) => {
   const startIndex = (currentPage - 1) * resultsPerPage;
 
   return (
-    <>
-      <MainModal id={serviceId} />
+    <TableBody className="divide-y divide-gray-100 dark:divide-gray-700/60">
+      {products?.map((product, i) => {
+        const firstName = product.first_name || "";
+        const lastName = product.last_name || "";
+        const fullName = `${firstName} ${lastName}`.trim() || "N/A";
 
-      <MainDrawer>
-        <ProductDrawer id={serviceId} />
-      </MainDrawer>
+        const website = product.website || product.enter_your_website || "";
+        const reason = product.reason || product.reason_contacting_us || "-";
+        const course = product.course || product.choose_course || "-";
+        const teacherDept = product.teacher_department || product.choose_teacher_department || "-";
+        const message = product.message || product.your_message || "-";
 
-      <TableBody>
-        {products
-          ?.filter((product) => product.status == 1)
-          .map((product, i) => (
-            <TableRow key={product._id || i}>
+        return (
+          <TableRow 
+            key={product._id || product.id || i}
+            className="hover:bg-gray-50/80 dark:hover:bg-gray-800/60 transition-colors duration-150"
+          >
+            {/* Sr. No. */}
+            <TableCell className="py-3 px-4">
+              <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+                {startIndex + i + 1}
+              </span>
+            </TableCell>
 
-              {/* Index */}
-              <TableCell>
-                <span className="text-xs uppercase font-semibold">
-                  {startIndex + i + 1}
-                </span>
-              </TableCell>
+            {/* Name */}
+            <TableCell className="py-3 px-4">
+              <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
+                {fullName}
+              </span>
+            </TableCell>
 
-              <TableCell>
-                <div className="flex items-center gap-3">
-                  {/* <div className="w-8 h-8 flex items-center justify-center rounded-full bg-pink-200 text-pink-700 font-semibold">
-                {product.first_name && product.last_name
-                  ? (product.first_name.charAt(0)).toUpperCase()
-                  : "U"}
-              </div> */}
+            {/* Website */}
+            <TableCell className="py-3 px-4">
+              {website ? (
+                <a
+                  href={website.startsWith("http") ? website : `https://${website}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium max-w-[150px] truncate"
+                >
+                  <FiGlobe size={13} className="shrink-0 text-blue-500" />
+                  <span className="truncate">{website}</span>
+                </a>
+              ) : (
+                <span className="text-xs text-gray-400">-</span>
+              )}
+            </TableCell>
 
-                  <span className="text-sm font-medium">
-                    {product.first_name || product.last_name
-                      ? `${product.first_name || ""} ${product.last_name || ""}`.trim()
-                      : "N/A"}
-                  </span>
-                </div>
-              </TableCell>
+            {/* Reason contacting us */}
+            <TableCell className="py-3 px-4">
+              <span className="text-xs font-medium text-gray-700 dark:text-gray-300">
+                {reason}
+              </span>
+            </TableCell>
 
-              <TableCell>
-                {/* <div className="flex flex-col text-sm gap-1"> */}
+            {/* Choose Course */}
+            <TableCell className="py-3 px-4">
+              <span className="inline-block bg-red-50 dark:bg-red-900/30 text-red-700 dark:text-red-300 text-xs font-medium px-2.5 py-1 rounded-md border border-red-100 dark:border-red-800/50 shadow-2xs">
+                {course}
+              </span>
+            </TableCell>
 
-                {/* Email */}
-                <div className="flex items-center gap-2">
-                  <FiMail className="text-gray-500" size={14} />
-                  <span>{product.email || "N/A"}</span>
-                </div>
-              </TableCell>
-              <TableCell>
+            {/* Teacher / Department */}
+            <TableCell className="py-3 px-4">
+              <span className="text-xs text-gray-700 dark:text-gray-300 font-medium">
+                {teacherDept}
+              </span>
+            </TableCell>
 
-                {/* Mobile */}
-                <div className="flex items-center gap-2">
-                  <FiPhone className="text-gray-500" size={14} />
-                  <span>{product.mobile || "N/A"}</span>
-                </div>
+            {/* Your Message */}
+            <TableCell className="py-3 px-4">
+              <div className="max-w-[210px]">
+                <ExpandableText text={message} maxLength={45} />
+              </div>
+            </TableCell>
 
-                {/* </div> */}
-              </TableCell>
+            {/* Time Stamp */}
+            <TableCell className="py-3 px-4 overflow-visible relative">
+              <DateBox 
+                created_at={product.created_at || product.createdAt} 
+                updated_at={product.updated_at || product.updatedAt}
+              />
+            </TableCell>
 
-              <TableCell>
-                <span className="flex flex-col text-sm">{product.lead_type || "-"}</span>
-              </TableCell>
-
-              <TableCell>
-                <div style={{ position: "relative", width: "320px" }}>
-                  <span
-                    style={{
-                      display: "block",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      cursor: "pointer",
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.nextSibling.style.display = "block";
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.nextSibling.style.display = "none";
-                    }}
-                  >
-                    {product.message}
-                  </span>
-
-                  <div
-                    style={{
-                      display: "none",
-                      position: "absolute",
-                      left: "0",
-                      top: "110%",
-                      zIndex: 9999,
-
-                      backgroundColor: "#1a1c23",
-                      color: "#fff",
-
-                      padding: "12px 16px",
-                      borderRadius: "8px",
-
-                      fontSize: "13px",
-                      lineHeight: "1.7",
-
-                      maxWidth: "900px",        // 🔥 allow much wider tooltip
-                      minWidth: "400px",        // 🔥 readable base width
-                      width: "max-content",     // 🔥 grow with content
-                      whiteSpace: "normal",     // allow wrapping
-                      wordBreak: "break-word",
-
-                      boxShadow: "0 12px 30px rgba(0,0,0,0.45)",
-                    }}
-                  >
-                    {product.message}
-                  </div>
-                </div>
-              </TableCell>
-
-              <TableCell>
-                <span className="flex flex-col text-sm">{product.utm_source || "-"}</span>
-              </TableCell>
-
-              <TableCell>
-                <span className="flex flex-col text-sm">{product.utm_medium || "-"}</span>
-              </TableCell>
-
-              <TableCell>
-                <span className="flex flex-col text-sm">{product.utm_campaign || "-"}</span>
-              </TableCell>
-
-              <TableCell>
-                <span className="flex flex-col text-sm">{product.utm_content || "-"}</span>
-              </TableCell>
-
-              <TableCell>
-                <span className="flex flex-col text-sm">{product.utm_term || "-"}</span>
-              </TableCell>
-
-               <TableCell>
-                <span className="flex flex-col text-sm">{product.i_referrer || "-"}</span>
-              </TableCell>
-
-              <TableCell>
-                <span className="flex flex-col text-sm">{product.l_referrer || "-"}</span>
-              </TableCell>
-
-              <TableCell>
-                <span className="flex flex-col text-sm">{product.landing_page || "-"}</span>
-              </TableCell>
-
-              <TableCell>
-                <span className="flex flex-col text-sm">{product.visits || "-"}</span>
-              </TableCell>
-
-              <TableCell>
-                <DateBox created_at={product.created_at} />
-              </TableCell>
-
-              {/* Edit/Delete Button */}
-              {/* <TableCell>
-            <EditDeleteButton
-              id={product._id}
-              handleUpdate={handleUpdate}
-              handleModalOpen={handleModalOpen}
-            />
-          </TableCell> */}
-
-            </TableRow>
-          ))}
-      </TableBody>
-    </>
-
+            {/* Actions (Delete Icon) */}
+            <TableCell className="py-3 px-4 text-right">
+              <button
+                type="button"
+                onClick={() => onDelete && onDelete(product._id || product.id || i)}
+                className="p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 rounded-lg transition-colors focus:outline-none"
+                title="Delete Lead"
+              >
+                <FiTrash2 className="w-4 h-4" />
+              </button>
+            </TableCell>
+          </TableRow>
+        );
+      })}
+    </TableBody>
   );
 };
 

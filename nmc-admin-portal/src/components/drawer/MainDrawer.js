@@ -22,9 +22,10 @@ const MainDrawer = ({ children, isDrawerOpen: customChildDrawerOpen, closeDrawer
     >
       <button
         onClick={handleToggle}
-        className="absolute focus:outline-none z-50 text-red-500 hover:bg-red-100 hover:text-gray-700 transition-colors duration-150 bg-white shadow-md mr-6 mt-6 right-0 left-auto w-10 h-10 rounded-full block text-center"
+        className="absolute focus:outline-none z-50 bg-red-700 hover:bg-red-800 text-white shadow-md mr-6 mt-6 right-0 left-auto w-9 h-9 rounded-md flex items-center justify-center transition-colors duration-150"
+        title="Close"
       >
-        <FiX className="mx-auto" />
+        <FiX className="w-5 h-5 text-white" />
       </button>
 
       <div className="flex flex-col w-full h-full justify-between">

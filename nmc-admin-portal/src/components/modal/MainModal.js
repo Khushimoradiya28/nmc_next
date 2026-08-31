@@ -27,11 +27,16 @@ import FacultyServices from '../../services/FacultyServices';
 import { SidebarContext } from '../../context/SidebarContext';
 import { notifySuccess, notifyError } from '../../utils/toast';
 
-const MainModal = ({ id }) => {
+const MainModal = ({ id, onDeleteConfirm }) => {
   const { isModalOpen, closeModal, setIsUpdate } = useContext(SidebarContext);
   const location = useLocation();
 
   const handleDelete = () => {
+    if (onDeleteConfirm) {
+      onDeleteConfirm(id);
+      closeModal();
+      return;
+    }
     const query = new URLSearchParams(location.search);
     const typeParam = query.get("type");
 

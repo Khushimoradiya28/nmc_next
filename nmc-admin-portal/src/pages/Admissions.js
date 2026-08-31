@@ -9,24 +9,29 @@ import {
   Pagination,
   Input,
 } from "@windmill/react-ui";
-import { FiRefreshCw, FiUpload, FiArrowUp, FiArrowDown } from "react-icons/fi";
+import {
+  FiRefreshCw,
+  FiUpload,
+  FiArrowUp,
+  FiArrowDown,
+} from "react-icons/fi";
 import { CSVDownloader } from "react-papaparse";
 
 import useFilter from "../hooks/useFilter";
-import mockLeads from "../utils/mockLeads";
+import mockAdmissions from "../utils/mockAdmissions";
 import NotFound from "../components/table/NotFound";
 import PageTitle from "../components/Typography/PageTitle";
-import LeadTable from "../components/lead/LeadTable";
+import AdmissionTable from "../components/admission/AdmissionTable";
 import Breadcrumb from "../components/form/Breadcrumb";
 import CustomDateRangePicker from "../components/form/CustomDateRangePicker";
 import MainModal from "../components/modal/MainModal";
 import { SidebarContext } from "../context/SidebarContext";
 import { notifySuccess } from "../utils/toast";
 
-const Leads = () => {
+const Admissions = () => {
   const { toggleModal } = useContext(SidebarContext);
 
-  const [leadsList, setLeadsList] = useState(mockLeads);
+  const [admissionsList, setAdmissionsList] = useState(mockAdmissions);
   const [deleteItemId, setDeleteItemId] = useState(null);
 
   const [filters, setFilters] = useState({
@@ -44,72 +49,65 @@ const Leads = () => {
     toggleModal();
   };
 
-  // Confirm Delete Action
+  // Perform Delete Callback
   const handleConfirmDelete = (id) => {
-    setLeadsList((prev) => prev.filter((item) => (item._id || item.id) !== id));
-    notifySuccess("Lead deleted successfully!");
+    setAdmissionsList((prev) => prev.filter((item) => (item._id || item.id) !== id));
+    notifySuccess("Admission lead deleted successfully!");
   };
 
-  // Filter & Sort leads locally for static display
-  const filteredAndSortedLeads = useMemo(() => {
-    let result = [...leadsList];
+  // Filter & Sort admissions locally
+  const filteredAndSortedAdmissions = useMemo(() => {
+    let result = [...admissionsList];
 
     // 1. Search Filter (matches all form fields)
     if (searchText.trim()) {
       const term = searchText.toLowerCase().trim();
       result = result.filter((item) => {
-        const name = `${item.first_name || ""} ${item.last_name || ""}`.toLowerCase();
+        const name = (item.fullName || "").toLowerCase();
         const email = (item.email || "").toLowerCase();
         const mobile = (item.mobile || "").toLowerCase();
-        const website = (item.website || item.enter_your_website || "").toLowerCase();
-        const reason = (item.reason || item.reason_contacting_us || "").toLowerCase();
-        const course = (item.course || item.choose_course || "").toLowerCase();
-        const teacherDept = (item.teacher_department || item.choose_teacher_department || "").toLowerCase();
-        const message = (item.message || item.your_message || "").toLowerCase();
+        const city = (item.cityVillage || "").toLowerCase();
+        const course = (item.course || "").toLowerCase();
+        const qual = (item.qualification || "").toLowerCase();
 
         return (
           name.includes(term) ||
           email.includes(term) ||
           mobile.includes(term) ||
-          website.includes(term) ||
-          reason.includes(term) ||
+          city.includes(term) ||
           course.includes(term) ||
-          teacherDept.includes(term) ||
-          message.includes(term)
+          qual.includes(term)
         );
       });
     }
 
-    // 2. Custom Date Range Filter
+    // 2. From Date & To Date Filter
     if (filters.from_date) {
-      const from = new Date(filters.from_date);
-      from.setHours(0, 0, 0, 0);
+      const fromTimestamp = new Date(filters.from_date).setHours(0, 0, 0, 0);
       result = result.filter((item) => {
-        const itemDate = new Date(item.created_at || item.createdAt);
-        return itemDate >= from;
+        const itemTime = new Date(item.created_at || item.createdAt || 0).getTime();
+        return itemTime >= fromTimestamp;
       });
     }
 
     if (filters.to_date) {
-      const to = new Date(filters.to_date);
-      to.setHours(23, 59, 59, 999);
+      const toTimestamp = new Date(filters.to_date).setHours(23, 59, 59, 999);
       result = result.filter((item) => {
-        const itemDate = new Date(item.created_at || item.createdAt);
-        return itemDate <= to;
+        const itemTime = new Date(item.created_at || item.createdAt || 0).getTime();
+        return itemTime <= toTimestamp;
       });
     }
 
-    // 3. Date Sort Order
+    // 3. Ascending / Descending Date Sorting
     result.sort((a, b) => {
-      const dateA = new Date(a.created_at || a.createdAt);
-      const dateB = new Date(b.created_at || b.createdAt);
-      return sortOrder === "desc" ? dateB - dateA : dateA - dateB;
+      const timeA = new Date(a.created_at || a.createdAt || 0).getTime();
+      const timeB = new Date(b.created_at || b.createdAt || 0).getTime();
+      return sortOrder === "desc" ? timeB - timeA : timeA - timeB;
     });
 
     return result;
-  }, [leadsList, searchText, filters.from_date, filters.to_date, sortOrder]);
+  }, [admissionsList, searchText, filters, sortOrder]);
 
-  // Hook pagination logic
   const {
     handleChangePage,
     totalResults,
@@ -117,7 +115,7 @@ const Leads = () => {
     dataTable,
     serviceData,
     currentPage,
-  } = useFilter(filteredAndSortedLeads);
+  } = useFilter(filteredAndSortedAdmissions);
 
   const handleInputChange = (e) => {
     setSearchText(e.target.value);
@@ -128,39 +126,45 @@ const Leads = () => {
   };
 
   const handleResetAll = () => {
+    setFilters({ from_date: "", to_date: "" });
     setSearchText("");
+    setSortOrder("desc");
+
     if (searchRef.current) {
       searchRef.current.value = "";
     }
-    setFilters({
-      from_date: "",
-      to_date: "",
-    });
-    setSortOrder("desc");
   };
 
-  // CSV Export formatting
-  const exportData = useMemo(() => {
-    return filteredAndSortedLeads.map((item, index) => ({
-      "Sr. No.": index + 1,
-      Name: `${item.first_name || ""} ${item.last_name || ""}`.trim(),
-      Website: item.website || item.enter_your_website || "",
-      "Reason Contacting Us": item.reason || item.reason_contacting_us || "",
-      Course: item.course || item.choose_course || "",
-      "Teacher / Department": item.teacher_department || item.choose_teacher_department || "",
-      Message: item.message || item.your_message || "",
-      "Created At": item.created_at || item.createdAt || "",
-    }));
-  }, [filteredAndSortedLeads]);
+  const exportData = filteredAndSortedAdmissions.map((item, index) => ({
+    "Sr No": index + 1,
+    "Full Name": item.fullName || "",
+    "Mobile Number": item.mobile || "",
+    "Email Address": item.email || "",
+    "Date of Birth": item.dob || "",
+    Gender: item.gender || "",
+    "City / Village": item.cityVillage || "",
+    "Course Interested In": item.course || "",
+    "Last Qualification": item.qualification || "",
+    "Submitted Date": item.created_at || item.createdAt || "",
+  }));
 
   return (
     <>
-      <Breadcrumb title="Leads" />
-      <PageTitle>Leads</PageTitle>
+      {/* Header & Controls Bar (Identical to Leads page) */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 my-2">
+        {/* Title + Breadcrumb */}
+        <div className="flex flex-col text-left w-full sm:w-auto">
+          <PageTitle>Admission Leads</PageTitle>
+          <Breadcrumb
+            items={[
+              { label: "Dashboard", link: "/dashboard" },
+              { label: "Admission Leads" },
+            ]}
+          />
+        </div>
 
-      {/* Control Bar: Search, Custom Date Range, Sort Toggle & CSV Export */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xs mb-5 border border-gray-100 dark:border-gray-700">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+        {/* Inline Search, Date Range Inputs, Sort & Controls */}
+        <div className="flex flex-wrap items-center gap-2.5">
           {/* Global Search Bar */}
           <div className="w-full sm:w-48 lg:w-56">
             <Input
@@ -171,7 +175,7 @@ const Leads = () => {
                 focus:ring focus:ring-red-300 dark:bg-gray-700 bg-gray-100 h-10 pl-3"
               type="search"
               name="search"
-              placeholder="Search leads..."
+              placeholder="Search admission leads..."
             />
           </div>
 
@@ -216,7 +220,7 @@ const Leads = () => {
           {/* Export CSV */}
           <CSVDownloader
             data={exportData}
-            filename={`leads_${new Date().toISOString().slice(0, 10)}`}
+            filename={`admission_leads_${new Date().toISOString().slice(0, 10)}`}
           >
             <Button
               className="rounded-md h-10 px-3 flex items-center justify-center"
@@ -230,24 +234,27 @@ const Leads = () => {
         </div>
       </div>
 
+      {/* Main Table Container */}
       {serviceData.length !== 0 ? (
         <TableContainer className="mb-8 rounded-b-lg">
           <Table>
             <TableHeader>
               <tr>
                 <TableCell>Sr. No.</TableCell>
-                <TableCell>Name</TableCell>
-                <TableCell>Website</TableCell>
-                <TableCell>Reason contacting us</TableCell>
-                <TableCell>Choose Course</TableCell>
-                <TableCell>Teacher / Department</TableCell>
-                <TableCell>Your Message</TableCell>
+                <TableCell>Full Name</TableCell>
+                <TableCell>Mobile Number</TableCell>
+                <TableCell>Email Address</TableCell>
+                <TableCell>Date of Birth</TableCell>
+                <TableCell>Gender</TableCell>
+                <TableCell>City / Village</TableCell>
+                <TableCell>Course Interested In</TableCell>
+                <TableCell>Last Qualification</TableCell>
                 <TableCell>Time Stamp</TableCell>
                 <TableCell className="text-right">Actions</TableCell>
               </tr>
             </TableHeader>
-            <LeadTable
-              products={dataTable}
+            <AdmissionTable
+              admissions={dataTable}
               currentPage={currentPage}
               resultsPerPage={resultsPerPage}
               onDelete={handleOpenDeleteModal}
@@ -258,12 +265,12 @@ const Leads = () => {
               totalResults={totalResults}
               resultsPerPage={resultsPerPage}
               onChange={handleChangePage}
-              label="Leads Page Navigation"
+              label="Admission Leads Navigation"
             />
           </TableFooter>
         </TableContainer>
       ) : (
-        <NotFound title="Lead" />
+        <NotFound title="Admission Lead" />
       )}
 
       {/* Common Project Delete Modal */}
@@ -272,4 +279,4 @@ const Leads = () => {
   );
 };
 
-export default Leads;
+export default Admissions;

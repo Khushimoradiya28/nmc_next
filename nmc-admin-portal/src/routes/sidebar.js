@@ -1,12 +1,14 @@
 import {
   FiGrid,
   FiCompass,
-  FiList,
+  FiFileText,
   FiMessageSquare,
   FiAward,
   FiBookOpen,
   FiUsers,
   FiUserCheck,
+  FiImage,
+  FiSliders,
 } from 'react-icons/fi';
 
 /**
@@ -28,6 +30,16 @@ const sidebar = [
     name: 'Leads',
   },
   {
+    path: '/admissions',
+    icon: FiFileText,
+    name: 'Admission Leads',
+  },
+  {
+    path: '/banner',
+    icon: FiSliders,
+    name: 'Home Banner',
+  },
+  {
     path: '/products?type=testimonial',
     icon: FiMessageSquare,
     name: 'Testimonial',
@@ -41,6 +53,11 @@ const sidebar = [
     path: '/products?type=courses',
     icon: FiBookOpen,
     name: 'Professional Certificate Courses',
+  },
+  {
+    path: '/gallery',
+    icon: FiImage,
+    name: 'Photo & Video Gallery',
   },
   {
     path: '/master/faculty',
@@ -57,11 +74,6 @@ const sidebar = [
     icon: FiUsers,
     name: 'Users',
   },
-  // {
-  //   path: '/master',
-  //   icon: FiList,
-  //   name: 'Master',
-  // },
 ];
 
 export default sidebar;
