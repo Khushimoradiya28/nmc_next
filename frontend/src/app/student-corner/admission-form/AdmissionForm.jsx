@@ -106,21 +106,66 @@ export default function AdmissionForm() {
     name: '', email: '', phone: '', gender: '', dob: '',
     course: '', qualification: '', city: ''
   });
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [apiError, setApiError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target || e;
+    setFormData({ ...formData, [name]: value });
+    // Clear error when user types/selects
+    if (fieldErrors[name]) {
+      setFieldErrors({ ...fieldErrors, [name]: null });
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.name && formData.phone && formData.course) {
+    const errors = {};
+    if (!formData.name.trim()) errors.name = 'Full name is required.';
+    if (!formData.phone.trim()) errors.phone = 'Mobile number is required.';
+    if (!formData.email.trim()) errors.email = 'Email address is required.';
+    if (!formData.dob) errors.dob = 'Date of birth is required.';
+    if (!formData.gender) errors.gender = 'Please select a gender.';
+    if (!formData.city.trim()) errors.city = 'City/Village is required.';
+    if (!formData.course) errors.course = 'Please select a course.';
+    if (!formData.qualification) errors.qualification = 'Please select last qualification.';
+
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
+    setFieldErrors({});
+    setApiError('');
+    setLoading(true);
+
+    try {
+      // TODO: Replace with actual API call once endpoint is confirmed
+      // await AdmissionServices.submitApplication(formData);
+      
+      // Simulating API delay
+      await new Promise(resolve => setTimeout(resolve, 800));
+
       setSubmitted(true);
       setTimeout(() => {
         setFormData({ name: '', email: '', phone: '', gender: '', dob: '', course: '', qualification: '', city: '' });
         setSubmitted(false);
       }, 6000);
+    } catch (err) {
+      setApiError(err.message || 'Failed to submit. Please try again.');
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const errLabel = {
+    color: '#dc2626',
+    fontSize: '0.85rem',
+    marginTop: '4px',
+    display: 'block',
+    fontWeight: '500'
   };
 
   if (submitted) {
@@ -139,30 +184,40 @@ export default function AdmissionForm() {
       <h3 className={styles.formCardTitle}>Admission Application Form</h3>
       <p className={styles.formCardSub}>Fill your details below. All fields marked * are mandatory.</p>
 
-      <form onSubmit={handleSubmit}>
+      {apiError && (
+        <div style={{ backgroundColor: '#fee2e2', color: '#991b1b', padding: '10px 15px', borderRadius: '6px', marginBottom: '15px', fontSize: '0.9rem', fontWeight: '500' }}>
+          ⚠ {apiError}
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} noValidate>
         <div className={styles.formGrid}>
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Full Name *</label>
-            <input type="text" name="name" className={styles.formInput} placeholder="Enter full name" value={formData.name} onChange={handleChange} required />
+            <input type="text" name="name" className={styles.formInput} placeholder="Enter full name" value={formData.name} onChange={handleChange} />
+            {fieldErrors.name && <span style={errLabel}>⚠ {fieldErrors.name}</span>}
           </div>
 
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Mobile Number *</label>
-            <input type="tel" name="phone" className={styles.formInput} placeholder="+91 XXXXX XXXXX" value={formData.phone} onChange={handleChange} required />
+            <input type="tel" name="phone" className={styles.formInput} placeholder="+91 XXXXX XXXXX" value={formData.phone} onChange={handleChange} />
+            {fieldErrors.phone && <span style={errLabel}>⚠ {fieldErrors.phone}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label className={styles.formLabel}>Email Address</label>
+            <label className={styles.formLabel}>Email Address *</label>
             <input type="email" name="email" className={styles.formInput} placeholder="your.email@example.com" value={formData.email} onChange={handleChange} />
+            {fieldErrors.email && <span style={errLabel}>⚠ {fieldErrors.email}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label className={styles.formLabel}>Date of Birth</label>
+            <label className={styles.formLabel}>Date of Birth *</label>
             <input type="date" name="dob" className={styles.formInput} value={formData.dob} onChange={handleChange} />
+            {fieldErrors.dob && <span style={errLabel}>⚠ {fieldErrors.dob}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label className={styles.formLabel}>Gender</label>
+            <label className={styles.formLabel}>Gender *</label>
             <CustomSelect
               name="gender"
               value={formData.gender}
@@ -170,11 +225,13 @@ export default function AdmissionForm() {
               options={genderOptions}
               placeholder="Select Gender"
             />
+            {fieldErrors.gender && <span style={errLabel}>⚠ {fieldErrors.gender}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label className={styles.formLabel}>City / Village</label>
+            <label className={styles.formLabel}>City / Village *</label>
             <input type="text" name="city" className={styles.formInput} placeholder="e.g. Bhavnagar, Sihor, Palitana" value={formData.city} onChange={handleChange} />
+            {fieldErrors.city && <span style={errLabel}>⚠ {fieldErrors.city}</span>}
           </div>
 
           <div className={styles.formGroup}>
@@ -186,10 +243,11 @@ export default function AdmissionForm() {
               options={courseOptions}
               placeholder="Select Course"
             />
+            {fieldErrors.course && <span style={errLabel}>⚠ {fieldErrors.course}</span>}
           </div>
 
           <div className={styles.formGroup}>
-            <label className={styles.formLabel}>Last Qualification</label>
+            <label className={styles.formLabel}>Last Qualification *</label>
             <CustomSelect
               name="qualification"
               value={formData.qualification}
@@ -197,12 +255,19 @@ export default function AdmissionForm() {
               options={qualificationOptions}
               placeholder="Select Qualification"
             />
+            {fieldErrors.qualification && <span style={errLabel}>⚠ {fieldErrors.qualification}</span>}
           </div>
 
           <div className={styles.formGroupFull}>
-            <button type="submit" className={styles.submitBtn}>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-              Submit Application
+            <button type="submit" className={styles.submitBtn} disabled={loading}>
+              {loading ? (
+                <span>SUBMITTING...</span>
+              ) : (
+                <>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                  Submit Application
+                </>
+              )}
             </button>
           </div>
         </div>
