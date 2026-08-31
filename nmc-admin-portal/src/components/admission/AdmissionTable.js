@@ -8,20 +8,31 @@ import { FiTrash2 } from 'react-icons/fi';
 
 import DateBox from '../form/DateBox';
 
-const AdmissionTable = ({ admissions, currentPage = 1, resultsPerPage = 10, onDelete }) => {
-  const startIndex = (currentPage - 1) * resultsPerPage;
-
+const AdmissionTable = ({
+  admissions,
+  currentPage = 1,
+  resultsPerPage = 8,
+  totalResults = 0,
+  sortOrder = 'desc',
+  onDelete,
+}) => {
   return (
     <TableBody className="divide-y divide-gray-100 dark:divide-gray-700/60">
       {admissions?.map((item, i) => {
-        const fullName = item.fullName || "N/A";
+        const fullName = item.full_name || item.fullName || "N/A";
         const mobile = item.mobile || "-";
         const email = item.email || "-";
         const dob = item.dob || "-";
         const gender = item.gender || "-";
-        const cityVillage = item.cityVillage || "-";
+        const cityVillage = item.city_village || item.cityVillage || "-";
         const course = item.course || "-";
-        const qualification = item.qualification || "-";
+        const qualification = item.last_qualification || item.qualification || "-";
+
+        // Dynamic sequence number respecting ASC / DESC sort order
+        const serialNo =
+          sortOrder === "asc"
+            ? (currentPage - 1) * resultsPerPage + i + 1
+            : Math.max(1, (totalResults || admissions.length) - ((currentPage - 1) * resultsPerPage + i));
 
         return (
           <TableRow
@@ -31,7 +42,7 @@ const AdmissionTable = ({ admissions, currentPage = 1, resultsPerPage = 10, onDe
             {/* 1. Sr. No. */}
             <TableCell className="py-3 px-4">
               <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                {startIndex + i + 1}
+                {serialNo}
               </span>
             </TableCell>
 
@@ -102,7 +113,7 @@ const AdmissionTable = ({ admissions, currentPage = 1, resultsPerPage = 10, onDe
             <TableCell className="py-3 px-4 overflow-visible relative">
               <DateBox
                 created_at={item.created_at || item.createdAt}
-                updated_at={item.updated_at || item.updatedAt}
+                showUpdated={false}
               />
             </TableCell>
 
@@ -111,7 +122,7 @@ const AdmissionTable = ({ admissions, currentPage = 1, resultsPerPage = 10, onDe
               <button
                 type="button"
                 onClick={() => onDelete && onDelete(item._id || item.id || i)}
-                className="p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 rounded-lg transition-colors focus:outline-none"
+                className="p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 rounded-lg transition-colors focus:outline-none cursor-pointer"
                 title="Delete Admission Lead"
               >
                 <FiTrash2 className="w-4 h-4" />

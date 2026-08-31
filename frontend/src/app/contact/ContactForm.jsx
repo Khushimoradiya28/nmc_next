@@ -3,6 +3,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import styles from './page.module.css';
 import ContactServices from '@/services/ContactServices';
+import CourseServices from '@/services/CourseServices';
 
 // Custom Scrollbar Dropdown wrapper
 function ScrollableDropdown({ children, onWheel }) {
@@ -57,30 +58,19 @@ function ScrollableDropdown({ children, onWheel }) {
   );
 }
 
-const COURSE_OPTIONS = [
-  { value: 'bca', label: 'B.C.A. – ₹15,000/Sem' },
-  { value: 'bba', label: 'B.B.A. – ₹8,000/Sem' },
-  { value: 'bcom', label: 'B.Com – Merit Fees' },
-  { value: 'ba', label: 'B.A. – Merit Fees' },
-  { value: 'msw', label: 'M.S.W. – Merit Fees' },
-  { value: 'mcom', label: 'M.Com – Merit Fees' },
-  { value: 'ma', label: 'M.A. – Merit Fees' },
-  { value: 'dfd', label: 'DFD (Fashion Design) – Subsidized' },
-  { value: 'dnys', label: 'DNYS (Naturopathy & Yoga) – Subsidized' },
-];
-
 const TEACHER_OPTIONS = [
-  { value: 'general', label: 'General Inquiry & Helpdesk' },
-  { value: 'admission', label: 'Admission Department' },
-  { value: 'principal', label: 'Principal Office' },
-  { value: 'bca_dept', label: 'BCA & IT Department Faculty' },
-  { value: 'bba_dept', label: 'BBA & Management Faculty' },
-  { value: 'commerce_dept', label: 'B.Com & M.Com Faculty' },
-  { value: 'arts_dept', label: 'B.A. & M.A. Arts Faculty' },
-  { value: 'social_work', label: 'MSW Social Work Faculty' },
+  { value: 'General Inquiry & Helpdesk', label: 'General Inquiry & Helpdesk' },
+  { value: 'Admission Department', label: 'Admission Department' },
+  { value: 'Principal Office', label: 'Principal Office' },
+  { value: 'BCA & IT Department Faculty', label: 'BCA & IT Department Faculty' },
+  { value: 'BBA & Management Faculty', label: 'BBA & Management Faculty' },
+  { value: 'B.Com & M.Com Faculty', label: 'B.Com & M.Com Faculty' },
+  { value: 'B.A. & M.A. Arts Faculty', label: 'B.A. & M.A. Arts Faculty' },
+  { value: 'MSW Social Work Faculty', label: 'MSW Social Work Faculty' },
 ];
 
 export default function ContactForm() {
+  const [courseOptions, setCourseOptions] = useState([]);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -100,6 +90,24 @@ export default function ContactForm() {
 
   const courseRef = useRef(null);
   const teacherRef = useRef(null);
+
+  useEffect(() => {
+    async function loadCourses() {
+      try {
+        const res = await CourseServices.getCourseDropdown();
+        if (res && res.data && Array.isArray(res.data)) {
+          const mapped = res.data.map(item => ({
+            value: item.display_label || item.full_title || item.title,
+            label: item.display_label || item.full_title || item.title,
+          }));
+          setCourseOptions(mapped);
+        }
+      } catch (err) {
+        console.error("Failed to load courses dropdown:", err);
+      }
+    }
+    loadCourses();
+  }, []);
 
   useEffect(() => {
     function handleClickOutside(e) {
@@ -141,20 +149,21 @@ export default function ContactForm() {
     if (!formData.teacher)          errors.teacher   = 'Please select a teacher/department.';
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
-      return;  // Stop — do nothing until required fields are filled
+      return;
     }
     setFieldErrors({});
     setApiError('');
     setLoading(true);
     try {
       await ContactServices.submitInquiry({
-        firstName: formData.firstName,
-        lastName:  formData.lastName,
-        website:   formData.website,
-        reason:    formData.reason,
+        firstName: formData.firstName.trim(),
+        lastName:  formData.lastName.trim(),
+        website:   formData.website.trim(),
+        reason:    formData.reason.trim(),
         course:    formData.course,
         teacher:   formData.teacher,
-        message:   formData.message,
+        message:   formData.message.trim(),
+        source:    'page',
       });
       setSubmitted(true);
       setTimeout(() => {
@@ -171,7 +180,7 @@ export default function ContactForm() {
   // Inline error label style
   const errLabel = { display: 'block', color: '#dc2626', fontSize: '0.76rem', fontWeight: 600, marginTop: '0.3rem' };
 
-  const selectedCourseObj = COURSE_OPTIONS.find(c => c.value === formData.course);
+  const selectedCourseObj = courseOptions.find(c => c.value === formData.course);
   const selectedTeacherObj = TEACHER_OPTIONS.find(t => t.value === formData.teacher);
 
   if (submitted) {
@@ -313,7 +322,7 @@ export default function ContactForm() {
                   role="listbox"
                 >
                   <ScrollableDropdown onWheel={(e) => e.stopPropagation()}>
-                  {COURSE_OPTIONS.map((option) => {
+                  {courseOptions.map((option) => {
                     const isSelected = formData.course === option.value;
                     return (
                       <div

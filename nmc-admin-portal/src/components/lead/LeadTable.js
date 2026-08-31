@@ -9,9 +9,14 @@ import { FiGlobe, FiTrash2 } from 'react-icons/fi';
 import DateBox from '../form/DateBox';
 import ExpandableText from '../common/ExpandableText';
 
-const LeadTable = ({ products, currentPage = 1, resultsPerPage = 8, onDelete }) => {
-  const startIndex = (currentPage - 1) * resultsPerPage;
-
+const LeadTable = ({
+  products,
+  currentPage = 1,
+  resultsPerPage = 8,
+  totalResults = 0,
+  sortOrder = 'desc',
+  onDelete,
+}) => {
   return (
     <TableBody className="divide-y divide-gray-100 dark:divide-gray-700/60">
       {products?.map((product, i) => {
@@ -25,6 +30,12 @@ const LeadTable = ({ products, currentPage = 1, resultsPerPage = 8, onDelete }) 
         const teacherDept = product.teacher || product.teacher_department || product.choose_teacher_department || "-";
         const message = product.message || product.your_message || "-";
 
+        // Dynamic sequence number respecting ASC / DESC sort order
+        const serialNo =
+          sortOrder === "asc"
+            ? (currentPage - 1) * resultsPerPage + i + 1
+            : Math.max(1, (totalResults || products.length) - ((currentPage - 1) * resultsPerPage + i));
+
         return (
           <TableRow 
             key={product._id || product.id || i}
@@ -33,7 +44,7 @@ const LeadTable = ({ products, currentPage = 1, resultsPerPage = 8, onDelete }) 
             {/* Sr. No. */}
             <TableCell className="py-3 px-4">
               <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                {startIndex + i + 1}
+                {serialNo}
               </span>
             </TableCell>
 
@@ -93,7 +104,7 @@ const LeadTable = ({ products, currentPage = 1, resultsPerPage = 8, onDelete }) 
             <TableCell className="py-3 px-4 overflow-visible relative">
               <DateBox 
                 created_at={product.created_at || product.createdAt} 
-                updated_at={product.updated_at || product.updatedAt}
+                showUpdated={false}
               />
             </TableCell>
 

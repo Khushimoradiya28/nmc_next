@@ -269,6 +269,8 @@ const Leads = () => {
               products={leadsList}
               currentPage={currentPage}
               resultsPerPage={resultsPerPage}
+              totalResults={totalResults}
+              sortOrder={sortOrder}
               onDelete={handleOpenDeleteModal}
             />
           </Table>

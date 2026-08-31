@@ -5,9 +5,10 @@ import { usePathname } from 'next/navigation';
 import Image from 'next/image';
 import styles from './PopupForm.module.css';
 import ContactServices from '@/services/ContactServices';
+import CourseServices from '@/services/CourseServices';
 
 // Custom Select Component
-function CustomSelect({ name, value, onChange, options, placeholder, icon }) {
+function CustomSelect({ name, value, onChange, options = [], placeholder, icon }) {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef(null);
   const triggerRef = useRef(null);
@@ -103,25 +104,14 @@ function CustomSelect({ name, value, onChange, options, placeholder, icon }) {
   );
 }
 
-const courseOptions = [
-  { value: 'bba', label: 'BBA (Bachelor of Business Administration)' },
-  { value: 'bca', label: 'BCA (Bachelor of Computer Application)' },
-  { value: 'ba', label: 'BA (Bachelor of Arts)' },
-  { value: 'bcom', label: 'B.Com (Bachelor of Commerce)' },
-  { value: 'ma', label: 'MA (Master of Arts)' },
-  { value: 'mcom', label: 'M.Com (Master of Commerce)' },
-  { value: 'msw', label: 'MSW (Master of Social Work)' },
-  { value: 'dfd', label: 'Diploma in Fashion Designing (DFD/CFD)' },
-  { value: 'dnys', label: 'Diploma in Naturopathy (DNYS)' },
-];
-
 const teacherOptions = [
-  { value: 'general', label: 'General Inquiry' },
-  { value: 'admission', label: 'Admission Department' },
-  { value: 'principal', label: 'Principal Office' },
+  { value: 'General Inquiry & Helpdesk', label: 'General Inquiry & Helpdesk' },
+  { value: 'Admission Department', label: 'Admission Department' },
+  { value: 'Principal Office', label: 'Principal Office' },
 ];
 
 export default function PopupForm() {
+  const [courseOptions, setCourseOptions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
@@ -134,9 +124,26 @@ export default function PopupForm() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [apiError, setApiError] = useState('');
-  const [fieldErrors, setFieldErrors] = useState({});
   const pathname = usePathname();
+
+  // Load dynamic courses from backend API
+  useEffect(() => {
+    async function loadCourses() {
+      try {
+        const res = await CourseServices.getCourseDropdown();
+        if (res && res.data && Array.isArray(res.data)) {
+          const mapped = res.data.map(item => ({
+            value: item.display_label || item.full_title || item.title,
+            label: item.display_label || item.full_title || item.title,
+          }));
+          setCourseOptions(mapped);
+        }
+      } catch (err) {
+        console.error("Failed to load popup courses:", err);
+      }
+    }
+    loadCourses();
+  }, []);
 
   // Open popup 7 seconds after every page navigation
   useEffect(() => {
@@ -145,7 +152,7 @@ export default function PopupForm() {
 
     const timer = setTimeout(() => {
       setIsOpen(true);
-    }, 15000);
+    }, 7000);
 
     return () => clearTimeout(timer);
   }, [pathname]);
@@ -177,35 +184,24 @@ export default function PopupForm() {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-    if (fieldErrors[name]) setFieldErrors(prev => { const n = { ...prev }; delete n[name]; return n; });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const errors = {};
-    if (!formData.firstName.trim()) errors.firstName = 'First name is required.';
-    if (!formData.lastName.trim())  errors.lastName  = 'Last name is required.';
-    if (!formData.reason.trim())    errors.reason    = 'Reason is required.';
-    if (!formData.course)           errors.course    = 'Please select a course.';
-    if (!formData.teacher)          errors.teacher   = 'Please select a teacher/department.';
-    if (Object.keys(errors).length > 0) {
-      setFieldErrors(errors);
-      return;  // Stop — nothing happens until required fields are filled
-    }
-    setFieldErrors({});
-    setApiError('');
+    if (!formData.firstName.trim()) return;
+
     setLoading(true);
     try {
       await ContactServices.submitInquiry({
-        firstName: formData.firstName,
-        lastName:  formData.lastName,
-        website:   formData.website,
-        reason:    formData.reason,
-        course:    formData.course,
-        teacher:   formData.teacher,
-        message:   formData.message,
+        firstName: formData.firstName.trim(),
+        lastName:  formData.lastName.trim(),
+        website:   formData.website.trim(),
+        reason:    formData.reason.trim(),
+        course:    formData.course || '',
+        teacher:   formData.teacher || '',
+        message:   formData.message.trim(),
+        source:    'modal',
       });
       setSubmitted(true);
       setTimeout(() => {
@@ -214,14 +210,11 @@ export default function PopupForm() {
         setIsOpen(false);
       }, 4000);
     } catch (err) {
-      setApiError(err.message || 'Failed to submit. Please try again.');
+      console.error("Popup submission error:", err);
     } finally {
       setLoading(false);
     }
   };
-
-  // Inline error label style
-  const errLabel = { display: 'block', color: '#dc2626', fontSize: '0.76rem', fontWeight: 600, marginTop: '0.3rem' };
 
   if (!isOpen) return null;
 
@@ -253,21 +246,20 @@ export default function PopupForm() {
           {submitted ? (
             <div className={styles.successMessage}>
               <div className={styles.successIcon}>
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
-                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"></polyline>
                 </svg>
               </div>
-              <h4>Message Sent Successfully!</h4>
-              <p>Our representative will get back to you within 24 hours.</p>
+              <h3>Message Sent Successfully!</h3>
+              <p>Once we receive your information our representative will get back to you within 24 hours.</p>
             </div>
           ) : (
             <>
-              {/* Header with Graduation Cap */}
+              {/* Header */}
               <div className={styles.popupHeader}>
-                <div className={styles.headerRow}>
-                  <div className={styles.capIcon}>
-                    <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="#8a0000" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <div className={styles.headerIconTitle}>
+                  <div className={styles.mortarboardIcon}>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
                       <path d="M6 12v5c0 0 2.5 3 6 3s6-3 6-3v-5"/>
                     </svg>
@@ -281,7 +273,7 @@ export default function PopupForm() {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className={styles.popupForm} noValidate>
+              <form onSubmit={handleSubmit} className={styles.popupForm}>
                 <div className={styles.formGrid}>
                   {/* First Name */}
                   <div className={styles.formGroup}>
@@ -296,12 +288,12 @@ export default function PopupForm() {
                         type="text"
                         name="firstName"
                         className={styles.formInput}
-                        placeholder="Your First Name"
+                        placeholder="Your name here..."
                         value={formData.firstName}
                         onChange={handleChange}
+                        required
                       />
                     </div>
-                    {fieldErrors.firstName && <span style={errLabel}>⚠ {fieldErrors.firstName}</span>}
                   </div>
 
                   {/* Last Name */}
@@ -317,12 +309,11 @@ export default function PopupForm() {
                         type="text"
                         name="lastName"
                         className={styles.formInput}
-                        placeholder="Your Last Name"
+                        placeholder="Your last name here..."
                         value={formData.lastName}
                         onChange={handleChange}
                       />
                     </div>
-                    {fieldErrors.lastName && <span style={errLabel}>⚠ {fieldErrors.lastName}</span>}
                   </div>
 
                   {/* Website */}
@@ -339,7 +330,7 @@ export default function PopupForm() {
                         type="text"
                         name="website"
                         className={styles.formInput}
-                        placeholder="Enter your Website"
+                        placeholder="Enter your Website ..."
                         value={formData.website}
                         onChange={handleChange}
                       />
@@ -359,12 +350,11 @@ export default function PopupForm() {
                         type="text"
                         name="reason"
                         className={styles.formInput}
-                        placeholder="Reason contacting us"
+                        placeholder="Reason contacting us ..."
                         value={formData.reason}
                         onChange={handleChange}
                       />
                     </div>
-                    {fieldErrors.reason && <span style={errLabel}>⚠ {fieldErrors.reason}</span>}
                   </div>
 
                   {/* Choose Course - Custom Select */}
@@ -382,9 +372,7 @@ export default function PopupForm() {
                         </svg>
                       }
                     />
-                    {fieldErrors.course && <span style={errLabel}>⚠ {fieldErrors.course}</span>}
                   </div>
-
 
                   {/* Choose Teacher - Custom Select */}
                   <div className={styles.formGroupFull}>
@@ -403,8 +391,6 @@ export default function PopupForm() {
                         </svg>
                       }
                     />
-                    <input type="hidden" name="teacher" value={formData.teacher} />
-                    {fieldErrors.teacher && <span style={errLabel}>⚠ {fieldErrors.teacher}</span>}
                   </div>
 
                   {/* Message */}
@@ -418,21 +404,17 @@ export default function PopupForm() {
                       <textarea
                         name="message"
                         className={styles.formTextarea}
-                        placeholder="Your message"
+                        placeholder="Your message..."
                         value={formData.message}
                         onChange={handleChange}
+                        required
                       ></textarea>
                     </div>
                   </div>
 
                   {/* Submit Button */}
                   <div className={styles.formGroupFull}>
-                    {apiError && (
-                      <p style={{ color: '#dc2626', fontSize: '0.82rem', marginBottom: '0.75rem', fontWeight: 600 }}>
-                        ⚠ {apiError}
-                      </p>
-                    )}
-                    <button type="submit" className={styles.submitBtn} disabled={loading} style={{ opacity: loading ? 0.7 : 1 }}>
+                    <button type="submit" className={styles.submitBtn} disabled={loading}>
                       <span className={styles.submitBtnIcon}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                           <line x1="22" y1="2" x2="11" y2="13"></line>

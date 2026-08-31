@@ -2,9 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import styles from './page.module.css';
+import AdmissionServices from '@/services/AdmissionServices';
+import CourseServices from '@/services/CourseServices';
 
-// Themed custom dropdown (matches site's red/gold theme instead of the default
-// browser select styling)
+// Themed custom dropdown
 function CustomSelect({ name, value, onChange, options, placeholder }) {
   const [isOpen, setIsOpen] = useState(false);
   const selectRef = useRef(null);
@@ -74,25 +75,11 @@ function CustomSelect({ name, value, onChange, options, placeholder }) {
 }
 
 const genderOptions = [
-  { value: 'female', label: 'Female' },
-  { value: 'other', label: 'Other' },
+  { value: 'Female', label: 'Female' },
+  { value: 'Other', label: 'Other' },
 ];
 
-const courseOptions = [
-  { value: 'bba', label: 'BBA (₹8,000/Sem)' },
-  { value: 'bca', label: 'BCA (₹15,000/Sem)' },
-  { value: 'ba', label: 'BA (Bachelor of Arts)' },
-  { value: 'bcom', label: 'B.Com (Bachelor of Commerce)' },
-  { value: 'ma', label: 'MA (Master of Arts)' },
-  { value: 'mcom', label: 'M.Com (Master of Commerce)' },
-  { value: 'msw', label: 'MSW (Master of Social Work)' },
-  { value: 'pgdpa', label: 'PGDPA (Public Administration)' },
-  { value: 'fd', label: 'Diploma in Fashion Designing' },
-  { value: 'dmphw', label: 'DMPHW (Health Worker)' },
-  { value: 'dhsi', label: 'DHSI (Sanitary Inspector)' },
-  { value: 'dnys', label: 'DNYS (Naturopathy)' },
-  { value: 'cfd', label: 'Certificate in Fashion Designing' },
-];
+const DEFAULT_COURSE_OPTIONS = [];
 
 const qualificationOptions = [
   { value: '10th', label: '10th Pass' },
@@ -102,10 +89,29 @@ const qualificationOptions = [
 ];
 
 export default function AdmissionForm() {
+  const [courseOptions, setCourseOptions] = useState([]);
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', gender: '', dob: '',
     course: '', qualification: '', city: ''
   });
+
+  useEffect(() => {
+    async function loadCourses() {
+      try {
+        const res = await CourseServices.getCourseDropdown();
+        if (res && res.data && Array.isArray(res.data)) {
+          const mapped = res.data.map(item => ({
+            value: item.display_label || item.full_title || item.title,
+            label: item.display_label || item.full_title || item.title,
+          }));
+          setCourseOptions(mapped);
+        }
+      } catch (err) {
+        console.error("Failed to load courses dropdown:", err);
+      }
+    }
+    loadCourses();
+  }, []);
   const [fieldErrors, setFieldErrors] = useState({});
   const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -113,10 +119,13 @@ export default function AdmissionForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target || e;
-    setFormData({ ...formData, [name]: value });
-    // Clear error when user types/selects
+    setFormData((prev) => ({ ...prev, [name]: value }));
     if (fieldErrors[name]) {
-      setFieldErrors({ ...fieldErrors, [name]: null });
+      setFieldErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
     }
   };
 
@@ -142,19 +151,41 @@ export default function AdmissionForm() {
     setLoading(true);
 
     try {
-      // TODO: Replace with actual API call once endpoint is confirmed
-      // await AdmissionServices.submitApplication(formData);
-      
-      // Simulating API delay
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const selectedCourseLabel = formData.course;
+      const selectedGenderLabel = genderOptions.find(g => g.value === formData.gender)?.label || formData.gender;
+      const selectedQualLabel = qualificationOptions.find(q => q.value === formData.qualification)?.label || formData.qualification;
 
+      console.log("[AdmissionForm] Submitting application payload:", {
+        full_name: formData.name.trim(),
+        mobile: formData.phone.trim(),
+        email: formData.email.trim(),
+        dob: formData.dob,
+        gender: selectedGenderLabel,
+        city_village: formData.city.trim(),
+        course: selectedCourseLabel,
+        last_qualification: selectedQualLabel,
+      });
+
+      const res = await AdmissionServices.submitApplication({
+        full_name: formData.name.trim(),
+        mobile: formData.phone.trim(),
+        email: formData.email.trim(),
+        dob: formData.dob,
+        gender: selectedGenderLabel,
+        city_village: formData.city.trim(),
+        course: selectedCourseLabel,
+        last_qualification: selectedQualLabel,
+      });
+
+      console.log("[AdmissionForm] Application submitted successfully:", res);
       setSubmitted(true);
       setTimeout(() => {
         setFormData({ name: '', email: '', phone: '', gender: '', dob: '', course: '', qualification: '', city: '' });
         setSubmitted(false);
       }, 6000);
     } catch (err) {
-      setApiError(err.message || 'Failed to submit. Please try again.');
+      console.error("[AdmissionForm] Submission failed:", err);
+      setApiError(err.message || 'Failed to submit application. Please try again.');
     } finally {
       setLoading(false);
     }
