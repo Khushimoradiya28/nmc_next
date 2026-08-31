@@ -193,20 +193,31 @@ exports.login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() }).select("+password");
+    const user = await User.findOne({ email: email.toLowerCase() })
+      .select("+password")
+      .populate("role", "role_name");
 
     if (!user) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(401).json({ status: 401, success: false, message: "Invalid email or password" });
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid email or password" });
+      return res.status(401).json({ status: 401, success: false, message: "Invalid email or password" });
     }
 
+    const roleName = user.role && typeof user.role === "object" ? user.role.role_name : "staff";
+
     const token = jwt.sign(
-      { id: user._id, email: user.email, role: user.role },
+      {
+        id: user._id,
+        email: user.email,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        role: user.role?._id || user.role,
+        role_name: roleName,
+      },
       config.JWT_SECRET,
       { expiresIn: "30d" }
     );
@@ -215,9 +226,13 @@ exports.login = async (req, res) => {
 
     res.status(200).json({
       status: 200,
+      success: true,
       message: "Login successful",
       token,
-      user,
+      user: {
+        ...user.toObject(),
+        role_name: roleName,
+      },
     });
 
   } catch (err) {

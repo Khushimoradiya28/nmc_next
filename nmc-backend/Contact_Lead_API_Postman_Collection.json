@@ -1,0 +1,156 @@
+{
+  "info": {
+    "_postman_id": "contact-lead-api-collection-v1",
+    "name": "NMC - Contact Us & Leads APIs",
+    "description": "Postman Collection for Contact Us Form Submission (Modal & Page) and Admin Lead Management.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1. Submit Contact Form (Public - From Modal or Page)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"first_name\": \"Kavita\",\n  \"last_name\": \"Patel\",\n  \"website\": \"https://kavitapatel.me\",\n  \"reason\": \"Inquiry about MBBS Admission 2026\",\n  \"course\": \"MBBS\",\n  \"teacher\": \"Dr. Rajesh Sharma\",\n  \"message\": \"Please share complete admission criteria and fee schedule.\",\n  \"email\": \"kavita@example.com\",\n  \"phone\": \"9876543210\",\n  \"source\": \"modal\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/contact/submit",
+          "host": ["{{base_url}}"],
+          "path": ["api", "contact", "submit"]
+        },
+        "description": "Public endpoint for website visitors to submit contact inquiries from modal or contact page."
+      },
+      "response": []
+    },
+    {
+      "name": "2. Get Contact Leads List (Super Admin & Department Only)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/contact?page=1&limit=10&status=all&source=all&search=",
+          "host": ["{{base_url}}"],
+          "path": ["api", "contact"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "status",
+              "value": "all",
+              "description": "pending | in_progress | contacted | closed | all"
+            },
+            {
+              "key": "source",
+              "value": "all",
+              "description": "modal | page | contact_us | all"
+            },
+            {
+              "key": "search",
+              "value": "",
+              "description": "Search by name, reason, course, teacher, or message"
+            }
+          ]
+        },
+        "description": "Fetches leads list. Blocked for Content role."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get Single Lead by ID",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/contact/{{lead_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "contact", "{{lead_id}}"]
+        },
+        "description": "Get single lead details."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Update Lead Status (Super Admin & Department Only)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"contacted\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/contact/{{lead_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "contact", "{{lead_id}}"]
+        },
+        "description": "Update lead status to pending, in_progress, contacted, or closed."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Delete Lead (Soft Delete - Super Admin Only)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/contact/{{lead_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "contact", "{{lead_id}}"]
+        },
+        "description": "Soft deletes lead record."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "jwt_token",
+      "value": "PASTE_YOUR_JWT_TOKEN_HERE"
+    },
+    {
+      "key": "lead_id",
+      "value": "66d35..."
+    }
+  ]
+}

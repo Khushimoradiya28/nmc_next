@@ -68,7 +68,21 @@ app.use("/api", (req, res, next) => {
     "academic-programs",
     "faculty",
     "faculties",
-    "master"
+    "master",
+    "banner",
+    "banners",
+    "gallery",
+    "galleries",
+    "contact",
+    "contact-us",
+    "leads",
+    "lead",
+    "admission",
+    "admissions",
+    "admission-lead",
+    "admission-leads",
+    "courses",
+    "course"
   ];
 
   if (req.method === "GET" || openPaths.some((key) => req.path.toLowerCase().includes(key))) {

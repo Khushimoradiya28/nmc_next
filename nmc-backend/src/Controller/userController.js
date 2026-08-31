@@ -1,450 +1,538 @@
 const User = require("../Model/user");
 const Role = require("../Model/role");
+const moment = require("moment-timezone");
 const config = require("../Config/app");
 const fs = require("fs");
 const path = require("path");
-const { saveLocalAndCreateWebp, uploadToS3AndCreateWebp, deleteLocalImages, deleteS3Objects, copyImage } = require("../Utils/imageProcessor");
+const {
+  saveLocalAndCreateWebp,
+  uploadToS3AndCreateWebp,
+  deleteLocalImages,
+  deleteS3Objects,
+} = require("../Utils/imageProcessor");
+const { logActivity } = require("../Utils/activityLogger");
 
-exports.addUser = async (req, res, next) => {
-  try {
-    const body = req.body || {};
+const isProduction = () => config.NODE_ENV === "production";
 
-    Object.keys(body).forEach(key => {
-      body[key.toLowerCase()] = body[key];
-    });
+/**
+ * Format user output with full URLs and Asia/Kolkata timestamps
+ */
+const formatUser = (user, req) => {
+  const doc = user._doc || user;
+  const baseUrl = `${req.protocol}://${req.get("host")}`;
 
-    if (!body.mobile) {
-      return res.status(400).json({
-        status: 400,
-        message: "Mobile number is required",
-      });
-    }
+  let profileImgUrl = null;
+  let profileImgWebpUrl = null;
 
-    const orConditions = [];
-    if (body.email) orConditions.push({ email: body.email });
-    if (body.mobile) orConditions.push({ mobile: body.mobile });
+  if (doc.profile_img) {
+    profileImgUrl = doc.profile_img.startsWith("http")
+      ? doc.profile_img
+      : `${baseUrl}/${doc.profile_img.replace(/\\/g, "/")}`;
+  }
+  if (doc.profile_img_webp) {
+    profileImgWebpUrl = doc.profile_img_webp.startsWith("http")
+      ? doc.profile_img_webp
+      : `${baseUrl}/${doc.profile_img_webp.replace(/\\/g, "/")}`;
+  }
 
-    const existingUser = await User.findOne({
-      $or: orConditions,
-    });
+  let roleInfo = null;
+  if (doc.role && typeof doc.role === "object") {
+    roleInfo = {
+      _id: doc.role._id,
+      role_name: doc.role.role_name,
+    };
+  }
 
-    if (existingUser) {
-      if (req.file && config.NODE_ENV !== "production") {
-        // delete local file if created by multer
-        const imagePath = path.join(__dirname, "../media/profile", req.file.filename);
-        if (fs.existsSync(imagePath)) fs.unlinkSync(imagePath);
-      }
-      return res.status(400).json({
-        status: 400,
-        message:
-          existingUser.email === body.email
-            ? "Email already exists"
-            : "Mobile number already exists",
-      });
-    }
+  return {
+    _id: doc._id,
+    first_name: doc.first_name || "",
+    last_name: doc.last_name || "",
+    email: doc.email || "",
+    mobile: doc.mobile || "",
+    role: roleInfo || doc.role,
+    role_name: doc.role?.role_name || null,
+    profile_img: doc.profile_img || null,
+    profile_img_webp: doc.profile_img_webp || null,
+    profile_img_url: profileImgUrl,
+    profile_img_webp_url: profileImgWebpUrl,
+    status: doc.status || "1",
+    guid: doc.guid,
+    created_at: moment(doc.created_at).tz("Asia/Kolkata").format("YYYY-MM-DD HH:mm:ss"),
+    updated_at: moment(doc.updated_at).tz("Asia/Kolkata").format("YYYY-MM-DD HH:mm:ss"),
+  };
+};
 
-    body.utm_source || req.body.USOURCE || null;
-    body.utm_medium || req.body.UMEDIUM || null;
-    body.utm_campaign || req.body.UCAMPAIGN || null;
-    body.utm_content || req.body.UCONTENT || null;
-    body.utm_term || req.body.UTERM || null;
-
-    body.ireferrer || req.body.IREFERRER || null;
-    body.lreferrer || req.body.LREFERRER || null;
-    body.ilandingpage || req.body.ILANDPAGE || null;
-    body.visits ? parseInt(req.body.visits) : (req.body.VISITS ? parseInt(req.body.VISITS) : 0);
-
-    let roleDoc = null;
-    if (body.role_id) {
-      roleDoc = await Role.findById(body.role_id);
-      if (!roleDoc) {
-        return res.status(400).json({
-          status: 400,
-          message: "Invalid role_id"
-        });
-      }
-    }
-
-    body.role = roleDoc ? roleDoc._id : null;
-
-    if (req.file) {
-      if (config.NODE_ENV === "production") {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "profile");
-        body.profile_img = uploadResult.originalKey;
-        body.profile_img_webp = uploadResult.webpKey;
-      } else {
-        const result = await saveLocalAndCreateWebp(req.file, "profile");
-        body.profile_img = result.originalPath;
-        body.profile_img_webp = result.webpPath;
+const deleteUploadedTemp = (file) => {
+  if (file && !isProduction()) {
+    const uploadedFilePath = path.join(__dirname, "../../", file.path);
+    if (fs.existsSync(uploadedFilePath)) {
+      try {
+        fs.unlinkSync(uploadedFilePath);
+      } catch (e) {
+        // ignore
       }
     }
-
-    const user = await User.create(body);
-
-    res.status(200).json({
-      status: 200,
-      message: "User created successfully",
-      data: user,
-    });
-
-  } catch (error) {
-    next(error);
   }
 };
 
+// @desc    Get all staff/admin users (Super Admin Only)
+// @route   GET /api/user/list or POST /api/user/list
 exports.getAllUsers = async (req, res, next) => {
   try {
-    const { status, search, limit, offset, sort_by, sort_order, _id, role_id, is_keep_update } = req.body || {};
+    const queryParams = req.method === "POST" ? req.body : req.query;
+    const {
+      page = 1,
+      limit = 10,
+      search,
+      status,
+      role_id,
+      role_name,
+      sort_by = "created_at",
+      sort_order = "desc",
+    } = queryParams || {};
 
-    const statusFilter = status && status.length ? status : ["1", "0"];
-    let query = { status: { $in: statusFilter } };
+    const query = {};
 
-    if (_id) {
-      query._id = _id;
+    if (status && status !== "all") {
+      query.status = status.toString().trim();
     }
 
     if (role_id) {
       query.role = role_id;
+    } else if (role_name && role_name !== "all") {
+      const targetRole = await Role.findOne({
+        role_name: { $regex: new RegExp(`^${role_name.trim()}$`, "i") },
+      });
+      if (targetRole) {
+        query.role = targetRole._id;
+      }
     }
 
-    if (is_keep_update) {
-      query.is_keep_update = is_keep_update;
-    }
-
-    if (search) {
+    if (search && search.trim()) {
+      const searchRegex = { $regex: search.trim(), $options: "i" };
       query.$or = [
-        { first_name: { $regex: search, $options: "i" } },
-        { last_name: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-        { mobile: { $regex: search, $options: "i" } },
+        { first_name: searchRegex },
+        { last_name: searchRegex },
+        { email: searchRegex },
+        { mobile: searchRegex },
       ];
     }
 
-    const pageLimit = limit ? parseInt(limit) : 0;
-    const pageOffset = offset ? parseInt(offset) : 0;
-    const sortField = sort_by || "createdAt";
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const pageLimit = Math.max(1, parseInt(limit) || 10);
+    const skip = (pageNum - 1) * pageLimit;
     const sortDirection = sort_order === "asc" ? 1 : -1;
 
-    let userQuery = User.find(query)
-      .populate("role", "role_name")
-      .sort({ [sortField]: sortDirection })
-      .skip(pageOffset);
+    const [users, totalCount] = await Promise.all([
+      User.find(query)
+        .populate("role", "role_name")
+        .sort({ [sort_by]: sortDirection })
+        .skip(skip)
+        .limit(pageLimit),
+      User.countDocuments(query),
+    ]);
 
-    if (pageLimit > 0) userQuery = userQuery.limit(pageLimit);
-
-    const user = await userQuery;
-    const count = await User.countDocuments(query);
-
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
-    const s3Url = "https://runrkids.s3.ap-south-1.amazonaws.com/media/profile";
-
-    const users = user.map((user) => {
-      const fileName = user.profile_img ? user.profile_img.split("/").pop() : null;
-
-      return {
-        ...user.toObject(),
-        role_id: user.role?._id || null,
-        role_name: user.role?.role_name || null,
-        profile_img: fileName
-          ? (config.NODE_ENV === "production"
-            ? `${s3Url}/${fileName}`
-            : `${baseUrl}/media/profile/${fileName}`
-          )
-          : null,
-      };
-    });
-
-    res.status(200).json({
-      message: "Users fetched successfully",
-      status: 200,
-      count,
-      data: users,
-    });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// helper already provided by you
-const getFileName = (imgPath) => {
-  if (!imgPath) return null;
-  return imgPath.split("/").pop();
-};
-
-const isProduction = () => config.NODE_ENV === "production";
-
-exports.updateUser = async (req, res, next) => {
-
-  const deleteUploadedTemp = () => {
-    if (req.file && !isProduction()) {
-      const uploadedFilePath = path.join(__dirname, "../media/profile", req.file.filename);
-      if (fs.existsSync(uploadedFilePath)) {
-        try {
-          fs.unlinkSync(uploadedFilePath);
-        } catch (e) {
-          console.warn("Failed to delete temp file:", e.message);
-        }
-      }
-    }
-  };
-
-  if (!req.body || !req.body.id) {
-    deleteUploadedTemp();
-    return res.status(400).json({
-      status: 400,
-      error: { id: ["ID field is required."] },
-    });
-  }
-
-  try {
-    const { id } = req.body;
-    const existingUser = await User.findById(id);
-    if (!existingUser) {
-      deleteUploadedTemp();
-      return res.status(404).json({ message: "User not found" });
-    }
-
-    const updateData = {};
-    const fields = [
-      "first_name",
-      "last_name",
-      "email",
-      // "password",
-      "birthday",
-      "status",
-      "is_keep_update",
-    ];
-    fields.forEach((field) => {
-      if (req.body[field] !== undefined) updateData[field] = req.body[field];
-    });
-
-    if (req.body.role_id !== undefined) {
-      const roleDoc = await Role.findById(req.body.role_id);
-      if (!roleDoc) {
-        deleteUploadedTemp();
-        return res.status(400).json({
-          status: 400,
-          message: "Invalid role_id",
-        });
-      }
-      updateData.role = roleDoc._id;
-    }
-
-    if (req.file) {
-      let newOriginal, newWebp;
-      try {
-        if (isProduction()) {
-          const uploadResult = await uploadToS3AndCreateWebp(req.file, "profile");
-          newOriginal = uploadResult.originalKey;
-          newWebp = uploadResult.webpKey;
-        } else {
-          const result = await saveLocalAndCreateWebp(req.file, "profile");
-          newOriginal = result.originalPath;
-          newWebp = result.webpPath;
-        }
-      } catch (err) {
-        deleteUploadedTemp();
-        throw err;
-      }
-
-      const oldOriginal = existingUser.profile_img;
-      const oldWebp = existingUser.profile_img_webp;
-      
-      try {
-        if (isProduction()) {
-            const keysToDelete = new Set();
-            if (oldOriginal) keysToDelete.add(oldOriginal);
-            if (oldWebp) keysToDelete.add(oldWebp);
-  
-            if (!oldWebp && oldOriginal) {
-              const ext = path.extname(oldOriginal);
-              const derived = oldOriginal.endsWith(ext) ? oldOriginal.replace(new RegExp(`${ext}$`), ".webp") : oldOriginal + ".webp";
-              keysToDelete.add(derived);
-            }
-  
-            const keys = Array.from(keysToDelete).filter(Boolean);
-            if (keys.length > 0) await deleteS3Objects(keys);
-          } else {
-            deleteLocalImages(oldOriginal, oldWebp);
-          }
-      } catch (err) {
-          console.warn("Failed to delete old images:", err.message);
-      }
-
-      updateData.profile_img = newOriginal;
-      updateData.profile_img_webp = newWebp;
-    } else if (req.body.profile_image_id) {
-        // Handle Default Cartoon Selection
-        const cartoonImage = await ProfileImage.findById(req.body.profile_image_id);
-        if (!cartoonImage) {
-            return res.status(400).json({ status: 400, message: "Invalid profile_image_id" });
-        }
-
-        let newOriginal, newWebp;
-        try {
-            const copied = await copyImage(cartoonImage.image_url, "profile");
-            newOriginal = copied.original;
-            newWebp = copied.webp;
-        } catch (err) {
-            console.error("Failed to copy profile image:", err);
-             // Proceed without failing everything? Or fail? Best to fail if image selection was explicit.
-             return res.status(500).json({ status: 500, message: "Failed to set profile image" });
-        }
-        
-        const oldOriginal = existingUser.profile_img;
-        const oldWebp = existingUser.profile_img_webp;
-
-        try {
-            if (isProduction()) {
-                const keysToDelete = new Set();
-                if (oldOriginal) keysToDelete.add(oldOriginal);
-                if (oldWebp) keysToDelete.add(oldWebp);
-      
-                if (!oldWebp && oldOriginal) {
-                  const ext = path.extname(oldOriginal);
-                  const derived = oldOriginal.endsWith(ext) ? oldOriginal.replace(new RegExp(`${ext}$`), ".webp") : oldOriginal + ".webp";
-                  keysToDelete.add(derived);
-                }
-      
-                const keys = Array.from(keysToDelete).filter(Boolean);
-                if (keys.length > 0) await deleteS3Objects(keys);
-              } else {
-                deleteLocalImages(oldOriginal, oldWebp);
-              }
-        } catch (err) {
-            console.warn("Failed to delete old images:", err.message);
-        }
-
-        updateData.profile_img = newOriginal;
-        updateData.profile_img_webp = newWebp;
-    }
-
-    updateData.updated_at = Date.now();
-
-    const updatedUser = await User.findByIdAndUpdate(id, updateData, {
-      new: true,
-      runValidators: true,
-      context: "query",
-    });
+    const totalPages = Math.ceil(totalCount / pageLimit) || 1;
 
     return res.status(200).json({
+      success: true,
       status: 200,
-      message: "User updated successfully",
-      data: updatedUser,
+      message: "Users fetched successfully.",
+      data: users.map((u) => formatUser(u, req)),
+      meta: {
+        total_records: totalCount,
+        current_page: pageNum,
+        total_pages: totalPages,
+        limit: pageLimit,
+      },
     });
-  } catch (error) {
-    // ensure uploaded temp removed in dev
-    deleteUploadedTemp();
-    next(error);
-  }
-};
-
-exports.deleteUser = async (req, res, next) => {
-
-  if (!req.body || !req.body.id) {
-    return res.status(400).json({
-      status: 400,
-      error: { id: ["ID field is required."] },
-    });
-  }
-
-  try {
-    const { id } = req.body;
-
-    const user = await User.findByIdAndUpdate(
-      id,
-      { status: "0", updated_at: Date.now() },
-      { new: true }
-    );
-    if (!user) {
-      return res.status(404).json({ message: "User not found" });
-    }
-    res.status(200).json({ status: 200, message: "User deleted successfully", data: user });
   } catch (error) {
     next(error);
   }
 };
 
-exports.getAllCustomerOrder = async (req, res, next) => {
+// @desc    Get single user by ID
+// @route   GET /api/user/:id
+exports.getUserById = async (req, res, next) => {
   try {
-    const { status, search, limit, offset, sort_by, sort_order } = req.body || {};
+    const { id } = req.params;
 
-    // 1. Find Customer Role to filter by it
-    const customerRole = await Role.findOne({ role_name: { $regex: /^customer$/i } });
-    
-    // If role doesn't exist, returns empty
-    if (!customerRole) {
-      return res.status(200).json({
-        message: "Customer role not found",
-        status: 200,
-        count: 0,
-        data: [],
+    if (!id || !id.toString().trim()) {
+      return res.status(422).json({
+        status: 422,
+        success: false,
+        message: "Validation error: Unable to process input fields",
+        errors: ["User ID is required."],
       });
     }
 
-    const statusFilter = status && status.length ? status : ["1"];
-    let query = { 
-      role: customerRole._id,
-      status: { $in: statusFilter } 
-    };
+    const isMongoId = /^[0-9a-fA-F]{24}$/.test(id.toString().trim());
+    const query = isMongoId
+      ? { _id: id.toString().trim() }
+      : { guid: id.toString().trim() };
 
-    if (search) {
-      query.$or = [
-        { first_name: { $regex: search, $options: "i" } },
-        { last_name: { $regex: search, $options: "i" } },
-        { email: { $regex: search, $options: "i" } },
-        { mobile: { $regex: search, $options: "i" } },
-      ];
+    const user = await User.findOne(query).populate("role", "role_name");
+    if (!user) {
+      return res.status(404).json({
+        status: 404,
+        success: false,
+        message: "User not found.",
+      });
     }
 
-    const pageLimit = limit ? parseInt(limit) : 0;
-    const pageOffset = offset ? parseInt(offset) : 0;
-    const sortField = sort_by || "createdAt";
-    const sortDirection = sort_order === "asc" ? 1 : -1;
-
-    let userQuery = User.find(query)
-      .populate("role", "role_name")
-      .sort({ [sortField]: sortDirection })
-      .skip(pageOffset);
-
-    if (pageLimit > 0) userQuery = userQuery.limit(pageLimit);
-
-    const users = await userQuery;
-    const count = await User.countDocuments(query);
-
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
-    const s3Url = "https://runrkids.s3.ap-south-1.amazonaws.com/media/profile";
-
-    // Process users and get order counts
-    const usersWithOrderCount = await Promise.all(users.map(async (user) => {
-      const fileName = user.profile_img ? user.profile_img.split("/").pop() : null;
-      
-      const profileImgUrl = fileName
-        ? (config.NODE_ENV === "production"
-          ? `${s3Url}/${fileName}`
-          : `${baseUrl}/media/profile/${fileName}`
-        )
-        : null;
-
-      // Count orders for this user (default to 0)
-      const totalOrders = 0;
-
-      return {
-        ...user.toObject(),
-        role_id: user.role?._id || null,
-        role_name: user.role?.role_name || null,
-        profile_img: profileImgUrl,
-        total_orders: totalOrders
-      };
-    }));
-
-    res.status(200).json({
-      message: "Customer orders fetched successfully",
+    return res.status(200).json({
+      success: true,
       status: 200,
-      count,
-      data: usersWithOrderCount,
+      message: "User fetched successfully.",
+      data: formatUser(user, req),
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Add new staff user with role (Super Admin Only)
+// @route   POST /api/user/add or POST /api/user
+exports.addUser = async (req, res, next) => {
+  try {
+    const body = req.body || {};
+    const errors = [];
+
+    const email = body.email ? body.email.toString().toLowerCase().trim() : "";
+    const mobile = body.mobile ? body.mobile.toString().trim() : "";
+    const password = body.password ? body.password.toString().trim() : "";
+    const roleInput = body.role_name || body.role_id || body.role;
+
+    if (!email) errors.push("email is required and cannot be blank.");
+    if (!password) errors.push("password is required and cannot be blank (min 8 chars).");
+    if (password && password.length < 8) errors.push("password must be at least 8 characters long.");
+    if (!roleInput) errors.push("role_name or role_id is required ('super_admin', 'department', 'content').");
+
+    // Resolve Role
+    let roleDoc = null;
+    if (roleInput) {
+      const isId = /^[0-9a-fA-F]{24}$/.test(roleInput.toString().trim());
+      if (isId) {
+        roleDoc = await Role.findById(roleInput.toString().trim());
+      } else {
+        const normalizedRole = roleInput.toString().trim();
+        roleDoc = await Role.findOne({
+          role_name: { $regex: new RegExp(`^${normalizedRole}$`, "i") },
+        });
+
+        // Auto-create role if it doesn't exist
+        if (!roleDoc && ["super_admin", "admin", "department", "content"].includes(normalizedRole.toLowerCase())) {
+          roleDoc = await Role.create({
+            role_name: normalizedRole,
+            status: 1,
+          });
+        }
+      }
+    }
+
+    if (!roleDoc) {
+      errors.push("Invalid role specified. Supported roles: 'super_admin', 'department', 'content'.");
+    }
+
+    // Check duplicate email / mobile
+    const orConditions = [];
+    if (email) orConditions.push({ email });
+    if (mobile) orConditions.push({ mobile });
+
+    if (orConditions.length > 0) {
+      const existing = await User.findOne({ $or: orConditions });
+      if (existing) {
+        if (existing.email === email) errors.push("A user with this email address already exists.");
+        if (mobile && existing.mobile === mobile) errors.push("A user with this mobile number already exists.");
+      }
+    }
+
+    if (errors.length > 0) {
+      deleteUploadedTemp(req.file);
+      return res.status(422).json({
+        status: 422,
+        success: false,
+        message: "Validation error: Unable to process input fields",
+        errors,
+      });
+    }
+
+    let profilePath = null;
+    let profileWebpPath = null;
+
+    if (req.file) {
+      if (isProduction()) {
+        const uploadResult = await uploadToS3AndCreateWebp(req.file, "profile");
+        profilePath = uploadResult.originalKey;
+        profileWebpPath = uploadResult.webpKey;
+      } else {
+        const result = await saveLocalAndCreateWebp(req.file, "profile");
+        profilePath = result.originalPath;
+        profileWebpPath = result.webpPath;
+      }
+    }
+
+    const newUser = new User({
+      first_name: body.first_name ? body.first_name.toString().trim() : "",
+      last_name: body.last_name ? body.last_name.toString().trim() : "",
+      email,
+      mobile: mobile || undefined,
+      password,
+      role: roleDoc._id,
+      profile_img: profilePath,
+      profile_img_webp: profileWebpPath,
+      status: body.status !== undefined ? body.status.toString().trim() : "1",
+      created_by: req.user ? req.user.id : null,
+      updated_by: req.user ? req.user.id : null,
+      created_at: moment().tz("Asia/Kolkata").toDate(),
+      updated_at: moment().tz("Asia/Kolkata").toDate(),
     });
 
+    await newUser.save();
+
+    // Log Activity
+    await logActivity({
+      req,
+      action: "CREATE",
+      module: "users",
+      record_id: newUser._id,
+      record_title: `${newUser.first_name} ${newUser.last_name} (${roleDoc.role_name})`,
+      description: `Created new user account with role '${roleDoc.role_name}'`,
+    });
+
+    return res.status(201).json({
+      success: true,
+      status: 201,
+      message: "User created successfully.",
+      data: formatUser(await User.findById(newUser._id).populate("role", "role_name"), req),
+    });
+  } catch (error) {
+    deleteUploadedTemp(req.file);
+    next(error);
+  }
+};
+
+// @desc    Update user details, role or status (Super Admin Only)
+// @route   PUT /api/user/update or POST /api/user/update or PUT /api/user/:id
+exports.updateUser = async (req, res, next) => {
+  try {
+    const id =
+      req.params.id ||
+      (req.body && (req.body.id || req.body._id || req.body.guid)) ||
+      (req.query && (req.query.id || req.query._id));
+
+    if (!id || !id.toString().trim()) {
+      deleteUploadedTemp(req.file);
+      return res.status(422).json({
+        status: 422,
+        success: false,
+        message: "Validation error: Unable to process input fields",
+        errors: ["User ID (id / _id) is required for update."],
+      });
+    }
+
+    const isMongoId = /^[0-9a-fA-F]{24}$/.test(id.toString().trim());
+    const query = isMongoId
+      ? { _id: id.toString().trim() }
+      : { guid: id.toString().trim() };
+
+    const existingUser = await User.findOne(query);
+    if (!existingUser) {
+      deleteUploadedTemp(req.file);
+      return res.status(404).json({
+        status: 404,
+        success: false,
+        message: "User not found.",
+      });
+    }
+
+    const body = req.body || {};
+    const errors = [];
+
+    // Role update
+    const roleInput = body.role_name || body.role_id || body.role;
+    if (roleInput) {
+      const isId = /^[0-9a-fA-F]{24}$/.test(roleInput.toString().trim());
+      let roleDoc = null;
+      if (isId) {
+        roleDoc = await Role.findById(roleInput.toString().trim());
+      } else {
+        roleDoc = await Role.findOne({
+          role_name: { $regex: new RegExp(`^${roleInput.toString().trim()}$`, "i") },
+        });
+      }
+
+      if (!roleDoc) {
+        errors.push("Invalid role specified.");
+      } else {
+        existingUser.role = roleDoc._id;
+      }
+    }
+
+    if (body.email !== undefined && body.email.toString().trim()) {
+      const newEmail = body.email.toString().toLowerCase().trim();
+      const duplicate = await User.findOne({ email: newEmail, _id: { $ne: existingUser._id } });
+      if (duplicate) {
+        errors.push("Email is already in use by another user.");
+      } else {
+        existingUser.email = newEmail;
+      }
+    }
+
+    if (body.mobile !== undefined && body.mobile.toString().trim()) {
+      const newMobile = body.mobile.toString().trim();
+      const duplicate = await User.findOne({ mobile: newMobile, _id: { $ne: existingUser._id } });
+      if (duplicate) {
+        errors.push("Mobile number is already in use by another user.");
+      } else {
+        existingUser.mobile = newMobile;
+      }
+    }
+
+    if (body.password !== undefined && body.password.toString().trim()) {
+      const pass = body.password.toString().trim();
+      if (pass.length < 8) {
+        errors.push("Password must be at least 8 characters long.");
+      } else {
+        existingUser.password = pass; // will be hashed via pre-save hook
+      }
+    }
+
+    if (errors.length > 0) {
+      deleteUploadedTemp(req.file);
+      return res.status(422).json({
+        status: 422,
+        success: false,
+        message: "Validation error: Unable to process input fields",
+        errors,
+      });
+    }
+
+    if (body.first_name !== undefined) existingUser.first_name = body.first_name.toString().trim();
+    if (body.last_name !== undefined) existingUser.last_name = body.last_name.toString().trim();
+    if (body.status !== undefined) existingUser.status = body.status.toString().trim();
+
+    // Handle Profile Image Replacement
+    if (req.file) {
+      let newOriginal, newWebp;
+      if (isProduction()) {
+        const uploadResult = await uploadToS3AndCreateWebp(req.file, "profile");
+        newOriginal = uploadResult.originalKey;
+        newWebp = uploadResult.webpKey;
+        if (existingUser.profile_img) {
+          await deleteS3Objects([existingUser.profile_img, existingUser.profile_img_webp].filter(Boolean));
+        }
+      } else {
+        const result = await saveLocalAndCreateWebp(req.file, "profile");
+        newOriginal = result.originalPath;
+        newWebp = result.webpPath;
+        deleteLocalImages(existingUser.profile_img, existingUser.profile_img_webp);
+      }
+      existingUser.profile_img = newOriginal;
+      existingUser.profile_img_webp = newWebp;
+    }
+
+    if (req.user) existingUser.updated_by = req.user.id;
+    existingUser.updated_at = moment().tz("Asia/Kolkata").toDate();
+
+    await existingUser.save();
+
+    // Log Activity
+    await logActivity({
+      req,
+      action: "UPDATE",
+      module: "users",
+      record_id: existingUser._id,
+      record_title: `${existingUser.first_name} ${existingUser.last_name}`,
+      description: `Updated user profile/role/status`,
+    });
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      message: "User updated successfully.",
+      data: formatUser(await User.findById(existingUser._id).populate("role", "role_name"), req),
+    });
+  } catch (error) {
+    deleteUploadedTemp(req.file);
+    next(error);
+  }
+};
+
+// @desc    Delete/Deactivate user (Super Admin Only)
+// @route   DELETE /api/user/:id or POST /api/user/delete
+exports.deleteUser = async (req, res, next) => {
+  try {
+    const id =
+      req.params.id ||
+      (req.body && (req.body.id || req.body._id || req.body.guid)) ||
+      (req.query && (req.query.id || req.query._id));
+
+    if (!id || !id.toString().trim()) {
+      return res.status(422).json({
+        status: 422,
+        success: false,
+        message: "Validation error: Unable to process input fields",
+        errors: ["User ID is required for deletion."],
+      });
+    }
+
+    const isMongoId = /^[0-9a-fA-F]{24}$/.test(id.toString().trim());
+    const query = isMongoId
+      ? { _id: id.toString().trim() }
+      : { guid: id.toString().trim() };
+
+    const user = await User.findOne(query);
+    if (!user) {
+      return res.status(404).json({
+        status: 404,
+        success: false,
+        message: "User not found or already deleted.",
+      });
+    }
+
+    // Soft delete or deactivate
+    user.status = "0";
+    user.updated_at = moment().tz("Asia/Kolkata").toDate();
+    if (req.user) user.updated_by = req.user.id;
+
+    await user.save();
+
+    // Log Activity
+    await logActivity({
+      req,
+      action: "DELETE",
+      module: "users",
+      record_id: user._id,
+      record_title: `${user.first_name} ${user.last_name}`,
+      description: `Deactivated/deleted user account`,
+    });
+
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      message: "User deleted successfully.",
+      data: {
+        id: user._id,
+        status: user.status,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// @desc    Get Roles list for dropdown in admin portal
+// @route   GET /api/user/roles or GET /api/role/list
+exports.getRoles = async (req, res, next) => {
+  try {
+    const roles = await Role.find({ status: 1 }).select("role_name status guid");
+    return res.status(200).json({
+      success: true,
+      status: 200,
+      message: "Roles fetched successfully.",
+      data: roles,
+    });
   } catch (error) {
     next(error);
   }

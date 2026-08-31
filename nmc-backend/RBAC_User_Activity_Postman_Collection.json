@@ -1,0 +1,276 @@
+{
+  "info": {
+    "_postman_id": "rbac-activity-user-collection-v1",
+    "name": "NMC - User Management & Activity Logs (RBAC)",
+    "description": "Postman Collection for 3-Tier Role Management (super_admin, department, content) and Activity Logs Audit Trail.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Auth - Login",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"superadmin@gmail.com\",\n  \"password\": \"Admin@123\"\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/auth/login",
+          "host": ["{{base_url}}"],
+          "path": ["api", "auth", "login"]
+        },
+        "description": "Log in to get the JWT token with role information."
+      },
+      "response": []
+    },
+    {
+      "name": "1. Get Roles List",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/user/roles",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user", "roles"]
+        },
+        "description": "Fetch list of roles: super_admin, department, content"
+      },
+      "response": []
+    },
+    {
+      "name": "2. Add New User with Role (Super Admin Only)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "first_name",
+              "value": "Rohan",
+              "type": "text"
+            },
+            {
+              "key": "last_name",
+              "value": "Patel",
+              "type": "text"
+            },
+            {
+              "key": "email",
+              "value": "rohan.dept@nmc.edu",
+              "type": "text"
+            },
+            {
+              "key": "password",
+              "value": "Department@123",
+              "type": "text"
+            },
+            {
+              "key": "mobile",
+              "value": "9876543210",
+              "type": "text"
+            },
+            {
+              "key": "role_name",
+              "value": "department",
+              "type": "text",
+              "description": "super_admin | department | content"
+            },
+            {
+              "key": "profile_img",
+              "type": "file",
+              "src": "",
+              "description": "Optional: upload avatar image"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/user/add",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user", "add"]
+        },
+        "description": "Create a new user with specific role."
+      },
+      "response": []
+    },
+    {
+      "name": "3. Get All Users (Super Admin Only - Blocked for department/content)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/user/list?page=1&limit=10&role_name=all&search=",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user", "list"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "10"
+            },
+            {
+              "key": "role_name",
+              "value": "all",
+              "description": "all | department | content | super_admin"
+            },
+            {
+              "key": "search",
+              "value": ""
+            }
+          ]
+        },
+        "description": "Fetches all users. Returns 403 Forbidden for department and content roles."
+      },
+      "response": []
+    },
+    {
+      "name": "4. Update User Profile & Role (Super Admin Only)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "id",
+              "value": "{{target_user_id}}",
+              "type": "text"
+            },
+            {
+              "key": "first_name",
+              "value": "Rohan (Updated)",
+              "type": "text"
+            },
+            {
+              "key": "role_name",
+              "value": "content",
+              "type": "text"
+            },
+            {
+              "key": "status",
+              "value": "1",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/api/user/update",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user", "update"]
+        },
+        "description": "Update user details or reassign role."
+      },
+      "response": []
+    },
+    {
+      "name": "5. Delete/Deactivate User (Super Admin Only)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/user/{{target_user_id}}",
+          "host": ["{{base_url}}"],
+          "path": ["api", "user", "{{target_user_id}}"]
+        },
+        "description": "Deactivates/soft-deletes user."
+      },
+      "response": []
+    },
+    {
+      "name": "6. Get Activity Logs (Super Admin Only - Track Department & Content Activity)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{jwt_token}}"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/api/activity-logs?page=1&limit=20&role_name=all&module=all&action=all&search=",
+          "host": ["{{base_url}}"],
+          "path": ["api", "activity-logs"],
+          "query": [
+            {
+              "key": "page",
+              "value": "1"
+            },
+            {
+              "key": "limit",
+              "value": "20"
+            },
+            {
+              "key": "role_name",
+              "value": "all",
+              "description": "department | content | super_admin | all"
+            },
+            {
+              "key": "module",
+              "value": "all",
+              "description": "banners | gallery | testimonials | awards | users | all"
+            },
+            {
+              "key": "action",
+              "value": "all",
+              "description": "CREATE | UPDATE | DELETE | all"
+            },
+            {
+              "key": "search",
+              "value": ""
+            }
+          ]
+        },
+        "description": "Super admin views full audit history of all actions performed by staff/users."
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000"
+    },
+    {
+      "key": "jwt_token",
+      "value": "PASTE_YOUR_JWT_TOKEN_HERE"
+    },
+    {
+      "key": "target_user_id",
+      "value": "USER_ID_TO_UPDATE"
+    }
+  ]
+}

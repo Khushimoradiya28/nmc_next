@@ -137,4 +137,54 @@ function getReviewUpload() {
   });
 }
 
-module.exports = { getMulterUpload, getExcelUpload, getReviewUpload };
+function getGalleryUpload() {
+  const folderPath = "gallery";
+  const allowed = /jpeg|jpg|png|webp|svg|heic|mp4|webm|mov|mkv/;
+
+  if (isProduction) {
+    const storage = multer.memoryStorage();
+    return multer({
+      storage,
+      limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit for video/image
+      fileFilter: (req, file, cb) => {
+        const ext = path.extname(file.originalname).toLowerCase();
+        if (!allowed.test(ext) && !allowed.test(file.mimetype)) {
+          const err = new Error("Only .jpg, .jpeg, .png, .webp, .svg, .heic, .mp4, .webm, .mov, and .mkv formats are allowed!");
+          err.statusCode = 422;
+          return cb(err);
+        }
+        cb(null, true);
+      },
+    });
+  }
+
+  const localStorage = multer.diskStorage({
+    destination: function (req, file, cb) {
+      const dir = path.join(__dirname, "..", "media", folderPath);
+      if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+      }
+      cb(null, dir);
+    },
+    filename: function (req, file, cb) {
+      const ext = path.extname(file.originalname);
+      cb(null, Date.now() + "-" + Math.round(Math.random() * 1e9) + ext);
+    },
+  });
+
+  return multer({
+    storage: localStorage,
+    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
+    fileFilter: (req, file, cb) => {
+      const ext = path.extname(file.originalname).toLowerCase();
+      if (!allowed.test(ext) && !allowed.test(file.mimetype)) {
+        const err = new Error("Only .jpg, .jpeg, .png, .webp, .svg, .heic, .mp4, .webm, .mov, and .mkv formats are allowed!");
+        err.statusCode = 422;
+        return cb(err);
+      }
+      cb(null, true);
+    },
+  });
+}
+
+module.exports = { getMulterUpload, getExcelUpload, getReviewUpload, getGalleryUpload };
