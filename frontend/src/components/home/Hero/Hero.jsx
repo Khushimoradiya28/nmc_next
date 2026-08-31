@@ -1,12 +1,55 @@
-import React from 'react';
+"use client";
+
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import styles from './Hero.module.css';
 
+// Background slider images. Only these change — the rest of the hero stays fixed.
+const HERO_SLIDES = [
+  '/assets/home/hero/new-banner.png',
+  '/assets/activities/activities_banner.jpg',
+  '/assets/orient/welcome.jpg',
+  '/assets/events_gallery/womens_day.jpg',
+];
+
 export default function Hero() {
+  const [activeSlide, setActiveSlide] = useState(0);
+
+  // Auto-advance the background image slider
+  useEffect(() => {
+    if (HERO_SLIDES.length <= 1) return;
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const openApplyModal = (e) => {
+    e.preventDefault();
+    // Reuse the existing modal popup (PopupForm) via its global event
+    window.dispatchEvent(new Event('openContactPopup'));
+  };
+
   return (
     <section className={`${styles.heroFullscreen} hero-fullscreen home-hero-fullscreen`} id="home">
+      {/* Background image slider — only the image changes */}
       <div className={`${styles.heroBgImage} hero-bg-image`} style={{ transform: 'scaleX(-1)' }}>
-        <Image src="/assets/home/hero/new-banner.png" alt="NMC Campus Life" width={1920} height={1080} className={`${styles.heroBgImg} hero-bg-img`} />
+        {HERO_SLIDES.map((src, idx) => (
+          <div
+            key={src}
+            className={`${styles.heroSlide} ${idx === activeSlide ? styles.heroSlideActive : ''}`}
+            aria-hidden={idx !== activeSlide}
+          >
+            <Image
+              src={src}
+              alt="NMC Campus Life"
+              width={1920}
+              height={1080}
+              priority={idx === 0}
+              className={`${styles.heroBgImg} hero-bg-img`}
+            />
+          </div>
+        ))}
       </div>
       <div className={`${styles.heroOverlay} hero-overlay`}></div>
       <div className={`${styles.heroContent} container`}>
@@ -17,7 +60,7 @@ export default function Hero() {
         <h1 className={`${styles.heroMainTitle} hero-main-title`}><em>Innovative learning</em><br /><em>for everyone</em></h1>
         <p className={`${styles.heroSubtitle} hero-subtitle`}>Graduates hold a position related to their degree or<br />career objective.</p>
         <div className={`${styles.heroCtaGroup} hero-cta-group`}>
-          <a href="#programs" className={`${styles.heroApplyBtn} hero-apply-btn`}>
+          <a href="#programs" onClick={openApplyModal} className={`${styles.heroApplyBtn} hero-apply-btn`}>
             <span className={`${styles.heroApplyIcon} hero-apply-icon`}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 4l-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z" />

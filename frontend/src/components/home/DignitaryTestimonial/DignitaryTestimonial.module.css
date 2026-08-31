@@ -150,6 +150,12 @@
   margin-bottom: 1rem;
   letter-spacing: 0.01em;
   text-transform: uppercase;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Card Text */
@@ -159,6 +165,12 @@
   line-height: 1.75;
   margin-bottom: 2rem;
   flex: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Author Section */
@@ -265,6 +277,12 @@
   color: var(--gray-600);
   line-height: 1.7;
   margin-bottom: 1.5rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .studTestiAuthor {

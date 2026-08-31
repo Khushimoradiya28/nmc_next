@@ -1,7 +1,105 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import styles from './page.module.css';
+
+// Themed custom dropdown (matches site's red/gold theme instead of the default
+// browser select styling)
+function CustomSelect({ name, value, onChange, options, placeholder }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const selectRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (selectRef.current && !selectRef.current.contains(e.target)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleSelect = (optionValue) => {
+    onChange({ target: { name, value: optionValue } });
+    setIsOpen(false);
+  };
+
+  const selectedLabel = options.find((o) => o.value === value)?.label || placeholder;
+
+  return (
+    <div className={styles.customSelect} ref={selectRef}>
+      <button
+        type="button"
+        className={`${styles.selectTrigger} ${isOpen ? styles.selectOpen : ''} ${value ? styles.selectHasValue : ''}`}
+        onClick={() => setIsOpen(!isOpen)}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+      >
+        <span className={styles.selectText}>{selectedLabel}</span>
+        <span className={`${styles.selectArrow} ${isOpen ? styles.selectArrowUp : ''}`}>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </span>
+      </button>
+
+      {isOpen && (
+        <div className={styles.selectDropdown} role="listbox">
+          <div
+            className={styles.selectOptions}
+            data-lenis-prevent
+            onWheel={(e) => e.stopPropagation()}
+          >
+            {options.map((option) => (
+              <div
+                key={option.value}
+                role="option"
+                aria-selected={value === option.value}
+                className={`${styles.selectOption} ${value === option.value ? styles.selectOptionActive : ''}`}
+                onClick={() => handleSelect(option.value)}
+              >
+                <span>{option.label}</span>
+                {value === option.value && (
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const genderOptions = [
+  { value: 'female', label: 'Female' },
+  { value: 'other', label: 'Other' },
+];
+
+const courseOptions = [
+  { value: 'bba', label: 'BBA (₹8,000/Sem)' },
+  { value: 'bca', label: 'BCA (₹15,000/Sem)' },
+  { value: 'ba', label: 'BA (Bachelor of Arts)' },
+  { value: 'bcom', label: 'B.Com (Bachelor of Commerce)' },
+  { value: 'ma', label: 'MA (Master of Arts)' },
+  { value: 'mcom', label: 'M.Com (Master of Commerce)' },
+  { value: 'msw', label: 'MSW (Master of Social Work)' },
+  { value: 'pgdpa', label: 'PGDPA (Public Administration)' },
+  { value: 'fd', label: 'Diploma in Fashion Designing' },
+  { value: 'dmphw', label: 'DMPHW (Health Worker)' },
+  { value: 'dhsi', label: 'DHSI (Sanitary Inspector)' },
+  { value: 'dnys', label: 'DNYS (Naturopathy)' },
+  { value: 'cfd', label: 'Certificate in Fashion Designing' },
+];
+
+const qualificationOptions = [
+  { value: '10th', label: '10th Pass' },
+  { value: '12th', label: '12th Pass (HSC)' },
+  { value: 'graduate', label: 'Graduate' },
+  { value: 'postgraduate', label: 'Post Graduate' },
+];
 
 export default function AdmissionForm() {
   const [formData, setFormData] = useState({
@@ -65,11 +163,13 @@ export default function AdmissionForm() {
 
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Gender</label>
-            <select name="gender" className={styles.formSelect} value={formData.gender} onChange={handleChange}>
-              <option value="">Select Gender</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
-            </select>
+            <CustomSelect
+              name="gender"
+              value={formData.gender}
+              onChange={handleChange}
+              options={genderOptions}
+              placeholder="Select Gender"
+            />
           </div>
 
           <div className={styles.formGroup}>
@@ -79,33 +179,24 @@ export default function AdmissionForm() {
 
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Course Interested In *</label>
-            <select name="course" className={styles.formSelect} value={formData.course} onChange={handleChange} required>
-              <option value="">Select Course</option>
-              <option value="bba">BBA (₹8,000/Sem)</option>
-              <option value="bca">BCA (₹15,000/Sem)</option>
-              <option value="ba">BA (Bachelor of Arts)</option>
-              <option value="bcom">B.Com (Bachelor of Commerce)</option>
-              <option value="ma">MA (Master of Arts)</option>
-              <option value="mcom">M.Com (Master of Commerce)</option>
-              <option value="msw">MSW (Master of Social Work)</option>
-              <option value="pgdpa">PGDPA (Public Administration)</option>
-              <option value="fd">Diploma in Fashion Designing</option>
-              <option value="dmphw">DMPHW (Health Worker)</option>
-              <option value="dhsi">DHSI (Sanitary Inspector)</option>
-              <option value="dnys">DNYS (Naturopathy)</option>
-              <option value="cfd">Certificate in Fashion Designing</option>
-            </select>
+            <CustomSelect
+              name="course"
+              value={formData.course}
+              onChange={handleChange}
+              options={courseOptions}
+              placeholder="Select Course"
+            />
           </div>
 
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Last Qualification</label>
-            <select name="qualification" className={styles.formSelect} value={formData.qualification} onChange={handleChange}>
-              <option value="">Select Qualification</option>
-              <option value="10th">10th Pass</option>
-              <option value="12th">12th Pass (HSC)</option>
-              <option value="graduate">Graduate</option>
-              <option value="postgraduate">Post Graduate</option>
-            </select>
+            <CustomSelect
+              name="qualification"
+              value={formData.qualification}
+              onChange={handleChange}
+              options={qualificationOptions}
+              placeholder="Select Qualification"
+            />
           </div>
 
           <div className={styles.formGroupFull}>

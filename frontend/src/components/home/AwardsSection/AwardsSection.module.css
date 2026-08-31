@@ -93,6 +93,12 @@
   padding: 0;
   line-height: 1.35;
   background: none !important;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  line-clamp: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .awardInfo {
@@ -104,6 +110,13 @@
   max-width: 320px;
   margin-left: auto;
   margin-right: auto;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: calc(1.6em * 2);
 }
 
 /* Award Arrows - Primary Theme Color Style */

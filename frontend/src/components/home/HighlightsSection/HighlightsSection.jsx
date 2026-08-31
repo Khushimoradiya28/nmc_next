@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import styles from './HighlightsSection.module.css';
 
 export default function HighlightsSection() {
@@ -79,12 +80,12 @@ export default function HighlightsSection() {
                 background, qualities & opportunities available in the niche</li>
               <li><span className={`${styles.pillarCheck} pillar-check`}>âœ“</span> Admission process open Monday to Sunday 9 AM to 5 PM</li>
             </ul>
-            <a href="#contact" className={`${styles.pillarCta} ${styles.btn} ${styles.btnCrimson} pillar-cta btn btn-crimson`}>
+            <Link href="/student-corner/admission-form" className={`${styles.pillarCta} ${styles.btn} ${styles.btnCrimson} pillar-cta btn btn-crimson`}>
               <span>Get Enrolled!</span>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M5 13h11.86l-5.43 5.43 1.42 1.42L21.14 12l-8.29-8.29-1.42 1.42L16.86 11H5v2z" />
               </svg>
-            </a>
+            </Link>
             <div className={`${styles.pillarGlow} ${styles.pillarGlowRed} pillar-glow pillar-glow-red`}></div>
           </div>
 
