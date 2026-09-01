@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import AdmissionServices from '@/services/AdmissionServices';
 import CourseServices from '@/services/CourseServices';
@@ -89,6 +90,7 @@ const qualificationOptions = [
 ];
 
 export default function AdmissionForm() {
+  const router = useRouter();
   const [courseOptions, setCourseOptions] = useState([]);
   const [formData, setFormData] = useState({
     name: '', email: '', phone: '', gender: '', dob: '',
@@ -115,7 +117,6 @@ export default function AdmissionForm() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [apiError, setApiError] = useState('');
   const [loading, setLoading] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target || e;
@@ -178,11 +179,8 @@ export default function AdmissionForm() {
       });
 
       console.log("[AdmissionForm] Application submitted successfully:", res);
-      setSubmitted(true);
-      setTimeout(() => {
-        setFormData({ name: '', email: '', phone: '', gender: '', dob: '', course: '', qualification: '', city: '' });
-        setSubmitted(false);
-      }, 6000);
+      setFormData({ name: '', email: '', phone: '', gender: '', dob: '', course: '', qualification: '', city: '' });
+      router.push('/thank-you');
     } catch (err) {
       console.error("[AdmissionForm] Submission failed:", err);
       setApiError(err.message || 'Failed to submit application. Please try again.');
@@ -198,17 +196,6 @@ export default function AdmissionForm() {
     display: 'block',
     fontWeight: '500'
   };
-
-  if (submitted) {
-    return (
-      <div className={styles.formCard}>
-        <div className={styles.successMsg}>
-          <h4>✔ Application Submitted Successfully!</h4>
-          <p>Our admission team will contact you within 24 hours. Keep your documents ready.</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.formCard}>
@@ -243,7 +230,15 @@ export default function AdmissionForm() {
 
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Date of Birth *</label>
-            <input type="date" name="dob" className={styles.formInput} value={formData.dob} onChange={handleChange} />
+            <input
+              type="date"
+              name="dob"
+              className={styles.formInput}
+              value={formData.dob}
+              onChange={handleChange}
+              onClick={(e) => e.target.showPicker && e.target.showPicker()}
+              style={{ cursor: 'pointer' }}
+            />
             {fieldErrors.dob && <span style={errLabel}>⚠ {fieldErrors.dob}</span>}
           </div>
 

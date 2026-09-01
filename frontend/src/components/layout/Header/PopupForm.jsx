@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import styles from './PopupForm.module.css';
 import ContactServices from '@/services/ContactServices';
@@ -124,9 +124,9 @@ export default function PopupForm() {
     message: ''
   });
   const [fieldErrors, setFieldErrors] = useState({});
-  const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
 
   // Load dynamic courses from backend API
   useEffect(() => {
@@ -150,7 +150,6 @@ export default function PopupForm() {
   // Open popup 7 seconds after every page navigation
   useEffect(() => {
     setIsOpen(false);
-    setSubmitted(false);
     setFieldErrors({});
 
     const timer = setTimeout(() => {
@@ -164,7 +163,6 @@ export default function PopupForm() {
   useEffect(() => {
     const handleOpenPopup = () => {
       setIsOpen(true);
-      setSubmitted(false);
       setFieldErrors({});
     };
     window.addEventListener('openContactPopup', handleOpenPopup);
@@ -269,12 +267,9 @@ export default function PopupForm() {
         message: messageVal,
         source: 'modal',
       });
-      setSubmitted(true);
-      setTimeout(() => {
-        setFormData({ name: '', phone: '', email: '', reason: '', course: '', website: '', teacher: '', message: '' });
-        setSubmitted(false);
-        setIsOpen(false);
-      }, 4000);
+      setFormData({ name: '', phone: '', email: '', reason: '', course: '', website: '', teacher: '', message: '' });
+      setIsOpen(false);
+      router.push('/thank-you');
     } catch (err) {
       console.error("Popup submission error:", err);
     } finally {
@@ -318,37 +313,25 @@ export default function PopupForm() {
             </svg>
           </button>
 
-          {submitted ? (
-            <div className={styles.successMessage}>
-              <div className={styles.successIcon}>
-                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12"></polyline>
+          {/* Header */}
+          <div className={styles.popupHeader}>
+            <div className={styles.headerIconTitle}>
+              <div className={styles.mortarboardIcon}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c0 0 2.5 3 6 3s6-3 6-3v-5"/>
                 </svg>
               </div>
-              <h3>Message Sent Successfully!</h3>
-              <p>Once we receive your information our representative will get back to you within 24 hours.</p>
-            </div>
-          ) : (
-            <>
-              {/* Header */}
-              <div className={styles.popupHeader}>
-                <div className={styles.headerIconTitle}>
-                  <div className={styles.mortarboardIcon}>
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
-                      <path d="M6 12v5c0 0 2.5 3 6 3s6-3 6-3v-5"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h2 className={styles.popupTitle}>Please Fill the Form below.</h2>
-                    <p className={styles.popupSubtext}>
-                      Once we receive your information our representative will get back to you within 24 hours.
-                    </p>
-                  </div>
-                </div>
+              <div>
+                <h2 className={styles.popupTitle}>Please Fill the Form below.</h2>
+                <p className={styles.popupSubtext}>
+                  Once we receive your information our representative will get back to you within 24 hours.
+                </p>
               </div>
+            </div>
+          </div>
 
-              <form onSubmit={handleSubmit} className={styles.popupForm} noValidate>
+          <form onSubmit={handleSubmit} className={styles.popupForm} noValidate>
                 <div className={styles.formGrid}>
                   {/* Row 1 Left: Full Name */}
                   <div className={styles.formGroup}>
@@ -526,8 +509,6 @@ export default function PopupForm() {
                   </div>
                 </div>
               </form>
-            </>
-          )}
         </div>
       </div>
     </div>

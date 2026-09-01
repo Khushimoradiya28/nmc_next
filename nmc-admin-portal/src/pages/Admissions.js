@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef, useContext } from "react";
 import {
   Table,
   TableHeader,
@@ -18,9 +18,11 @@ import AdmissionTable from "../components/admission/AdmissionTable";
 import MainModal from "../components/modal/MainModal";
 import CustomDateRangePicker from "../components/form/CustomDateRangePicker";
 import AdmissionLeadServices from "../services/AdmissionLeadServices";
+import { SidebarContext } from "../context/SidebarContext";
 import { notifySuccess, notifyError } from "../utils/toast";
 
 const Admissions = () => {
+  const { toggleModal } = useContext(SidebarContext);
   const [admissionsList, setAdmissionsList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -91,6 +93,7 @@ const Admissions = () => {
 
   const handleOpenDeleteModal = (id) => {
     setDeleteItemId(id);
+    toggleModal();
   };
 
   const handleConfirmDelete = async (id) => {

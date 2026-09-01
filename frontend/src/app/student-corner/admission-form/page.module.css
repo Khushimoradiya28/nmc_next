@@ -224,6 +224,21 @@
   transition: all 0.2s ease;
 }
 
+.formInput[type="date"] {
+  cursor: pointer;
+}
+
+.formInput[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  opacity: 0.75;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.formInput[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 1;
+  transform: scale(1.15);
+}
+
 .formInput:focus,
 .formSelect:focus {
   border-color: var(--red-800, #8a0000);

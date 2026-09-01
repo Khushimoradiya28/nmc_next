@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './page.module.css';
 import ContactServices from '@/services/ContactServices';
 import CourseServices from '@/services/CourseServices';
@@ -70,6 +71,7 @@ const TEACHER_OPTIONS = [
 ];
 
 export default function ContactForm() {
+  const router = useRouter();
   const [courseOptions, setCourseOptions] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
@@ -85,7 +87,6 @@ export default function ContactForm() {
   const [fieldErrors, setFieldErrors] = useState({});
   const [courseOpen, setCourseOpen] = useState(false);
   const [teacherOpen, setTeacherOpen] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [apiError, setApiError] = useState('');
 
@@ -206,11 +207,8 @@ export default function ContactForm() {
         message: messageVal,
         source: 'page',
       });
-      setSubmitted(true);
-      setTimeout(() => {
-        setFormData({ name: '', phone: '', email: '', reason: '', course: '', website: '', teacher: '', message: '' });
-        setSubmitted(false);
-      }, 6000);
+      setFormData({ name: '', phone: '', email: '', reason: '', course: '', website: '', teacher: '', message: '' });
+      router.push('/thank-you');
     } catch (err) {
       setApiError(err.message || 'Failed to submit. Please try again.');
     } finally {
@@ -222,17 +220,6 @@ export default function ContactForm() {
 
   const selectedCourseObj = courseOptions.find(c => c.value === formData.course);
   const selectedTeacherObj = TEACHER_OPTIONS.find(t => t.value === formData.teacher);
-
-  if (submitted) {
-    return (
-      <div className={styles.formArea}>
-        <div className={styles.successMessage}>
-          <h4>✔ Message Sent Successfully!</h4>
-          <p>Once we receive your information our representative will get back to you within 24 hours.</p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={styles.formArea}>

@@ -144,8 +144,8 @@ const LeadTable = ({
             <TableCell className="py-3 px-4 text-right">
               <button
                 type="button"
-                onClick={() => onDelete && onDelete(product._id || product.id || i)}
-                className="p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 rounded-lg transition-colors focus:outline-none"
+                onClick={() => onDelete && onDelete(product._id || product.id || product.guid)}
+                className="p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 rounded-lg transition-colors focus:outline-none cursor-pointer"
                 title="Delete Lead"
               >
                 <FiTrash2 className="w-4 h-4" />

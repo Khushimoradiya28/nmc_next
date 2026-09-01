@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef, useContext } from "react";
 import {
   Table,
   TableHeader,
@@ -19,9 +19,11 @@ import LeadTable from "../components/lead/LeadTable";
 import MainModal from "../components/modal/MainModal";
 import CustomDateRangePicker from "../components/form/CustomDateRangePicker";
 import LeadServices from "../services/LeadServices";
+import { SidebarContext } from "../context/SidebarContext";
 import { notifySuccess, notifyError } from "../utils/toast";
 
 const Leads = () => {
+  const { toggleModal } = useContext(SidebarContext);
   const [leadsList, setLeadsList] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -92,6 +94,7 @@ const Leads = () => {
 
   const handleOpenDeleteModal = (id) => {
     setDeleteItemId(id);
+    toggleModal();
   };
 
   const handleConfirmDelete = async (id) => {

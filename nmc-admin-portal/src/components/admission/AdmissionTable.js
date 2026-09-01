@@ -121,7 +121,7 @@ const AdmissionTable = ({
             <TableCell className="py-3 px-4 text-right">
               <button
                 type="button"
-                onClick={() => onDelete && onDelete(item._id || item.id || i)}
+                onClick={() => onDelete && onDelete(item._id || item.id || item.guid)}
                 className="p-2 text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-gray-700 rounded-lg transition-colors focus:outline-none cursor-pointer"
                 title="Delete Admission Lead"
               >

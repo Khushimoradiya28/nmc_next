@@ -1,10 +1,12 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Link from 'next/link';
 import styles from './CertificateCoursesSection.module.css';
 import CourseServices from '@/services/CourseServices';
+import ContactServices from '@/services/ContactServices';
 
 const resolveImageUrl = (img) => {
   if (!img) return '';
@@ -60,6 +62,7 @@ const formatFees = (val) => {
 const categoryBadgeStyles = [styles.tagRuby, styles.tagGold, styles.tagCyan, styles.tagRose, styles.tagEmerald];
 
 export default function CertificateCoursesSection() {
+  const router = useRouter();
   const [coursesData, setCoursesData] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -162,15 +165,32 @@ export default function CertificateCoursesSection() {
     setIsOpen(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert(`Thank you, ${firstName}! Your application for "${selectedCert}" has been submitted.`);
-    closeEnrollModal();
-    setFirstName('');
-    setLastName('');
-    setEmail('');
-    setPhone('');
-    setMessage('');
+    try {
+      await ContactServices.submitInquiry({
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
+        name: `${firstName} ${lastName}`.trim(),
+        email: email.trim(),
+        phone: phone.trim(),
+        course: selectedCert || mainCourse,
+        reason: 'Certificate Course Registration',
+        teacher: mainCourse,
+        message: `Registered for certificate course: ${selectedCert}`,
+        source: 'certificate_courses_modal',
+      });
+    } catch (err) {
+      console.error('Registration inquiry error:', err);
+    } finally {
+      closeEnrollModal();
+      setFirstName('');
+      setLastName('');
+      setEmail('');
+      setPhone('');
+      setMessage('');
+      router.push('/thank-you');
+    }
   };
 
   const degreePrograms = [
