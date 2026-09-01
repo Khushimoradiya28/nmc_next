@@ -35,8 +35,13 @@ exports.submitContactLead = async (req, res, next) => {
     const body = req.body || {};
     const errors = [];
 
-    const first_name = (body.first_name || body.firstName || "").toString().trim();
-    const last_name = (body.last_name || body.lastName || "").toString().trim();
+    let first_name = (body.first_name || body.firstName || body.fullName || body.name || "").toString().trim();
+    let last_name = (body.last_name || body.lastName || "").toString().trim();
+    if (!last_name && first_name.includes(" ")) {
+      const parts = first_name.split(" ");
+      first_name = parts[0];
+      last_name = parts.slice(1).join(" ");
+    }
     const website = (body.website || "").toString().trim();
     const reason = (body.reason || body.reasonContacting || "").toString().trim();
     const course = (body.course || body.choseCourse || body.chooseCourse || "").toString().trim();
@@ -47,7 +52,7 @@ exports.submitContactLead = async (req, res, next) => {
     const source = (body.source || "contact_us").toString().toLowerCase().trim();
 
     if (!first_name) {
-      errors.push("first_name is required and cannot be blank.");
+      errors.push("first_name (or name) is required and cannot be blank.");
     }
 
     if (errors.length > 0) {

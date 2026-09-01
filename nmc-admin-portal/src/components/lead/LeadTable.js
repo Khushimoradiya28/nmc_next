@@ -4,7 +4,7 @@ import {
   TableBody,
   TableRow,
 } from '@windmill/react-ui';
-import { FiGlobe, FiTrash2 } from 'react-icons/fi';
+import { FiGlobe, FiTrash2, FiPhone, FiMail } from 'react-icons/fi';
 
 import DateBox from '../form/DateBox';
 import ExpandableText from '../common/ExpandableText';
@@ -23,6 +23,8 @@ const LeadTable = ({
         const firstName = product.first_name || "";
         const lastName = product.last_name || "";
         const fullName = `${firstName} ${lastName}`.trim() || product.full_name || "N/A";
+        const phone = product.phone || product.mobile || "";
+        const email = product.email || "";
 
         const website = product.website || product.enter_your_website || "";
         const reason = product.reason || product.reason_contacting_us || "-";
@@ -53,6 +55,36 @@ const LeadTable = ({
               <span className="text-sm font-semibold text-gray-900 dark:text-gray-100">
                 {fullName}
               </span>
+            </TableCell>
+
+            {/* Phone */}
+            <TableCell className="py-3 px-4">
+              {phone ? (
+                <a
+                  href={`tel:${phone}`}
+                  className="inline-flex items-center gap-1.5 text-xs text-gray-800 dark:text-gray-200 hover:text-red-700 font-mono"
+                >
+                  <FiPhone size={12} className="text-red-700 dark:text-red-400 shrink-0" />
+                  <span>{phone}</span>
+                </a>
+              ) : (
+                <span className="text-xs text-gray-400">-</span>
+              )}
+            </TableCell>
+
+            {/* Email */}
+            <TableCell className="py-3 px-4">
+              {email ? (
+                <a
+                  href={`mailto:${email}`}
+                  className="inline-flex items-center gap-1.5 text-xs text-blue-600 dark:text-blue-400 hover:underline max-w-[150px] truncate"
+                >
+                  <FiMail size={12} className="text-blue-500 shrink-0" />
+                  <span className="truncate">{email}</span>
+                </a>
+              ) : (
+                <span className="text-xs text-gray-400">-</span>
+              )}
             </TableCell>
 
             {/* Website */}

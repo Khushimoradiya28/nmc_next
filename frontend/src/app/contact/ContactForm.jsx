@@ -72,13 +72,14 @@ const TEACHER_OPTIONS = [
 export default function ContactForm() {
   const [courseOptions, setCourseOptions] = useState([]);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    website: '',
+    name: '',
+    phone: '',
+    email: '',
     reason: '',
     course: '',
+    website: '',
     teacher: '',
-    message: ''
+    message: '',
   });
 
   const [fieldErrors, setFieldErrors] = useState({});
@@ -91,6 +92,7 @@ export default function ContactForm() {
   const courseRef = useRef(null);
   const teacherRef = useRef(null);
 
+  // Load live courses from API
   useEffect(() => {
     async function loadCourses() {
       try {
@@ -103,7 +105,7 @@ export default function ContactForm() {
           setCourseOptions(mapped);
         }
       } catch (err) {
-        console.error("Failed to load courses dropdown:", err);
+        console.error("Failed to load courses for contact form:", err);
       }
     }
     loadCourses();
@@ -124,29 +126,66 @@ export default function ContactForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'phone') {
+      const cleaned = value.replace(/\D/g, '').slice(0, 10);
+      setFormData(prev => ({ ...prev, [name]: cleaned }));
+      if (fieldErrors[name]) setFieldErrors(prev => { const n = { ...prev }; delete n[name]; return n; });
+      return;
+    }
     setFormData(prev => ({ ...prev, [name]: value }));
     if (fieldErrors[name]) setFieldErrors(prev => { const n = { ...prev }; delete n[name]; return n; });
   };
 
   const handleSelectCourse = (value) => {
-    setFormData({ ...formData, course: value });
+    setFormData(prev => ({ ...prev, course: value }));
+    if (fieldErrors.course) setFieldErrors(prev => { const n = { ...prev }; delete n.course; return n; });
     setCourseOpen(false);
   };
 
   const handleSelectTeacher = (value) => {
-    setFormData({ ...formData, teacher: value });
+    setFormData(prev => ({ ...prev, teacher: value }));
+    if (fieldErrors.teacher) setFieldErrors(prev => { const n = { ...prev }; delete n.teacher; return n; });
     setTeacherOpen(false);
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    // Validate mandatory fields
+    if (e && e.preventDefault) e.preventDefault();
+    
+    // Validate mandatory fields with safe variable extraction
     const errors = {};
-    if (!formData.firstName.trim()) errors.firstName = 'First name is required.';
-    if (!formData.lastName.trim())  errors.lastName  = 'Last name is required.';
-    if (!formData.reason.trim())    errors.reason    = 'Reason is required.';
-    if (!formData.course)           errors.course    = 'Please select a course.';
-    if (!formData.teacher)          errors.teacher   = 'Please select a teacher/department.';
+    const nameVal = (formData.name || '').trim();
+    const phoneVal = (formData.phone || '').trim();
+    const emailVal = (formData.email || '').trim();
+    const reasonVal = (formData.reason || '').trim();
+    const courseVal = formData.course || '';
+    const teacherVal = formData.teacher || '';
+    const messageVal = (formData.message || '').trim();
+
+    if (!nameVal) {
+      errors.name = 'Full name is required.';
+    }
+    if (!phoneVal) {
+      errors.phone = 'Phone number is required.';
+    } else if (!/^[6-9]\d{9}$/.test(phoneVal)) {
+      errors.phone = 'Phone number must be 10 digits starting with 6, 7, 8, or 9.';
+    }
+
+    if (!emailVal) {
+      errors.email = 'Email address is required.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      errors.email = 'Please enter a valid email address.';
+    }
+
+    if (!reasonVal) {
+      errors.reason = 'Reason is required.';
+    }
+    if (!courseVal) {
+      errors.course = 'Please select a course.';
+    }
+    if (!teacherVal) {
+      errors.teacher = 'Please select a teacher/department.';
+    }
+
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
       return;
@@ -156,18 +195,20 @@ export default function ContactForm() {
     setLoading(true);
     try {
       await ContactServices.submitInquiry({
-        firstName: formData.firstName.trim(),
-        lastName:  formData.lastName.trim(),
-        website:   formData.website.trim(),
-        reason:    formData.reason.trim(),
-        course:    formData.course,
-        teacher:   formData.teacher,
-        message:   formData.message.trim(),
-        source:    'page',
+        name: nameVal,
+        first_name: nameVal,
+        phone: phoneVal,
+        email: emailVal,
+        reason: reasonVal,
+        course: courseVal,
+        website: (formData.website || '').trim(),
+        teacher: teacherVal,
+        message: messageVal,
+        source: 'page',
       });
       setSubmitted(true);
       setTimeout(() => {
-        setFormData({ firstName: '', lastName: '', website: '', reason: '', course: '', teacher: '', message: '' });
+        setFormData({ name: '', phone: '', email: '', reason: '', course: '', website: '', teacher: '', message: '' });
         setSubmitted(false);
       }, 6000);
     } catch (err) {
@@ -177,7 +218,6 @@ export default function ContactForm() {
     }
   };
 
-  // Inline error label style
   const errLabel = { display: 'block', color: '#dc2626', fontSize: '0.76rem', fontWeight: 600, marginTop: '0.3rem' };
 
   const selectedCourseObj = courseOptions.find(c => c.value === formData.course);
@@ -203,7 +243,7 @@ export default function ContactForm() {
 
       <form onSubmit={handleSubmit} noValidate>
         <div className={styles.formGrid}>
-          {/* First Name */}
+          {/* Row 1 Left: Full Name */}
           <div className={styles.formGroup}>
             <div className={styles.inputWithIcon}>
               <span className={styles.fieldIcon}>
@@ -214,65 +254,66 @@ export default function ContactForm() {
               </span>
               <input
                 type="text"
-                name="firstName"
+                name="name"
                 className={styles.formInput}
-                placeholder="Your First Name"
-                value={formData.firstName}
+                placeholder="Your Full Name"
+                value={formData.name}
                 onChange={handleChange}
               />
             </div>
-            {fieldErrors.firstName && <span style={errLabel}>⚠ {fieldErrors.firstName}</span>}
+            {fieldErrors.name && <span style={errLabel}>⚠ {fieldErrors.name}</span>}
           </div>
 
-          {/* Last Name */}
+          {/* Row 1 Right: Phone Number */}
           <div className={styles.formGroup}>
             <div className={styles.inputWithIcon}>
               <span className={styles.fieldIcon}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                  <circle cx="12" cy="7" r="4"/>
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
                 </svg>
               </span>
               <input
-                type="text"
-                name="lastName"
+                type="tel"
+                name="phone"
                 className={styles.formInput}
-                placeholder="Your Last Name"
-                value={formData.lastName}
+                placeholder="Your Phone Number"
+                value={formData.phone}
                 onChange={handleChange}
+                maxLength={10}
               />
             </div>
-            {fieldErrors.lastName && <span style={errLabel}>⚠ {fieldErrors.lastName}</span>}
+            {fieldErrors.phone && <span style={errLabel}>⚠ {fieldErrors.phone}</span>}
           </div>
 
-          {/* Website */}
-          <div className={styles.formGroup}>
-            <div className={styles.inputWithIcon}>
-              <span className={styles.fieldIcon}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10"/>
-                  <line x1="2" y1="12" x2="22" y2="12"/>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
-                </svg>
-              </span>
-              <input
-                type="text"
-                name="website"
-                className={styles.formInput}
-                placeholder="Enter your Website"
-                value={formData.website}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-
-          {/* Reason */}
+          {/* Row 2 Left: Email Address */}
           <div className={styles.formGroup}>
             <div className={styles.inputWithIcon}>
               <span className={styles.fieldIcon}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
                   <polyline points="22,6 12,13 2,6"/>
+                </svg>
+              </span>
+              <input
+                type="email"
+                name="email"
+                className={styles.formInput}
+                placeholder="Your Email Address"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </div>
+            {fieldErrors.email && <span style={errLabel}>⚠ {fieldErrors.email}</span>}
+          </div>
+
+          {/* Row 2 Right: Reason */}
+          <div className={styles.formGroup}>
+            <div className={styles.inputWithIcon}>
+              <span className={styles.fieldIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                  <line x1="12" y1="17" x2="12.01" y2="17"/>
                 </svg>
               </span>
               <input
@@ -287,8 +328,8 @@ export default function ContactForm() {
             {fieldErrors.reason && <span style={errLabel}>⚠ {fieldErrors.reason}</span>}
           </div>
 
-          {/* Choose Course Dropdown */}
-          <div className={styles.formGroupFull}>
+          {/* Row 3 Left: Choose Course Dropdown */}
+          <div className={styles.formGroup}>
             <div className={styles.customSelectWrapper} ref={courseRef}>
               <button
                 type="button"
@@ -351,7 +392,28 @@ export default function ContactForm() {
             {fieldErrors.course && <span style={errLabel}>⚠ {fieldErrors.course}</span>}
           </div>
 
-          {/* Choose Teacher Dropdown */}
+          {/* Row 3 Right: Website */}
+          <div className={styles.formGroup}>
+            <div className={styles.inputWithIcon}>
+              <span className={styles.fieldIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </span>
+              <input
+                type="text"
+                name="website"
+                className={styles.formInput}
+                placeholder="Enter your Website"
+                value={formData.website}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+
+          {/* Row 4: Choose Teacher Dropdown (Full Width) */}
           <div className={styles.formGroupFull}>
             <div className={styles.customSelectWrapper} ref={teacherRef}>
               <button
@@ -417,7 +479,7 @@ export default function ContactForm() {
             {fieldErrors.teacher && <span style={errLabel}>⚠ {fieldErrors.teacher}</span>}
           </div>
 
-          {/* Message */}
+          {/* Row 5: Message (Full Width) */}
           <div className={styles.formGroupFull}>
             <div className={styles.textareaWithIcon}>
               <span className={styles.textareaFieldIcon}>
@@ -435,7 +497,7 @@ export default function ContactForm() {
             </div>
           </div>
 
-          {/* Submit Button */}
+          {/* Row 6: Submit Button */}
           <div className={styles.formGroupFull}>
             {apiError && (
               <p style={{ color: '#dc2626', fontSize: '0.82rem', marginBottom: '0.75rem', fontWeight: 600 }}>

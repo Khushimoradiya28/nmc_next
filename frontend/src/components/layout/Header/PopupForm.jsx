@@ -114,11 +114,12 @@ export default function PopupForm() {
   const [courseOptions, setCourseOptions] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    website: '',
+    name: '',
+    phone: '',
+    email: '',
     reason: '',
     course: '',
+    website: '',
     teacher: '',
     message: ''
   });
@@ -188,6 +189,18 @@ export default function PopupForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+    if (name === 'phone') {
+      const cleaned = value.replace(/\D/g, '').slice(0, 10);
+      setFormData(prev => ({ ...prev, [name]: cleaned }));
+      if (fieldErrors[name]) {
+        setFieldErrors(prev => {
+          const next = { ...prev };
+          delete next[name];
+          return next;
+        });
+      }
+      return;
+    }
     setFormData(prev => ({ ...prev, [name]: value }));
     if (fieldErrors[name]) {
       setFieldErrors(prev => {
@@ -199,16 +212,42 @@ export default function PopupForm() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
     
-    // Validate mandatory fields matching Contact Form
+    // Validate mandatory fields with safe variable extraction
     const errors = {};
-    if (!formData.firstName.trim()) errors.firstName = 'First name is required.';
-    if (!formData.lastName.trim())  errors.lastName  = 'Last name is required.';
-    if (!formData.reason.trim())    errors.reason    = 'Reason is required.';
-    if (!formData.course)           errors.course    = 'Please select a course.';
-    if (!formData.teacher)          errors.teacher   = 'Please select a teacher/department.';
-    if (!formData.message.trim())   errors.message   = 'Message is required.';
+    const nameVal = (formData.name || '').trim();
+    const phoneVal = (formData.phone || '').trim();
+    const emailVal = (formData.email || '').trim();
+    const reasonVal = (formData.reason || '').trim();
+    const courseVal = formData.course || '';
+    const teacherVal = formData.teacher || '';
+    const messageVal = (formData.message || '').trim();
+
+    if (!nameVal) {
+      errors.name = 'Full name is required.';
+    }
+    if (!phoneVal) {
+      errors.phone = 'Phone number is required.';
+    } else if (!/^[6-9]\d{9}$/.test(phoneVal)) {
+      errors.phone = 'Phone number must be 10 digits starting with 6, 7, 8, or 9.';
+    }
+    
+    if (!emailVal) {
+      errors.email = 'Email address is required.';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      errors.email = 'Please enter a valid email address.';
+    }
+
+    if (!reasonVal) {
+      errors.reason = 'Reason is required.';
+    }
+    if (!courseVal) {
+      errors.course = 'Please select a course.';
+    }
+    if (!teacherVal) {
+      errors.teacher = 'Please select a teacher/department.';
+    }
 
     if (Object.keys(errors).length > 0) {
       setFieldErrors(errors);
@@ -219,18 +258,20 @@ export default function PopupForm() {
     setLoading(true);
     try {
       await ContactServices.submitInquiry({
-        firstName: formData.firstName.trim(),
-        lastName:  formData.lastName.trim(),
-        website:   formData.website.trim(),
-        reason:    formData.reason.trim(),
-        course:    formData.course || '',
-        teacher:   formData.teacher || '',
-        message:   formData.message.trim(),
-        source:    'modal',
+        name: nameVal,
+        first_name: nameVal,
+        phone: phoneVal,
+        email: emailVal,
+        reason: reasonVal,
+        course: courseVal,
+        website: (formData.website || '').trim(),
+        teacher: teacherVal,
+        message: messageVal,
+        source: 'modal',
       });
       setSubmitted(true);
       setTimeout(() => {
-        setFormData({ firstName: '', lastName: '', website: '', reason: '', course: '', teacher: '', message: '' });
+        setFormData({ name: '', phone: '', email: '', reason: '', course: '', website: '', teacher: '', message: '' });
         setSubmitted(false);
         setIsOpen(false);
       }, 4000);
@@ -309,7 +350,7 @@ export default function PopupForm() {
 
               <form onSubmit={handleSubmit} className={styles.popupForm} noValidate>
                 <div className={styles.formGrid}>
-                  {/* First Name */}
+                  {/* Row 1 Left: Full Name */}
                   <div className={styles.formGroup}>
                     <div className={styles.inputWrapper}>
                       <span className={styles.inputIcon}>
@@ -320,38 +361,99 @@ export default function PopupForm() {
                       </span>
                       <input
                         type="text"
-                        name="firstName"
+                        name="name"
                         className={styles.formInput}
                         placeholder="Your name here..."
-                        value={formData.firstName}
+                        value={formData.name}
                         onChange={handleChange}
                       />
                     </div>
-                    {fieldErrors.firstName && <span style={errLabel}>⚠ {fieldErrors.firstName}</span>}
+                    {fieldErrors.name && <span style={errLabel}>⚠ {fieldErrors.name}</span>}
                   </div>
 
-                  {/* Last Name */}
+                  {/* Row 1 Right: Phone Number */}
                   <div className={styles.formGroup}>
                     <div className={styles.inputWrapper}>
                       <span className={styles.inputIcon}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                          <circle cx="12" cy="7" r="4"/>
+                          <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                        </svg>
+                      </span>
+                      <input
+                        type="tel"
+                        name="phone"
+                        className={styles.formInput}
+                        placeholder="Your phone number here..."
+                        value={formData.phone}
+                        onChange={handleChange}
+                        maxLength={10}
+                      />
+                    </div>
+                    {fieldErrors.phone && <span style={errLabel}>⚠ {fieldErrors.phone}</span>}
+                  </div>
+
+                  {/* Row 2 Left: Email Address */}
+                  <div className={styles.formGroup}>
+                    <div className={styles.inputWrapper}>
+                      <span className={styles.inputIcon}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                          <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                      </span>
+                      <input
+                        type="email"
+                        name="email"
+                        className={styles.formInput}
+                        placeholder="Enter your Email ..."
+                        value={formData.email}
+                        onChange={handleChange}
+                      />
+                    </div>
+                    {fieldErrors.email && <span style={errLabel}>⚠ {fieldErrors.email}</span>}
+                  </div>
+
+                  {/* Row 2 Right: Reason */}
+                  <div className={styles.formGroup}>
+                    <div className={styles.inputWrapper}>
+                      <span className={styles.inputIcon}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10"/>
+                          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+                          <line x1="12" y1="17" x2="12.01" y2="17"/>
                         </svg>
                       </span>
                       <input
                         type="text"
-                        name="lastName"
+                        name="reason"
                         className={styles.formInput}
-                        placeholder="Your last name here..."
-                        value={formData.lastName}
+                        placeholder="Reason contacting us ..."
+                        value={formData.reason}
                         onChange={handleChange}
                       />
                     </div>
-                    {fieldErrors.lastName && <span style={errLabel}>⚠ {fieldErrors.lastName}</span>}
+                    {fieldErrors.reason && <span style={errLabel}>⚠ {fieldErrors.reason}</span>}
                   </div>
 
-                  {/* Website */}
+                  {/* Row 3 Left: Choose Course - Custom Select */}
+                  <div className={styles.formGroup}>
+                    <CustomSelect
+                      name="course"
+                      value={formData.course}
+                      onChange={handleChange}
+                      options={courseOptions}
+                      placeholder="Chose Course"
+                      icon={
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+                          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+                        </svg>
+                      }
+                    />
+                    {fieldErrors.course && <span style={errLabel}>⚠ {fieldErrors.course}</span>}
+                  </div>
+
+                  {/* Row 3 Right: Website */}
                   <div className={styles.formGroup}>
                     <div className={styles.inputWrapper}>
                       <span className={styles.inputIcon}>
@@ -372,46 +474,7 @@ export default function PopupForm() {
                     </div>
                   </div>
 
-                  {/* Reason */}
-                  <div className={styles.formGroup}>
-                    <div className={styles.inputWrapper}>
-                      <span className={styles.inputIcon}>
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                          <polyline points="22,6 12,13 2,6"/>
-                        </svg>
-                      </span>
-                      <input
-                        type="text"
-                        name="reason"
-                        className={styles.formInput}
-                        placeholder="Reason contacting us ..."
-                        value={formData.reason}
-                        onChange={handleChange}
-                      />
-                    </div>
-                    {fieldErrors.reason && <span style={errLabel}>⚠ {fieldErrors.reason}</span>}
-                  </div>
-
-                  {/* Choose Course - Custom Select */}
-                  <div className={styles.formGroupFull}>
-                    <CustomSelect
-                      name="course"
-                      value={formData.course}
-                      onChange={handleChange}
-                      options={courseOptions}
-                      placeholder="Chose Course"
-                      icon={
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
-                          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
-                        </svg>
-                      }
-                    />
-                    {fieldErrors.course && <span style={errLabel}>⚠ {fieldErrors.course}</span>}
-                  </div>
-
-                  {/* Choose Teacher - Custom Select */}
+                  {/* Row 4: Choose Teacher - Custom Select (Full Width) */}
                   <div className={styles.formGroupFull}>
                     <CustomSelect
                       name="teacher"
@@ -431,7 +494,7 @@ export default function PopupForm() {
                     {fieldErrors.teacher && <span style={errLabel}>⚠ {fieldErrors.teacher}</span>}
                   </div>
 
-                  {/* Message */}
+                  {/* Row 5: Message (Full Width) */}
                   <div className={styles.formGroupFull}>
                     <div className={styles.textareaWrapper}>
                       <span className={styles.textareaIcon}>
@@ -447,10 +510,9 @@ export default function PopupForm() {
                         onChange={handleChange}
                       ></textarea>
                     </div>
-                    {fieldErrors.message && <span style={errLabel}>⚠ {fieldErrors.message}</span>}
                   </div>
 
-                  {/* Submit Button */}
+                  {/* Row 6: Submit Button */}
                   <div className={styles.formGroupFull}>
                     <button type="submit" className={styles.submitBtn} disabled={loading}>
                       <span className={styles.submitBtnIcon}>

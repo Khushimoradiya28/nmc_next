@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@windmill/react-ui';
 import { ImFacebook, ImGoogle } from 'react-icons/im';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
 
 import Error from '../components/form/Error';
 import LabelArea from '../components/form/LabelAreaProject';
@@ -11,6 +12,7 @@ import ImageDark from '../assets/img/login-office-dark.jpeg';
 import useLoginSubmit from '../hooks/useLoginSubmit';
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState(false);
   const { onSubmit, register, handleSubmit, errors, loading } =
     useLoginSubmit();
 
@@ -56,17 +58,33 @@ const Login = () => {
                     placeholder="john@doe.com"
                   />
                   <Error errorName={errors.email} />
-                  <div className="mt-6"></div>
-                  <LabelArea label="Password" />
-                  <InputArea
-                    register={register}
-                    // defaultValue="1234567123"
-                    label="Password"
-                    name="password"
-                    type="password"
-                    placeholder="***************"
-                  />
-                  <Error errorName={errors.password} />
+                  <div className="mt-6">
+                    <LabelArea label="Password" />
+                    <div className="relative">
+                      <InputArea
+                        register={register}
+                        label="Password"
+                        name="password"
+                        type={showPassword ? "text" : "password"}
+                        placeholder="***************"
+                        className="pr-10"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setShowPassword(!showPassword)}
+                        className="absolute inset-y-0 right-0 pr-3.5 flex items-center text-gray-500 hover:text-red-800 dark:text-gray-400 dark:hover:text-amber-400 focus:outline-none cursor-pointer"
+                        title={showPassword ? "Hide password" : "Show password"}
+                        tabIndex={-1}
+                      >
+                        {showPassword ? (
+                          <FiEyeOff className="w-5 h-5" />
+                        ) : (
+                          <FiEye className="w-5 h-5" />
+                        )}
+                      </button>
+                    </div>
+                    <Error errorName={errors.password} />
+                  </div>
 
                   <Button
                     disabled={loading}

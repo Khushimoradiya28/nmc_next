@@ -143,7 +143,9 @@ const Leads = () => {
   const exportData = useMemo(() => {
     return leadsList.map((item, index) => ({
       "Sr. No.": (currentPage - 1) * resultsPerPage + index + 1,
-      Name: `${item.first_name || ""} ${item.last_name || ""}`.trim(),
+      Name: `${item.first_name || ""} ${item.last_name || ""}`.trim() || item.full_name || "",
+      Phone: item.phone || item.mobile || "",
+      Email: item.email || "",
       Website: item.website || "",
       "Reason Contacting Us": item.reason || "",
       Course: item.course || "",
@@ -163,7 +165,7 @@ const Leads = () => {
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           {/* Left: Professional Search Bar with Search Icon */}
           <div className="relative flex-grow max-w-md">
-            <Input
+            <input
               ref={searchRef}
               value={searchText}
               onChange={(e) => {
@@ -256,6 +258,8 @@ const Leads = () => {
               <tr>
                 <TableCell>Sr. No.</TableCell>
                 <TableCell>Name</TableCell>
+                <TableCell>Phone</TableCell>
+                <TableCell>Email</TableCell>
                 <TableCell>Website</TableCell>
                 <TableCell>Reason contacting us</TableCell>
                 <TableCell>Choose Course</TableCell>
