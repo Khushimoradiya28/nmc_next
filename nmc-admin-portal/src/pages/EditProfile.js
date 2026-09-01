@@ -255,7 +255,7 @@ const EditProfile = () => {
                   })()}
                 </span>
                 <span className="ml-3 text-xs text-gray-400 dark:text-gray-500 font-medium">
-                  (Managed by System)
+                  (Managed by Admin)
                 </span>
               </div>
             </div>

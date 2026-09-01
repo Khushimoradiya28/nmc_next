@@ -105,18 +105,22 @@ const routes = [
   {
     path: '/leads',
     component: Leads,
+    roles: ['super_admin', 'admin', 'department'],
   },
   {
     path: '/admissions',
     component: Admissions,
+    roles: ['super_admin', 'admin', 'department'],
   },
   {
     path: '/banner',
     component: Banner,
+    roles: ['super_admin', 'admin', 'department', 'content'],
   },
   {
     path: '/gallery',
     component: Gallery,
+    roles: ['super_admin', 'admin', 'department', 'content'],
   },
 
   { path: '/setting', component: EditProfile },
@@ -138,10 +142,12 @@ const routes = [
   {
     path: '/master/faculty',
     component: Faculty,
+    roles: ['super_admin', 'admin', 'department', 'content'],
   },
   {
     path: '/master/academic-programs',
     component: AcademicPrograms,
+    roles: ['super_admin', 'admin', 'department', 'content'],
   },
   {
     path: '/master/brand',
@@ -154,10 +160,12 @@ const routes = [
   {
     path: '/master/user',
     component: MasterUser,
+    roles: ['super_admin', 'admin'],
   },
   {
     path: '/master/userrole',
     component: UserRole,
+    roles: ['super_admin', 'admin'],
   },
   {
     path: '/master/tag',

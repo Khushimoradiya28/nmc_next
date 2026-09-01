@@ -11,8 +11,29 @@ import { AdminContext } from '../../context/AdminContext';
 
 const SidebarContent = ({ isCollapsed }) => {
   const { mode } = useContext(WindmillContext);
-  const { dispatch } = useContext(AdminContext);
+  const { state, dispatch } = useContext(AdminContext);
   const location = useLocation();
+
+  // Safely extract role from context or cookies
+  const adminInfo = state?.adminInfo || (Cookies.get("adminInfo") ? JSON.parse(Cookies.get("adminInfo")) : null);
+  
+  const rawRole = (
+    adminInfo?.role_name ||
+    (typeof adminInfo?.role === 'object' ? adminInfo?.role?.role_name : '') ||
+    (typeof adminInfo?.role === 'string' ? adminInfo?.role : '') ||
+    ''
+  ).toLowerCase().trim();
+
+  const userRole = (rawRole === 'admin' || rawRole === 'super_admin' || rawRole === 'superadmin')
+    ? 'super_admin'
+    : rawRole;
+
+  // Filter sidebar based on permitted roles
+  const filteredSidebar = sidebar.filter((route) => {
+    if (!route.roles || route.roles.length === 0) return true;
+    if (userRole === 'super_admin') return true;
+    return route.roles.map((r) => r.toLowerCase().trim()).includes(userRole);
+  });
 
   const isRouteActive = (routePath) => {
     const [path, search] = routePath.split('?');
@@ -36,7 +57,7 @@ const SidebarContent = ({ isCollapsed }) => {
       </Link>
 
       <ul className="mt-6">
-        {sidebar.map((route) => {
+        {filteredSidebar.map((route) => {
           if (route.routes) {
             return <SidebarSubmenu route={route} key={route.name} isCollapsed={isCollapsed} />;
           }
