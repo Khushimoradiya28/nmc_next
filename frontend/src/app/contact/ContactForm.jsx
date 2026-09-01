@@ -99,10 +99,13 @@ export default function ContactForm() {
       try {
         const res = await CourseServices.getCourseDropdown();
         if (res && res.data && Array.isArray(res.data)) {
-          const mapped = res.data.map(item => ({
-            value: item.display_label || item.full_title || item.title,
-            label: item.display_label || item.full_title || item.title,
-          }));
+          const mapped = res.data.map(item => {
+            const cleanName = (item.title || item.full_title || item.display_label || '').replace(/\s*\([^)]*\)\s*$/, '').trim();
+            return {
+              value: cleanName || item.title,
+              label: cleanName || item.title,
+            };
+          });
           setCourseOptions(mapped);
         }
       } catch (err) {

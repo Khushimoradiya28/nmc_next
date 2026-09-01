@@ -20,33 +20,32 @@ router.get("/dropdown", async (req, res, next) => {
         .sort({ sortOrder: 1, created_at: -1 }),
     ]);
 
-    // Format Academic Programs
+    // Format Academic Programs (Clean course name only, without fee in parentheses)
     const formattedAcademic = academicPrograms.map((prog) => {
-      const label = prog.fees ? `${prog.shortTitle || prog.fullName} (${prog.fees})` : (prog.shortTitle || prog.fullName);
+      const courseName = prog.shortTitle || prog.fullName;
       return {
         id: prog._id,
         guid: prog.guid,
         slug: prog.slug,
-        title: prog.shortTitle || prog.fullName,
+        title: courseName,
         full_title: prog.fullName,
-        display_label: label,
-        course_type: "academic_program", // 'ug', 'pg', 'diploma'
+        display_label: courseName,
+        course_type: "academic_program",
         group: prog.programType ? prog.programType.toUpperCase() + " Degree / Program" : "Academic Programs",
         category: prog.programType,
         fees: prog.fees || "",
       };
     });
 
-    // Format Professional Certificate Courses
+    // Format Professional Certificate Courses (Clean course name only)
     const formattedCertificate = certificateCourses.map((cert) => {
-      const label = cert.fees ? `${cert.title} (${cert.fees})` : cert.title;
       return {
         id: cert._id,
         guid: cert.guid,
         slug: cert.slug,
         title: cert.title,
         full_title: cert.title,
-        display_label: label,
+        display_label: cert.title,
         course_type: "certificate_course",
         group: "Professional Certificate Courses",
         category: cert.category || "Certificate",
