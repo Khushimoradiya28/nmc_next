@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Button, Label } from '@windmill/react-ui';
 import { FiCamera, FiUser, FiMail, FiPhone, FiShield } from 'react-icons/fi';
 import Select from 'react-select';
@@ -11,6 +11,12 @@ import LetterAvatar from '../components/common/LetterAvatar';
 
 // Dynamic Profile Avatar Uploader Component with Letter Avatar Fallback
 const AvatarUploader = ({ imageUrl, setImageUrl, setUploadedFile, name = '' }) => {
+  const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [imageUrl]);
+
   const handleFile = (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -18,6 +24,7 @@ const AvatarUploader = ({ imageUrl, setImageUrl, setUploadedFile, name = '' }) =
     if (setUploadedFile) {
       setUploadedFile(file);
     }
+    setImgError(false);
     setImageUrl(URL.createObjectURL(file));
   };
 
@@ -35,14 +42,12 @@ const AvatarUploader = ({ imageUrl, setImageUrl, setUploadedFile, name = '' }) =
         className="relative group flex-shrink-0 cursor-pointer"
         title="Click to upload profile photo"
       >
-        {resolvedSrc ? (
+        {resolvedSrc && !imgError ? (
           <img
             src={resolvedSrc}
             alt="Profile Preview"
             className="w-28 h-28 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-white dark:border-gray-800 shadow-xl ring-4 ring-red-900/10 bg-white dark:bg-gray-700 transition group-hover:opacity-90"
-            onError={(e) => {
-              e.target.style.display = 'none';
-            }}
+            onError={() => setImgError(true)}
           />
         ) : (
           <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-4 border-white dark:border-gray-800 shadow-xl ring-4 ring-red-900/10 flex items-center justify-center bg-red-700 text-white text-3xl font-bold">

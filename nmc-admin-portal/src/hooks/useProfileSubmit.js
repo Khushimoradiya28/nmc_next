@@ -108,17 +108,44 @@ const useProfileSubmit = () => {
       if (res) {
         notifySuccess(res.message || 'Profile updated successfully');
 
+        const updatedData = res.data || {};
+        const freshImage =
+          updatedData.profile_img_webp_url ||
+          updatedData.profile_img_url ||
+          updatedData.image ||
+          updatedData.profile_img ||
+          '';
+
+        if (freshImage) {
+          setImageUrl(freshImage);
+        }
+        setUploadedFile(null);
+
         // Update local session cookie so header avatar refreshes immediately
+        const currentToken = token || Cookies.get('adminToken');
         const updatedAdminInfo = {
           ...(adminInfo || {}),
+          ...updatedData,
           first_name: data.first_name.trim(),
           last_name: data.last_name.trim(),
           email: data.email.trim(),
           mobile: data.mobile.trim(),
-          ...(res.data?.profile_img_url ? { profile_img_url: res.data.profile_img_url, image: res.data.profile_img_url } : {}),
+          image: freshImage || adminInfo?.image || null,
+          profile_img_url: updatedData.profile_img_url || adminInfo?.profile_img_url || null,
+          profile_img_webp_url: updatedData.profile_img_webp_url || adminInfo?.profile_img_webp_url || null,
         };
         Cookies.set('adminInfo', JSON.stringify(updatedAdminInfo));
-        dispatch({ type: 'USER_LOGIN', payload: updatedAdminInfo });
+        if (currentToken) Cookies.set('adminToken', currentToken);
+
+        dispatch({
+          type: 'UPDATE_PROFILE',
+          payload: { ...updatedAdminInfo, token: currentToken },
+        });
+
+        // Reload the current page to display the refreshed state cleanly
+        setTimeout(() => {
+          window.location.reload();
+        }, 600);
       }
     } catch (err) {
       notifyError(err?.response?.data?.message || err?.message || 'Profile update failed');

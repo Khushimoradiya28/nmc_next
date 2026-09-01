@@ -13,12 +13,13 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
+    case "UPDATE_PROFILE":
     case "USER_LOGIN":
       return {
         ...state,
         adminInfo: action.payload,
-        adminToken: action.payload.token,
-        adminUserId: action.payload._id,
+        adminToken: action.payload.token || state.adminToken || Cookies.get("adminToken"),
+        adminUserId: action.payload._id || state.adminUserId || Cookies.get("adminUserId"),
       };
 
     case "USER_LOGOUT":

@@ -32,7 +32,6 @@ const MasterUserService = {
       return requests.post('/user/update', body, {
         headers: {
           "Authorization": token ? `Bearer ${token}` : undefined,
-          "Content-Type": "multipart/form-data",
         },
       });
     }

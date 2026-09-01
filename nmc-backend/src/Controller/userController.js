@@ -55,6 +55,7 @@ const formatUser = (user, req) => {
     profile_img_webp: doc.profile_img_webp || null,
     profile_img_url: profileImgUrl,
     profile_img_webp_url: profileImgWebpUrl,
+    image: profileImgWebpUrl || profileImgUrl || doc.profile_img || null,
     status: doc.status || "1",
     guid: doc.guid,
     created_at: moment(doc.created_at).tz("Asia/Kolkata").format("YYYY-MM-DD HH:mm:ss"),

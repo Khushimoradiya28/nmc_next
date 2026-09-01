@@ -1,8 +1,8 @@
 import requests from "./httpService";
 
 const UserServices = {
-  getAllUsers(body) {
-    return requests.get(`/user`, body);
+  getAllUsers(params = {}) {
+    return requests.get(`/user/list`, { params });
   },
   getUserById(id) {
     return requests.get(`/user/${id}`);

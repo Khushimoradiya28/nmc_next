@@ -1,16 +1,16 @@
 import React from "react";
-import noResult from "../../assets/img/no-result.svg";
+import noResult from "../../assets/img/no-result.png";
 
-const NotFound = ({ title }) => {
+const NotFound = () => {
   return (
-    <div className="flex flex-col items-center justify-center text-center mx-auto p-5 my-5 w-full">
-      <img className="my-4 mx-auto block" src={noResult} alt="no-result" width="400" />
-      <h2 className="text-lg md:text-xl lg:text-2xl text-center mt-2 font-medium font-serif text-gray-600 dark:text-gray-400">
-        Sorry, we can not find this {title}
-        <span role="img" aria-labelledby="img" className="ml-1">
-          😞
-        </span>
-      </h2>
+    <div className="flex flex-col items-center justify-center text-center mx-auto py-8 px-4 w-full">
+      <div className="flex items-center justify-center w-full max-w-sm sm:max-w-md md:max-w-lg">
+        <img
+          className="w-80 sm:w-96 md:w-[440px] max-w-full h-auto object-contain mx-auto"
+          src={noResult}
+          alt="No Results Found"
+        />
+      </div>
     </div>
   );
 };

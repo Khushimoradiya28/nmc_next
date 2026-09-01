@@ -122,6 +122,7 @@ export default function PopupForm() {
     teacher: '',
     message: ''
   });
+  const [fieldErrors, setFieldErrors] = useState({});
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
   const pathname = usePathname();
@@ -149,6 +150,7 @@ export default function PopupForm() {
   useEffect(() => {
     setIsOpen(false);
     setSubmitted(false);
+    setFieldErrors({});
 
     const timer = setTimeout(() => {
       setIsOpen(true);
@@ -162,6 +164,7 @@ export default function PopupForm() {
     const handleOpenPopup = () => {
       setIsOpen(true);
       setSubmitted(false);
+      setFieldErrors({});
     };
     window.addEventListener('openContactPopup', handleOpenPopup);
     return () => window.removeEventListener('openContactPopup', handleOpenPopup);
@@ -184,13 +187,35 @@ export default function PopupForm() {
   };
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (fieldErrors[name]) {
+      setFieldErrors(prev => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.firstName.trim()) return;
+    
+    // Validate mandatory fields matching Contact Form
+    const errors = {};
+    if (!formData.firstName.trim()) errors.firstName = 'First name is required.';
+    if (!formData.lastName.trim())  errors.lastName  = 'Last name is required.';
+    if (!formData.reason.trim())    errors.reason    = 'Reason is required.';
+    if (!formData.course)           errors.course    = 'Please select a course.';
+    if (!formData.teacher)          errors.teacher   = 'Please select a teacher/department.';
+    if (!formData.message.trim())   errors.message   = 'Message is required.';
 
+    if (Object.keys(errors).length > 0) {
+      setFieldErrors(errors);
+      return;
+    }
+
+    setFieldErrors({});
     setLoading(true);
     try {
       await ContactServices.submitInquiry({
@@ -214,6 +239,15 @@ export default function PopupForm() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const errLabel = {
+    display: 'block',
+    color: '#dc2626',
+    fontSize: '0.72rem',
+    fontWeight: 600,
+    marginTop: '0.25rem',
+    textAlign: 'left',
   };
 
   if (!isOpen) return null;
@@ -273,7 +307,7 @@ export default function PopupForm() {
                 </div>
               </div>
 
-              <form onSubmit={handleSubmit} className={styles.popupForm}>
+              <form onSubmit={handleSubmit} className={styles.popupForm} noValidate>
                 <div className={styles.formGrid}>
                   {/* First Name */}
                   <div className={styles.formGroup}>
@@ -291,9 +325,9 @@ export default function PopupForm() {
                         placeholder="Your name here..."
                         value={formData.firstName}
                         onChange={handleChange}
-                        required
                       />
                     </div>
+                    {fieldErrors.firstName && <span style={errLabel}>⚠ {fieldErrors.firstName}</span>}
                   </div>
 
                   {/* Last Name */}
@@ -314,6 +348,7 @@ export default function PopupForm() {
                         onChange={handleChange}
                       />
                     </div>
+                    {fieldErrors.lastName && <span style={errLabel}>⚠ {fieldErrors.lastName}</span>}
                   </div>
 
                   {/* Website */}
@@ -355,6 +390,7 @@ export default function PopupForm() {
                         onChange={handleChange}
                       />
                     </div>
+                    {fieldErrors.reason && <span style={errLabel}>⚠ {fieldErrors.reason}</span>}
                   </div>
 
                   {/* Choose Course - Custom Select */}
@@ -372,6 +408,7 @@ export default function PopupForm() {
                         </svg>
                       }
                     />
+                    {fieldErrors.course && <span style={errLabel}>⚠ {fieldErrors.course}</span>}
                   </div>
 
                   {/* Choose Teacher - Custom Select */}
@@ -391,6 +428,7 @@ export default function PopupForm() {
                         </svg>
                       }
                     />
+                    {fieldErrors.teacher && <span style={errLabel}>⚠ {fieldErrors.teacher}</span>}
                   </div>
 
                   {/* Message */}
@@ -407,9 +445,9 @@ export default function PopupForm() {
                         placeholder="Your message..."
                         value={formData.message}
                         onChange={handleChange}
-                        required
                       ></textarea>
                     </div>
+                    {fieldErrors.message && <span style={errLabel}>⚠ {fieldErrors.message}</span>}
                   </div>
 
                   {/* Submit Button */}

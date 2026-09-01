@@ -36,8 +36,43 @@ const Header = () => {
   };
   const [profileOpen, setProfileOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const pRef = useRef();
   const nRef = useRef();
+
+  const getAvatarUrl = () => {
+    const rawImg =
+      adminInfo?.profile_img_webp_url ||
+      adminInfo?.profile_img_url ||
+      adminInfo?.image ||
+      adminInfo?.profile_img_webp ||
+      adminInfo?.profile_img;
+
+    if (!rawImg || typeof rawImg !== 'string' || rawImg.trim() === '') {
+      return null;
+    }
+
+    if (
+      rawImg.startsWith('http://') ||
+      rawImg.startsWith('https://') ||
+      rawImg.startsWith('blob:')
+    ) {
+      return rawImg;
+    }
+
+    const backendBase = (
+      process.env.REACT_APP_API_URL || 'http://localhost:5000/api'
+    ).replace(/\/api\/?$/, '');
+
+    return `${backendBase}/${rawImg.replace(/^\//, '')}`;
+  };
+
+  const avatarSrc = getAvatarUrl();
+
+  // Reset img error if adminInfo changes
+  useEffect(() => {
+    setImgError(false);
+  }, [adminInfo?.image, adminInfo?.profile_img_url, adminInfo?.profile_img]);
 
   const handleLogOut = () => {
     dispatch({ type: 'USER_LOGOUT' });
@@ -295,17 +330,27 @@ const Header = () => {
             {/* <!-- Profile menu --> */}
             <li className="relative inline-block text-left" ref={pRef}>
               <button
-                className="rounded-full dark:bg-amber-600 bg-red-800 text-white h-8 w-8 font-medium mx-auto focus:outline-none"
+                className="rounded-full dark:bg-amber-600 bg-red-800 text-white h-9 w-9 font-bold flex items-center justify-center mx-auto focus:outline-none shadow-sm text-sm overflow-hidden border-2 border-white/20"
                 onClick={handleProfileOpen}
+                title={adminInfo?.first_name || adminInfo?.name || 'Profile'}
               >
-                {adminInfo.image ? (
-                  <Avatar
-                    className="align-middle"
-                    src={`${adminInfo.image}`}
-                    aria-hidden="true"
+                {avatarSrc && !imgError ? (
+                  <img
+                    className="w-full h-full object-cover rounded-full"
+                    src={avatarSrc}
+                    alt="Profile"
+                    onError={() => setImgError(true)}
                   />
                 ) : (
-                  <span>{adminInfo.email[0].toUpperCase()}</span>
+                  <span>
+                    {(
+                      adminInfo?.first_name ||
+                      adminInfo?.name ||
+                      adminInfo?.user_name ||
+                      adminInfo?.email ||
+                      'A'
+                    ).trim()[0].toUpperCase()}
+                  </span>
                 )}
               </button>
               {profileOpen && (

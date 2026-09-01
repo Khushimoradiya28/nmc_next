@@ -1,872 +1,938 @@
-import React, {
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-  useRef,
-} from "react";
-import { Bar, Doughnut, Line } from "react-chartjs-2";
+import React, { useEffect, useState, useContext } from 'react';
+import { Doughnut, Bar } from 'react-chartjs-2';
+import { Link } from 'react-router-dom';
+import Cookies from 'js-cookie';
+import dayjs from 'dayjs';
+
+// Icons
 import {
-  Table,
-  TableHeader,
-  TableBody,
-  TableRow,
-  TableCell,
-  TableFooter,
-  TableContainer,
-  Pagination,
-} from "@windmill/react-ui";
-import { ImStack, ImCreditCard } from "react-icons/im";
-import {
-  FiShoppingCart,
-  FiTruck,
+  FiCompass,
+  FiFileText,
+  FiSliders,
+  FiMessageSquare,
+  FiAward,
+  FiBookOpen,
+  FiUsers,
+  FiUserCheck,
+  FiImage,
+  FiClock,
+  FiCheckCircle,
+  FiAlertCircle,
   FiRefreshCw,
-  FiCheck,
-  FiXCircle,
-  FiFilter,
-} from "react-icons/fi";
-import { useHistory } from "react-router-dom";
-import Tooltip from "../components/tooltip/Tooltip";
-import { FiTrello } from "react-icons/fi";
-import useAsync from "../hooks/useAsync";
-import useFilter from "../hooks/useFilter";
-import OrderServices from "../services/OrderServices";
-import DashboardServices from "../services/DashboardServices";
-import Loading from "../components/preloader/Loading";
-import ChartCard from "../components/chart/ChartCard";
-import CardItem from "../components/dashboard/CardItem";
-import PageTitle from "../components/Typography/PageTitle";
-import OrderTable from "../components/dashboard/OrderTable";
-import CardItemTwo from "../components/dashboard/CardItemTwo";
-import { barOptions, doughnutOptions } from "../utils/chartsData";
-import ProductTable from "../components/order/OrderTable";
-import NotFound from "../components/table/NotFound";
+  FiPhone,
+  FiMail,
+} from 'react-icons/fi';
+
+import { AdminContext } from '../context/AdminContext';
+import DashboardHero from '../components/dashboard/DashboardHero';
+import DashboardKpiCard from '../components/dashboard/DashboardKpiCard';
+import DashboardPreviewTable from '../components/dashboard/DashboardPreviewTable';
+import ChartCard from '../components/chart/ChartCard';
+import Loading from '../components/preloader/Loading';
+
+// Real API Services
+import LeadServices from '../services/LeadServices';
+import AdmissionLeadServices from '../services/AdmissionLeadServices';
+import FacultyServices from '../services/FacultyServices';
+import AcademicProgramServices from '../services/AcademicProgramServices';
+import CourseServices from '../services/CourseServices';
+import BannerServices from '../services/BannerServices';
+import GalleryService from '../services/GalleryService';
+import TestimonialServices from '../services/TestimonialServices';
+import AwardServices from '../services/AwardServices';
+import UserServices from '../services/UserServices';
 
 const Dashboard = () => {
-  const fetchRecentOrders = useCallback(() => {
-    return OrderServices.getAllOrders({
-      type: "order_list",
-      payment_status: ["success", "failed"],
-      sort_order: "desc",
-      sort_by: "created_at",
-    });
-  }, []);
-  const filterRef = useRef(null);
-  const { data, loading } = useAsync(fetchRecentOrders, []);
-  const [categoryFilter, setCategoryFilter] = useState("this_year");
-  const [showFilter, setShowFilter] = useState(false);
-  const [customRange, setCustomRange] = useState({
-    from_date: "",
-    to_date: "",
+  const { state } = useContext(AdminContext);
+  const adminInfo =
+    state?.adminInfo ||
+    (Cookies.get('adminInfo') ? JSON.parse(Cookies.get('adminInfo')) : null);
+
+  const rawRole = (
+    adminInfo?.role_name ||
+    (typeof adminInfo?.role === 'object' ? adminInfo?.role?.role_name : '') ||
+    (typeof adminInfo?.role === 'string' ? adminInfo?.role : '') ||
+    ''
+  )
+    .toLowerCase()
+    .trim();
+
+  const userRole =
+    rawRole === 'admin' || rawRole === 'super_admin' || rawRole === 'superadmin'
+      ? 'super_admin'
+      : rawRole;
+
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Real Counts State
+  const [stats, setStats] = useState({
+    contactLeadsCount: 0,
+    admissionLeadsCount: 0,
+    facultyCount: 0,
+    programsCount: 0,
+    coursesCount: 0,
+    bannersCount: 0,
+    galleryCount: 0,
+    testimonialsCount: 0,
+    awardsCount: 0,
+    usersCount: 0,
+    pendingAdmissionsCount: 0,
+    pendingContactLeadsCount: 0,
   });
 
-  const [brandFilter, setBrandFilter] = useState("this_year");
-  const [brandTempFilter, setBrandTempFilter] = useState("this_year");
-  const [brandCustomRange, setBrandCustomRange] = useState({
-    from_date: "",
-    to_date: "",
-  });
-  const [showBrandFilter, setShowBrandFilter] = useState(false);
-  const brandFilterRef = useRef(null);
+  // Recent Tables Data
+  const [recentAdmissions, setRecentAdmissions] = useState([]);
+  const [recentContactLeads, setRecentContactLeads] = useState([]);
+  const [recentBanners, setRecentBanners] = useState([]);
+  const [recentGallery, setRecentGallery] = useState([]);
+  const [recentTestimonials, setRecentTestimonials] = useState([]);
 
-  const FILTER_OPTIONS = [
-    { label: "Today", value: "today" },
-    { label: "Yesterday", value: "yesterday" },
-    { label: "This Week", value: "this_week" },
-    { label: "Last Week", value: "last_week" },
-    { label: "Last 7 Days", value: "last_7_days" },
-    { label: "This Month", value: "this_month" },
-    { label: "Last Month", value: "last_month" },
-    { label: "Last 28 Days", value: "last_28_days" },
-    { label: "Last 6 Months", value: "last_6_months" },
-    { label: "This Year", value: "this_year" },
-    { label: "Custom", value: "custom" },
-  ];
-
-  const [orderSummary, setOrderSummary] = useState({
-    today: 0,
-    month: 0,
-    year: 0,
-  });
-  const [orderStatus, setOrderStatus] = useState({
-    total: 0,
-    pending: 0,
-    confirmed: 0,
-    completed: 0,
-    cancelled: 0,
-  });
-  const [categoryStats, setCategoryStats] = useState({
-    labels: [], // months
-    datasets: [], // categories
-  });
-  const [brandStats, setBrandStats] = useState({
-    labels: [],
-    datasets: [],
-  });
-  const [highestSellingStats, setHighestSellingStats] = useState({
-    labels: [],
-    datasets: [],
-  });
-
-  const hasHighestSellingData = highestSellingStats?.labels?.length > 0;
-
-  const ordersData = useMemo(() => {
-    return data?.data ?? [];
-  }, [data]);
-
-  useEffect(() => {
-    fetchOrderSummary();
-    fetchOrderStatus();
-    // fetchBrandStats();
-    fetchHighestSellingProducts();
-  }, []);
-  useEffect(() => {
-    fetchCategoryStats(categoryFilter);
-  }, [categoryFilter]);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (filterRef.current && !filterRef.current.contains(event.target)) {
-        setShowFilter(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-  useEffect(() => {
-    fetchBrandStats(brandFilter); // <-- modify fetchBrandStats to accept a filter
-  }, [brandFilter]);
-
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (
-        brandFilterRef.current &&
-        !brandFilterRef.current.contains(event.target)
-      ) {
-        setShowBrandFilter(false);
-      }
-    }
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-  const [tempFilter, setTempFilter] = useState(categoryFilter);
-
-  const fetchOrderSummary = async () => {
+  // Fetch all real data
+  const fetchDashboardData = async () => {
     try {
-      const res = await DashboardServices.getAllRevenueSummary();
+      setRefreshing(true);
 
-      // ✅ FIX HERE
-      const summary = res?.data;
+      const promises = [];
 
-      setOrderSummary({
-        today: summary?.today_total || 0,
-        month: summary?.month_total || 0,
-        year: summary?.year_total || 0,
+      // Contact Leads (Super Admin & Department)
+      if (userRole === 'super_admin' || userRole === 'department') {
+        promises.push(
+          LeadServices.getAllLeads({ page: 1, limit: 10 }).catch(() => ({
+            data: [],
+            totalDoc: 0,
+          }))
+        );
+        promises.push(
+          AdmissionLeadServices.getAllAdmissions({
+            page: 1,
+            limit: 10,
+          }).catch(() => ({ data: [], totalDoc: 0 }))
+        );
+      } else {
+        promises.push(Promise.resolve(null));
+        promises.push(Promise.resolve(null));
+      }
+
+      // Faculty (All roles)
+      promises.push(
+        FacultyServices.getAllFaculty({ page: 1, limit: 10 }).catch(() => ({
+          data: [],
+          totalDoc: 0,
+        }))
+      );
+
+      // Academic Programs (All roles)
+      promises.push(
+        AcademicProgramServices.getAllPrograms({ page: 1, limit: 10 }).catch(
+          () => ({ data: [], total: 0 })
+        )
+      );
+
+      // Certificate Courses (All roles)
+      promises.push(
+        CourseServices.getAllCourses({ page: 1, limit: 10 }).catch(() => ({
+          data: [],
+          total: 0,
+        }))
+      );
+
+      // Banners (All roles)
+      promises.push(
+        BannerServices.getAllBanners({ page: 1, limit: 10 }).catch(() => ({
+          data: [],
+          total: 0,
+        }))
+      );
+
+      // Gallery (All roles)
+      promises.push(
+        GalleryService.getAllGallery({ page: 1, limit: 10 }).catch(() => ({
+          data: [],
+          total: 0,
+        }))
+      );
+
+      // Testimonials (All roles)
+      promises.push(
+        TestimonialServices.getTestimonials({}).catch(() => ({
+          data: [],
+          total: 0,
+        }))
+      );
+
+      // Awards (All roles)
+      promises.push(
+        AwardServices.getAllAwards({ page: 1, limit: 10 }).catch(() => ({
+          data: [],
+          total: 0,
+        }))
+      );
+
+      // Users (Super Admin only)
+      if (userRole === 'super_admin') {
+        promises.push(
+          UserServices.getAllUsers().catch(() => ({ data: [], total: 0 }))
+        );
+      } else {
+        promises.push(Promise.resolve(null));
+      }
+
+      const [
+        contactRes,
+        admissionRes,
+        facultyRes,
+        programsRes,
+        coursesRes,
+        bannersRes,
+        galleryRes,
+        testimonialsRes,
+        awardsRes,
+        usersRes,
+      ] = await Promise.all(promises);
+
+      // Extract leads
+      const contactList = contactRes?.data || contactRes?.leads || [];
+      const contactTotal =
+        contactRes?.totalDoc || contactRes?.total || contactList.length || 0;
+
+      const admissionList = admissionRes?.data || admissionRes?.leads || [];
+      const admissionTotal =
+        admissionRes?.totalDoc ||
+        admissionRes?.total ||
+        admissionList.length ||
+        0;
+
+      const pendingAdmissions = admissionList.filter(
+        (a) => !a.status || a.status === 'New' || a.status === 'Pending'
+      ).length;
+      const pendingContacts = contactList.filter(
+        (c) => !c.status || c.status === 'New' || c.status === 'Pending'
+      ).length;
+
+      // Extract faculty & academic
+      const facultyList = facultyRes?.data || [];
+      const facultyTotal = facultyRes?.totalDoc || facultyList.length || 0;
+
+      const programList = programsRes?.data || [];
+      const programsTotal = programsRes?.total || programList.length || 0;
+
+      const coursesList = coursesRes?.data || [];
+      const coursesTotal = coursesRes?.total || coursesList.length || 0;
+
+      // Extract media
+      const bannerList = bannersRes?.data || [];
+      const bannersTotal = bannersRes?.total || bannerList.length || 0;
+
+      const galleryList = galleryRes?.data || [];
+      const galleryTotal = galleryRes?.total || galleryList.length || 0;
+
+      const testimonialsList = testimonialsRes?.data || [];
+      const testimonialsTotal =
+        testimonialsRes?.total || testimonialsList.length || 0;
+
+      const awardsList = awardsRes?.data || [];
+      const awardsTotal = awardsRes?.total || awardsList.length || 0;
+
+      // Extract users
+      const usersList = usersRes?.data || [];
+      const usersTotal = usersRes?.total || usersList.length || 0;
+
+      setStats({
+        contactLeadsCount: contactTotal,
+        admissionLeadsCount: admissionTotal,
+        facultyCount: facultyTotal,
+        programsCount: programsTotal,
+        coursesCount: coursesTotal,
+        bannersCount: bannersTotal,
+        galleryCount: galleryTotal,
+        testimonialsCount: testimonialsTotal,
+        awardsCount: awardsTotal,
+        usersCount: usersTotal,
+        pendingAdmissionsCount: pendingAdmissions,
+        pendingContactLeadsCount: pendingContacts,
       });
-    } catch (error) {
-      console.error("Dashboard summary error:", error);
-    }
-  };
-  const fetchOrderStatus = async () => {
-    try {
-      const res1 = await DashboardServices.getAllOrderStatus();
 
-      const status = res1?.data;
-
-      setOrderStatus({
-        total: status?.total || 0,
-        pending: status?.pending || 0,
-        confirmed: status?.confirmed || 0,
-        completed: status?.completed || 0,
-        cancelled: status?.cancelled || 0,
-      });
+      setRecentAdmissions(admissionList.slice(0, 5));
+      setRecentContactLeads(contactList.slice(0, 5));
+      setRecentBanners(bannerList.slice(0, 5));
+      setRecentGallery(galleryList.slice(0, 5));
+      setRecentTestimonials(testimonialsList.slice(0, 5));
     } catch (err) {
-      console.error("Order status error:", err);
+      console.error('Error loading dashboard metrics:', err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
     }
   };
-
-  const fetchCategoryStats = async (date_filter = categoryFilter) => {
-    try {
-      const body =
-        date_filter === "custom"
-          ? {
-            date_filter,
-            from_date: customRange.from_date,
-            to_date: customRange.to_date,
-          }
-          : { date_filter };
-
-      const res = await DashboardServices.getAllCategoryStats(body);
-      const data = res?.data || [];
-
-      if (data.length > 0) {
-        const labels = data.map((item) => item.month);
-
-        const categoriesSet = new Set();
-        data.forEach((item) => {
-          Object.keys(item).forEach((key) => {
-            if (key !== "month") categoriesSet.add(key);
-          });
-        });
-
-        const categories = Array.from(categoriesSet);
-
-        const colors = [
-          "#FB8B42", // #F97316 → slightly lighter than dark
-          "#3AC0F5", // #0EA5E9 → slightly lighter
-          "#2BD9A8", // #10B981 → slightly lighter
-          "#FCD23B", // #EAB308 → slightly lighter
-          "#F7607A", // #F43F5E → slightly lighter
-          "#25BA5C", // #16A34A → slightly lighter
-          "#5EA0F8", // #3B82F6 → slightly lighter
-          "#F36A6A", // #EF4444 → slightly lighter
-          "#A675F8", // #8B5CF6 → slightly lighter
-          "#FBB728", // #F59E0B → slightly lighter
-          "#1AB9B1", // #14B8A6 → slightly lighter
-          "#E63A88", // #DB2777 → slightly lighter
-          "#6B6FF8", // #6366F1 → slightly lighter
-          "#2AD8EE", // #22D3EE → slightly lighter
-          "#BFA3FC", // #A78BFA → slightly lighter
-          "#F584B8", // #F472B6 → slightly lighter
-          "#91D123", // #84CC16 → slightly lighter
-          "#FCD93B", // #FACC15 → slightly lighter
-          "#0FA397", // #0F766E → slightly lighter
-        ];
-
-        //
-        const datasets = categories.map((cat, idx) => ({
-          label: cat,
-          data: data.map((item) => item[cat] || 0),
-          backgroundColor: colors[idx % colors.length],
-          // barThickness: 30,
-        }));
-
-        setCategoryStats({ labels, datasets });
-      } else {
-        setCategoryStats({ labels: [], datasets: [] });
-      }
-    } catch (err) {
-      console.error("Category stats error:", err);
-    }
-  };
-
-  const fetchBrandStats = async (date_filter = "this_year") => {
-    try {
-      const body =
-        date_filter === "custom"
-          ? {
-            date_filter,
-            from_date: brandCustomRange.from_date,
-            to_date: brandCustomRange.to_date,
-          }
-          : { date_filter };
-
-      const res = await DashboardServices.getAllBrandStats(body);
-      const data = res?.data || [];
-
-      if (data.length > 0) {
-        const labels = data.map((item) => item.brand_name);
-
-        const colors = [
-          "#FB8B42", // #F97316 → slightly lighter than dark
-          "#3AC0F5", // #0EA5E9 → slightly lighter
-          "#2BD9A8", // #10B981 → slightly lighter
-          "#FCD23B", // #EAB308 → slightly lighter
-          "#F7607A", // #F43F5E → slightly lighter
-          "#25BA5C", // #16A34A → slightly lighter
-          "#5EA0F8", // #3B82F6 → slightly lighter
-          "#F36A6A", // #EF4444 → slightly lighter
-          "#A675F8", // #8B5CF6 → slightly lighter
-          "#FBB728", // #F59E0B → slightly lighter
-          "#1AB9B1", // #14B8A6 → slightly lighter
-          "#E63A88", // #DB2777 → slightly lighter
-          "#6B6FF8", // #6366F1 → slightly lighter
-          "#2AD8EE", // #22D3EE → slightly lighter
-          "#BFA3FC", // #A78BFA → slightly lighter
-          "#F584B8", // #F472B6 → slightly lighter
-          "#91D123", // #84CC16 → slightly lighter
-          "#FCD93B", // #FACC15 → slightly lighter
-          "#0FA397", // #0F766E → slightly lighter
-        ];
-
-        const datasets = [
-          {
-            data: data.map((item) => item.count || 0),
-            backgroundColor: colors.slice(0, data.length),
-          },
-        ];
-
-        setBrandStats({ labels, datasets });
-      } else {
-        setBrandStats({ labels: [], datasets: [] });
-      }
-    } catch (err) {
-      console.error("Brand stats error:", err);
-    }
-  };
-  const fetchHighestSellingProducts = async () => {
-    try {
-      const res = await DashboardServices.getAllHightSellingProduct({});
-      const data = res?.data || [];
-
-      if (data.length > 0) {
-        setHighestSellingStats({
-          labels: data.map((item) =>
-            item.product_name.length > 25
-              ? item.product_name.slice(0, 25) + "…"
-              : item.product_name
-          ),
-          datasets: [
-            {
-              label: "Units Sold",
-              data: data.map((item) => item.total_sold),
-              borderColor: "#3AC0F5",
-              backgroundColor: "rgba(58,192,245,0.15)",
-              fill: true,
-              tension: 0.4,
-              pointRadius: 4,
-            },
-          ],
-        });
-      } else {
-        setHighestSellingStats({ labels: [], datasets: [] });
-      }
-    } catch (err) {
-      console.error("Highest selling products error:", err);
-    }
-  };
-
-  // ---------------------------
-  // LOW STOCK PRODUCT STATES
-  // ---------------------------
-  const history = useHistory();
-  const [lowStockLoading, setLowStockLoading] = useState(false);
-  const [lowStockData, setLowStockData] = useState([]);
-  const [lowStockTotal, setLowStockTotal] = useState(0);
-
-  // LOW STOCK PRODUCT STATES
-  const [lowStockPage, setLowStockPage] = useState(1);
-  const lowStockResultsPerPage = 10;
-
-  // Slice data for current page
-  const startIndex = (lowStockPage - 1) * lowStockResultsPerPage;
-  const endIndex = startIndex + lowStockResultsPerPage;
-  const currentLowStockData = lowStockData.slice(startIndex, endIndex);
-
-  const handleLowStockPageChange = (page) => setLowStockPage(page);
-
 
   useEffect(() => {
-    const fetchLowStockProducts = async () => {
-      try {
-        setLowStockLoading(true);
-        const res = await DashboardServices.getLowStockProducts();
-        setLowStockData(res?.data || []);
-        setLowStockTotal(res?.data?.length || 0);
-      } catch (error) {
-        console.error("Low stock API error:", error);
-      } finally {
-        setLowStockLoading(false);
-      }
-    };
+    fetchDashboardData();
+  }, [userRole]);
 
-    fetchLowStockProducts();
-  }, []);
-
-  const handleViewProduct = (product) => {
-    if (!product?._id) return;
-    history.push(`/product-details/${product._id}`);
+  // Chart data: Distribution of Portal Assets
+  const portalAssetsChartData = {
+    labels: [
+      'Academic Programs',
+      'Professional Courses',
+      'Faculty',
+      'Home Banners',
+      'Gallery Media',
+      'Testimonials',
+      'Awards',
+    ],
+    datasets: [
+      {
+        data: [
+          stats.programsCount,
+          stats.coursesCount,
+          stats.facultyCount,
+          stats.bannersCount,
+          stats.galleryCount,
+          stats.testimonialsCount,
+          stats.awardsCount,
+        ],
+        backgroundColor: [
+          '#1D4ED8', // blue
+          '#15803D', // green
+          '#6D28D9', // purple
+          '#8A0000', // NMC Primary Deep Red
+          '#F4B000', // NMC Gold
+          '#BE185D', // rose
+          '#0E7490', // cyan
+        ],
+        borderWidth: 2,
+        borderColor: '#ffffff',
+      },
+    ],
   };
 
+  // Chart data: Inquiries & Leads comparison (Admin & Department)
+  const leadsComparisonChartData = {
+    labels: ['Total Contact Inquiries', 'Total Admission Applications', 'Pending Follow-up'],
+    datasets: [
+      {
+        label: 'Inquiries Count',
+        data: [
+          stats.contactLeadsCount,
+          stats.admissionLeadsCount,
+          stats.pendingAdmissionsCount + stats.pendingContactLeadsCount,
+        ],
+        backgroundColor: ['#8A0000', '#F4B000', '#DC2626'],
+        borderRadius: 8,
+      },
+    ],
+  };
 
-  const {
-    handleChangePage,
-    totalResults,
-    resultsPerPage: orderResultsPerPage,
-    dataTable,
-    serviceData,
-    currentPage,
-  } = useFilter(ordersData);
-  const hasCategoryData =
-    categoryStats?.datasets?.length > 0 &&
-    categoryStats.datasets.some((ds) => ds.data.some((v) => v > 0));
+  // Chart data: Media breakdown (Content role)
+  const contentMediaChartData = {
+    labels: ['Home Banners', 'Gallery Items', 'Academic Programs', 'Professional Courses', 'Testimonials', 'Awards'],
+    datasets: [
+      {
+        label: 'Published Count',
+        data: [
+          stats.bannersCount,
+          stats.galleryCount,
+          stats.programsCount,
+          stats.coursesCount,
+          stats.testimonialsCount,
+          stats.awardsCount,
+        ],
+        backgroundColor: ['#8A0000', '#6D28D9', '#1D4ED8', '#15803D', '#F4B000', '#0E7490'],
+        borderRadius: 8,
+      },
+    ],
+  };
 
-  const hasBrandData =
-    brandStats?.datasets?.length > 0 &&
-    brandStats.datasets[0]?.data?.some((v) => v > 0);
+  // Chart data: Department Assets Distribution
+  const departmentAssetsChartData = {
+    labels: [
+      'Academic Programs',
+      'Professional Courses',
+      'Faculty',
+      'Testimonials',
+    ],
+    datasets: [
+      {
+        data: [
+          stats.programsCount,
+          stats.coursesCount,
+          stats.facultyCount,
+          stats.testimonialsCount,
+        ],
+        backgroundColor: [
+          '#1D4ED8', // blue
+          '#15803D', // green
+          '#6D28D9', // purple
+          '#BE185D', // rose
+        ],
+        borderWidth: 2,
+        borderColor: '#ffffff',
+      },
+    ],
+  };
+
+  // Reusable sleek chart options
+  const barChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: '#111827',
+        titleFont: { size: 11, weight: 'bold' },
+        bodyFont: { size: 11 },
+        padding: 8,
+        cornerRadius: 6,
+      },
+    },
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { font: { size: 10, weight: '600' } },
+      },
+      y: {
+        beginAtZero: true,
+        grid: { color: 'rgba(0, 0, 0, 0.05)' },
+        ticks: { font: { size: 10 }, precision: 0 },
+      },
+    },
+    maxBarThickness: 36,
+  };
+
+  const doughnutChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { boxWidth: 10, font: { size: 11, weight: '600' }, padding: 10 },
+      },
+    },
+    cutout: '68%',
+  };
+
+  if (loading) {
+    return <Loading loading={loading} />;
+  }
 
   return (
-    <>
-      <PageTitle>Dashboard Overview</PageTitle>
-
-      <div className="grid gap-4 mb-8 md:grid-cols-3 xl:grid-cols-3">
-        <CardItemTwo
-          title="Today Order"
-          Icon={ImStack}
-          price={orderSummary.today}
-          className="text-white bg-gradient-to-r from-red-800 to-red-600 shadow-md"
-        />
-        <CardItemTwo
-          title="This Month"
-          Icon={FiShoppingCart}
-          price={orderSummary.month}
-          className="text-white bg-gradient-to-r from-amber-500 to-yellow-600 shadow-md"
-        />
-        <CardItemTwo
-          title="Total Order"
-          Icon={ImCreditCard}
-          price={orderSummary.year}
-          className="text-white bg-gradient-to-r from-red-950 to-red-800 shadow-md"
-        />
+    <div className="pb-12">
+      {/* Header bar with Refresh */}
+      <div className="flex items-center justify-between mb-4">
+        <div>
+          <h2 className="text-xl font-black text-gray-900 dark:text-white tracking-tight">
+            Dashboard Overview
+          </h2>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            Real-time live metrics and operational management
+          </p>
+        </div>
+        <button
+          onClick={fetchDashboardData}
+          disabled={refreshing}
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold text-red-800 dark:text-amber-400 bg-red-50 dark:bg-gray-800 hover:bg-red-100 dark:hover:bg-gray-700 transition-colors border border-red-200/50 dark:border-gray-700"
+          title="Refresh real-time data"
+        >
+          <FiRefreshCw className={`w-3.5 h-3.5 ${refreshing ? 'animate-spin' : ''}`} />
+          <span>{refreshing ? 'Syncing...' : 'Sync Data'}</span>
+        </button>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-        <CardItem
-          title="Total Order"
-          Icon={FiShoppingCart}
-          quantity={orderStatus.total}
-          className="text-orange-600 bg-orange-100 dark:bg-orange-500 dark:text-orange-100"
-        />
-        <CardItem
-          title="Order Pending"
-          Icon={FiRefreshCw}
-          quantity={orderStatus.pending}
-          className="text-blue-600 bg-blue-100 dark:bg-blue-500 dark:text-blue-100"
-        />
-        <CardItem
-          title="Order Confirmed"
-          Icon={FiTruck}
-          quantity={orderStatus.confirmed}
-          className="text-teal-600 bg-teal-100 dark:bg-teal-500 dark:text-teal-100"
-        />
-        <CardItem
-          title="Order Completed"
-          Icon={FiCheck}
-          quantity={orderStatus.completed}
-          className="text-green-600 bg-green-100 dark:bg-green-500 dark:text-green-100"
-        />
-        <CardItem
-          title="Order Cancelled"
-          Icon={FiXCircle}
-          quantity={orderStatus.cancelled}
-          className="text-red-600 bg-red-100 dark:bg-red-500 dark:text-red-100"
-        />
-      </div>
+      {/* Hero Welcome Banner */}
+      <DashboardHero adminInfo={adminInfo} userRole={userRole} />
 
-      <div className="grid gap-4 md:grid-cols-2 my-8">
-        <ChartCard
-          title="Conversions This Year"
-          action={
-            <div className="relative">
-              <button
-                className="p-2 hover:bg-red-50 rounded-full text-red-800"
-                title="Reset Filter"
-                onClick={() => {
-                  setCategoryFilter("this_year"); // useEffect will call fetchCategoryStats
-                  setTempFilter("this_year");
-                  setCustomRange({ from_date: "", to_date: "" });
-                  setShowFilter(false);
-                }}
-              >
-                <FiRefreshCw size={16} />
-              </button>
-              <button
-                className="p-2 hover:bg-gray-100 rounded-full"
-                onClick={() => setShowFilter(!showFilter)}
-              >
-                <FiFilter size={18} className="text-red-800" />
-              </button>
-              {/* RESET ICON */}
-              {showFilter && (
-                <div
-                  ref={filterRef}
-                  className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-lg z-50 p-2"
-                  style={{ maxHeight: "220px", overflowY: "auto" }}
-                >
-                  {FILTER_OPTIONS.map((item) => (
-                    <div key={item.value} className="mb-1">
-                      <button
-                        onClick={() => {
-                          setTempFilter(item.value);
-                          if (item.value !== "custom") {
-                            setCategoryFilter(item.value);
-                            setShowFilter(false);
-                          }
-                        }}
-                        className={`
-                        block w-full text-left px-4 py-2 rounded
-                        text-gray-800 dark:text-gray-200
-                        hover:bg-gray-100 dark:hover:bg-gray-700
-                        ${tempFilter === item.value
-                            ? "bg-red-50 text-red-800 dark:bg-red-900 font-semibold"
-                            : ""
-                          }
-                      `}
-                      >
-                        {item.label}
-                      </button>
+      {/* ========================================================= */}
+      {/* 1. SUPER ADMIN VIEW */}
+      {/* ========================================================= */}
+      {userRole === 'super_admin' && (
+        <>
+          {/* Executive KPI Metric Cards */}
+          <div className="grid gap-4 mb-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
+            <DashboardKpiCard
+              title="Admission Leads"
+              count={stats.admissionLeadsCount}
+              icon={FiFileText}
+              linkTo="/admissions"
+              gradient="from-red-900 to-red-700"
+              iconBg="bg-red-100 text-red-900 dark:bg-red-950/80 dark:text-red-300"
+              subtext="Total Applications"
+              badgeText={stats.pendingAdmissionsCount > 0 ? `${stats.pendingAdmissionsCount} New` : null}
+            />
 
-                      {item.value === "custom" && tempFilter === "custom" && (
-                        <div className="px-4 py-2">
-                          <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">
-                            From:
-                          </label>
-                          <input
-                            type="date"
-                            value={customRange.from_date}
-                            onChange={(e) =>
-                              setCustomRange((prev) => ({
-                                ...prev,
-                                from_date: e.target.value,
-                              }))
-                            }
-                            className="w-full rounded px-3 py-2 dark:bg-gray-700 dark:text-gray-200 mb-2 border border-gray-300 dark:border-gray-600"
-                          />
+            <DashboardKpiCard
+              title="Contact Leads"
+              count={stats.contactLeadsCount}
+              icon={FiCompass}
+              linkTo="/leads"
+              gradient="from-amber-600 to-amber-500"
+              iconBg="bg-amber-100 text-amber-900 dark:bg-amber-950/80 dark:text-amber-300"
+              subtext="General Inquiries"
+              badgeText={stats.pendingContactLeadsCount > 0 ? `${stats.pendingContactLeadsCount} New` : null}
+            />
 
-                          <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">
-                            To:
-                          </label>
-                          <input
-                            type="date"
-                            value={customRange.to_date}
-                            onChange={(e) =>
-                              setCustomRange((prev) => ({
-                                ...prev,
-                                to_date: e.target.value,
-                              }))
-                            }
-                            className="w-full rounded px-3 py-2 dark:bg-gray-700 dark:text-gray-200 mb-2 border border-gray-300 dark:border-gray-600"
-                          />
+            <DashboardKpiCard
+              title="Academic Programs"
+              count={stats.programsCount}
+              icon={FiBookOpen}
+              linkTo="/master/academic-programs"
+              gradient="from-blue-700 to-indigo-600"
+              iconBg="bg-blue-100 text-blue-900 dark:bg-blue-950/80 dark:text-blue-300"
+              subtext="Degree Programs"
+            />
 
-                          <button
-                            onClick={() => {
-                              setCategoryFilter("custom");
-                              setShowFilter(false);
-                            }}
-                            className="w-full bg-red-800 text-white py-2 rounded hover:bg-red-900"
-                          >
-                            Apply
-                          </button>
+            <DashboardKpiCard
+              title="Professional Courses"
+              count={stats.coursesCount}
+              icon={FiAward}
+              linkTo="/products?type=courses"
+              gradient="from-emerald-700 to-teal-600"
+              iconBg="bg-emerald-100 text-emerald-900 dark:bg-emerald-950/80 dark:text-emerald-300"
+              subtext="Certificate Courses"
+            />
+
+            <DashboardKpiCard
+              title="Professors & Faculty"
+              count={stats.facultyCount}
+              icon={FiUserCheck}
+              linkTo="/master/faculty"
+              gradient="from-purple-700 to-indigo-700"
+              iconBg="bg-purple-100 text-purple-900 dark:bg-purple-950/80 dark:text-purple-300"
+              subtext="Active Faculty"
+            />
+
+            <DashboardKpiCard
+              title="Media & Gallery"
+              count={stats.bannersCount + stats.galleryCount}
+              icon={FiImage}
+              linkTo="/gallery"
+              gradient="from-pink-700 to-rose-600"
+              iconBg="bg-pink-100 text-pink-900 dark:bg-pink-950/80 dark:text-pink-300"
+              subtext={`${stats.bannersCount} Ban + ${stats.galleryCount} Gal`}
+            />
+
+            <DashboardKpiCard
+              title="System Users"
+              count={stats.usersCount}
+              icon={FiUsers}
+              linkTo="/master/user"
+              gradient="from-slate-800 to-gray-700"
+              iconBg="bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+              subtext="Staff & Admins"
+            />
+          </div>
+
+          {/* Charts Row */}
+          <div className="grid gap-6 md:grid-cols-2 mb-8">
+            <ChartCard title="Inquiries & Applications Overview">
+              <div className="h-56 p-1 flex items-center justify-center">
+                <Bar
+                  data={leadsComparisonChartData}
+                  options={barChartOptions}
+                />
+              </div>
+            </ChartCard>
+
+            <ChartCard title="College Portal Content Distribution">
+              <div className="h-56 p-1 flex items-center justify-center">
+                <Doughnut
+                  data={portalAssetsChartData}
+                  options={doughnutChartOptions}
+                />
+              </div>
+            </ChartCard>
+          </div>
+
+          {/* Real Data Preview Tables */}
+          <div className="grid gap-6 lg:grid-cols-2">
+            {/* Recent Admissions */}
+            <DashboardPreviewTable
+              title="Recent Admission Applications"
+              subtitle="Latest student applications submitted online"
+              viewAllLink="/admissions"
+              headers={['Applicant', 'Course / Batch', 'Contact', 'Status']}
+              rows={recentAdmissions}
+              renderRow={(item, idx) => (
+                <tr key={item._id || idx} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                  <td className="py-3 px-2 font-medium text-gray-900 dark:text-white">
+                    <p className="font-bold text-gray-900 dark:text-gray-100">{item.full_name || `${item.first_name || ''} ${item.last_name || ''}` || 'Applicant'}</p>
+                    <p className="text-[11px] text-gray-500 font-medium">{item.email || '-'}</p>
+                  </td>
+                  <td className="py-3 px-2 font-semibold text-gray-700 dark:text-gray-200">
+                    {item.course_name || item.program || item.department || 'Degree Program'}
+                  </td>
+                  <td className="py-3 px-2 text-gray-700 dark:text-gray-300">
+                    <span className="inline-flex items-center gap-1 font-mono text-[11px] font-bold">
+                      <FiPhone className="w-3 h-3 text-red-800 dark:text-amber-400" /> {item.mobile || item.phone || '-'}
+                    </span>
+                  </td>
+                  <td className="py-3 px-2">
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                        item.status === 'Approved' || item.status === 'Admitted'
+                          ? 'bg-green-100 text-green-900 dark:bg-green-900/50 dark:text-green-200'
+                          : item.status === 'Rejected'
+                          ? 'bg-red-100 text-red-900 dark:bg-red-900/50 dark:text-red-200'
+                          : 'bg-amber-100 text-amber-900 dark:bg-amber-900/50 dark:text-amber-200'
+                      }`}
+                    >
+                      {item.status || 'New'}
+                    </span>
+                  </td>
+                </tr>
+              )}
+            />
+
+            {/* Recent Contact Leads */}
+            <DashboardPreviewTable
+              title="Recent Contact Us Leads"
+              subtitle="Latest inquiries received from website visitors"
+              viewAllLink="/leads"
+              headers={['Inquirer', 'Subject / Dept', 'Contact', 'Date']}
+              rows={recentContactLeads}
+              renderRow={(item, idx) => (
+                <tr key={item._id || idx} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                  <td className="py-3 px-2 font-medium text-gray-900 dark:text-white">
+                    <p className="font-bold text-gray-900 dark:text-gray-100">{item.name || `${item.first_name || ''} ${item.last_name || ''}` || 'Visitor'}</p>
+                    <p className="text-[11px] text-gray-500 font-medium">{item.email || '-'}</p>
+                  </td>
+                  <td className="py-3 px-2 font-semibold text-gray-700 dark:text-gray-200 truncate max-w-[120px]" title={item.subject || item.message}>
+                    {item.subject || item.teacher || item.department || 'General Inquiry'}
+                  </td>
+                  <td className="py-3 px-2 text-gray-700 dark:text-gray-300">
+                    <span className="inline-flex items-center gap-1 font-mono text-[11px] font-bold">
+                      <FiPhone className="w-3 h-3 text-red-800 dark:text-amber-400" /> {item.mobile || item.phone || '-'}
+                    </span>
+                  </td>
+                  <td className="py-3 px-2 text-gray-600 dark:text-gray-400 text-[11px] font-bold">
+                    {item.created_at ? dayjs(item.created_at).format('DD MMM') : '-'}
+                  </td>
+                </tr>
+              )}
+            />
+          </div>
+        </>
+      )}
+
+      {/* ========================================================= */}
+      {/* 2. DEPARTMENT VIEW */}
+      {/* ========================================================= */}
+      {userRole === 'department' && (
+        <>
+          {/* Department KPI Metric Cards */}
+          <div className="grid gap-4 mb-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6">
+            <DashboardKpiCard
+              title="Admission Leads"
+              count={stats.admissionLeadsCount}
+              icon={FiFileText}
+              linkTo="/admissions"
+              gradient="from-red-900 to-red-700"
+              iconBg="bg-red-100 text-red-900 dark:bg-red-950/80 dark:text-red-300"
+              subtext="Applications"
+              badgeText={stats.pendingAdmissionsCount > 0 ? `${stats.pendingAdmissionsCount} Pending` : null}
+            />
+
+            <DashboardKpiCard
+              title="Contact Leads"
+              count={stats.contactLeadsCount}
+              icon={FiCompass}
+              linkTo="/leads"
+              gradient="from-amber-600 to-amber-500"
+              iconBg="bg-amber-100 text-amber-900 dark:bg-amber-950/80 dark:text-amber-300"
+              subtext="Student Inquiries"
+              badgeText={stats.pendingContactLeadsCount > 0 ? `${stats.pendingContactLeadsCount} New` : null}
+            />
+
+            <DashboardKpiCard
+              title="Academic Programs"
+              count={stats.programsCount}
+              icon={FiBookOpen}
+              linkTo="/master/academic-programs"
+              gradient="from-blue-700 to-indigo-600"
+              iconBg="bg-blue-100 text-blue-900 dark:bg-blue-950/80 dark:text-blue-300"
+              subtext="Degree Programs"
+            />
+
+            <DashboardKpiCard
+              title="Professional Courses"
+              count={stats.coursesCount}
+              icon={FiAward}
+              linkTo="/products?type=courses"
+              gradient="from-emerald-700 to-teal-600"
+              iconBg="bg-emerald-100 text-emerald-900 dark:bg-emerald-950/80 dark:text-emerald-300"
+              subtext="Skill Courses"
+            />
+
+            <DashboardKpiCard
+              title="Professors & Faculty"
+              count={stats.facultyCount}
+              icon={FiUserCheck}
+              linkTo="/master/faculty"
+              gradient="from-purple-700 to-indigo-700"
+              iconBg="bg-purple-100 text-purple-900 dark:bg-purple-950/80 dark:text-purple-300"
+              subtext="Faculty Directory"
+            />
+
+            <DashboardKpiCard
+              title="Testimonials"
+              count={stats.testimonialsCount}
+              icon={FiMessageSquare}
+              linkTo="/products?type=testimonial"
+              gradient="from-rose-700 to-pink-600"
+              iconBg="bg-rose-100 text-rose-900 dark:bg-rose-950/80 dark:text-rose-300"
+              subtext="Student Reviews"
+            />
+          </div>
+
+          {/* Department Charts Row (2 Column Layout) */}
+          <div className="grid gap-6 md:grid-cols-2 mb-8">
+            <ChartCard title="Inquiries & Applications Trend">
+              <div className="h-56 p-1 flex items-center justify-center">
+                <Bar
+                  data={leadsComparisonChartData}
+                  options={barChartOptions}
+                />
+              </div>
+            </ChartCard>
+
+            <ChartCard title="Department Programs & Faculty Ratio">
+              <div className="h-56 p-1 flex items-center justify-center">
+                <Doughnut
+                  data={departmentAssetsChartData}
+                  options={doughnutChartOptions}
+                />
+              </div>
+            </ChartCard>
+          </div>
+
+          {/* Department Data Tables */}
+          <div className="grid gap-6 lg:grid-cols-2">
+            <DashboardPreviewTable
+              title="Latest Admission Inquiries"
+              subtitle="Requires department review and verification"
+              viewAllLink="/admissions"
+              headers={['Applicant', 'Course', 'Contact', 'Status']}
+              rows={recentAdmissions}
+              renderRow={(item, idx) => (
+                <tr key={item._id || idx} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                  <td className="py-3 px-2 font-medium text-gray-900 dark:text-white">
+                    <p className="font-bold text-gray-900 dark:text-gray-100">{item.full_name || `${item.first_name || ''} ${item.last_name || ''}` || 'Applicant'}</p>
+                    <p className="text-[11px] text-gray-500 font-medium">{item.email || '-'}</p>
+                  </td>
+                  <td className="py-3 px-2 font-semibold text-gray-700 dark:text-gray-200">
+                    {item.course_name || item.program || item.department || 'Degree Program'}
+                  </td>
+                  <td className="py-3 px-2 text-gray-700 dark:text-gray-300">
+                    <span className="inline-flex items-center gap-1 font-mono text-[11px] font-bold">
+                      <FiPhone className="w-3 h-3 text-red-800 dark:text-amber-400" /> {item.mobile || item.phone || '-'}
+                    </span>
+                  </td>
+                  <td className="py-3 px-2">
+                    <span
+                      className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase ${
+                        item.status === 'Approved' || item.status === 'Admitted'
+                          ? 'bg-green-100 text-green-900 dark:bg-green-900/50 dark:text-green-200'
+                          : 'bg-amber-100 text-amber-900 dark:bg-amber-900/50 dark:text-amber-200'
+                      }`}
+                    >
+                      {item.status || 'Pending'}
+                    </span>
+                  </td>
+                </tr>
+              )}
+            />
+
+            <DashboardPreviewTable
+              title="Latest Contact Inquiries"
+              subtitle="Incoming questions regarding curriculum & admissions"
+              viewAllLink="/leads"
+              headers={['Inquirer', 'Department / Subject', 'Phone', 'Date']}
+              rows={recentContactLeads}
+              renderRow={(item, idx) => (
+                <tr key={item._id || idx} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                  <td className="py-3 px-2 font-medium text-gray-900 dark:text-white">
+                    <p className="font-bold text-gray-900 dark:text-gray-100">{item.name || 'Student'}</p>
+                    <p className="text-[11px] text-gray-500 font-medium">{item.email || '-'}</p>
+                  </td>
+                  <td className="py-3 px-2 font-semibold text-gray-700 dark:text-gray-200 truncate max-w-[120px]">
+                    {item.teacher || item.subject || item.department || 'Inquiry'}
+                  </td>
+                  <td className="py-3 px-2 font-mono text-[11px] font-bold text-gray-700 dark:text-gray-300">
+                    {item.mobile || item.phone || '-'}
+                  </td>
+                  <td className="py-3 px-2 text-gray-600 dark:text-gray-400 text-[11px] font-bold">
+                    {item.created_at ? dayjs(item.created_at).format('DD MMM') : '-'}
+                  </td>
+                </tr>
+              )}
+            />
+          </div>
+        </>
+      )}
+
+      {/* ========================================================= */}
+      {/* 3. CONTENT SPECIALIST VIEW */}
+      {/* ========================================================= */}
+      {userRole === 'content' && (
+        <>
+          {/* Content KPI Metric Cards */}
+          <div className="grid gap-4 mb-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
+            <DashboardKpiCard
+              title="Home Banners"
+              count={stats.bannersCount}
+              icon={FiSliders}
+              linkTo="/banner"
+              gradient="from-red-900 to-red-700"
+              iconBg="bg-red-100 text-red-900 dark:bg-red-950/80 dark:text-red-300"
+              subtext="Sliders Live"
+            />
+
+            <DashboardKpiCard
+              title="Gallery Media"
+              count={stats.galleryCount}
+              icon={FiImage}
+              linkTo="/gallery"
+              gradient="from-purple-700 to-indigo-600"
+              iconBg="bg-purple-100 text-purple-900 dark:bg-purple-950/80 dark:text-purple-300"
+              subtext="Photos & Videos"
+            />
+
+            <DashboardKpiCard
+              title="Academic Programs"
+              count={stats.programsCount}
+              icon={FiBookOpen}
+              linkTo="/master/academic-programs"
+              gradient="from-blue-700 to-indigo-600"
+              iconBg="bg-blue-100 text-blue-900 dark:bg-blue-950/80 dark:text-blue-300"
+              subtext="Degrees (B.Com, B.A)"
+            />
+
+            <DashboardKpiCard
+              title="Professional Courses"
+              count={stats.coursesCount}
+              icon={FiAward}
+              linkTo="/products?type=courses"
+              gradient="from-emerald-700 to-teal-600"
+              iconBg="bg-emerald-100 text-emerald-900 dark:bg-emerald-950/80 dark:text-emerald-300"
+              subtext="Skill Courses"
+            />
+
+            <DashboardKpiCard
+              title="Testimonials"
+              count={stats.testimonialsCount}
+              icon={FiMessageSquare}
+              linkTo="/products?type=testimonial"
+              gradient="from-amber-600 to-yellow-500"
+              iconBg="bg-amber-100 text-amber-900 dark:bg-amber-950/80 dark:text-amber-300"
+              subtext="Reviews & Feedback"
+            />
+
+            <DashboardKpiCard
+              title="Awards & Honors"
+              count={stats.awardsCount}
+              icon={FiAward}
+              linkTo="/products?type=awards"
+              gradient="from-cyan-700 to-blue-600"
+              iconBg="bg-cyan-100 text-cyan-900 dark:bg-cyan-950/80 dark:text-cyan-300"
+              subtext="Achievements"
+            />
+
+            <DashboardKpiCard
+              title="Faculty Profiles"
+              count={stats.facultyCount}
+              icon={FiUserCheck}
+              linkTo="/master/faculty"
+              gradient="from-slate-800 to-gray-700"
+              iconBg="bg-gray-200 text-gray-900 dark:bg-gray-700 dark:text-gray-100"
+              subtext="Published Faculty"
+            />
+          </div>
+
+          {/* Content Media Chart */}
+          <div className="grid gap-6 md:grid-cols-2 mb-8">
+            <ChartCard title="Media & Content Assets Breakdown">
+              <div className="h-56 p-1 flex items-center justify-center">
+                <Bar
+                  data={contentMediaChartData}
+                  options={barChartOptions}
+                />
+              </div>
+            </ChartCard>
+
+            <ChartCard title="Content Distribution Ratio">
+              <div className="h-56 p-1 flex items-center justify-center">
+                <Doughnut
+                  data={portalAssetsChartData}
+                  options={doughnutChartOptions}
+                />
+              </div>
+            </ChartCard>
+          </div>
+
+          {/* Content Data Preview Tables */}
+          <div className="grid gap-6 lg:grid-cols-2">
+            {/* Recent Banners */}
+            <DashboardPreviewTable
+              title="Live Home Banners"
+              subtitle="Active homepage promotional sliders"
+              viewAllLink="/banner"
+              headers={['Banner', 'Title', 'Date Added']}
+              rows={recentBanners}
+              renderRow={(item, idx) => (
+                <tr key={item._id || idx} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                  <td className="py-2.5 px-2">
+                    <div className="w-16 h-10 rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-700 border border-gray-200 dark:border-gray-600">
+                      {item.image ? (
+                        <img
+                          src={item.image_url || item.image}
+                          alt={item.title || 'Banner'}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-gray-400 text-xs">
+                          Banner
                         </div>
                       )}
                     </div>
-                  ))}
-                </div>
+                  </td>
+                  <td className="py-2.5 px-2 font-medium text-gray-900 dark:text-white">
+                    <p className="font-bold text-gray-900 dark:text-gray-100 truncate max-w-[200px]">{item.title || 'Hero Banner'}</p>
+                    <p className="text-[11px] text-gray-500 font-medium truncate max-w-[200px]">{item.subtitle || '-'}</p>
+                  </td>
+                  <td className="py-2.5 px-2 text-gray-600 dark:text-gray-400 text-[11px] font-bold">
+                    {item.created_at ? dayjs(item.created_at).format('DD MMM YYYY') : '-'}
+                  </td>
+                </tr>
               )}
-            </div>
-          }
-        >
-          {hasCategoryData ? (
-            <Bar
-              data={categoryStats}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: { display: false },
-                  tooltip: { enabled: true },
-                },
-                scales: {
-                  x: {
-                    stacked: false,
-                    ticks: { padding: 10 },
-                    grid: { drawTicks: false, drawBorder: false },
-                    barPercentage: 0.4,
-                    categoryPercentage: 0.5,
-                  },
-                  y: { beginAtZero: true },
-                },
-              }}
             />
-          ) : (
-            <NotFound title="Conversions This Year" />
-            // <div className="flex items-center justify-center h-64 text-gray-500 dark:text-gray-400">
-            //   No data found
-            // </div>
-          )}
-        </ChartCard>
-        <ChartCard
-          title="Top Revenue Product"
-          action={
-            <div className="relative">
-              <button
-                className="p-2 hover:bg-red-50 rounded-full text-red-800"
-                title="Reset Filter"
-                onClick={() => {
-                  setBrandFilter("this_year");
-                  setBrandTempFilter("this_year");
-                  setBrandCustomRange({ from_date: "", to_date: "" });
-                  setShowBrandFilter(false);
-                }}
-              >
-                <FiRefreshCw size={16} />
-              </button>
-              <button
-                className="p-2 hover:bg-gray-100 rounded-full"
-                onClick={() => setShowBrandFilter(!showBrandFilter)}
-              >
-                <FiFilter size={18} className="text-red-800" />
-              </button>
 
-              {showBrandFilter && (
-                <div
-                  ref={brandFilterRef}
-                  className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-800 border dark:border-gray-700 rounded shadow-lg z-50 p-2"
-                  style={{ maxHeight: "220px", overflowY: "auto" }}
-                >
-                  {FILTER_OPTIONS.map((item) => (
-                    <div key={item.value} className="mb-1">
-                      <button
-                        onClick={() => {
-                          setBrandTempFilter(item.value);
-                          if (item.value !== "custom") {
-                            setBrandFilter(item.value);
-                            setShowBrandFilter(false);
-                          }
-                        }}
-                        className={`
-                  block w-full text-left px-4 py-2 rounded
-                  text-gray-800 dark:text-gray-200
-                  hover:bg-gray-100 dark:hover:bg-gray-700
-                  ${brandTempFilter === item.value
-                            ? "bg-red-50 text-red-800 dark:bg-red-900 font-semibold"
-                            : ""
-                          }
-                `}
-                      >
-                        {item.label}
-                      </button>
-
-                      {item.value === "custom" &&
-                        brandTempFilter === "custom" && (
-                          <div className="px-4 py-2">
-                            <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">
-                              From:
-                            </label>
-                            <input
-                              type="date"
-                              value={brandCustomRange.from_date}
-                              onChange={(e) =>
-                                setBrandCustomRange((prev) => ({
-                                  ...prev,
-                                  from_date: e.target.value,
-                                }))
-                              }
-                              className="w-full rounded px-3 py-2 dark:bg-gray-700 dark:text-gray-200 mb-2 border border-gray-300 dark:border-gray-600"
-                            />
-
-                            <label className="block text-sm mb-1 text-gray-700 dark:text-gray-300">
-                              To:
-                            </label>
-                            <input
-                              type="date"
-                              value={brandCustomRange.to_date}
-                              onChange={(e) =>
-                                setBrandCustomRange((prev) => ({
-                                  ...prev,
-                                  to_date: e.target.value,
-                                }))
-                              }
-                              className="w-full rounded px-3 py-2 dark:bg-gray-700 dark:text-gray-200 mb-2 border border-gray-300 dark:border-gray-600"
-                            />
-
-                            <button
-                              onClick={() => {
-                                setBrandFilter("custom");
-                                setShowBrandFilter(false);
-                              }}
-                              className="w-full bg-red-800 text-white py-2 rounded hover:bg-red-900"
-                            >
-                              Apply
-                            </button>
-                          </div>
-                        )}
-                    </div>
-                  ))}
-                </div>
+            {/* Recent Testimonials */}
+            <DashboardPreviewTable
+              title="Recent Testimonials & Feedback"
+              subtitle="Student and dignitary quotes displayed on website"
+              viewAllLink="/products?type=testimonial"
+              headers={['Author', 'Designation / Batch', 'Type']}
+              rows={recentTestimonials}
+              renderRow={(item, idx) => (
+                <tr key={item._id || idx} className="hover:bg-gray-50 dark:hover:bg-gray-700/30 transition-colors">
+                  <td className="py-3 px-2 font-medium text-gray-900 dark:text-white">
+                    <p className="font-bold text-gray-900 dark:text-gray-100">{item.name || item.student_name || 'Alumnus'}</p>
+                  </td>
+                  <td className="py-3 px-2 text-gray-700 dark:text-gray-300 font-semibold text-xs">
+                    {item.designation || item.course || item.batch || 'Student'}
+                  </td>
+                  <td className="py-3 px-2">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase bg-amber-100 text-amber-900 dark:bg-amber-900/50 dark:text-amber-200">
+                      {item.type || 'Student'}
+                    </span>
+                  </td>
+                </tr>
               )}
-            </div>
-          }
-        >
-          {hasBrandData ? (
-            <Doughnut
-              data={brandStats}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: { display: false },
-                  tooltip: { enabled: true },
-                },
-              }}
-              className="chart"
             />
-          ) : (
-            // <div className="flex items-center justify-center h-64 text-gray-500 dark:text-gray-400">
-            //   No data found
-            // </div>
-            <NotFound title="Top Revenue Product" />
-          )}
-        </ChartCard>
-      </div>
-      <div className="grid gap-4 md:grid-cols-2 my-8">
-        <ChartCard title="Top Performer of the Year">
-          {hasHighestSellingData ? (
-            <Line
-              data={highestSellingStats}
-              options={{
-                responsive: true,
-                plugins: {
-                  legend: { display: false },
-                  tooltip: { enabled: true },
-                },
-                scales: {
-                  x: {
-                    ticks: {
-                      autoSkip: false,
-                      maxRotation: 45,
-                      minRotation: 30,
-                    },
-                    grid: { drawBorder: false },
-                  },
-                  y: {
-                    beginAtZero: true,
-                    grid: { drawBorder: false },
-                  },
-                },
-              }}
-            />
-          ) : (
-            <NotFound title="Top Performer of the Year" />
-            // <div className="flex items-center justify-center h-64 text-gray-500 dark:text-gray-400">
-            //   No data found
-            // </div>
-          )}
-        </ChartCard>
-        <ChartCard title={
-          <div className="relative flex items-center gap-2">
-            {/* Show red dot ONLY when low stock exists */}
-            {!lowStockLoading && lowStockData.length > 0 && (
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500 border-2 border-white"></span>
-              </span>
-            )}
-
-            <span>Low Stock Products</span>
           </div>
-        }
-        >
-          {lowStockLoading ? (
-            <Loading loading={lowStockLoading} />
-          ) : lowStockData.length > 0 ? (
-            <TableContainer className="mb-8 rounded-b-lg">
-              <Table>
-                <TableHeader>
-                  <tr>
-                    <TableCell>Sr. No.</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Quantity</TableCell>
-                    <TableCell>Actions</TableCell>
-                  </tr>
-                </TableHeader>
-
-                <TableBody>
-                  {currentLowStockData.map((item, index) => (
-                    <TableRow key={item._id}>
-                      <TableCell>{startIndex + index + 1}</TableCell>
-
-                      <TableCell>
-                        {item.product_title.slice(0, Math.ceil(item.product_title.length / 3)) + "..."}
-                      </TableCell>
-
-
-                      <TableCell>
-                        <span
-                          className={`px-2 py-1 rounded text-sm font-medium ${item.stock_quantity <= 5
-                            ? "bg-red-100 text-red-600"
-                            : "bg-yellow-100 text-yellow-600"
-                            }`}
-                        >
-                          {item.stock_quantity}
-                        </span>
-                      </TableCell>
-
-                      <TableCell>
-                        <button
-                          className="text-blue-600 hover:underline text-sm"
-                          onClick={() => handleViewProduct(item)}
-                        >
-                          <Tooltip
-                            Icon={FiTrello}
-                            title="View Product"
-                            bgColor="#2563EB"
-                          />
-                        </button>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-              <TableFooter>
-                <Pagination
-                  totalResults={lowStockTotal}
-                  resultsPerPage={lowStockResultsPerPage}
-                  onChange={handleLowStockPageChange}
-                  label="Low Stock Product Navigation"
-                />
-              </TableFooter>
-            </TableContainer>
-          ) : (
-            <NotFound title="Low Stock Products" />
-          )}
-        </ChartCard>
-
-      </div>
-
-      <PageTitle>Recent Orders</PageTitle>
-
-      {loading ? (
-        <Loading loading={loading} />
-      ) : serviceData.length !== 0 ? (
-        <TableContainer className="mb-8 rounded-b-lg">
-          <Table>
-            <TableHeader>
-              <tr>
-                <TableCell>Order ID</TableCell>
-                <TableCell>Customer</TableCell>
-                <TableCell>Sub Total</TableCell>
-                <TableCell>Discount</TableCell>
-                <TableCell>Shipping Charge</TableCell>
-                <TableCell>Total</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Payment Mode</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Actions</TableCell>
-              </tr>
-            </TableHeader>
-
-            <ProductTable
-              products={dataTable}
-              currentPage={currentPage}
-              resultsPerPage={orderResultsPerPage}
-            />
-          </Table>
-
-          <TableFooter>
-            <Pagination
-              totalResults={totalResults}
-              resultsPerPage={orderResultsPerPage}
-              onChange={handleChangePage}
-              label="Order Page Navigation"
-            />
-          </TableFooter>
-        </TableContainer>
-      ) : (
-        <NotFound title="Order" />
+        </>
       )}
-    </>
+    </div>
   );
 };
 
