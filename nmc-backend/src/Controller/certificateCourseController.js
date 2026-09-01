@@ -193,13 +193,8 @@ exports.createCertificateCourse = async (req, res, next) => {
     // Image processing
     let imagePath = (body.imageUrl || body.image_url || body.image || "").toString().trim();
     if (req.file) {
-      if (isProduction()) {
-        const processed = await uploadToS3AndCreateWebp(req.file, "certificate_courses");
-        imagePath = processed.originalLocation || processed.originalKey;
-      } else {
-        const processed = await saveLocalAndCreateWebp(req.file, "certificate_courses");
-        imagePath = processed.originalPath || processed.originalRelativePath;
-      }
+      const processed = await uploadToS3AndCreateWebp(req.file, "certificate_courses");
+      imagePath = processed.originalKey || processed.originalPath;
     }
 
 
@@ -357,19 +352,12 @@ exports.updateCertificateCourse = async (req, res, next) => {
 
     // Image Upload processing for update
     if (req.file) {
-      if (isProduction()) {
-        if (existingCourse.imageUrl) {
-          await deleteS3Objects([existingCourse.imageUrl]);
-        }
-        const processed = await uploadToS3AndCreateWebp(req.file, "certificate_courses");
-        existingCourse.imageUrl = processed.originalLocation || processed.originalKey;
-      } else {
-        if (existingCourse.imageUrl) {
-          deleteLocalImages(existingCourse.imageUrl);
-        }
-        const processed = await saveLocalAndCreateWebp(req.file, "certificate_courses");
-        existingCourse.imageUrl = processed.originalPath || processed.originalRelativePath;
+      if (existingCourse.imageUrl) {
+        await deleteS3Objects([existingCourse.imageUrl]);
+        deleteLocalImages(existingCourse.imageUrl);
       }
+      const processed = await uploadToS3AndCreateWebp(req.file, "certificate_courses");
+      existingCourse.imageUrl = processed.originalKey || processed.originalPath;
     } else {
       const explicitImg = (body.imageUrl || body.image_url || body.image || "").toString().trim();
       if (explicitImg) {

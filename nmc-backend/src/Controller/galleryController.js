@@ -233,41 +233,13 @@ exports.createGallery = async (req, res, next) => {
 
     // Handle file upload via Multer
     if (req.file) {
-      const ext = path.extname(req.file.originalname).toLowerCase();
+      const ext = path.extname(req.file.originalname || "").toLowerCase();
       const isVideo = [".mp4", ".webm", ".mov", ".mkv"].includes(ext);
       detectedType = isVideo ? "video" : "image";
 
-      if (isProduction()) {
-        if (isVideo) {
-          // Upload video to S3 directly without sharp WebP
-          const baseName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-          const originalKey = `media/gallery/${baseName}${ext}`;
-          const { PutObjectCommand } = require("@aws-sdk/client-s3");
-          const { s3 } = require("../Utils/s3Client");
-          await s3.send(
-            new PutObjectCommand({
-              Bucket: config.AWS_BUCKET_NAME,
-              Key: originalKey,
-              Body: req.file.buffer,
-              ContentType: req.file.mimetype,
-              ACL: "public-read",
-            })
-          );
-          mediaPath = originalKey;
-        } else {
-          const uploadResult = await uploadToS3AndCreateWebp(req.file, "gallery");
-          mediaPath = uploadResult.originalKey;
-          webpPath = uploadResult.webpKey;
-        }
-      } else {
-        if (isVideo) {
-          mediaPath = path.join("media", "gallery", path.basename(req.file.path)).replace(/\\/g, "/");
-        } else {
-          const result = await saveLocalAndCreateWebp(req.file, "gallery");
-          mediaPath = result.originalPath;
-          webpPath = result.webpPath;
-        }
-      }
+      const uploadResult = await uploadToS3AndCreateWebp(req.file, "gallery");
+      mediaPath = uploadResult.originalKey || uploadResult.originalPath;
+      webpPath = uploadResult.webpKey || uploadResult.webpPath;
     } else if (body.video_url && body.video_url.toString().trim()) {
       mediaPath = body.video_url.toString().trim();
       detectedType = "video";
@@ -436,48 +408,19 @@ exports.updateGallery = async (req, res, next) => {
 
     // Handle File Replacement
     if (req.file) {
-      const ext = path.extname(req.file.originalname).toLowerCase();
+      const ext = path.extname(req.file.originalname || "").toLowerCase();
       const isVideo = [".mp4", ".webm", ".mov", ".mkv"].includes(ext);
       existingGallery.media_type = isVideo ? "video" : "image";
 
-      let newOriginal, newWebp;
-      if (isProduction()) {
-        if (isVideo) {
-          const baseName = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-          newOriginal = `media/gallery/${baseName}${ext}`;
-          const { PutObjectCommand } = require("@aws-sdk/client-s3");
-          const { s3 } = require("../Utils/s3Client");
-          await s3.send(
-            new PutObjectCommand({
-              Bucket: config.AWS_BUCKET_NAME,
-              Key: newOriginal,
-              Body: req.file.buffer,
-              ContentType: req.file.mimetype,
-              ACL: "public-read",
-            })
-          );
-          if (existingGallery.media_file) {
-            await deleteS3Objects([existingGallery.media_file, existingGallery.media_file_webp].filter(Boolean));
-          }
-        } else {
-          const uploadResult = await uploadToS3AndCreateWebp(req.file, "gallery");
-          newOriginal = uploadResult.originalKey;
-          newWebp = uploadResult.webpKey;
-          if (existingGallery.media_file) {
-            await deleteS3Objects([existingGallery.media_file, existingGallery.media_file_webp].filter(Boolean));
-          }
-        }
-      } else {
-        if (isVideo) {
-          newOriginal = path.join("media", "gallery", path.basename(req.file.path)).replace(/\\/g, "/");
-          deleteLocalImages(existingGallery.media_file, existingGallery.media_file_webp);
-        } else {
-          const result = await saveLocalAndCreateWebp(req.file, "gallery");
-          newOriginal = result.originalPath;
-          newWebp = result.webpPath;
-          deleteLocalImages(existingGallery.media_file, existingGallery.media_file_webp);
-        }
+      const uploadResult = await uploadToS3AndCreateWebp(req.file, "gallery");
+      const newOriginal = uploadResult.originalKey || uploadResult.originalPath;
+      const newWebp = uploadResult.webpKey || uploadResult.webpPath;
+
+      if (existingGallery.media_file) {
+        await deleteS3Objects([existingGallery.media_file, existingGallery.media_file_webp].filter(Boolean));
+        deleteLocalImages(existingGallery.media_file, existingGallery.media_file_webp);
       }
+
       existingGallery.media_file = newOriginal;
       existingGallery.media_file_webp = newWebp || null;
     } else if (body.media_file && body.media_file.toString().trim()) {

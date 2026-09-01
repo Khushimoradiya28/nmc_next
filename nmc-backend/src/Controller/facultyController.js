@@ -165,15 +165,9 @@ exports.createFaculty = async (req, res) => {
 
     // Image Upload processing (matches req.file from multer)
     if (req.file) {
-      if (isProduction()) {
-        const processed = await uploadToS3AndCreateWebp(req.file, "faculty");
-        facultyData.photo = processed.originalLocation || processed.originalKey;
-        facultyData.photo_webp = processed.webpLocation || processed.webpKey;
-      } else {
-        const processed = await saveLocalAndCreateWebp(req.file, "faculty");
-        facultyData.photo = processed.originalPath || processed.originalRelativePath;
-        facultyData.photo_webp = processed.webpPath || processed.webpRelativePath;
-      }
+      const processed = await uploadToS3AndCreateWebp(req.file, "faculty");
+      facultyData.photo = processed.originalKey || processed.originalPath;
+      facultyData.photo_webp = processed.webpKey || processed.webpPath;
     } else if (facultyData.photo && typeof facultyData.photo === "string" && facultyData.photo.startsWith("http")) {
       // Keep existing photo if passed as URL string
       facultyData.photo_webp = facultyData.photo;
@@ -249,21 +243,14 @@ exports.updateFaculty = async (req, res) => {
 
     // Image Upload processing for update
     if (req.file) {
-      if (isProduction()) {
-        if (faculty.photo) await deleteS3Objects([faculty.photo]);
-        if (faculty.photo_webp) await deleteS3Objects([faculty.photo_webp]);
-
-        const processed = await uploadToS3AndCreateWebp(req.file, "faculty");
-        updateData.photo = processed.originalLocation || processed.originalKey;
-        updateData.photo_webp = processed.webpLocation || processed.webpKey;
-      } else {
-        if (faculty.photo) deleteLocalImages(faculty.photo);
-        if (faculty.photo_webp) deleteLocalImages(faculty.photo_webp);
-
-        const processed = await saveLocalAndCreateWebp(req.file, "faculty");
-        updateData.photo = processed.originalPath || processed.originalRelativePath;
-        updateData.photo_webp = processed.webpPath || processed.webpRelativePath;
+      if (faculty.photo) {
+        await deleteS3Objects([faculty.photo, faculty.photo_webp].filter(Boolean));
+        deleteLocalImages(faculty.photo, faculty.photo_webp);
       }
+
+      const processed = await uploadToS3AndCreateWebp(req.file, "faculty");
+      updateData.photo = processed.originalKey || processed.originalPath;
+      updateData.photo_webp = processed.webpKey || processed.webpPath;
     } else {
       const explicitImg = (updateData.photo || updateData.photo_url || updateData.image || "").toString().trim();
       if (explicitImg && explicitImg.startsWith("http")) {

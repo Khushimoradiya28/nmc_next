@@ -193,7 +193,7 @@ exports.login = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase() })
+    const user = await User.findOne({ email: email.toLowerCase().trim() })
       .select("+password")
       .populate("role", "role_name");
 
@@ -201,7 +201,7 @@ exports.login = async (req, res) => {
       return res.status(401).json({ status: 401, success: false, message: "Invalid email or password" });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    const isMatch = await bcrypt.compare(password.toString().trim(), user.password);
 
     if (!isMatch) {
       return res.status(401).json({ status: 401, success: false, message: "Invalid email or password" });

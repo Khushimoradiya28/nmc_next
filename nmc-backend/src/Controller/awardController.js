@@ -1,11 +1,9 @@
-﻿const Award = require("../Model/award");
+const Award = require("../Model/award");
 const moment = require("moment-timezone");
 const config = require("../Config/app");
 const fs = require("fs");
 const path = require("path");
 const { saveLocalAndCreateWebp, uploadToS3AndCreateWebp, deleteLocalImages, deleteS3Objects } = require("../Utils/imageProcessor");
-
-const isProduction = () => config.NODE_ENV === "production";
 
 /**
  * Format award item with full image URLs and Asia/Kolkata timestamps
@@ -37,11 +35,10 @@ const formatAward = (item, req) => {
  * Helper to delete temp local file on error
  */
 const deleteUploadedTemp = (file) => {
-  if (file && !isProduction()) {
-    const uploadedFilePath = path.join(__dirname, "../../", file.path);
-    if (fs.existsSync(uploadedFilePath)) {
+  if (file && file.path) {
+    if (fs.existsSync(file.path)) {
       try {
-        fs.unlinkSync(uploadedFilePath);
+        fs.unlinkSync(file.path);
       } catch (e) {
         // ignore
       }
@@ -185,15 +182,9 @@ exports.createAward = async (req, res, next) => {
 
     // If file is uploaded via multer
     if (req.file) {
-      if (isProduction()) {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "awards");
-        imagePath = uploadResult.originalKey;
-        webpPath = uploadResult.webpKey;
-      } else {
-        const result = await saveLocalAndCreateWebp(req.file, "awards");
-        imagePath = result.originalPath;
-        webpPath = result.webpPath;
-      }
+      const uploadResult = await uploadToS3AndCreateWebp(req.file, "awards");
+      imagePath = uploadResult.originalKey || uploadResult.originalPath;
+      webpPath = uploadResult.webpKey || uploadResult.webpPath;
     }
 
     if (!imagePath) {
@@ -311,18 +302,15 @@ exports.updateAward = async (req, res, next) => {
 
     // Handle Image Replacement
     if (req.file) {
-      let newOriginal, newWebp;
-      if (isProduction()) {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "awards");
-        newOriginal = uploadResult.originalKey;
-        newWebp = uploadResult.webpKey;
-        if (existingAward.image) await deleteS3Objects([existingAward.image, existingAward.image_webp].filter(Boolean));
-      } else {
-        const result = await saveLocalAndCreateWebp(req.file, "awards");
-        newOriginal = result.originalPath;
-        newWebp = result.webpPath;
+      const uploadResult = await uploadToS3AndCreateWebp(req.file, "awards");
+      const newOriginal = uploadResult.originalKey || uploadResult.originalPath;
+      const newWebp = uploadResult.webpKey || uploadResult.webpPath;
+
+      if (existingAward.image) {
+        await deleteS3Objects([existingAward.image, existingAward.image_webp].filter(Boolean));
         deleteLocalImages(existingAward.image, existingAward.image_webp);
       }
+
       existingAward.image = newOriginal;
       existingAward.image_webp = newWebp;
     } else if (body.image) {
@@ -407,4 +395,3 @@ exports.deleteAward = async (req, res, next) => {
     next(error);
   }
 };
-

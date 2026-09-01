@@ -4,32 +4,34 @@ const path = require("path");
 const fs = require("fs");
 const config = require("../Config/app");
 
-
-const isProduction = config.NODE_ENV === "production";
+const isS3Configured = Boolean(
+  config.AWS_ACCESS_KEY_ID &&
+  config.AWS_SECRET_ACCESS_KEY &&
+  config.AWS_BUCKET_NAME &&
+  config.AWS_BUCKET_NAME.trim() !== ""
+);
 
 function getMulterUpload(folderPath) {
   const allowed = /jpeg|jpg|png|webp|svg/;
 
-  if (isProduction) {
-    // Use memory storage in production: we'll manually upload original + webp to S3
+  if (isS3Configured) {
     const storage = multer.memoryStorage();
-    const upload = multer({
+    return multer({
       storage,
-      limits: { fileSize: 10 * 1024 * 1024 }, // optional limit 10MB
+      limits: { fileSize: 15 * 1024 * 1024 }, // 15MB
       fileFilter: (req, file, cb) => {
         const ext = path.extname(file.originalname).toLowerCase();
         if (!allowed.test(ext) && !allowed.test(file.mimetype)) {
           const err = new Error("Only .png, .jpg, .jpeg, .webp, and .svg formats are allowed!");
-          err.statusCode = 400;
+          err.statusCode = 422;
           return cb(err);
         }
         cb(null, true);
       },
     });
-    return upload;
   }
 
-  // Local disk storage (dev)
+  // Local disk storage (fallback on VPS / Render without S3)
   const localStorage = multer.diskStorage({
     destination: function (req, file, cb) {
       const dir = path.join(__dirname, "..", "media", folderPath);
@@ -46,20 +48,18 @@ function getMulterUpload(folderPath) {
 
   return multer({
     storage: localStorage,
-    limits: { fileSize: 10 * 1024 * 1024 },
+    limits: { fileSize: 15 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
       const ext = path.extname(file.originalname).toLowerCase();
       if (!allowed.test(ext) && !allowed.test(file.mimetype)) {
         const err = new Error("Only .png, .jpg, .jpeg, .webp, and .svg formats are allowed!");
-        err.statusCode = 400;
+        err.statusCode = 422;
         return cb(err);
       }
       cb(null, true);
     },
   });
 }
-
-
 
 function getExcelUpload() {
   const localStorage = multer.diskStorage({
@@ -77,11 +77,10 @@ function getExcelUpload() {
     storage: localStorage,
     limits: { fileSize: 50 * 1024 * 1024 }, // 50MB
     fileFilter: (req, file, cb) => {
-      // Accept .xlsx, .xls, and .csv too if needed, but strict to xlsx/xls for now
-      const allowed = /xlsx|xls/;
+      const allowed = /xlsx|xls|csv/;
       const ext = path.extname(file.originalname).toLowerCase();
       if (!allowed.test(ext)) {
-         return cb(new Error("Only .xlsx and .xls format allowed!"));
+         return cb(new Error("Only .xlsx, .xls and .csv formats allowed!"));
       }
       cb(null, true);
     },
@@ -91,17 +90,16 @@ function getExcelUpload() {
 function getReviewUpload() {
   const folderPath = "review";
 
-  if (isProduction) {
+  if (isS3Configured) {
     const storage = multer.memoryStorage();
-     // Limit 10MB to accommodate video. We will validate image vs video size in controller or fileFilter if possible.
     return multer({
       storage,
-      limits: { fileSize: 10 * 1024 * 1024 },
+      limits: { fileSize: 25 * 1024 * 1024 },
       fileFilter: (req, file, cb) => {
-        const allowed = /jpeg|jpg|png|heic|mp4/;
+        const allowed = /jpeg|jpg|png|heic|mp4|webp/;
         const ext = path.extname(file.originalname).toLowerCase();
         if (!allowed.test(ext) && !allowed.test(file.mimetype)) {
-           return cb(new Error("Only .jpg, .jpeg, .png, .heic and .mp4 allowed!"));
+           return cb(new Error("Only .jpg, .jpeg, .png, .webp, .heic and .mp4 allowed!"));
         }
         cb(null, true);
       },
@@ -110,8 +108,7 @@ function getReviewUpload() {
 
   const localStorage = multer.diskStorage({
     destination: function (req, file, cb) {
-      const dir = `src/media/${folderPath}`;
-      const fs = require('fs');
+      const dir = path.join(__dirname, "..", "media", folderPath);
       if (!fs.existsSync(dir)){
           fs.mkdirSync(dir, { recursive: true });
       }
@@ -125,12 +122,12 @@ function getReviewUpload() {
 
   return multer({
     storage: localStorage,
-    limits: { fileSize: 10 * 1024 * 1024 },
+    limits: { fileSize: 25 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
-      const allowed = /jpeg|jpg|png|heic|mp4/;
+      const allowed = /jpeg|jpg|png|heic|mp4|webp/;
       const ext = path.extname(file.originalname).toLowerCase();
       if (!allowed.test(ext) && !allowed.test(file.mimetype)) {
-        return cb(new Error("Only .jpg, .jpeg, .png, .heic and .mp4 allowed!"));
+        return cb(new Error("Only .jpg, .jpeg, .png, .webp, .heic and .mp4 allowed!"));
       }
       cb(null, true);
     },
@@ -141,11 +138,11 @@ function getGalleryUpload() {
   const folderPath = "gallery";
   const allowed = /jpeg|jpg|png|webp|svg|heic|mp4|webm|mov|mkv/;
 
-  if (isProduction) {
+  if (isS3Configured) {
     const storage = multer.memoryStorage();
     return multer({
       storage,
-      limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit for video/image
+      limits: { fileSize: 50 * 1024 * 1024 }, // 50MB limit
       fileFilter: (req, file, cb) => {
         const ext = path.extname(file.originalname).toLowerCase();
         if (!allowed.test(ext) && !allowed.test(file.mimetype)) {

@@ -1,4 +1,4 @@
-﻿const Testimonial = require("../Model/testimonial");
+const Testimonial = require("../Model/testimonial");
 const moment = require("moment-timezone");
 const config = require("../Config/app");
 const { saveLocalAndCreateWebp, uploadToS3AndCreateWebp, deleteLocalImages, deleteS3Objects } = require("../Utils/imageProcessor");
@@ -211,13 +211,8 @@ exports.createTestimonial = async (req, res, next) => {
 
     let avatarUrl = "";
     if (req.file) {
-      if (isProduction()) {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "testimonials");
-        avatarUrl = uploadResult.originalKey;
-      } else {
-        const result = await saveLocalAndCreateWebp(req.file, "testimonials");
-        avatarUrl = result.originalPath;
-      }
+      const uploadResult = await uploadToS3AndCreateWebp(req.file, "testimonials");
+      avatarUrl = uploadResult.originalKey || uploadResult.originalPath;
     } else if (body.avatarUrl || body.avatar_url || body.student_photo || body.profile_photo || body.image || body.photo) {
       const rawAvatar = body.avatarUrl || body.avatar_url || body.student_photo || body.profile_photo || body.image || body.photo;
       if (!rawAvatar.startsWith("blob:")) {
@@ -358,19 +353,13 @@ exports.updateTestimonial = async (req, res, next) => {
     existingTestimonial.type = targetType;
 
     if (req.file) {
-      let newOriginal, newWebp;
-      if (isProduction()) {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "testimonials");
-        newOriginal = uploadResult.originalKey;
-        newWebp = uploadResult.webpKey;
-        if (existingTestimonial.avatarUrl) await deleteS3Objects([existingTestimonial.avatarUrl]);
-      } else {
-        const result = await saveLocalAndCreateWebp(req.file, "testimonials");
-        newOriginal = result.originalPath;
-        newWebp = result.webpPath;
+      if (existingTestimonial.avatarUrl) {
+        await deleteS3Objects([existingTestimonial.avatarUrl]);
         deleteLocalImages(existingTestimonial.avatarUrl);
       }
-      existingTestimonial.avatarUrl = newOriginal;
+
+      const uploadResult = await uploadToS3AndCreateWebp(req.file, "testimonials");
+      existingTestimonial.avatarUrl = uploadResult.originalKey || uploadResult.originalPath;
     } else if (body.avatarUrl !== undefined || body.avatar_url !== undefined || body.student_photo !== undefined || body.profile_photo !== undefined || body.image !== undefined) {
       const avatarUrl = body.avatarUrl !== undefined ? body.avatarUrl : (body.avatar_url !== undefined ? body.avatar_url : (body.student_photo !== undefined ? body.student_photo : (body.profile_photo !== undefined ? body.profile_photo : body.image)));
       if (avatarUrl && !avatarUrl.startsWith("blob:")) {

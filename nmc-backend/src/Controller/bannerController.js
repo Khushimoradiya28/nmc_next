@@ -181,17 +181,11 @@ exports.createBanner = async (req, res, next) => {
     let imagePath = body.image ? body.image.toString().trim() : "";
     let webpPath = null;
 
-    // Handle file upload via Multer
+    // Handle file upload via Multer (S3 with auto-fallback to local disk)
     if (req.file) {
-      if (isProduction()) {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "banners");
-        imagePath = uploadResult.originalKey;
-        webpPath = uploadResult.webpKey;
-      } else {
-        const result = await saveLocalAndCreateWebp(req.file, "banners");
-        imagePath = result.originalPath;
-        webpPath = result.webpPath;
-      }
+      const uploadResult = await uploadToS3AndCreateWebp(req.file, "banners");
+      imagePath = uploadResult.originalKey || uploadResult.originalPath;
+      webpPath = uploadResult.webpKey || uploadResult.webpPath;
     }
 
     if (!imagePath) {
@@ -325,20 +319,15 @@ exports.updateBanner = async (req, res, next) => {
 
     // Handle Image Replacement
     if (req.file) {
-      let newOriginal, newWebp;
-      if (isProduction()) {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "banners");
-        newOriginal = uploadResult.originalKey;
-        newWebp = uploadResult.webpKey;
-        if (existingBanner.image) {
-          await deleteS3Objects([existingBanner.image, existingBanner.image_webp].filter(Boolean));
-        }
-      } else {
-        const result = await saveLocalAndCreateWebp(req.file, "banners");
-        newOriginal = result.originalPath;
-        newWebp = result.webpPath;
+      const uploadResult = await uploadToS3AndCreateWebp(req.file, "banners");
+      const newOriginal = uploadResult.originalKey || uploadResult.originalPath;
+      const newWebp = uploadResult.webpKey || uploadResult.webpPath;
+
+      if (existingBanner.image) {
+        await deleteS3Objects([existingBanner.image, existingBanner.image_webp].filter(Boolean));
         deleteLocalImages(existingBanner.image, existingBanner.image_webp);
       }
+
       existingBanner.image = newOriginal;
       existingBanner.image_webp = newWebp;
     } else if (body.image && body.image.toString().trim()) {

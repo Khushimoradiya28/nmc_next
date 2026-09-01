@@ -98,8 +98,10 @@ app.use("/api", Routes);
 
 app.use(errorHandler);
 
-app.use("/media", express.static("src/media"));
-app.use("/uploads", express.static("src/media"));
+app.use("/media", express.static(path.join(__dirname, "src", "media")));
+app.use("/uploads", express.static(path.join(__dirname, "src", "media")));
+app.use("/api/media", express.static(path.join(__dirname, "src", "media")));
+app.use("/api/uploads", express.static(path.join(__dirname, "src", "media")));
 
 app.get("/", (req, res) => {
   res.send("NMC Portal API is running and MongoDB is connected!");

@@ -292,15 +292,9 @@ exports.addUser = async (req, res, next) => {
     let profileWebpPath = null;
 
     if (req.file) {
-      if (isProduction()) {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "profile");
-        profilePath = uploadResult.originalKey;
-        profileWebpPath = uploadResult.webpKey;
-      } else {
-        const result = await saveLocalAndCreateWebp(req.file, "profile");
-        profilePath = result.originalPath;
-        profileWebpPath = result.webpPath;
-      }
+      const uploadResult = await uploadToS3AndCreateWebp(req.file, "profile");
+      profilePath = uploadResult.originalKey || uploadResult.originalPath;
+      profileWebpPath = uploadResult.webpKey || uploadResult.webpPath;
     }
 
     const newUser = new User({
@@ -463,22 +457,13 @@ exports.updateUser = async (req, res, next) => {
 
     // Handle Profile Image Replacement
     if (req.file) {
-      let newOriginal, newWebp;
-      if (isProduction()) {
-        const uploadResult = await uploadToS3AndCreateWebp(req.file, "profile");
-        newOriginal = uploadResult.originalKey;
-        newWebp = uploadResult.webpKey;
-        if (existingUser.profile_img) {
-          await deleteS3Objects([existingUser.profile_img, existingUser.profile_img_webp].filter(Boolean));
-        }
-      } else {
-        const result = await saveLocalAndCreateWebp(req.file, "profile");
-        newOriginal = result.originalPath;
-        newWebp = result.webpPath;
+      if (existingUser.profile_img) {
+        await deleteS3Objects([existingUser.profile_img, existingUser.profile_img_webp].filter(Boolean));
         deleteLocalImages(existingUser.profile_img, existingUser.profile_img_webp);
       }
-      existingUser.profile_img = newOriginal;
-      existingUser.profile_img_webp = newWebp;
+      const uploadResult = await uploadToS3AndCreateWebp(req.file, "profile");
+      existingUser.profile_img = uploadResult.originalKey || uploadResult.originalPath;
+      existingUser.profile_img_webp = uploadResult.webpKey || uploadResult.webpPath;
     }
 
     if (req.user) existingUser.updated_by = req.user.id;
