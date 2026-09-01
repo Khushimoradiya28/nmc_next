@@ -1,4 +1,4 @@
-﻿const Faculty = require("../Model/Faculty");
+const Faculty = require("../Model/faculty");
 const config = require("../Config/app");
 const { generateSlug } = require("../helper");
 const {
