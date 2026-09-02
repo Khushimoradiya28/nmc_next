@@ -4,6 +4,7 @@ const config = require("../Config/app");
 const fs = require("fs");
 const path = require("path");
 const { saveLocalAndCreateWebp, uploadToS3AndCreateWebp, deleteLocalImages, deleteS3Objects } = require("../Utils/imageProcessor");
+const { logActivity } = require("../Utils/activityLogger");
 
 /**
  * Format award item with full image URLs and Asia/Kolkata timestamps
@@ -218,6 +219,15 @@ exports.createAward = async (req, res, next) => {
 
     await newAward.save();
 
+    await logActivity({
+      req,
+      action: "CREATE",
+      module: "awards",
+      record_id: newAward._id,
+      record_title: newAward.title || "Award",
+      description: `Created award '${newAward.title || "Award"}'`,
+    });
+
     return res.status(201).json({
       success: true,
       status: 201,
@@ -258,7 +268,7 @@ exports.updateAward = async (req, res, next) => {
         success: false,
         status: 404,
         message: "Award not found",
-        error: {},
+        error: { id: ["Award not found or already deleted."] },
       });
     }
 
@@ -266,27 +276,20 @@ exports.updateAward = async (req, res, next) => {
     const errors = {};
 
     if (body.title !== undefined) {
-      if (!body.title.toString().trim()) {
-        errors.title = ["Award title cannot be blank."];
+      const title = body.title.toString().trim();
+      if (!title) {
+        errors.title = ["Title cannot be blank."];
       } else {
-        existingAward.title = body.title.toString().trim();
+        existingAward.title = title;
       }
     }
 
     if (body.description !== undefined) {
-      if (!body.description.toString().trim()) {
-        errors.description = ["Award description cannot be blank."];
+      const description = body.description.toString().trim();
+      if (!description) {
+        errors.description = ["Description cannot be blank."];
       } else {
-        existingAward.description = body.description.toString().trim();
-      }
-    }
-
-    if (body.status !== undefined) {
-      const statusLower = body.status.toString().toLowerCase().trim();
-      if (!["active", "inactive"].includes(statusLower)) {
-        errors.status = ["Status must be either 'active' or 'inactive'."];
-      } else {
-        existingAward.status = statusLower;
+        existingAward.description = description;
       }
     }
 
@@ -300,21 +303,25 @@ exports.updateAward = async (req, res, next) => {
       });
     }
 
-    // Handle Image Replacement
+    // Image Upload processing for update
     if (req.file) {
-      const uploadResult = await uploadToS3AndCreateWebp(req.file, "awards");
-      const newOriginal = uploadResult.originalKey || uploadResult.originalPath;
-      const newWebp = uploadResult.webpKey || uploadResult.webpPath;
-
       if (existingAward.image) {
         await deleteS3Objects([existingAward.image, existingAward.image_webp].filter(Boolean));
         deleteLocalImages(existingAward.image, existingAward.image_webp);
       }
+      const processed = await uploadToS3AndCreateWebp(req.file, "awards");
+      existingAward.image = processed.originalKey || processed.originalPath;
+      existingAward.image_webp = processed.webpKey || processed.webpPath;
+    } else {
+      const explicitImg = (body.image || body.image_url || "").toString().trim();
+      if (explicitImg && explicitImg.startsWith("http")) {
+        existingAward.image = explicitImg;
+        existingAward.image_webp = explicitImg;
+      }
+    }
 
-      existingAward.image = newOriginal;
-      existingAward.image_webp = newWebp;
-    } else if (body.image) {
-      existingAward.image = body.image.toString().trim();
+    if (body.status && ["active", "inactive"].includes(body.status.toLowerCase())) {
+      existingAward.status = body.status.toLowerCase();
     }
 
     if (typeof body.sort_order !== "undefined") {
@@ -330,6 +337,15 @@ exports.updateAward = async (req, res, next) => {
     existingAward.updated_at = moment().tz("Asia/Kolkata").toDate();
 
     await existingAward.save();
+
+    await logActivity({
+      req,
+      action: "UPDATE",
+      module: "awards",
+      record_id: existingAward._id,
+      record_title: existingAward.title || "Award",
+      description: `Updated award '${existingAward.title || "Award"}'`,
+    });
 
     return res.status(200).json({
       success: true,
@@ -380,6 +396,15 @@ exports.deleteAward = async (req, res, next) => {
     if (req.user) award.updated_by = req.user._id;
 
     await award.save();
+
+    await logActivity({
+      req,
+      action: "DELETE",
+      module: "awards",
+      record_id: award._id,
+      record_title: award.title || "Award",
+      description: `Deleted award '${award.title || "Award"}'`,
+    });
 
     return res.status(200).json({
       success: true,

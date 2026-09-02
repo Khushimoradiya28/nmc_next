@@ -8,6 +8,7 @@ const {
   deleteLocalImages,
   deleteS3Objects,
 } = require("../Utils/imageProcessor");
+const { logActivity } = require("../Utils/activityLogger");
 
 const isProduction = () => config.NODE_ENV === "production";
 
@@ -238,6 +239,15 @@ exports.createCertificateCourse = async (req, res, next) => {
 
     const newCourse = await CertificateCourse.create(courseData);
 
+    await logActivity({
+      req,
+      action: "CREATE",
+      module: "certificate_courses",
+      record_id: newCourse._id,
+      record_title: newCourse.title,
+      description: `Created certificate course '${newCourse.title}'`,
+    });
+
     return res.status(201).json({
       status: 201,
       success: true,
@@ -277,69 +287,28 @@ exports.updateCertificateCourse = async (req, res, next) => {
     }
 
     const body = req.body || {};
-    const errors = {};
 
-    // Validate if fields are sent
-    if (body.title !== undefined) {
-      const title = body.title.toString().trim();
-      if (!title) {
-        errors.title = ["Title cannot be blank."];
-      } else {
-        existingCourse.title = title;
-      }
+    if (body.title && body.title.trim()) {
+      existingCourse.title = body.title.trim();
     }
-
-    if (body.category !== undefined) {
-      const category = body.category.toString().trim();
-      if (!category) {
-        errors.category = ["Category cannot be blank."];
-      } else {
-        existingCourse.category = category;
-      }
+    if (body.category && body.category.trim()) {
+      existingCourse.category = body.category.trim();
     }
-
-    if (body.description !== undefined) {
-      const description = body.description.toString().trim();
-      if (!description) {
-        errors.description = ["Description cannot be blank."];
-      } else {
-        existingCourse.description = description;
-      }
+    if (body.description && body.description.trim()) {
+      existingCourse.description = body.description.trim();
     }
-
-    if (body.duration !== undefined) {
-      const duration = body.duration.toString().trim();
-      if (!duration) {
-        errors.duration = ["Duration cannot be blank."];
-      } else {
-        existingCourse.duration = duration;
-      }
+    if (body.duration && body.duration.trim()) {
+      existingCourse.duration = body.duration.trim();
     }
-
-    if (body.fees !== undefined) {
-      const fees = body.fees.toString().trim();
-      if (!fees) {
-        errors.fees = ["Fees cannot be blank."];
-      } else {
-        existingCourse.fees = fees;
-      }
+    if (body.fees && body.fees.trim()) {
+      existingCourse.fees = body.fees.trim();
     }
-
-    // Return validation errors
-    if (Object.keys(errors).length > 0) {
-      return res.status(400).json({
-        status: 400,
-        message: "Validation failed. Please verify the submitted data.",
-        error: errors,
-      });
-    }
-
-    // Optional fields update
     if (body.badge !== undefined || body.course_badge !== undefined) {
       existingCourse.badge = (body.badge || body.course_badge || "").toString().trim();
     }
+
     if (body.highlights !== undefined || body.course_highlights !== undefined) {
-      let highlights = body.highlights || body.course_highlights || [];
+      let highlights = body.highlights || body.course_highlights;
       if (typeof highlights === "string") {
         try {
           highlights = JSON.parse(highlights);
@@ -390,6 +359,15 @@ exports.updateCertificateCourse = async (req, res, next) => {
 
     await existingCourse.save();
 
+    await logActivity({
+      req,
+      action: "UPDATE",
+      module: "certificate_courses",
+      record_id: existingCourse._id,
+      record_title: existingCourse.title,
+      description: `Updated certificate course '${existingCourse.title}'`,
+    });
+
     return res.status(200).json({
       status: 200,
       success: true,
@@ -436,6 +414,15 @@ exports.deleteCertificateCourse = async (req, res, next) => {
     if (req.user) course.updated_by = req.user._id;
 
     await course.save();
+
+    await logActivity({
+      req,
+      action: "DELETE",
+      module: "certificate_courses",
+      record_id: course._id,
+      record_title: course.title,
+      description: `Deleted certificate course '${course.title}'`,
+    });
 
     return res.status(200).json({
       status: 200,

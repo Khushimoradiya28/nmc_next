@@ -17,15 +17,17 @@ router.get("/", getBanners);
 router.post("/list", getBanners);
 router.get("/:id", getBannerById);
 
+const { verifyToken } = require("../Middleware/authMiddleware");
+
 // Admin / Write Operations (Supports Multipart File Upload & JSON)
-router.post("/", upload.single("image"), createBanner);
-router.post("/add", upload.single("image"), createBanner);
-router.put("/update", upload.single("image"), updateBanner);
-router.post("/update", upload.single("image"), updateBanner);
-router.put("/:id", upload.single("image"), updateBanner);
-router.put("/", upload.single("image"), updateBanner);
-router.delete("/:id", deleteBanner);
-router.delete("/", deleteBanner);
-router.post("/delete", deleteBanner);
+router.post("/", verifyToken, upload.single("image"), createBanner);
+router.post("/add", verifyToken, upload.single("image"), createBanner);
+router.put("/update", verifyToken, upload.single("image"), updateBanner);
+router.post("/update", verifyToken, upload.single("image"), updateBanner);
+router.put("/:id", verifyToken, upload.single("image"), updateBanner);
+router.put("/", verifyToken, upload.single("image"), updateBanner);
+router.delete("/:id", verifyToken, deleteBanner);
+router.delete("/", verifyToken, deleteBanner);
+router.post("/delete", verifyToken, deleteBanner);
 
 module.exports = router;

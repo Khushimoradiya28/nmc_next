@@ -17,12 +17,14 @@ router.get("/", getAwards);
 router.post("/list", getAwards);
 router.get("/:idOrSlug", getAwardById);
 
+const { verifyToken } = require("../Middleware/authMiddleware");
+
 // Admin / Write Operations (Supports Multipart File Upload & JSON)
-router.post("/", upload.single("image"), createAward);
-router.post("/add", upload.single("image"), createAward);
-router.put("/:idOrSlug", upload.single("image"), updateAward);
-router.post("/update", upload.single("image"), updateAward);
-router.delete("/:idOrSlug", deleteAward);
-router.post("/delete", deleteAward);
+router.post("/", verifyToken, upload.single("image"), createAward);
+router.post("/add", verifyToken, upload.single("image"), createAward);
+router.put("/:idOrSlug", verifyToken, upload.single("image"), updateAward);
+router.post("/update", verifyToken, upload.single("image"), updateAward);
+router.delete("/:idOrSlug", verifyToken, deleteAward);
+router.post("/delete", verifyToken, deleteAward);
 
 module.exports = router;

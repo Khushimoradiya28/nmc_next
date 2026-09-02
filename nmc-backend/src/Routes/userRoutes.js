@@ -20,14 +20,14 @@ router.get("/list", getAllUsers);
 router.post("/list", getAllUsers);
 router.get("/:id", getUserById);
 
-router.post("/add", upload.single("profile_img"), addUser);
-router.post("/", upload.single("profile_img"), addUser);
+router.post("/add", verifyToken, upload.single("profile_img"), addUser);
+router.post("/", verifyToken, upload.single("profile_img"), addUser);
 
-router.put("/update", upload.single("profile_img"), updateUser);
-router.post("/update", upload.single("profile_img"), updateUser);
-router.put("/:id", upload.single("profile_img"), updateUser);
+router.put("/update", verifyToken, upload.single("profile_img"), updateUser);
+router.post("/update", verifyToken, upload.single("profile_img"), updateUser);
+router.put("/:id", verifyToken, upload.single("profile_img"), updateUser);
 
-router.delete("/:id", deleteUser);
-router.post("/delete", deleteUser);
+router.delete("/:id", verifyToken, deleteUser);
+router.post("/delete", verifyToken, deleteUser);
 
 module.exports = router;

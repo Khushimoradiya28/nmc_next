@@ -10,6 +10,7 @@ import {
   FiImage,
   FiSliders,
   FiTrendingUp,
+  FiActivity,
 } from 'react-icons/fi';
 
 /**
@@ -97,6 +98,10 @@ const sidebar = [
     icon: FiSliders,
     name: 'Master',
     roles: ['super_admin', 'admin', 'department', 'content'],
+    path: '/activity-logs',
+    icon: FiActivity,
+    name: 'Activity Logs',
+    roles: ['super_admin', 'admin'],
   },
   {
     path: '/master/user',

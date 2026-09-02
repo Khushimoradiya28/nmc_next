@@ -47,11 +47,17 @@ exports.getActivityLogs = async (req, res, next) => {
 
     const targetRole = role_name || role;
     if (targetRole && targetRole !== "all") {
-      filter.role_name = targetRole.toLowerCase().trim();
+      const normalizedRole = targetRole.toLowerCase().trim();
+      if (normalizedRole === "admin" || normalizedRole === "super_admin") {
+        filter.role_name = { $in: ["admin", "super_admin", "Admin", "Super Admin", "Super_Admin"] };
+      } else {
+        filter.role_name = new RegExp(`^${normalizedRole}$`, "i");
+      }
     }
 
     if (mod && mod !== "all") {
-      filter.module = mod.toLowerCase().trim();
+      const cleanMod = mod.toLowerCase().trim().replace(/s$/, "");
+      filter.module = { $regex: new RegExp(`^${cleanMod}s?$`, "i") };
     }
 
     if (action && action !== "all") {

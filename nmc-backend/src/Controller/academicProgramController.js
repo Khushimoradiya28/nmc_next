@@ -1,5 +1,6 @@
 const AcademicProgram = require('../Model/academicProgram');
 const crypto = require('crypto');
+const { logActivity } = require("../Utils/activityLogger");
 
 function slugifyText(text) {
   return (text || '')
@@ -271,6 +272,15 @@ exports.addProgram = async (req, res) => {
 
     await newProgram.save();
 
+    await logActivity({
+      req,
+      action: "CREATE",
+      module: "academic_programs",
+      record_id: newProgram._id,
+      record_title: newProgram.shortTitle || newProgram.fullName,
+      description: `Created academic program '${newProgram.shortTitle || newProgram.fullName}'`,
+    });
+
     return res.status(201).json({
       status: 201,
       success: true,
@@ -386,6 +396,15 @@ exports.updateProgram = async (req, res) => {
 
     await existingProgram.save();
 
+    await logActivity({
+      req,
+      action: "UPDATE",
+      module: "academic_programs",
+      record_id: existingProgram._id,
+      record_title: existingProgram.shortTitle || existingProgram.fullName,
+      description: `Updated academic program '${existingProgram.shortTitle || existingProgram.fullName}'`,
+    });
+
     return res.status(200).json({
       status: 200,
       success: true,
@@ -437,6 +456,15 @@ exports.deleteProgram = async (req, res) => {
         message: 'Academic program not found to delete',
       });
     }
+
+    await logActivity({
+      req,
+      action: "DELETE",
+      module: "academic_programs",
+      record_id: program._id,
+      record_title: program.shortTitle || program.fullName,
+      description: `Deleted academic program '${program.shortTitle || program.fullName}'`,
+    });
 
     return res.status(200).json({
       status: 200,

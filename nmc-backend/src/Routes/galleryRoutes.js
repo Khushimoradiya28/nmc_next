@@ -38,15 +38,17 @@ router.get("/", getGalleries);
 router.post("/list", getGalleries);
 router.get("/:idOrSlug", getGalleryById);
 
+const { verifyToken } = require("../Middleware/authMiddleware");
+
 // Admin / Write Operations (Supports Multipart File Upload & JSON)
-router.post("/", normalizeUpload, createGallery);
-router.post("/add", normalizeUpload, createGallery);
-router.put("/update", normalizeUpload, updateGallery);
-router.post("/update", normalizeUpload, updateGallery);
-router.put("/:idOrSlug", normalizeUpload, updateGallery);
-router.put("/", normalizeUpload, updateGallery);
-router.delete("/:idOrSlug", deleteGallery);
-router.delete("/", deleteGallery);
-router.post("/delete", deleteGallery);
+router.post("/", verifyToken, normalizeUpload, createGallery);
+router.post("/add", verifyToken, normalizeUpload, createGallery);
+router.put("/update", verifyToken, normalizeUpload, updateGallery);
+router.post("/update", verifyToken, normalizeUpload, updateGallery);
+router.put("/:idOrSlug", verifyToken, normalizeUpload, updateGallery);
+router.put("/", verifyToken, normalizeUpload, updateGallery);
+router.delete("/:idOrSlug", verifyToken, deleteGallery);
+router.delete("/", verifyToken, deleteGallery);
+router.post("/delete", verifyToken, deleteGallery);
 
 module.exports = router;

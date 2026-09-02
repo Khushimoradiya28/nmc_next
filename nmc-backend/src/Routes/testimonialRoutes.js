@@ -1,4 +1,4 @@
-﻿const express = require("express");
+const express = require("express");
 const router = express.Router();
 const {
   getTestimonials,
@@ -39,12 +39,14 @@ router.get("/", getTestimonials);
 router.post("/list", getTestimonials);
 router.get("/:idOrSlug", getTestimonialById);
 
+const { verifyToken } = require("../Middleware/authMiddleware");
+
 // Admin / Write Operations
-router.post("/", uploadPhoto, handlePhotoFile, createTestimonial);
-router.post("/add", uploadPhoto, handlePhotoFile, createTestimonial);
-router.put("/:idOrSlug", uploadPhoto, handlePhotoFile, updateTestimonial);
-router.post("/update", uploadPhoto, handlePhotoFile, updateTestimonial);
-router.delete("/:idOrSlug", deleteTestimonial);
-router.post("/delete", deleteTestimonial);
+router.post("/", verifyToken, uploadPhoto, handlePhotoFile, createTestimonial);
+router.post("/add", verifyToken, uploadPhoto, handlePhotoFile, createTestimonial);
+router.put("/:idOrSlug", verifyToken, uploadPhoto, handlePhotoFile, updateTestimonial);
+router.post("/update", verifyToken, uploadPhoto, handlePhotoFile, updateTestimonial);
+router.delete("/:idOrSlug", verifyToken, deleteTestimonial);
+router.post("/delete", verifyToken, deleteTestimonial);
 
 module.exports = router;

@@ -36,11 +36,13 @@ const handlePhotoFile = (req, res, next) => {
   next();
 };
 
-router.post("/", uploadPhoto, handlePhotoFile, createFaculty);
-router.post("/add", uploadPhoto, handlePhotoFile, createFaculty);
-router.put("/:idOrSlug", uploadPhoto, handlePhotoFile, updateFaculty);
-router.post("/update", uploadPhoto, handlePhotoFile, updateFaculty);
-router.delete("/:idOrSlug", deleteFaculty);
-router.post("/delete", deleteFaculty);
+const { verifyToken } = require("../Middleware/authMiddleware");
+
+router.post("/", verifyToken, uploadPhoto, handlePhotoFile, createFaculty);
+router.post("/add", verifyToken, uploadPhoto, handlePhotoFile, createFaculty);
+router.put("/:idOrSlug", verifyToken, uploadPhoto, handlePhotoFile, updateFaculty);
+router.post("/update", verifyToken, uploadPhoto, handlePhotoFile, updateFaculty);
+router.delete("/:idOrSlug", verifyToken, deleteFaculty);
+router.post("/delete", verifyToken, deleteFaculty);
 
 module.exports = router;

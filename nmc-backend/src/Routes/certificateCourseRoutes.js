@@ -33,13 +33,15 @@ router.get("/", getCertificateCourses);
 router.post("/list", getCertificateCourses);
 router.get("/:idOrSlug", getCertificateCourseById);
 
+const { verifyToken } = require("../Middleware/authMiddleware");
+
 // Admin / Write Operations (with flexible image field upload support)
-router.post("/", cpUpload, createCertificateCourse);
-router.post("/add", cpUpload, createCertificateCourse);
-router.put("/:idOrSlug", cpUpload, updateCertificateCourse);
-router.post("/update", cpUpload, updateCertificateCourse);
-router.delete("/:idOrSlug", deleteCertificateCourse);
-router.post("/delete", deleteCertificateCourse);
+router.post("/", verifyToken, cpUpload, createCertificateCourse);
+router.post("/add", verifyToken, cpUpload, createCertificateCourse);
+router.put("/:idOrSlug", verifyToken, cpUpload, updateCertificateCourse);
+router.post("/update", verifyToken, cpUpload, updateCertificateCourse);
+router.delete("/:idOrSlug", verifyToken, deleteCertificateCourse);
+router.post("/delete", verifyToken, deleteCertificateCourse);
 
 
 module.exports = router;

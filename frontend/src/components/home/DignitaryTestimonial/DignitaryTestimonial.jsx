@@ -1,4 +1,4 @@
-﻿'use client';
+'use client';
 
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
@@ -13,6 +13,43 @@ const getInitials = (name) => {
   }
   return parts[0].substring(0, 2).toUpperCase();
 };
+
+function DignitaryAvatar({ dig }) {
+  const [imgError, setImgError] = useState(false);
+
+  if (dig.avatarUrl && !imgError) {
+    return (
+      <img
+        src={dig.avatarUrl}
+        alt={dig.authorName}
+        onError={() => setImgError(true)}
+        style={{
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          display: 'block'
+        }}
+      />
+    );
+  }
+
+  return (
+    <div style={{
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #8a0000 0%, #b30000 100%)',
+      color: '#ffffff',
+      fontWeight: 800,
+      fontSize: '1.1rem',
+      fontFamily: 'var(--font-heading)'
+    }}>
+      {dig.initials}
+    </div>
+  );
+}
 
 export default function DignitaryTestimonial() {
   const [activeTab, setActiveTab] = useState('dignitary');
@@ -160,30 +197,7 @@ export default function DignitaryTestimonial() {
         <p className={`${styles.digiCardText} digi-card-text`}>{dig.quote}</p>
         <div className={`${styles.digiCardAuthor} digi-card-author`}>
           <div className={`${styles.digiAuthorImg} digi-author-img`}>
-            {dig.avatarUrl ? (
-              <Image 
-                src={dig.avatarUrl} 
-                alt={dig.authorName} 
-                width={600} 
-                height={400} 
-                unoptimized={dig.avatarUrl.startsWith('http')}
-              />
-            ) : (
-              <div style={{
-                width: '100%',
-                height: '100%',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                background: 'linear-gradient(135deg, #8a0000 0%, #b30000 100%)',
-                color: '#ffffff',
-                fontWeight: 800,
-                fontSize: '1.1rem',
-                fontFamily: 'var(--font-heading)'
-              }}>
-                {dig.initials}
-              </div>
-            )}
+            <DignitaryAvatar dig={dig} />
           </div>
           <div className={`${styles.digiAuthorInfo} digi-author-info`}>
             <h4>{dig.authorName}</h4>
