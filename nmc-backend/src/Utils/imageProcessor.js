@@ -44,7 +44,15 @@ async function saveLocalAndCreateWebp(file, folderPath) {
       try {
         const webpFileName = `${baseName}.webp`;
         const webpDiskPath = path.join(uploadsDir, webpFileName);
-        await sharp(file.buffer).webp({ quality: 80 }).toFile(webpDiskPath);
+        const isSmallFile = file.buffer.length < 150 * 1024; // If already < 150KB
+        
+        await sharp(file.buffer)
+          .webp(
+            isSmallFile
+              ? { quality: 95, nearLossless: true, effort: 4 }
+              : { quality: 85, effort: 6, smartSubsample: true }
+          )
+          .toFile(webpDiskPath);
         relWebp = path.join("media", folderPath, webpFileName).replace(/\\/g, "/");
       } catch (err) {
         console.warn("WebP conversion fallback warning:", err.message);
@@ -70,7 +78,16 @@ async function saveLocalAndCreateWebp(file, folderPath) {
   if (ext !== ".webp") {
     try {
       const webpPath = path.join(path.dirname(originalPath), baseName + ".webp");
-      await sharp(originalPath).webp({ quality: 80 }).toFile(webpPath);
+      const stat = fs.existsSync(originalPath) ? fs.statSync(originalPath) : null;
+      const isSmallFile = stat && stat.size < 150 * 1024; // If already < 150KB
+      
+      await sharp(originalPath)
+        .webp(
+          isSmallFile
+            ? { quality: 95, nearLossless: true, effort: 4 }
+            : { quality: 85, effort: 6, smartSubsample: true }
+        )
+        .toFile(webpPath);
       relWebp = path.join("media", folderPath, path.basename(webpPath)).replace(/\\/g, "/");
     } catch (err) {
       console.warn("WebP conversion fallback warning:", err.message);
@@ -119,7 +136,9 @@ async function uploadToS3AndCreateWebp(file, folderPath) {
     );
 
     try {
-      const webpBuffer = await sharp(fileBuffer).webp({ quality: 80 }).toBuffer();
+      const webpBuffer = await sharp(fileBuffer)
+        .webp({ quality: 85, effort: 6, smartSubsample: true })
+        .toBuffer();
       await s3.send(
         new PutObjectCommand({
           Bucket: bucket,

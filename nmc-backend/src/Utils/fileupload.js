@@ -80,7 +80,16 @@ const fileUpload = (folderName = 'media') => {
 
                     // Convert to WebP
                     if (ext !== '.webp') {
-                        await sharp(originalPath).toFormat('webp').toFile(webpFilePath);
+                        const stat = fs.existsSync(originalPath) ? fs.statSync(originalPath) : null;
+                        const isSmallFile = stat && stat.size < 150 * 1024;
+
+                        await sharp(originalPath)
+                            .webp(
+                                isSmallFile
+                                    ? { quality: 95, nearLossless: true, effort: 4 }
+                                    : { quality: 85, effort: 6, smartSubsample: true }
+                            )
+                            .toFile(webpFilePath);
                     } else {
                         fs.copyFileSync(originalPath, webpFilePath);
                     }
