@@ -16,6 +16,7 @@ const Leads = lazy(() => import('../pages/Leads'));
 const Admissions = lazy(() => import('../pages/Admissions'));
 const Banner = lazy(() => import('../pages/Banner'));
 const Gallery = lazy(() => import('../pages/Gallery'));
+const ActivityLogs = lazy(() => import('../pages/ActivityLogs'));
 // const OrderDetails = lazy(() => import('../pages/OrderDetails'));
 // const Setting = lazy(() => import("../pages/Setting"));
 const Page404 = lazy(() => import('../pages/404'));
@@ -121,6 +122,11 @@ const routes = [
     path: '/gallery',
     component: Gallery,
     roles: ['super_admin', 'admin', 'department', 'content'],
+  },
+  {
+    path: '/activity-logs',
+    component: ActivityLogs,
+    roles: ['super_admin', 'admin'],
   },
 
   { path: '/setting', component: EditProfile },

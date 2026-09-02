@@ -23,7 +23,28 @@ const logActivity = async ({
   changes = null,
 }) => {
   try {
-    const user = req && req.user ? req.user : null;
+    let user = req && req.user ? req.user : null;
+    
+    // Fallback: If req.user is not populated by middleware yet, decode token from Authorization header
+    if ((!user || !user.id) && req && req.headers && req.headers["authorization"]) {
+      try {
+        const jwt = require("jsonwebtoken");
+        const config = require("../Config/app");
+        const authHeader = req.headers["authorization"];
+        const token = typeof authHeader === "string" && authHeader.startsWith("Bearer ")
+          ? authHeader.slice(7).trim()
+          : (typeof authHeader === "string" ? authHeader.trim() : "");
+        if (token && config.JWT_SECRET) {
+          const decoded = jwt.verify(token, config.JWT_SECRET);
+          if (decoded && decoded.id) {
+            user = decoded;
+          }
+        }
+      } catch (err) {
+        // Token decode fallback error ignored
+      }
+    }
+
     if (!user || !user.id) return; // Ignore unauthenticated actions
 
     const userName = `${user.first_name || ""} ${user.last_name || ""}`.trim() || user.email || "Staff User";

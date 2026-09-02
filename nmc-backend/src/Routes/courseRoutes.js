@@ -20,6 +20,23 @@ router.get("/dropdown", async (req, res, next) => {
         .sort({ sortOrder: 1, created_at: -1 }),
     ]);
 
+    // Rank map for strict sequence: 1st UG, 2nd PG, 3rd Diploma, other
+    const programTypeRank = {
+      ug: 1,
+      pg: 2,
+      diploma: 3,
+    };
+
+    // Sort Academic Programs: 1st UG, 2nd PG, 3rd Diploma, then by sort_order
+    academicPrograms.sort((a, b) => {
+      const rankA = programTypeRank[(a.programType || "").toLowerCase()] || 99;
+      const rankB = programTypeRank[(b.programType || "").toLowerCase()] || 99;
+      if (rankA !== rankB) {
+        return rankA - rankB;
+      }
+      return (a.sort_order || 0) - (b.sort_order || 0);
+    });
+
     // Format Academic Programs (Clean course name only, without fee in parentheses)
     const formattedAcademic = academicPrograms.map((prog) => {
       const courseName = prog.shortTitle || prog.fullName;
@@ -54,7 +71,7 @@ router.get("/dropdown", async (req, res, next) => {
       };
     });
 
-    // Combined flat list ready for select dropdowns
+    // Combined flat list ready for select dropdowns (1st UG -> 2nd PG -> 3rd Diploma -> Certificate)
     const combinedCourses = [...formattedAcademic, ...formattedCertificate];
 
     return res.status(200).json({

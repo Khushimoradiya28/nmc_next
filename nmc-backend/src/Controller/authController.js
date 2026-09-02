@@ -4,6 +4,7 @@ const User = require("../Model/user");
 const config = require("../Config/app");
 const { sendOtp } = require("../Utils/sendOtp");
 const Role = require("../Model/role");
+const { logActivity } = require("../Utils/activityLogger");
 
 exports.sendOtpToUser = async (req, res, next) => {
   try {
@@ -223,6 +224,25 @@ exports.login = async (req, res) => {
     );
 
     user.password = undefined;
+
+    // Log Activity for user login
+    await logActivity({
+      req: {
+        ...req,
+        user: {
+          id: user._id.toString(),
+          email: user.email,
+          first_name: user.first_name,
+          last_name: user.last_name,
+          role_name: roleName,
+        }
+      },
+      action: "LOGIN",
+      module: "auth",
+      record_id: user._id,
+      record_title: `${user.first_name || ""} ${user.last_name || ""}`.trim() || user.email,
+      description: `User ${user.email} (${roleName}) logged in successfully`,
+    });
 
     const baseUrl = `${req.protocol}://${req.get("host")}`;
     let profileImgUrl = null;

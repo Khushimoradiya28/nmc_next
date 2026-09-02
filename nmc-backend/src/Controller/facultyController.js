@@ -7,6 +7,7 @@ const {
   deleteLocalImages,
   deleteS3Objects,
 } = require("../Utils/imageProcessor");
+const { logActivity } = require("../Utils/activityLogger");
 
 const isProduction = () => config.NODE_ENV === "production";
 
@@ -200,6 +201,15 @@ exports.createFaculty = async (req, res) => {
     const faculty = new Faculty(facultyData);
     await faculty.save();
 
+    await logActivity({
+      req,
+      action: "CREATE",
+      module: "faculty",
+      record_id: faculty._id,
+      record_title: faculty.name || faculty.fullName,
+      description: `Created faculty member '${faculty.name || faculty.fullName}'`,
+    });
+
     res.status(201).json({
       success: true,
       status: 201,
@@ -280,6 +290,15 @@ exports.updateFaculty = async (req, res) => {
     faculty.updated_at = new Date();
     await faculty.save();
 
+    await logActivity({
+      req,
+      action: "UPDATE",
+      module: "faculty",
+      record_id: faculty._id,
+      record_title: faculty.name || faculty.fullName,
+      description: `Updated faculty member '${faculty.name || faculty.fullName}'`,
+    });
+
     res.status(200).json({
       success: true,
       status: 200,
@@ -323,6 +342,15 @@ exports.deleteFaculty = async (req, res) => {
     faculty.is_deleted = true;
     faculty.updated_at = new Date();
     await faculty.save();
+
+    await logActivity({
+      req,
+      action: "DELETE",
+      module: "faculty",
+      record_id: faculty._id,
+      record_title: faculty.name || faculty.fullName,
+      description: `Deleted faculty member '${faculty.name || faculty.fullName}'`,
+    });
 
     res.status(200).json({
       success: true,

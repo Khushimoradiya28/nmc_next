@@ -3,6 +3,7 @@ const moment = require("moment-timezone");
 const config = require("../Config/app");
 const { saveLocalAndCreateWebp, uploadToS3AndCreateWebp, deleteLocalImages, deleteS3Objects } = require("../Utils/imageProcessor");
 const { generateSlug } = require("../helper");
+const { logActivity } = require("../Utils/activityLogger");
 
 const isProduction = () => config.NODE_ENV === "production";
 
@@ -241,6 +242,15 @@ exports.createTestimonial = async (req, res, next) => {
 
     await newTestimonial.save();
 
+    await logActivity({
+      req,
+      action: "CREATE",
+      module: "testimonials",
+      record_id: newTestimonial._id,
+      record_title: newTestimonial.authorName || newTestimonial.title,
+      description: `Created testimonial for '${newTestimonial.authorName || newTestimonial.title}'`,
+    });
+
     return res.status(201).json({
       status: 201,
       success: true,
@@ -257,6 +267,7 @@ exports.createTestimonial = async (req, res, next) => {
 exports.updateTestimonial = async (req, res, next) => {
   try {
     const idOrSlug = req.params.idOrSlug || req.params.id || req.body.id || req.body.slug;
+
     if (!idOrSlug) {
       return res.status(400).json({
         status: 400,
@@ -274,72 +285,53 @@ exports.updateTestimonial = async (req, res, next) => {
       return res.status(404).json({
         status: 404,
         message: "Testimonial not found",
+        error: { id: ["Testimonial not found or already deleted."] },
       });
     }
 
     const body = req.body || {};
     const errors = {};
 
-    let targetType = existingTestimonial.type;
-    if (body.type || body.testimonial_type || body.testimonialType) {
-      const rawType = body.type || body.testimonial_type || body.testimonialType;
-      const lower = rawType.toString().toLowerCase().trim();
-      if (lower.includes("dignitary")) targetType = "dignitary";
-      else if (lower.includes("student")) targetType = "student";
-      else targetType = lower;
-
-      if (!["student", "dignitary"].includes(targetType)) {
-        errors.type = ["Testimonial type must be either 'student' or 'dignitary'."];
-      }
+    const type = body.type ? body.type.toLowerCase().trim() : existingTestimonial.type;
+    if (body.type && !["dignitary", "student"].includes(type)) {
+      errors.type = ["Testimonial type must be either 'student' or 'dignitary'."];
     }
 
-    if (body.authorName !== undefined || body.author_name !== undefined || body.student_name !== undefined || body.dignitary_name !== undefined || body.name !== undefined) {
-      const authorName = body.authorName || body.author_name || body.student_name || body.dignitary_name || body.name;
-      if (!authorName || !authorName.toString().trim()) {
-        errors.authorName = [targetType === "student" ? "Student Name cannot be blank." : "Dignitary Name cannot be blank."];
+    if (body.authorName !== undefined) {
+      if (!body.authorName.toString().trim()) {
+        errors.authorName = ["Author Name cannot be blank."];
       } else {
-        existingTestimonial.authorName = authorName.toString().trim();
+        existingTestimonial.authorName = body.authorName.toString().trim();
       }
     }
 
-    if (body.designationSubtext !== undefined || body.designation_subtext !== undefined || body.course !== undefined || body.designation !== undefined || body.subtext !== undefined) {
-      const designationSubtext = body.designationSubtext || body.designation_subtext || body.course || body.designation || body.subtext;
-      if (!designationSubtext || !designationSubtext.toString().trim()) {
-        errors.designationSubtext = [targetType === "student" ? "Course / Subtext cannot be blank." : "Designation / Subtext cannot be blank."];
+    if (body.designationSubtext !== undefined) {
+      if (!body.designationSubtext.toString().trim()) {
+        errors.designationSubtext = ["Designation / Subtext cannot be blank."];
       } else {
-        existingTestimonial.designationSubtext = designationSubtext.toString().trim();
+        existingTestimonial.designationSubtext = body.designationSubtext.toString().trim();
       }
     }
 
-    if (body.quote !== undefined || body.testimonial_quote !== undefined || body.description !== undefined) {
-      const quote = body.quote || body.testimonial_quote || body.description;
-      if (!quote || !quote.toString().trim()) {
-        errors.quote = ["Testimonial Quote cannot be blank."];
+    if (body.quote !== undefined) {
+      if (!body.quote.toString().trim()) {
+        errors.quote = ["Quote/Testimonial text cannot be blank."];
       } else {
-        existingTestimonial.quote = quote.toString().trim();
+        existingTestimonial.quote = body.quote.toString().trim();
       }
     }
 
-    if (body.title !== undefined || body.headline !== undefined || body.headline_title !== undefined) {
-      const title = body.title !== undefined ? body.title : (body.headline !== undefined ? body.headline : body.headline_title);
-      if (targetType === "dignitary" && (!title || !title.toString().trim())) {
-        errors.title = ["Headline / Title is mandatory for Dignitary Testimonials."];
-      } else {
-        existingTestimonial.title = title ? title.toString().trim() : "";
+    if (type === "student") {
+      if (body.rating !== undefined) {
+        const numRating = Number(body.rating);
+        if (isNaN(numRating) || numRating < 1 || numRating > 5) {
+          errors.rating = ["Rating must be a valid number between 1 and 5."];
+        } else {
+          existingTestimonial.rating = numRating;
+        }
       }
-    } else if (targetType === "dignitary" && (!existingTestimonial.title || !existingTestimonial.title.trim())) {
-      errors.title = ["Headline / Title is mandatory for Dignitary Testimonials."];
-    }
-
-    if (targetType === "dignitary") {
+    } else {
       existingTestimonial.rating = null;
-    } else if (body.rating !== undefined) {
-      const rating = Number(body.rating);
-      if (isNaN(rating) || rating < 1 || rating > 5) {
-        errors.rating = ["Rating must be between 1 and 5 for student testimonials."];
-      } else {
-        existingTestimonial.rating = rating;
-      }
     }
 
     if (Object.keys(errors).length > 0) {
@@ -350,29 +342,33 @@ exports.updateTestimonial = async (req, res, next) => {
       });
     }
 
-    existingTestimonial.type = targetType;
+    if (body.title !== undefined) {
+      existingTestimonial.title = body.title ? body.title.toString().trim() : "";
+    }
+
+    if (body.type !== undefined) {
+      existingTestimonial.type = type;
+    }
 
     if (req.file) {
       if (existingTestimonial.avatarUrl) {
         await deleteS3Objects([existingTestimonial.avatarUrl]);
         deleteLocalImages(existingTestimonial.avatarUrl);
       }
-
       const uploadResult = await uploadToS3AndCreateWebp(req.file, "testimonials");
       existingTestimonial.avatarUrl = uploadResult.originalKey || uploadResult.originalPath;
-    } else if (body.avatarUrl !== undefined || body.avatar_url !== undefined || body.student_photo !== undefined || body.profile_photo !== undefined || body.image !== undefined) {
-      const avatarUrl = body.avatarUrl !== undefined ? body.avatarUrl : (body.avatar_url !== undefined ? body.avatar_url : (body.student_photo !== undefined ? body.student_photo : (body.profile_photo !== undefined ? body.profile_photo : body.image)));
-      if (avatarUrl && !avatarUrl.startsWith("blob:")) {
-        existingTestimonial.avatarUrl = avatarUrl.toString().trim();
+    } else if (body.avatarUrl || body.avatar_url || body.student_photo || body.profile_photo || body.image || body.photo) {
+      const explicitAvatar = body.avatarUrl || body.avatar_url || body.student_photo || body.profile_photo || body.image || body.photo;
+      if (!explicitAvatar.startsWith("blob:")) {
+        existingTestimonial.avatarUrl = explicitAvatar.toString().trim();
       }
     }
 
     if (typeof body.isActive !== "undefined") {
       existingTestimonial.isActive = body.isActive === true || body.isActive === "true" || body.isActive === 1 || body.isActive === "1";
-      existingTestimonial.status = existingTestimonial.isActive ? "active" : "inactive";
-    } else if (body.status !== undefined) {
-      existingTestimonial.status = body.status.toString().toLowerCase().trim();
-      existingTestimonial.isActive = existingTestimonial.status === "active";
+    }
+    if (typeof body.status !== "undefined") {
+      existingTestimonial.status = body.status.toLowerCase().trim();
     }
     if (typeof body.sortOrder !== "undefined") {
       existingTestimonial.sortOrder = Number(body.sortOrder);
@@ -386,6 +382,15 @@ exports.updateTestimonial = async (req, res, next) => {
     existingTestimonial.updated_at = moment().tz("Asia/Kolkata").toDate();
 
     await existingTestimonial.save();
+
+    await logActivity({
+      req,
+      action: "UPDATE",
+      module: "testimonials",
+      record_id: existingTestimonial._id,
+      record_title: existingTestimonial.authorName || existingTestimonial.title,
+      description: `Updated testimonial for '${existingTestimonial.authorName || existingTestimonial.title}'`,
+    });
 
     return res.status(200).json({
       status: 200,
@@ -431,6 +436,15 @@ exports.deleteTestimonial = async (req, res, next) => {
     if (req.user) testimonial.updated_by = req.user._id;
 
     await testimonial.save();
+
+    await logActivity({
+      req,
+      action: "DELETE",
+      module: "testimonials",
+      record_id: testimonial._id,
+      record_title: testimonial.authorName || testimonial.title,
+      description: `Deleted testimonial for '${testimonial.authorName || testimonial.title}'`,
+    });
 
     return res.status(200).json({
       status: 200,

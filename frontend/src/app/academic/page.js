@@ -24,6 +24,38 @@ const getInitials = (name) => {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 };
 
+function FacultyPortrait({ src, name, role, className }) {
+  const [imgError, setImgError] = useState(false);
+
+  if (src && !imgError) {
+    return (
+      <img
+        src={src}
+        alt={`${name} - ${role || ''}`}
+        className={className}
+        onError={() => setImgError(true)}
+        style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+      />
+    );
+  }
+
+  return (
+    <div style={{
+      width: '100%',
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      background: 'linear-gradient(135deg, #8a0000 0%, #b30000 100%)',
+      color: '#ffffff',
+      fontWeight: 800,
+      fontSize: '2.2rem'
+    }}>
+      {getInitials(name)}
+    </div>
+  );
+}
+
 const formatExp = (exp) => {
   if (!exp) return '1+ Years Experience';
   // Extract strictly the number
@@ -417,30 +449,12 @@ export default function AcademicPage() {
                     >
                       {/* Portrait Image */}
                       <div className={styles.cardMedia}>
-                        {fac.image ? (
-                          <Image
-                            src={fac.image}
-                            alt={`${fac.name} - ${fac.role}`}
-                            fill
-                            sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                            className={styles.portraitImg}
-                            unoptimized={fac.image.startsWith('http')}
-                          />
-                        ) : (
-                          <div style={{
-                            width: '100%',
-                            height: '100%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            background: 'linear-gradient(135deg, #8a0000 0%, #b30000 100%)',
-                            color: '#ffffff',
-                            fontWeight: 800,
-                            fontSize: '2.2rem'
-                          }}>
-                            {getInitials(fac.name)}
-                          </div>
-                        )}
+                        <FacultyPortrait
+                          src={fac.image}
+                          name={fac.name}
+                          role={fac.role}
+                          className={styles.portraitImg}
+                        />
                       </div>
 
                       {/* Card Content Information */}
@@ -571,29 +585,12 @@ export default function AcademicPage() {
 
             <div className={styles.modalHeaderRow}>
               <div className={styles.modalMediaWrap}>
-                {activeModalTeacher.image ? (
-                  <Image
-                    src={activeModalTeacher.image}
-                    alt={activeModalTeacher.name}
-                    fill
-                    className={styles.modalPortraitImg}
-                    unoptimized={activeModalTeacher.image.startsWith('http')}
-                  />
-                ) : (
-                  <div style={{
-                    width: '100%',
-                    height: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    background: 'linear-gradient(135deg, #8a0000 0%, #b30000 100%)',
-                    color: '#ffffff',
-                    fontWeight: 800,
-                    fontSize: '2.2rem'
-                  }}>
-                    {getInitials(activeModalTeacher.name)}
-                  </div>
-                )}
+                <FacultyPortrait
+                  src={activeModalTeacher.image}
+                  name={activeModalTeacher.name}
+                  role={activeModalTeacher.role}
+                  className={styles.modalPortraitImg}
+                />
               </div>
 
               <div className={styles.modalHeaderInfo}>
