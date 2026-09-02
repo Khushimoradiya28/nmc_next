@@ -83,6 +83,12 @@ app.use("/api", (req, res, next) => {
     "admission-leads",
     "courses",
     "course",
+    "gold-medalist",
+    "gold-medalists",
+    "achievers",
+    "ranker",
+    "rankers",
+    "top-10",
     "user",
     "role"
   ];

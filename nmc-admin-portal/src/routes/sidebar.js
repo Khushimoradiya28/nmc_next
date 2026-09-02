@@ -9,6 +9,7 @@ import {
   FiUserCheck,
   FiImage,
   FiSliders,
+  FiTrendingUp,
 } from 'react-icons/fi';
 
 /**
@@ -77,6 +78,24 @@ const sidebar = [
     path: '/master/academic-programs',
     icon: FiBookOpen,
     name: 'Academic Programs',
+    roles: ['super_admin', 'admin', 'department', 'content'],
+  },
+  {
+    path: '/master/gold-medalists',
+    icon: FiAward,
+    name: 'Gold Medalist Achievers',
+    roles: ['super_admin', 'admin', 'department', 'content'],
+  },
+  {
+    path: '/master/rankers',
+    icon: FiTrendingUp,
+    name: 'University Rankers',
+    roles: ['super_admin', 'admin', 'department', 'content'],
+  },
+  {
+    path: '/master',
+    icon: FiSliders,
+    name: 'Master',
     roles: ['super_admin', 'admin', 'department', 'content'],
   },
   {

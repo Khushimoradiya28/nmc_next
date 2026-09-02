@@ -16,6 +16,8 @@ const activityLogRoutes = require("./activityLogRoutes");
 const contactLeadRoutes = require("./contactLeadRoutes");
 const admissionLeadRoutes = require("./admissionLeadRoutes");
 const courseRoutes = require("./courseRoutes");
+const goldMedalistRoutes = require("./goldMedalistRoutes");
+const rankerRoutes = require("./rankerRoutes");
 
 // All routes grouped under /api
 router.use("/auth", authRoutes);
@@ -47,6 +49,12 @@ router.use("/admission-lead", admissionLeadRoutes);
 router.use("/admission-leads", admissionLeadRoutes);
 router.use("/courses", courseRoutes);
 router.use("/course", courseRoutes);
+router.use("/gold-medalists", goldMedalistRoutes);
+router.use("/gold-medalist", goldMedalistRoutes);
+router.use("/achievers", goldMedalistRoutes);
+router.use("/rankers", rankerRoutes);
+router.use("/ranker", rankerRoutes);
+router.use("/top-10", rankerRoutes);
 
 // Faculty & Master Faculty Routes
 router.use("/faculty", facultyRoutes);
