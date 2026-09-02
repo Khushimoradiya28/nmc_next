@@ -278,232 +278,187 @@
     }
 }
 
-/* ============================================================
-   SEMESTER-GROUPED COMPACT ROSTER (built for 100+ records)
-   ============================================================ */
-.groupsWrap {
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-}
-
-.semGroup {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-.semHeader {
-    display: flex;
-    align-items: center;
-    gap: 0.85rem;
-}
-
-.semTitle {
-    font-weight: 900;
-    font-size: 1.05rem;
-    color: var(--gray-900);
-    letter-spacing: -0.2px;
-    position: relative;
-    padding-left: 0.85rem;
-}
-
-.semTitle::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 4px;
-    height: 1.1em;
-    border-radius: 2px;
-    background: linear-gradient(180deg, #8a0000, #f59e0b);
-}
-
-.semCount {
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #8a0000;
-    background: rgba(138, 0, 0, 0.05);
-    border: 1px solid rgba(138, 0, 0, 0.12);
-    padding: 0.2rem 0.65rem;
-    border-radius: 2rem;
-    white-space: nowrap;
-}
-
-.semHeader::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: linear-gradient(90deg, var(--gray-200), transparent);
-}
-
-/* Premium portrait card grid */
-.rosterGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
-    gap: 1.35rem;
-}
-
-.rosterCard {
-    position: relative;
-    display: flex;
-    flex-direction: column;
+/* Single Leaderboard Card Layout */
+.leaderboardCard {
     background: var(--white);
     border: 1px solid var(--gray-200);
-    border-radius: 1.15rem;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease, border-color 0.4s ease;
-    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
-}
-
-.rosterCard:hover {
-    transform: translateY(-6px);
-    border-color: rgba(138, 0, 0, 0.18);
-    box-shadow: 0 22px 44px rgba(138, 0, 0, 0.1);
-}
-
-/* Photo — fixed portrait frame, any source size fits uniformly */
-.rosterPhoto {
-    position: relative;
-    width: 100%;
-    aspect-ratio: 3 / 3.4;
-    overflow: hidden;
-    background: var(--gray-100);
-}
-
-.rosterPhoto::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, transparent 55%, rgba(17, 24, 39, 0.06) 100%);
-    pointer-events: none;
-}
-
-.rosterCard :global(img) {
-    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.rosterCard:hover .rosterPhoto :global(img) {
-    transform: scale(1.05);
-}
-
-/* Rank badge — refined pill, top-left on photo */
-.rankBadge {
-    position: absolute;
-    top: 0.7rem;
-    left: 0.7rem;
-    z-index: 3;
-    display: inline-flex;
-    align-items: baseline;
-    gap: 1px;
-    padding: 0.28rem 0.6rem;
-    border-radius: 0.6rem;
-    line-height: 1;
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
-}
-
-.rankBadgeNum {
-    font-weight: 900;
-    font-size: 0.9rem;
-    letter-spacing: -0.3px;
-}
-
-.rankBadgeSuffix {
-    font-weight: 800;
-    font-size: 0.56rem;
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    opacity: 0.9;
-}
-
-.rank1 {
-    background: linear-gradient(135deg, #fde68a 0%, #f59e0b 60%, #d97706 100%);
-    color: #6b3a00;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-.rank2 {
-    background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 60%, #94a3b8 100%);
-    color: #334155;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-.rank3 {
-    background: linear-gradient(135deg, #fed7aa 0%, #fb923c 60%, #c2410c 100%);
-    color: #7c2d12;
-    border: 1px solid rgba(255, 255, 255, 0.6);
-}
-
-.rankOther {
-    background: linear-gradient(135deg, #b30000 0%, #8a0000 100%);
-    color: #ffffff;
-    border: 1px solid rgba(255, 255, 255, 0.45);
-}
-
-/* Info block */
-.rosterInfo {
+    border-radius: 1.5rem;
+    padding: 1rem 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
     display: flex;
     flex-direction: column;
-    gap: 0.4rem;
-    padding: 0.85rem 0.95rem 1rem;
-    flex: 1;
-    min-width: 0;
 }
 
-.studentName {
-    font-family: var(--font-heading, 'Outfit', sans-serif);
-    font-weight: 800;
-    color: var(--gray-900);
-    font-size: 0.92rem;
-    line-height: 1.3;
-    letter-spacing: -0.2px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    transition: color 0.3s ease;
-}
-
-.rosterCard:hover .studentName {
-    color: #8a0000;
-}
-
-.achievementRow {
+.leaderboardRow {
     display: flex;
     align-items: center;
-    gap: 0.35rem;
-    min-width: 0;
+    padding: 1.15rem 0.75rem;
+    transition: background-color 0.25s ease, padding-left 0.25s ease;
+    border-bottom: 1px solid var(--gray-100);
+    border-radius: 0.5rem;
+    position: relative;
 }
 
-.achievementIcon {
-    color: #d97706;
+.leaderboardRow:last-child {
+    border-bottom: none;
+}
+
+/* Rank Circle Badges */
+.rankBadgeWrap {
+    position: relative;
     flex-shrink: 0;
 }
 
-.achievementText {
-    font-size: 0.68rem;
-    font-weight: 700;
-    color: var(--gray-500);
-    text-transform: uppercase;
-    letter-spacing: 0.3px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.rankBadge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-weight: 800;
+    font-size: 0.85rem;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
 }
 
-/* Top-3 cards get a subtle gold top accent */
-.rosterCardTop::before {
+.leaderboardRow:hover .rankBadge {
+    transform: scale(1.15);
+    box-shadow: 0 4px 12px rgba(138, 0, 0, 0.15);
+}
+
+.hoverImage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.85) rotate(-2deg);
+    width: 160px;
+    height: 190px;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 4px solid #ffffff;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 100;
+    box-shadow:
+        0 25px 50px rgba(138, 0, 0, 0.25),
+        0 10px 20px rgba(0, 0, 0, 0.12),
+        0 0 0 5px rgba(138, 0, 0, 0.08);
+}
+
+.hoverImage::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 3px;
-    z-index: 4;
-    background: linear-gradient(90deg, #f59e0b, #d97706);
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(138, 0, 0, 0.4) 100%);
+    border-radius: 0.75rem;
+    pointer-events: none;
+}
+
+.leaderboardRow:hover .hoverImage {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+}
+
+/* Row glow effect on hover */
+.leaderboardRow:hover {
+    background: linear-gradient(90deg, rgba(138, 0, 0, 0.02) 0%, rgba(245, 158, 11, 0.03) 50%, rgba(138, 0, 0, 0.02) 100%);
+    padding-left: 1.25rem;
+}
+
+.leaderboardRow:hover .connectorLine {
+    border-bottom-color: rgba(138, 0, 0, 0.15);
+    opacity: 1;
+}
+
+.rank1 {
+    background: #fef3c7;
+    color: #b45309;
+    border: 1px solid #fde68a;
+    box-shadow: 0 2px 5px rgba(180, 83, 9, 0.1);
+}
+
+.rank2 {
+    background: #f1f5f9;
+    color: #475569;
+    border: 1px solid #cbd5e1;
+}
+
+.rank3 {
+    background: #ffedd5;
+    color: #c2410c;
+    border: 1px solid #fed7aa;
+}
+
+.rankOther {
+    background: var(--slate-50);
+    color: var(--gray-500);
+    border: 1px solid var(--gray-200);
+}
+
+.studentName {
+    font-weight: 750;
+    color: var(--gray-900);
+    font-size: 1rem;
+    margin-left: 1.25rem;
+    flex-shrink: 0;
+    transition: color 0.3s ease;
+}
+
+.leaderboardRow:hover .studentName {
+    color: #8a0000;
+}
+
+/* Creative Dot Connector Bridge */
+.connectorLine {
+    flex: 1;
+    height: 2px;
+    border-bottom: 2px dotted var(--gray-200);
+    margin: 0 2rem;
+    opacity: 0.6;
+    position: relative;
+}
+
+/* Mobile avatar — hidden on desktop, shown as circle on mobile */
+.mobileAvatar {
+    display: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    margin-left: 0.65rem;
+    border: 2px solid rgba(138, 0, 0, 0.15);
+    background: var(--gray-100);
+}
+
+.leaderboardRow:hover .connectorLine {
+    border-bottom-color: rgba(138, 0, 0, 0.15);
+}
+
+.deptBadge {
+    background: rgba(138, 0, 0, 0.04);
+    color: #8a0000;
+    padding: 0.35rem 0.75rem;
+    border-radius: 0.5rem;
+    font-weight: 700;
+    font-size: 0.78rem;
+    border: 1.5px solid rgba(138, 0, 0, 0.1);
+    display: inline-block;
+    flex-shrink: 0;
+}
+
+.cgpaValue {
+    color: #8a0000;
+    font-weight: 900;
+    font-size: 1.05rem;
+    margin-left: 2rem;
+    width: 100px;
+    text-align: right;
+    flex-shrink: 0;
 }
 
 .noResults {
@@ -551,14 +506,14 @@
         line-height: 1.45 !important;
     }
 
-    /* Normal: search on its own line, dropdowns wrap below */
+    /* Normal: all in one row */
     .filterControls {
         width: 100% !important;
         display: flex !important;
         flex-direction: row !important;
         align-items: center !important;
         gap: 0.5rem !important;
-        flex-wrap: wrap !important;
+        flex-wrap: nowrap !important;
     }
 
     .searchWrapper {
@@ -578,11 +533,10 @@
 
     .dropdownsGroup {
         display: flex !important;
-        flex: 1 1 100% !important;
-        flex-wrap: wrap !important;
+        flex: 1 !important;
         gap: 0.5rem !important;
         align-items: center;
-        width: 100% !important;
+        width: auto !important;
     }
 
     .filterSelect {
@@ -649,81 +603,94 @@
         padding: 1.5rem 0 !important;
     }
 
-    /* Grouped roster — mobile */
-    .groupsWrap {
-        gap: 1.5rem;
+    .leaderboardCard {
+        padding: 0.5rem 1rem;
+        border-radius: 14px !important;
+        box-shadow: none !important;
     }
 
-    .semTitle {
-        font-size: 0.92rem;
+    .leaderboardRow {
+        padding: 0.9rem 0.5rem;
+        gap: 0.5rem;
     }
 
-    .semCount {
-        font-size: 0.66rem;
-        padding: 0.18rem 0.55rem;
-    }
-
-    .rosterGrid {
-        grid-template-columns: 1fr 1fr;
-        gap: 0.85rem;
-    }
-
-    .rosterCard {
-        border-radius: 0.9rem;
-    }
-
-    .rosterCard:hover {
-        transform: none;
-        box-shadow: 0 4px 14px rgba(15, 23, 42, 0.05);
-    }
-
-    .rosterInfo {
-        padding: 0.7rem 0.75rem 0.85rem;
-        gap: 0.3rem;
+    .connectorLine {
+        display: none !important;
     }
 
     .studentName {
-        font-size: 0.82rem;
+        font-size: 0.84rem;
+        margin-left: 0;
+        flex: 1 !important;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .achievementText {
-        font-size: 0.62rem;
+    .cgpaValue {
+        margin-left: 0;
+        width: auto;
+        font-size: 0.84rem;
+        white-space: nowrap;
     }
 
     .rankBadge {
-        top: 0.55rem;
-        left: 0.55rem;
-        padding: 0.24rem 0.5rem;
+        width: 30px !important;
+        height: 30px !important;
+        font-size: 0.78rem !important;
     }
 
-    .rankBadgeNum {
-        font-size: 0.82rem;
+    .deptBadge {
+        font-size: 0.7rem !important;
+        padding: 0.25rem 0.55rem !important;
     }
 
-    /* Very small screens ≤ 380px — single column */
-    @media (max-width: 380px) {
-        .rosterGrid {
-            grid-template-columns: 1fr !important;
+    /* Very small screens < 400px — hide dept badge, shrink elements */
+    @media (max-width: 400px) {
+        .leaderboardRow {
+            gap: 0.35rem !important;
+            padding: 0.8rem 0.4rem !important;
         }
 
-        .rosterPhoto {
-            aspect-ratio: 3 / 2.6;
+        .mobileAvatar {
+            width: 28px !important;
+            height: 28px !important;
+        }
+
+        .rankBadge {
+            width: 26px !important;
+            height: 26px !important;
+            font-size: 0.72rem !important;
+        }
+
+        .deptBadge {
+            display: none !important;
+        }
+
+        .studentName {
+            font-size: 0.8rem !important;
+        }
+
+        .cgpaValue {
+            font-size: 0.8rem !important;
+            font-weight: 800 !important;
         }
     }
 
-    /* Rank popup badge on mobile modal image */
-    .mobilePopupRank {
-        position: absolute;
-        top: 14px;
-        left: 14px;
-        z-index: 10;
-        background: linear-gradient(135deg, #fbbf24, #d97706);
-        color: #fff;
-        font-weight: 900;
-        font-size: 0.8rem;
-        padding: 0.25rem 0.7rem;
-        border-radius: 2rem;
-        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.4);
+    .hoverImage {
+        display: none !important;
+    }
+
+    .mobileAvatar {
+        display: flex !important;
+        width: 34px !important;
+        height: 34px !important;
+        margin-left: 0 !important;
+        flex-shrink: 0 !important;
+        border: none !important;
+        padding: 0 !important;
+        background: transparent !important;
+        cursor: pointer !important;
     }
 
     /* Make entire row clickable on mobile */
@@ -918,9 +885,5 @@
 }
 
 .mobilePopup {
-    display: none;
-}
-
-.mobilePopupRank {
     display: none;
 }

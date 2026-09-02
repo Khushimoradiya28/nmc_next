@@ -4,22 +4,44 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Header from '@/components/layout/Header/Header';
 import Footer from '@/components/layout/Footer/Footer';
-import GoldMedalistServices from '@/services/GoldMedalistServices';
 import styles from './page.module.css';
 
-const FALLBACK_PHOTO = '/assets/toppers/anjali.jpg';
+const allMedalists = [
+  { name: "Anjali K. Gohil", course: "BCA", year: "2025", cgpa: "9.68", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Krina G. Shah", course: "BCA", year: "2024", cgpa: "9.30", photo: "/assets/toppers/priya.jpg" },
+  { name: "Priya R. Mori", course: "BBA", year: "2024", cgpa: "9.52", photo: "/assets/toppers/priya.jpg" },
+  { name: "Meera D. Bhatt", course: "B.COM", year: "2024", cgpa: "9.45", photo: "/assets/toppers/meera.jpg" },
+  { name: "Dhara M. Mehta", course: "M.COM", year: "2025", cgpa: "9.18", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Vidhi N. Pathak", course: "BA", year: "2025", cgpa: "9.15", photo: "/assets/toppers/meera.jpg" },
+  { name: "Pooja V. Rathod", course: "MA", year: "2024", cgpa: "8.98", photo: "/assets/toppers/priya.jpg" },
+  { name: "Neha S. Gohil", course: "MSW", year: "2025", cgpa: "9.20", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Kinjal B. Parmar", course: "DFD & CFD", year: "2024", cgpa: "9.40", photo: "/assets/toppers/meera.jpg" },
+  { name: "Bhakti R. Dave", course: "DNYS", year: "2025", cgpa: "9.10", photo: "/assets/toppers/priya.jpg" },
+  { name: "Riya K. Patel", course: "BCA", year: "2025", cgpa: "9.55", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Shruti M. Shah", course: "BBA", year: "2024", cgpa: "9.22", photo: "/assets/toppers/meera.jpg" },
+  { name: "Nidhi V. Desai", course: "B.COM", year: "2025", cgpa: "9.38", photo: "/assets/toppers/priya.jpg" },
+  { name: "Foram S. Joshi", course: "M.COM", year: "2024", cgpa: "9.05", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Kavya R. Trivedi", course: "MA", year: "2025", cgpa: "9.12", photo: "/assets/toppers/meera.jpg" },
+  { name: "Hiral N. Patel", course: "BA", year: "2024", cgpa: "9.00", photo: "/assets/toppers/priya.jpg" },
+  { name: "Disha K. Mehta", course: "MSW", year: "2025", cgpa: "9.25", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Mansi P. Vora", course: "DFD & CFD", year: "2024", cgpa: "9.48", photo: "/assets/toppers/meera.jpg" },
+  { name: "Tanvi A. Rao", course: "DNYS", year: "2025", cgpa: "9.08", photo: "/assets/toppers/priya.jpg" },
+  { name: "Kruti J. Shah", course: "BCA", year: "2024", cgpa: "9.60", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Prachi D. Thakkar", course: "BBA", year: "2025", cgpa: "9.35", photo: "/assets/toppers/meera.jpg" },
+  { name: "Jalpa M. Gohil", course: "B.COM", year: "2024", cgpa: "9.42", photo: "/assets/toppers/priya.jpg" },
+  { name: "Swati N. Parmar", course: "M.COM", year: "2025", cgpa: "9.17", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Foram R. Patel", course: "BA", year: "2024", cgpa: "9.03", photo: "/assets/toppers/meera.jpg" },
+  { name: "Drashti K. Dave", course: "MA", year: "2025", cgpa: "9.28", photo: "/assets/toppers/priya.jpg" },
+  { name: "Muskan A. Shah", course: "MSW", year: "2024", cgpa: "9.14", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Pooja K. Raval", course: "DFD & CFD", year: "2025", cgpa: "9.50", photo: "/assets/toppers/meera.jpg" },
+  { name: "Khushi M. Modi", course: "DNYS", year: "2024", cgpa: "9.06", photo: "/assets/toppers/priya.jpg" },
+  { name: "Urvi S. Bhavsar", course: "BCA", year: "2025", cgpa: "9.72", photo: "/assets/toppers/anjali.jpg" },
+  { name: "Riddhi N. Kapadia", course: "BBA", year: "2024", cgpa: "9.33", photo: "/assets/toppers/meera.jpg" },
+  { name: "Sonal R. Trivedi", course: "B.COM", year: "2025", cgpa: "9.46", photo: "/assets/toppers/priya.jpg" },
+];
 
-// Normalize a raw API record into the shape the card expects (design unchanged)
-const mapMedalist = (item) => ({
-  name: item.name || '',
-  programme: item.programme || '',
-  semesterYear: item.subCourse || '',
-  academicYear: item.academicYear || '',
-  // Backend stores rank like "1ST RANK"; medallion shows only the number part ("1ST")
-  rank: (item.rank || '').replace(/\s*RANK\s*$/i, '').trim() || (item.rank || ''),
-  achievement: item.rankLabel || 'University Rank Holder',
-  photo: item.image_url || item.image_webp_url || item.image || FALLBACK_PHOTO,
-});
+const departments = ["All Departments", "BA", "MA", "B.COM", "M.COM", "BCA", "BBA", "MSW", "DFD & CFD", "DNYS"];
+const years = ["All Years", "2025", "2024"];
 
 function CustomDropdown({ options, value, onChange }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -74,7 +96,7 @@ function CustomDropdown({ options, value, onChange }) {
 
 
 export default function GoldMedalistPage() {
-  const [selectedProgramme, setSelectedProgramme] = useState('All Programmes');
+  const [selectedDept, setSelectedDept] = useState('All Departments');
   const [selectedYear, setSelectedYear] = useState('All Years');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -82,41 +104,11 @@ export default function GoldMedalistPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [itemsPerPage, setItemsPerPage] = useState(12);
 
-  // API-driven state
-  const [allMedalists, setAllMedalists] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  // Fetch active gold medalists from backend once on mount
-  useEffect(() => {
-    let mounted = true;
-    (async () => {
-      try {
-        setLoading(true);
-        const res = await GoldMedalistServices.getAllMedalists({ page: 1, limit: 500, status: 'active' });
-        const list = res?.data || (Array.isArray(res) ? res : []);
-        if (mounted) {
-          setAllMedalists(Array.isArray(list) ? list.map(mapMedalist) : []);
-        }
-      } catch (err) {
-        console.error('Failed to fetch gold medalists:', err);
-        if (mounted) setAllMedalists([]);
-      } finally {
-        if (mounted) setLoading(false);
-      }
-    })();
-    return () => { mounted = false; };
-  }, []);
-
-  // Build dropdown options dynamically from fetched records
-  const programmes = ['All Programmes', ...Array.from(new Set(allMedalists.map((m) => m.programme).filter(Boolean)))];
-  const academicYears = ['All Years', ...Array.from(new Set(allMedalists.map((m) => m.academicYear).filter(Boolean)))
-    .sort((a, b) => b.localeCompare(a))];
-
   const filteredMedalists = allMedalists.filter(medalist => {
-    const matchProgramme = selectedProgramme === 'All Programmes' || medalist.programme === selectedProgramme;
-    const matchYear = selectedYear === 'All Years' || medalist.academicYear === selectedYear;
+    const matchDept = selectedDept === 'All Departments' || medalist.course === selectedDept;
+    const matchYear = selectedYear === 'All Years' || medalist.year === selectedYear;
     const matchName = medalist.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchProgramme && matchYear && matchName;
+    return matchDept && matchYear && matchName;
   });
 
   useEffect(() => {
@@ -131,7 +123,7 @@ export default function GoldMedalistPage() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  useEffect(() => { setCurrentPage(1); }, [selectedProgramme, selectedYear, searchQuery]);
+  useEffect(() => { setCurrentPage(1); }, [selectedDept, selectedYear, searchQuery]);
 
   const handleToggleSearch = () => {
     if (isSearchOpen) { setSearchQuery(''); }
@@ -179,44 +171,29 @@ export default function GoldMedalistPage() {
                   </button>
                 </div>
                 <div className={styles.dropdownsGroup}>
-                  <CustomDropdown options={programmes} value={selectedProgramme} onChange={setSelectedProgramme} />
-                  <CustomDropdown options={academicYears} value={selectedYear} onChange={setSelectedYear} />
+                  <CustomDropdown options={departments} value={selectedDept} onChange={setSelectedDept} />
+                  <CustomDropdown options={years} value={selectedYear} onChange={setSelectedYear} />
                 </div>
               </div>
             </div>
 
-            {loading ? (
-              <div className={styles.noResults}>
-                <p className={styles.noResultsText}>Loading gold medalist achievers...</p>
-              </div>
-            ) : filteredMedalists.length > 0 ? (
+            {filteredMedalists.length > 0 ? (
               <>
                 <div className={styles.medalistGrid}>
                   {paginatedMedalists.map((medalist, idx) => (
                     <div key={idx} className={styles.medalistCard}>
                       <div className={styles.imageContainer}>
-                        <Image src={medalist.photo} alt={medalist.name} fill className={styles.cardImage} sizes="(max-width: 768px) 100vw, 33vw" unoptimized />
-                        <span className={styles.ribbon}><span className={styles.ribbonText}>Gold Medalist</span></span>
-                        <span className={styles.rankMedallion}>
-                          <span className={styles.rankMedallionNum}>{medalist.rank}</span>
-                          <span className={styles.rankMedallionTxt}>Rank</span>
-                        </span>
+                        <Image src={medalist.photo} alt={medalist.name} fill className={styles.cardImage} sizes="(max-width: 768px) 100vw, 33vw" />
+                        <div className={styles.ribbon}>Gold Medalist</div>
                       </div>
                       <div className={styles.cardContent}>
                         <div>
                           <h4 className={styles.name}>{medalist.name}</h4>
-                          <p className={styles.metaInfo}>{medalist.programme} &bull; {medalist.semesterYear} &bull; {medalist.academicYear}</p>
+                          <p className={styles.metaInfo}>{medalist.course} &bull; Passing Year: {medalist.year}</p>
                         </div>
-                        <div className={styles.achievementBar}>
-                          <svg className={styles.achievementIcon} width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6" />
-                            <path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18" />
-                            <path d="M4 22h16" />
-                            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22" />
-                            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22" />
-                            <path d="M18 2H6v7a6 6 0 0 0 12 0V2Z" />
-                          </svg>
-                          <span className={styles.achievementText}>{medalist.achievement}</span>
+                        <div className={styles.scoreBadge}>
+                          <span className={styles.scoreLabel}>Academic score:</span>
+                          <strong className={styles.scoreValue}>{medalist.cgpa} CGPA</strong>
                         </div>
                       </div>
                     </div>
@@ -237,19 +214,9 @@ export default function GoldMedalistPage() {
                 )}
               </>
             ) : (
-              <div className={styles.emptyState}>
-                <span className={styles.emptyIconWrap}>
-                  <svg className={styles.emptyIcon} width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="8" r="6" />
-                    <path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11" />
-                  </svg>
-                </span>
-                <h3 className={styles.emptyTitle}>No Gold Medalist Achievers Found</h3>
-                <p className={styles.emptyText}>
-                  {allMedalists.length === 0
-                    ? 'Currently, there are no active gold medalist achievers to display.'
-                    : 'No gold medalists match the selected filters. Try choosing different values.'}
-                </p>
+              <div className={styles.noResults}>
+                <h3 className={styles.noResultsTitle}>No Achievers Found</h3>
+                <p className={styles.noResultsText}>No gold medalists match the selected filters. Try choosing different values.</p>
               </div>
             )}
           </div>

@@ -7,8 +7,6 @@ import CategoryServices from "../../services/master/CategoryService";
 import CharacterServices from "../../services/master/CharacterService";
 import AcademicProgramServices from "../../services/AcademicProgramServices";
 import FacultyServices from "../../services/FacultyServices";
-import GoldMedalistServices from "../../services/GoldMedalistServices";
-import RankerServices from "../../services/RankerServices";
 import AwardServices from "../../services/AwardServices";
 import TestimonialServices from "../../services/TestimonialServices";
 import CourseServices from "../../services/CourseServices";
@@ -48,16 +46,6 @@ const ShowHideButton = ({ id, status, type = "brand" }) => {
       facultyFormData.append("status", statusString);
       facultyFormData.append("is_active", newStatus);
       apiCall = FacultyServices.updateFaculty(id, facultyFormData);
-    } else if (type === "goldMedalist" || type === "goldMedalists") {
-      const medalistFormData = new FormData();
-      medalistFormData.append("status", statusString);
-      medalistFormData.append("isActive", newStatus === 1 ? "true" : "false");
-      apiCall = GoldMedalistServices.updateMedalist(id, medalistFormData);
-    } else if (type === "ranker" || type === "rankers") {
-      const rankerFormData = new FormData();
-      rankerFormData.append("status", statusString);
-      rankerFormData.append("isActive", newStatus === 1 ? "true" : "false");
-      apiCall = RankerServices.updateRanker(id, rankerFormData);
     } else if (type === "award" || type === "awards") {
       const awardFormData = new FormData();
       awardFormData.append("status", statusString);

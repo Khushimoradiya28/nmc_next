@@ -24,8 +24,6 @@ import AwardServices from '../../services/AwardServices';
 import CourseServices from '../../services/CourseServices';
 import AcademicProgramServices from '../../services/AcademicProgramServices';
 import FacultyServices from '../../services/FacultyServices';
-import GoldMedalistServices from '../../services/GoldMedalistServices';
-import RankerServices from '../../services/RankerServices';
 import { SidebarContext } from '../../context/SidebarContext';
 import { notifySuccess, notifyError } from '../../utils/toast';
 
@@ -258,26 +256,6 @@ const MainModal = ({ id, onDeleteConfirm }) => {
         .then((res) => {
           setIsUpdate(true);
           notifySuccess(res?.message || 'Faculty member deleted successfully!');
-        })
-        .catch((err) => notifyError(err?.response?.data?.message || err.message));
-      closeModal();
-    }
-
-    if (location.pathname === '/master/gold-medalists') {
-      GoldMedalistServices.deleteMedalist(id)
-        .then((res) => {
-          setIsUpdate(true);
-          notifySuccess(res?.message || 'Gold medalist deleted successfully!');
-        })
-        .catch((err) => notifyError(err?.response?.data?.message || err.message));
-      closeModal();
-    }
-
-    if (location.pathname === '/master/rankers') {
-      RankerServices.deleteRanker(id)
-        .then((res) => {
-          setIsUpdate(true);
-          notifySuccess(res?.message || 'Ranker deleted successfully!');
         })
         .catch((err) => notifyError(err?.response?.data?.message || err.message));
       closeModal();
