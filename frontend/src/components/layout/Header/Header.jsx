@@ -180,7 +180,7 @@ export default function Header() {
               </span>
               <ul className={styles.heroDropdownMenu}>
                 <li><Link href="/toppers/gold-medalist" onClick={closeMobileNav}>Gold Medalist</Link></li>
-                <li><Link href="/toppers/top-10" onClick={closeMobileNav}>Top-10</Link></li>
+                <li><Link href="/toppers/top-10" onClick={closeMobileNav}>Rankers</Link></li>
               </ul>
             </li>
 

@@ -10,6 +10,7 @@ import styles from './page.module.css';
 
 const FALLBACK_PHOTO = '/assets/toppers/anjali.jpg';
 
+
 // Rank helper: numeric -> ordinal string (1 -> 1ST, 2 -> 2ND ...)
 const toOrdinal = (n) => {
   const num = parseInt(n);
@@ -85,8 +86,8 @@ export default function Top10Page() {
   const [allRankers, setAllRankers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const [selectedProgramme, setSelectedProgramme] = useState('');
-  const [selectedYear, setSelectedYear] = useState('');
+  const [selectedProgramme, setSelectedProgramme] = useState('All Programmes');
+  const [selectedYear, setSelectedYear] = useState('All Years');
   const [selectedSem, setSelectedSem] = useState('All Semesters');
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -111,40 +112,50 @@ export default function Top10Page() {
     return () => { mounted = false; };
   }, []);
 
-  // Programme & academic-year options built dynamically from the fetched records
-  const programmes = useMemo(
-    () => Array.from(new Set(allRankers.map((r) => r.programme).filter(Boolean))),
-    [allRankers]
-  );
-  const academicYears = useMemo(
-    () => Array.from(new Set(allRankers.map((r) => r.academicYear).filter(Boolean))).sort((a, b) => b.localeCompare(a)),
-    [allRankers]
-  );
+  // Programme options with 'All Programmes'
+  const programmes = useMemo(() => {
+    const progs = Array.from(new Set(allRankers.map((r) => r.programme).filter(Boolean)));
+    return ['All Programmes', ...progs];
+  }, [allRankers]);
 
-  // Default the programme/year selection once data arrives
+  // Academic-year options with 'All Years'
+  const academicYears = useMemo(() => {
+    const years = allRankers
+      .filter((r) => selectedProgramme === 'All Programmes' || !selectedProgramme || r.programme === selectedProgramme)
+      .map((r) => r.academicYear)
+      .filter(Boolean);
+    return ['All Years', ...Array.from(new Set(years)).sort((a, b) => b.localeCompare(a))];
+  }, [allRankers, selectedProgramme]);
+
+  // If selectedYear is not valid for the selected programme, reset to 'All Years'
   useEffect(() => {
-    if (programmes.length && !selectedProgramme) setSelectedProgramme(programmes[0]);
-  }, [programmes, selectedProgramme]);
-  useEffect(() => {
-    if (academicYears.length && !selectedYear) setSelectedYear(academicYears[0]);
+    if (academicYears.length > 0 && !academicYears.includes(selectedYear)) {
+      setSelectedYear('All Years');
+    }
   }, [academicYears, selectedYear]);
 
-  // Semester options available for the current programme + academic year
+  // Semester options with 'All Semesters'
   const semesterOptions = useMemo(() => {
     const sems = allRankers
-      .filter(r => r.programme === selectedProgramme && r.academicYear === selectedYear)
+      .filter(r => (selectedProgramme === 'All Programmes' || !selectedProgramme || r.programme === selectedProgramme) &&
+                   (selectedYear === 'All Years' || !selectedYear || r.academicYear === selectedYear))
       .map(r => r.semesterYear);
     return ['All Semesters', ...Array.from(new Set(sems))];
-  }, [selectedProgramme, selectedYear]);
+  }, [allRankers, selectedProgramme, selectedYear]);
+
+  // Reset semester filter if it's no longer valid
+  useEffect(() => {
+    if (!semesterOptions.includes(selectedSem)) setSelectedSem('All Semesters');
+  }, [semesterOptions, selectedSem]);
 
   const filteredRankings = useMemo(() => {
     return allRankers.filter(row =>
-      row.programme === selectedProgramme &&
-      row.academicYear === selectedYear &&
-      (selectedSem === 'All Semesters' || row.semesterYear === selectedSem) &&
+      (selectedProgramme === 'All Programmes' || !selectedProgramme || row.programme === selectedProgramme) &&
+      (selectedYear === 'All Years' || !selectedYear || row.academicYear === selectedYear) &&
+      (selectedSem === 'All Semesters' || !selectedSem || row.semesterYear === selectedSem) &&
       row.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-  }, [selectedProgramme, selectedYear, selectedSem, searchQuery]);
+  }, [allRankers, selectedProgramme, selectedYear, selectedSem, searchQuery]);
 
   // Group filtered results by Semester / Year, each group sorted by rank
   const groupedRankings = useMemo(() => {
