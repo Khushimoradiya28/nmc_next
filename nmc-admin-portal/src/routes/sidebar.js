@@ -82,20 +82,12 @@ const sidebar = [
     roles: ['super_admin', 'admin', 'department', 'content'],
   },
   {
-    path: '/master/gold-medalists',
-    roles: ['super_admin', 'admin', 'department', 'content'],
-  },
-  {
-    path: '/master/rankers',
-    icon: FiTrendingUp,
-    name: 'University Rankers',
-    roles: ['super_admin', 'admin', 'department', 'content'],
-  },
-  {
     path: '/master',
     icon: FiSliders,
     name: 'Master',
     roles: ['super_admin', 'admin', 'department', 'content'],
+  },
+  {
     path: '/activity-logs',
     icon: FiActivity,
     name: 'Activity Logs',
@@ -104,6 +96,7 @@ const sidebar = [
   {
     path: '/master/user',
     icon: FiUsers,
+    name: 'Users',
     roles: ['super_admin', 'admin'],
   },
 ];

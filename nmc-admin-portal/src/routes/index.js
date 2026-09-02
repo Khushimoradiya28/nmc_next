@@ -35,6 +35,10 @@ const Age = lazy(() => import('../pages/Masters/Age'));
 const Skill = lazy(() => import('../pages/Masters/Skill'))
 const Faculty = lazy(() => import('../pages/Masters/Faculty'))
 const AcademicPrograms = lazy(() => import('../pages/Masters/AcademicPrograms'))
+const GoldMedalist = lazy(() => import('../pages/Masters/GoldMedalist'))
+const GoldMedalistBulkImport = lazy(() => import('../pages/Masters/GoldMedalistBulkImport'))
+const Ranker = lazy(() => import('../pages/Masters/Ranker'))
+const RankerBulkImport = lazy(() => import('../pages/Masters/RankerBulkImport'))
 const ProductDetail = lazy(() => import('../components/drawer/ProductDetailDrawer'))
 const OrderDetails = lazy(() => import('../components/drawer/OrderDetailDrawer'))
 const PriceManagement = lazy(() => import('../pages/PriceManagement'))
@@ -153,6 +157,26 @@ const routes = [
   {
     path: '/master/academic-programs',
     component: AcademicPrograms,
+    roles: ['super_admin', 'admin', 'department', 'content'],
+  },
+  {
+    path: '/master/gold-medalists',
+    component: GoldMedalist,
+    roles: ['super_admin', 'admin', 'department', 'content'],
+  },
+  {
+    path: '/master/gold-medalists/bulk-import',
+    component: GoldMedalistBulkImport,
+    roles: ['super_admin', 'admin', 'department', 'content'],
+  },
+  {
+    path: '/master/rankers',
+    component: Ranker,
+    roles: ['super_admin', 'admin', 'department', 'content'],
+  },
+  {
+    path: '/master/rankers/bulk-import',
+    component: RankerBulkImport,
     roles: ['super_admin', 'admin', 'department', 'content'],
   },
   {
