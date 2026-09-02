@@ -316,10 +316,12 @@ exports.bulkValidate = async (req, res, next) => {
     }
 
     // Load active Programme master values (shortTitle) once
-    const programmes = await AcademicProgram.find({ is_deleted: false }).select("shortTitle").lean();
-    const programmeSet = new Set(
-      programmes.map((p) => normProgramme(p.shortTitle)).filter(Boolean)
-    );
+    const programmes = await AcademicProgram.find({ is_deleted: false }).select("shortTitle fullName").lean();
+    const programmeSet = new Set();
+    programmes.forEach((p) => {
+      if (p.shortTitle) programmeSet.add(normProgramme(p.shortTitle));
+      if (p.fullName) programmeSet.add(normProgramme(p.fullName));
+    });
 
     // Track duplicates within the sheet
     const seenInSheet = new Set();

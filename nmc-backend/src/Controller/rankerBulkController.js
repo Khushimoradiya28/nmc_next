@@ -185,10 +185,10 @@ const validateRecord = (rec, programmeSet) => {
     }
   }
 
-  if (programme && !programmeSet.has(normProgramme(programme))) {
+  if (programme && programmeSet && programmeSet.size > 0 && !programmeSet.has(normProgramme(programme))) {
     errors.push({
       column: DISPLAY_COLUMN.programme,
-      reason: `Programme "${programme}" does not exist in the Academic Programs master. Create this master data first, then re-import.`,
+      reason: `Programme "${programme}" does not exist in the Academic Programs master. Please create "${programme}" in Academic Programs first or update it.`,
     });
   }
 
@@ -250,10 +250,12 @@ exports.bulkValidate = async (req, res, next) => {
       });
     }
 
-    const programmes = await AcademicProgram.find({ is_deleted: false }).select("shortTitle").lean();
-    const programmeSet = new Set(
-      programmes.map((p) => normProgramme(p.shortTitle)).filter(Boolean)
-    );
+    const programmes = await AcademicProgram.find({ is_deleted: false }).select("shortTitle fullName").lean();
+    const programmeSet = new Set();
+    programmes.forEach((p) => {
+      if (p.shortTitle) programmeSet.add(normProgramme(p.shortTitle));
+      if (p.fullName) programmeSet.add(normProgramme(p.fullName));
+    });
 
     const seenInSheet = new Set();
     const valid = [];
@@ -302,10 +304,12 @@ exports.bulkImport = async (req, res, next) => {
       });
     }
 
-    const programmes = await AcademicProgram.find({ is_deleted: false }).select("shortTitle").lean();
-    const programmeSet = new Set(
-      programmes.map((p) => normProgramme(p.shortTitle)).filter(Boolean)
-    );
+    const programmes = await AcademicProgram.find({ is_deleted: false }).select("shortTitle fullName").lean();
+    const programmeSet = new Set();
+    programmes.forEach((p) => {
+      if (p.shortTitle) programmeSet.add(normProgramme(p.shortTitle));
+      if (p.fullName) programmeSet.add(normProgramme(p.fullName));
+    });
 
     const created_by = req.user ? req.user._id : null;
     const now = moment().tz("Asia/Kolkata").toDate();
