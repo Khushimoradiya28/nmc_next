@@ -31,6 +31,10 @@ const DISPLAY_COLUMN = {
 // Normalize a header string for matching
 const norm = (s) => (s || "").toString().trim().toLowerCase().replace(/\s+/g, " ");
 
+// Normalize a programme value for loose comparison: strip dots, spaces & case
+// so "B.A." , "BA" , "b a" all compare equal.
+const normProgramme = (s) => (s || "").toString().toLowerCase().replace(/[^a-z0-9&]/g, "");
+
 // Resolve which model field a given raw header belongs to
 const resolveField = (rawHeader) => {
   const h = norm(rawHeader);
@@ -245,7 +249,8 @@ const validateRecord = (rec, programmeSet, existingNameKeys) => {
   }
 
   // Master-data cross-check: Programme must exist in Academic Programs
-  if (programme && !programmeSet.has(programme.toLowerCase())) {
+  // (matched loosely: dots/spaces/case ignored so "B.A." == "BA" == "b a")
+  if (programme && !programmeSet.has(normProgramme(programme))) {
     errors.push({
       column: DISPLAY_COLUMN.programme,
       reason: `Programme "${programme}" does not exist in the Academic Programs master. Create this master data first, then re-import.`,
@@ -313,7 +318,7 @@ exports.bulkValidate = async (req, res, next) => {
     // Load active Programme master values (shortTitle) once
     const programmes = await AcademicProgram.find({ is_deleted: false }).select("shortTitle").lean();
     const programmeSet = new Set(
-      programmes.map((p) => (p.shortTitle || "").toString().trim().toLowerCase()).filter(Boolean)
+      programmes.map((p) => normProgramme(p.shortTitle)).filter(Boolean)
     );
 
     // Track duplicates within the sheet
@@ -381,7 +386,7 @@ exports.bulkImport = async (req, res, next) => {
     // Re-load programme master for server-side safety re-check
     const programmes = await AcademicProgram.find({ is_deleted: false }).select("shortTitle").lean();
     const programmeSet = new Set(
-      programmes.map((p) => (p.shortTitle || "").toString().trim().toLowerCase()).filter(Boolean)
+      programmes.map((p) => normProgramme(p.shortTitle)).filter(Boolean)
     );
 
     const created_by = req.user ? req.user._id : null;
@@ -440,3 +445,4 @@ exports.bulkImport = async (req, res, next) => {
     next(error);
   }
 };
+

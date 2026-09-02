@@ -29,6 +29,9 @@ const DISPLAY_COLUMN = {
 
 const norm = (s) => (s || "").toString().trim().toLowerCase().replace(/\s+/g, " ");
 
+// Loose programme comparison: strip dots/spaces/case so "B.A." == "BA" == "b a"
+const normProgramme = (s) => (s || "").toString().toLowerCase().replace(/[^a-z0-9&]/g, "");
+
 const resolveField = (rawHeader) => {
   const h = norm(rawHeader);
   for (const [field, aliases] of Object.entries(COLUMN_MAP)) {
@@ -182,7 +185,7 @@ const validateRecord = (rec, programmeSet) => {
     }
   }
 
-  if (programme && !programmeSet.has(programme.toLowerCase())) {
+  if (programme && !programmeSet.has(normProgramme(programme))) {
     errors.push({
       column: DISPLAY_COLUMN.programme,
       reason: `Programme "${programme}" does not exist in the Academic Programs master. Create this master data first, then re-import.`,
@@ -249,7 +252,7 @@ exports.bulkValidate = async (req, res, next) => {
 
     const programmes = await AcademicProgram.find({ is_deleted: false }).select("shortTitle").lean();
     const programmeSet = new Set(
-      programmes.map((p) => (p.shortTitle || "").toString().trim().toLowerCase()).filter(Boolean)
+      programmes.map((p) => normProgramme(p.shortTitle)).filter(Boolean)
     );
 
     const seenInSheet = new Set();
@@ -301,7 +304,7 @@ exports.bulkImport = async (req, res, next) => {
 
     const programmes = await AcademicProgram.find({ is_deleted: false }).select("shortTitle").lean();
     const programmeSet = new Set(
-      programmes.map((p) => (p.shortTitle || "").toString().trim().toLowerCase()).filter(Boolean)
+      programmes.map((p) => normProgramme(p.shortTitle)).filter(Boolean)
     );
 
     const created_by = req.user ? req.user._id : null;
@@ -352,3 +355,4 @@ exports.bulkImport = async (req, res, next) => {
     next(error);
   }
 };
+
