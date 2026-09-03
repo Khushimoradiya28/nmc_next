@@ -11,6 +11,7 @@ import { SidebarContext } from '../../context/SidebarContext';
 import { ThemeContext } from '../../context/ThemeContext';
 import RankerServices from '../../services/RankerServices';
 import AcademicProgramServices from '../../services/AcademicProgramServices';
+import CourseServices from '../../services/CourseServices';
 import { notifySuccess, notifyError } from '../../utils/toast';
 
 const RankerDrawer = ({ id }) => {
@@ -36,23 +37,67 @@ const RankerDrawer = ({ id }) => {
     formState: { errors },
   } = useForm();
 
-  // Fetch Academic Programs for the Programme dropdown
+  // Fetch Academic Programs & Certificate/Professional Courses for the Programme dropdown (UG -> PG -> Diploma -> Certificate)
   useEffect(() => {
-    AcademicProgramServices.getAllPrograms({ page: 1, limit: 100 })
-      .then((res) => {
-        const list = res?.data || res?.programs || (Array.isArray(res) ? res : []);
-        if (Array.isArray(list)) {
-          const seen = new Set();
-          const opts = [];
-          list.forEach((item) => {
-            const short = (item.shortTitle || item.shortName || item.fullName || '').trim();
-            if (short && !seen.has(short.toLowerCase())) {
-              seen.add(short.toLowerCase());
-              opts.push({ value: short, label: short });
-            }
-          });
-          setProgrammeOptions(opts);
-        }
+    Promise.allSettled([
+      AcademicProgramServices.getAllPrograms({ page: 1, limit: 100 }),
+      CourseServices.getAllCourses({ page: 1, limit: 100 }),
+    ])
+      .then(([progRes, courseRes]) => {
+        const progData =
+          progRes.status === 'fulfilled'
+            ? progRes.value?.data || progRes.value?.programs || (Array.isArray(progRes.value) ? progRes.value : [])
+            : [];
+        const courseData =
+          courseRes.status === 'fulfilled'
+            ? courseRes.value?.data || courseRes.value?.courses || (Array.isArray(courseRes.value) ? courseRes.value : [])
+            : [];
+
+        const getRank = (item) => {
+          const type = (item.programType || item.category || '').toLowerCase().trim();
+          if (type === 'ug') return 1;
+          if (type === 'pg') return 2;
+          if (type === 'diploma') return 3;
+          const title = (item.shortTitle || item.fullName || item.title || '').toUpperCase();
+          if (title.startsWith('B.') || title.startsWith('BCA') || title.startsWith('BBA') || title.startsWith('BSC') || title.startsWith('BA')) return 1;
+          if (title.startsWith('M.') || title.startsWith('MSW') || title.startsWith('MCA') || title.startsWith('MSC') || title.startsWith('MA')) return 2;
+          if (title.includes('DIPLOMA') || title.includes('DFD') || title.includes('CFD')) return 3;
+          return 4;
+        };
+
+        const sortedPrograms = (Array.isArray(progData) ? [...progData] : []).sort((a, b) => {
+          const rankA = getRank(a);
+          const rankB = getRank(b);
+          if (rankA !== rankB) return rankA - rankB;
+          return (a.sort_order || 0) - (b.sort_order || 0);
+        });
+
+        const sortedCourses = (Array.isArray(courseData) ? [...courseData] : []).sort((a, b) => {
+          return (a.sortOrder || 0) - (b.sortOrder || 0);
+        });
+
+        const opts = [];
+        const seen = new Set();
+
+        // 1. Add Academic Programs (UG -> PG -> Diploma)
+        sortedPrograms.forEach((item) => {
+          const short = (item.shortTitle || item.shortName || item.fullName || '').trim();
+          if (short && !seen.has(short.toLowerCase())) {
+            seen.add(short.toLowerCase());
+            opts.push({ value: short, label: short });
+          }
+        });
+
+        // 2. Add Professional / Certificate Courses
+        sortedCourses.forEach((item) => {
+          const title = (item.title || item.name || '').trim();
+          if (title && !seen.has(title.toLowerCase())) {
+            seen.add(title.toLowerCase());
+            opts.push({ value: title, label: title });
+          }
+        });
+
+        setProgrammeOptions(opts);
       })
       .catch((err) => console.error('Error fetching academic program options:', err));
   }, []);

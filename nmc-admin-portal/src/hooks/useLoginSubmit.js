@@ -45,7 +45,11 @@ const useLoginSubmit = () => {
 
     } 
     catch (err) {
-      notifyError("Invalid email or password");
+      const errorMsg =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Invalid email or password";
+      notifyError(errorMsg);
     } 
     finally {
       setLoading(false);

@@ -30,7 +30,7 @@ exports.getActivityLogs = async (req, res, next) => {
     const queryParams = req.method === "POST" ? req.body : req.query;
     const {
       page = 1,
-      limit = 20,
+      limit = 15,
       role_name,
       role,
       module: mod,

@@ -1,10 +1,11 @@
 import React from "react";
 import { TableBody, TableRow, TableCell, Badge } from "@windmill/react-ui";
+import DateBox from "../form/DateBox";
 
 const ActivityLogTable = ({
   logs,
   currentPage = 1,
-  resultsPerPage = 20,
+  resultsPerPage = 15,
   totalResults = 0,
   sortOrder = "desc",
 }) => {
@@ -25,10 +26,10 @@ const ActivityLogTable = ({
 
   const getRoleBadge = (role) => {
     const r = role ? role.toLowerCase() : "";
-    if (r === "super_admin") {
+    if (r === "super_admin" || r === "admin") {
       return (
-        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-purple-100 text-purple-800 dark:bg-purple-900 dark:text-purple-200">
-          Super Admin
+        <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
+          Admin
         </span>
       );
     }
@@ -74,9 +75,12 @@ const ActivityLogTable = ({
               {srNo}
             </TableCell>
 
-            {/* Date & Time */}
-            <TableCell className="text-xs text-gray-700 dark:text-gray-300 font-mono whitespace-nowrap">
-              {item.created_at || "—"}
+            {/* Time Stamp */}
+            <TableCell className="py-3 px-4 overflow-visible relative whitespace-nowrap">
+              <DateBox
+                created_at={item.created_at || item.createdAt}
+                showUpdated={false}
+              />
             </TableCell>
 
             {/* User Details */}

@@ -123,7 +123,12 @@ export default function AdmissionForm() {
 
   const handleChange = (e) => {
     const { name, value } = e.target || e;
-    setFormData((prev) => ({ ...prev, [name]: value }));
+    let finalValue = value;
+    if (name === 'phone') {
+      // Allow only digits and maximum 10 digits
+      finalValue = value.replace(/\D/g, '').slice(0, 10);
+    }
+    setFormData((prev) => ({ ...prev, [name]: finalValue }));
     if (fieldErrors[name]) {
       setFieldErrors((prev) => {
         const next = { ...prev };
@@ -136,8 +141,20 @@ export default function AdmissionForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const errors = {};
+    const phoneVal = (formData.phone || '').trim();
+
     if (!formData.name.trim()) errors.name = 'Full name is required.';
-    if (!formData.phone.trim()) errors.phone = 'Mobile number is required.';
+    
+    if (!phoneVal) {
+      errors.phone = 'Mobile number is required.';
+    } else if (!/^[6-9]/.test(phoneVal)) {
+      errors.phone = 'Mobile number must start with 6, 7, 8, or 9.';
+    } else if (phoneVal.length !== 10) {
+      errors.phone = 'Mobile number must be exactly 10 digits.';
+    } else if (!/^[6-9]\d{9}$/.test(phoneVal)) {
+      errors.phone = 'Please enter a valid 10-digit mobile number.';
+    }
+
     if (!formData.email.trim()) errors.email = 'Email address is required.';
     if (!formData.dob) errors.dob = 'Date of birth is required.';
     if (!formData.gender) errors.gender = 'Please select a gender.';
@@ -221,7 +238,16 @@ export default function AdmissionForm() {
 
           <div className={styles.formGroup}>
             <label className={styles.formLabel}>Mobile Number *</label>
-            <input type="tel" name="phone" className={styles.formInput} placeholder="+91 XXXXX XXXXX" value={formData.phone} onChange={handleChange} />
+            <input
+              type="tel"
+              name="phone"
+              maxLength={10}
+              inputMode="numeric"
+              className={styles.formInput}
+              placeholder="e.g. 9876543210"
+              value={formData.phone}
+              onChange={handleChange}
+            />
             {fieldErrors.phone && <span style={errLabel}>⚠ {fieldErrors.phone}</span>}
           </div>
 

@@ -2,47 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import { useForm } from 'react-hook-form';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
-import Select from 'react-select';
-
 import Title from '../../form/Title';
 import Error from '../../form/Error';
-import LabelArea from '../../form/LabelArea';
 import DrawerButton from '../../form/DrawerButton';
+import CustomSelect from '../../form/CustomSelect';
 import Uploader from '../../image-uploader/Uploader';
 import { SidebarContext } from '../../../context/SidebarContext';
 import MasterUserService from '../../../services/master/MasterUserService';
 import AllUserRoles from '../../../services/master/UserRoleService';
 import { notifyError, notifySuccess } from '../../../utils/toast';
-
-// SingleSelect Component for Role Dropdown
-const SingleSelect = ({
-  options = [],
-  value = null,
-  onChange,
-  labelKey = 'role_name',
-  valueKey = '_id',
-  placeholder = 'Select Role',
-}) => {
-  const formatted = options.map((item) => ({
-    value: item[valueKey],
-    label: item[labelKey] || item.name,
-  }));
-
-  const selectedOption = formatted.find((f) => f.value === value) || null;
-
-  return (
-    <Select
-      options={formatted}
-      isMulti={false}
-      closeMenuOnSelect={true}
-      value={selectedOption}
-      onChange={(selected) => onChange(selected ? selected.value : null)}
-      className="text-black text-sm"
-      classNamePrefix="react-select"
-      placeholder={placeholder}
-    />
-  );
-};
 
 const MasterUserDrawer = ({ id }) => {
   const [imageUrl, setImageUrl] = useState('');
@@ -186,154 +154,163 @@ const MasterUserDrawer = ({ id }) => {
         )}
       </div>
 
-      <Scrollbars className="w-full md:w-7/12 lg:w-8/12 xl:w-8/12 relative dark:bg-gray-700 dark:text-gray-200">
-        <form onSubmit={handleSubmit(onSubmit)} className="block">
-          <div className="px-6 pt-8 flex-grow w-full h-full max-h-full pb-40 md:pb-32 lg:pb-32 xl:pb-32">
-            {/* First Name (Strict Letters Only) */}
-            <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
-              <LabelArea label="First Name" />
-              <div className="col-span-8 sm:col-span-4">
-                <input
-                  {...register('first_name', {
-                    required: 'First name is required',
-                    pattern: {
-                      value: /^[A-Za-z\s]+$/,
-                      message: 'First name must contain letters only',
-                    },
-                  })}
-                  type="text"
-                  placeholder="First Name"
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
-                  }}
-                  className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md px-4"
-                />
-                <Error errorName={errors.first_name} />
-              </div>
-            </div>
-
-            {/* Last Name (Strict Letters Only) */}
-            <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
-              <LabelArea label="Last Name" />
-              <div className="col-span-8 sm:col-span-4">
-                <input
-                  {...register('last_name', {
-                    required: 'Last name is required',
-                    pattern: {
-                      value: /^[A-Za-z\s]+$/,
-                      message: 'Last name must contain letters only',
-                    },
-                  })}
-                  type="text"
-                  placeholder="Last Name"
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
-                  }}
-                  className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md px-4"
-                />
-                <Error errorName={errors.last_name} />
-              </div>
-            </div>
-
-            {/* Email */}
-            <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
-              <LabelArea label="Email" />
-              <div className="col-span-8 sm:col-span-4">
-                <input
-                  {...register('email', {
-                    required: 'Email is required',
-                  })}
-                  type="email"
-                  placeholder="Email"
-                  className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md px-4"
-                />
-                <Error errorName={errors.email} />
-              </div>
-            </div>
-
-            {/* Mobile (Strict 10 Digits Only) */}
-            <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
-              <LabelArea label="Mobile" />
-              <div className="col-span-8 sm:col-span-4">
-                <input
-                  {...register('mobile', {
-                    required: 'Mobile is required',
-                    pattern: {
-                      value: /^\d{10}$/,
-                      message: 'Mobile number must be exactly 10 digits',
-                    },
-                  })}
-                  maxLength={10}
-                  type="tel"
-                  placeholder="10-digit Mobile Number"
-                  onInput={(e) => {
-                    e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
-                  }}
-                  className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md px-4"
-                />
-                <Error errorName={errors.mobile} />
-              </div>
-            </div>
-
-            {/* Role Dropdown */}
-            <div className="grid grid-cols-6 gap-6 mb-6">
-              <LabelArea label="Role" />
-              <div className="col-span-4 mt-2">
-                <SingleSelect
-                  options={roles}
-                  value={watch('role') || null}
-                  onChange={(val) => setValue('role', val, { shouldValidate: true })}
-                  labelKey="role_name"
-                  valueKey="_id"
-                  placeholder="Select Role"
-                />
-              </div>
-            </div>
-
-            {/* Password with Eye Toggle (Show for Add User) */}
-            {!id && (
-              <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
-                <LabelArea label="Password" />
-                <div className="col-span-8 sm:col-span-4 relative">
-                  <input
-                    {...register('password', {
-                      required: 'Password is required',
-                      minLength: {
-                        value: 6,
-                        message: 'Password must be at least 6 characters',
-                      },
-                    })}
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Password"
-                    className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md pl-4 pr-11"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none p-1 cursor-pointer"
-                    title={showPassword ? 'Hide Password' : 'Show Password'}
-                  >
-                    {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
-                  </button>
-                  <Error errorName={errors.password} />
-                </div>
-              </div>
-            )}
-
-            {/* Optional User Image */}
-            <div className="grid grid-cols-6 gap-3 md:gap-5 xl:gap-6 lg:gap-6 mb-6">
-              <LabelArea label="User Image (Optional)" />
-              <div className="col-span-8 sm:col-span-4 mt-3">
-                <Uploader
-                  imageUrl={imageUrl}
-                  setImageUrl={setImageUrl}
-                  setUploadedFile={setUploadedFile}
-                />
-              </div>
-            </div>
-
-            <DrawerButton id={id} title="User" />
+      <Scrollbars className="w-full relative dark:bg-gray-700 dark:text-gray-200">
+        <form onSubmit={handleSubmit(onSubmit)} className="block p-6 pb-36">
+          {/* First Name */}
+          <div className="mb-5 flex flex-col">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              First Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register('first_name', {
+                required: 'First name is required',
+                pattern: {
+                  value: /^[A-Za-z\s]+$/,
+                  message: 'First name must contain letters only',
+                },
+              })}
+              type="text"
+              placeholder="First Name"
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
+              }}
+              className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:bg-white dark:text-gray-200 rounded-md px-4"
+            />
+            <Error errorName={errors.first_name} />
           </div>
+
+          {/* Last Name */}
+          <div className="mb-5 flex flex-col">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Last Name <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register('last_name', {
+                required: 'Last name is required',
+                pattern: {
+                  value: /^[A-Za-z\s]+$/,
+                  message: 'Last name must contain letters only',
+                },
+              })}
+              type="text"
+              placeholder="Last Name"
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
+              }}
+              className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:bg-white dark:text-gray-200 rounded-md px-4"
+            />
+            <Error errorName={errors.last_name} />
+          </div>
+
+          {/* Email */}
+          <div className="mb-5 flex flex-col">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Email <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register('email', {
+                required: 'Email is required',
+              })}
+              type="email"
+              placeholder="Email"
+              className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:bg-white dark:text-gray-200 rounded-md px-4"
+            />
+            <Error errorName={errors.email} />
+          </div>
+
+          {/* Mobile */}
+          <div className="mb-5 flex flex-col">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Mobile <span className="text-red-500">*</span>
+            </label>
+            <input
+              {...register('mobile', {
+                required: 'Mobile is required',
+                pattern: {
+                  value: /^\d{10}$/,
+                  message: 'Mobile number must be exactly 10 digits',
+                },
+              })}
+              maxLength={10}
+              type="tel"
+              placeholder="10-digit Mobile Number"
+              onInput={(e) => {
+                e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+              }}
+              className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:bg-white dark:text-gray-200 rounded-md px-4"
+            />
+            <Error errorName={errors.mobile} />
+          </div>
+
+          {/* Role Dropdown */}
+          <div className="mb-5 flex flex-col">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              Role <span className="text-red-500">*</span>
+            </label>
+            <CustomSelect
+              options={roles.map((r) => ({
+                value: r._id || r.id || r.role_name,
+                label: r.role_name || r.name,
+              }))}
+              value={watch('role') || ''}
+              onChange={(val) => {
+                setValue('role', val, { shouldValidate: true });
+                if (errors.role) clearErrors('role');
+              }}
+              placeholder="Select Role"
+              heightClass="h-12"
+              textSize="text-sm"
+              width="w-full"
+            />
+            <Error errorName={errors.role} />
+          </div>
+
+          {/* Password with Eye Toggle (Show for Add User) */}
+          {!id && (
+            <div className="mb-5 flex flex-col">
+              <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                Password <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  {...register('password', {
+                    required: 'Password is required',
+                    minLength: {
+                      value: 6,
+                      message: 'Password must be at least 6 characters',
+                    },
+                  })}
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="Password"
+                  className="border h-12 text-sm focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-gray-200 dark:border-gray-600 focus:bg-white dark:text-gray-200 rounded-md pl-4 pr-11"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none p-1 cursor-pointer"
+                  title={showPassword ? 'Hide Password' : 'Show Password'}
+                >
+                  {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
+              <Error errorName={errors.password} />
+            </div>
+          )}
+
+          {/* User Image (Optional) */}
+          <div className="mb-5 flex flex-col">
+            <label className="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+              User Image (Optional)
+            </label>
+            <Uploader
+              imageUrl={imageUrl}
+              setImageUrl={setImageUrl}
+              setUploadedFile={setUploadedFile}
+              folder="users"
+            />
+          </div>
+
+          <DrawerButton id={id} title="User" />
         </form>
       </Scrollbars>
     </>

@@ -3,7 +3,10 @@ import React from 'react';
 export const DateCard = ({ date, title = 'Created At', align = 'center' }) => {
   if (!date) return <span className="text-xs text-gray-400">-</span>;
 
-  const d = new Date(date);
+  let d = new Date(date);
+  if (isNaN(d.getTime())) {
+    d = new Date(String(date).replace(' ', 'T'));
+  }
   if (isNaN(d.getTime())) return <span className="text-xs text-gray-400">-</span>;
 
   const dayMonth = d.toLocaleDateString('en-GB', {

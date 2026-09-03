@@ -51,7 +51,7 @@ const CustomSelect = ({
 
       {/* Custom Dropdown Options Menu */}
       {isOpen && (
-        <div className="absolute left-0 right-0 z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg max-h-60 overflow-y-auto py-1 animate-fadeIn">
+        <div className="absolute left-0 right-0 z-50 mt-1 w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md shadow-lg max-h-80 overflow-y-auto py-1 animate-fadeIn">
           {options.map((opt, idx) => {
             const optVal = typeof opt === "object" ? opt.value : opt;
             const optLabel = typeof opt === "object" ? opt.label : opt;

@@ -346,14 +346,14 @@ const ProductTable = ({ products, currentPage = 1, resultsPerPage = 10, sortBy =
                     )}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-gray-400 hover:text-blue-600 cursor-pointer"
+                    className="text-gray-400 hover:text-red-800 dark:hover:text-amber-400 cursor-pointer transition-colors"
                     title="Preview"
                   >
                     <Tooltip
                       id="preview"
                       Icon={FiEye}
                       title="Preview"
-                      bgColor="#2563EB"
+                      bgColor="#991b1b"
                     />
                     {/* <FiEye size={18} /> */}
                   </a>

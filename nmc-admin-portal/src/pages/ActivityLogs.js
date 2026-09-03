@@ -7,7 +7,6 @@ import {
   TableContainer,
   Pagination,
   Input,
-  Select,
 } from "@windmill/react-ui";
 import { FiArrowUp, FiArrowDown, FiRotateCw, FiUpload, FiSearch } from "react-icons/fi";
 import { CSVDownloader } from "react-papaparse";
@@ -15,10 +14,42 @@ import { CSVDownloader } from "react-papaparse";
 import PageTitle from "../components/Typography/PageTitle";
 import Breadcrumb from "../components/form/Breadcrumb";
 import NotFound from "../components/table/NotFound";
+import CustomSelect from "../components/form/CustomSelect";
 import CustomDateRangePicker from "../components/form/CustomDateRangePicker";
 import ActivityLogTable from "../components/activity/ActivityLogTable";
 import ActivityLogServices from "../services/ActivityLogServices";
 import { notifySuccess, notifyError } from "../utils/toast";
+
+const roleFilterOptions = [
+  { value: "all", label: "All Roles" },
+  { value: "super_admin", label: "Admin" },
+  { value: "department", label: "Department" },
+  { value: "content", label: "Content" },
+];
+
+const moduleFilterOptions = [
+  { value: "all", label: "All Modules" },
+  { value: "contact_lead", label: "Contact Us Leads" },
+  { value: "admission_lead", label: "Admission Leads" },
+  { value: "banner", label: "Home Banner" },
+  { value: "testimonial", label: "Testimonials" },
+  { value: "award", label: "Awards & Certificates" },
+  { value: "certificate_course", label: "Professional Certificate Courses" },
+  { value: "gallery", label: "Photo & Video Gallery" },
+  { value: "faculty", label: "Professors & Faculty" },
+  { value: "academic_program", label: "Academic Programs" },
+  { value: "gold_medalist", label: "Gold Medalist Achievers" },
+  { value: "ranker", label: "University Rankers" },
+  { value: "user", label: "Users & Staff" },
+];
+
+const actionFilterOptions = [
+  { value: "all", label: "All Actions" },
+  { value: "CREATE", label: "CREATE" },
+  { value: "UPDATE", label: "UPDATE" },
+  { value: "DELETE", label: "DELETE" },
+  { value: "LOGIN", label: "LOGIN" },
+];
 
 const ActivityLogs = () => {
   const [logsList, setLogsList] = useState([]);
@@ -39,7 +70,7 @@ const ActivityLogs = () => {
   // Pagination state
   const [currentPage, setCurrentPage] = useState(1);
   const [totalResults, setTotalResults] = useState(0);
-  const resultsPerPage = 20;
+  const resultsPerPage = 15;
 
   const searchRef = useRef(null);
 
@@ -179,10 +210,11 @@ const ActivityLogs = () => {
       <PageTitle>Activity Logs</PageTitle>
 
       {/* Filter and Control Bar */}
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xs mb-6 border border-gray-100 dark:border-gray-700">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-3">
-          {/* Left: Search Input */}
-          <div className="relative flex-grow max-w-md">
+      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-xs mb-6 border border-gray-100 dark:border-gray-700 space-y-3.5">
+        {/* Row 1: Search Input & Custom Dropdown Filters */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+          {/* Search Input */}
+          <div className="relative w-full">
             <Input
               ref={searchRef}
               value={searchText}
@@ -191,7 +223,7 @@ const ActivityLogs = () => {
                 setCurrentPage(1);
               }}
               onKeyDown={handleSearchKeyDown}
-              className="border h-10 text-xs focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md pl-10 pr-4"
+              className="border h-10 text-xs focus:outline-none block w-full bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md pl-10 pr-4 shadow-xs"
               type="search"
               placeholder="Search logs by user, email, module, description... (Press Enter)"
             />
@@ -201,76 +233,70 @@ const ActivityLogs = () => {
             />
           </div>
 
-          {/* Right Controls: Filters & Buttons */}
-          <div className="flex flex-wrap items-center gap-2.5">
-            {/* Role Filter */}
-            <Select
+          {/* Role Filter */}
+          <div className="w-full">
+            <CustomSelect
+              options={roleFilterOptions}
               value={roleFilter}
-              onChange={(e) => {
-                setRoleFilter(e.target.value);
+              onChange={(val) => {
+                setRoleFilter(val);
                 setCurrentPage(1);
               }}
-              className="h-10 text-xs border bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md px-3"
-            >
-              <option value="all">All Roles</option>
-              <option value="super_admin">Admin / Super Admin</option>
-              <option value="department">Department</option>
-              <option value="content">Content</option>
-            </Select>
-
-            {/* Module Filter */}
-            <Select
-              value={moduleFilter}
-              onChange={(e) => {
-                setModuleFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="h-10 text-xs border bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md px-3"
-            >
-              <option value="all">All Modules</option>
-              <option value="user">User & Roles</option>
-              <option value="banner">Home Banner</option>
-              <option value="faculty">Faculty</option>
-              <option value="academic_program">Academic Programs</option>
-              <option value="certificate_course">Certificate Courses</option>
-              <option value="gallery">Gallery</option>
-              <option value="admission_lead">Admission Leads</option>
-              <option value="contact_lead">Contact Leads</option>
-              <option value="testimonial">Testimonials</option>
-              <option value="award">Awards & Certificates</option>
-              <option value="auth">Auth & Login</option>
-            </Select>
-
-            {/* Action Filter */}
-            <Select
-              value={actionFilter}
-              onChange={(e) => {
-                setActionFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="h-10 text-xs border bg-gray-100 dark:bg-gray-700 border-transparent focus:bg-white dark:text-gray-200 rounded-md px-3"
-            >
-              <option value="all">All Actions</option>
-              <option value="CREATE">CREATE</option>
-              <option value="UPDATE">UPDATE</option>
-              <option value="DELETE">DELETE</option>
-              <option value="LOGIN">LOGIN</option>
-            </Select>
-
-            {/* Date Range Picker */}
-            <CustomDateRangePicker
-              fromDate={filters.from_date}
-              toDate={filters.to_date}
-              onFromDateChange={(val) => {
-                setFilters((prev) => ({ ...prev, from_date: val }));
-                setCurrentPage(1);
-              }}
-              onToDateChange={(val) => {
-                setFilters((prev) => ({ ...prev, to_date: val }));
-                setCurrentPage(1);
-              }}
+              placeholder="All Roles"
+              heightClass="h-10"
+              textSize="text-xs"
             />
+          </div>
 
+          {/* Module Filter */}
+          <div className="w-full">
+            <CustomSelect
+              options={moduleFilterOptions}
+              value={moduleFilter}
+              onChange={(val) => {
+                setModuleFilter(val);
+                setCurrentPage(1);
+              }}
+              placeholder="All Modules"
+              heightClass="h-10"
+              textSize="text-xs"
+            />
+          </div>
+
+          {/* Action Filter */}
+          <div className="w-full">
+            <CustomSelect
+              options={actionFilterOptions}
+              value={actionFilter}
+              onChange={(val) => {
+                setActionFilter(val);
+                setCurrentPage(1);
+              }}
+              placeholder="All Actions"
+              heightClass="h-10"
+              textSize="text-xs"
+            />
+          </div>
+        </div>
+
+        {/* Row 2: Date Range Picker & Action Buttons */}
+        <div className="flex flex-wrap items-center justify-between gap-3 pt-2 border-t border-gray-100 dark:border-gray-700/60">
+          {/* Left: Custom Date Range Picker */}
+          <CustomDateRangePicker
+            fromDate={filters.from_date}
+            toDate={filters.to_date}
+            onFromDateChange={(val) => {
+              setFilters((prev) => ({ ...prev, from_date: val }));
+              setCurrentPage(1);
+            }}
+            onToDateChange={(val) => {
+              setFilters((prev) => ({ ...prev, to_date: val }));
+              setCurrentPage(1);
+            }}
+          />
+
+          {/* Right: Sort, Refresh, Export */}
+          <div className="flex items-center gap-2">
             {/* Ascending / Descending Toggle */}
             <button
               type="button"
@@ -297,11 +323,13 @@ const ActivityLogs = () => {
               onClick={handleResetAll}
               disabled={isRefreshing || loading}
               className="bg-red-700 hover:bg-red-800 active:scale-95 text-white h-10 w-10 rounded-md flex items-center justify-center transition-all duration-200 focus:outline-none shadow-xs hover:shadow-md cursor-pointer shrink-0 disabled:opacity-75"
-              title="Reset Filters"
+              title="Reset Filters & Refresh List"
             >
               <FiRotateCw
                 size={15}
-                className={"text-white transition-transform duration-500 " + (isRefreshing ? "animate-spin" : "hover:rotate-45")}
+                className={`text-white transition-transform duration-500 ${
+                  isRefreshing ? "animate-spin" : "hover:rotate-45"
+                }`}
               />
             </button>
 
@@ -330,7 +358,7 @@ const ActivityLogs = () => {
             <TableHeader>
               <tr>
                 <TableCell>Sr. No.</TableCell>
-                <TableCell>Date & Time</TableCell>
+                <TableCell>Time Stamp</TableCell>
                 <TableCell>User</TableCell>
                 <TableCell>Role</TableCell>
                 <TableCell>Action</TableCell>

@@ -35,7 +35,18 @@ export default function TransportForm() {
         </div>
         <div className={styles.formGroup}>
           <label className={styles.formLabel}>Mobile Number *</label>
-          <input type="tel" className={styles.formInput} placeholder="+91 XXXXX XXXXX" value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} required />
+          <input
+            type="tel"
+            maxLength={10}
+            inputMode="numeric"
+            className={styles.formInput}
+            placeholder="e.g. 9876543210"
+            value={form.phone}
+            onChange={e => setForm({...form, phone: e.target.value.replace(/\D/g, '').slice(0, 10)})}
+            pattern="[6-9][0-9]{9}"
+            title="Please enter a valid 10-digit mobile number starting with 6, 7, 8, or 9"
+            required
+          />
         </div>
         <div className={styles.formGroup}>
           <label className={styles.formLabel}>Village / Area</label>

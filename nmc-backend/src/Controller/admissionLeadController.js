@@ -41,11 +41,14 @@ exports.submitAdmissionLead = async (req, res, next) => {
     const course = (body.course || body.courseInterestedIn || "").toString().trim();
     const last_qualification = (body.last_qualification || body.lastQualification || "").toString().trim();
 
+    const mobileRegex = /^[6-9]\d{9}$/;
     if (!full_name) {
       errors.push("full_name is required and cannot be blank.");
     }
     if (!mobile) {
       errors.push("mobile is required and cannot be blank.");
+    } else if (!mobileRegex.test(mobile)) {
+      errors.push("mobile must be a valid 10-digit number starting with 6, 7, 8, or 9.");
     }
     if (!course) {
       errors.push("course (Course Interested In) is required and cannot be blank.");

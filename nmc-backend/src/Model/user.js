@@ -55,6 +55,15 @@ const userSchema = new mongoose.Schema({
     trim: true,
     default: null
   },
+  profile_img_webp: {
+    type: String,
+    trim: true,
+    default: null
+  },
+  is_deleted: {
+    type: Boolean,
+    default: false
+  },
   role: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Role",

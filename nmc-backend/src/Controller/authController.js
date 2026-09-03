@@ -208,6 +208,19 @@ exports.login = async (req, res) => {
       return res.status(401).json({ status: 401, success: false, message: "Invalid email or password" });
     }
 
+    if (user.is_deleted) {
+      return res.status(401).json({ status: 401, success: false, message: "Invalid email or password" });
+    }
+
+    // Block inactive users from logging in
+    if (user.status !== undefined && String(user.status) !== "1" && String(user.status).toLowerCase() !== "active") {
+      return res.status(403).json({
+        status: 403,
+        success: false,
+        message: "Your account is deactivated. Please contact Admin.",
+      });
+    }
+
     const roleName = user.role && typeof user.role === "object" ? user.role.role_name : "staff";
 
     const token = jwt.sign(

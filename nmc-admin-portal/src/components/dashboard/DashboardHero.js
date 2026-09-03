@@ -120,7 +120,7 @@ const DashboardHero = ({ adminInfo, userRole }) => {
         <div>
           <div className="flex items-center gap-3 mb-2 flex-wrap">
             <span className="px-3.5 py-1 text-xs font-black tracking-wider uppercase rounded-full bg-[#F4B000] text-gray-950 shadow-sm">
-              {roleDisplay === 'SUPER_ADMIN' ? 'SUPER ADMIN' : roleDisplay} PORTAL
+              {roleDisplay === 'SUPER_ADMIN' || roleDisplay === 'ADMIN' ? 'ADMIN' : roleDisplay} PORTAL
             </span>
             <span className="text-xs text-amber-200 font-semibold bg-black/40 px-3 py-1 rounded-full border border-white/10">
               📅 {currentDate}

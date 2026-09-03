@@ -418,10 +418,14 @@ export default function CertificateCoursesSection() {
               <div className={styles.formGroup}>
                 <input
                   type="tel"
-                  placeholder="Your phone number ..."
+                  placeholder="10-digit phone number ..."
                   className={styles.formInput}
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  maxLength={10}
+                  inputMode="numeric"
+                  pattern="[6-9][0-9]{9}"
+                  title="Please enter a valid 10-digit phone number starting with 6, 7, 8, or 9"
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
                   required
                 />
               </div>

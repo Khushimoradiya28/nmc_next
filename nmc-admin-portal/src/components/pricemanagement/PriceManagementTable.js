@@ -206,7 +206,7 @@ const PriceManagementTable = ({
                         <div
                             className={`p-2 cursor-pointer ${product.isLoading
                                 ? "text-gray-300"
-                                : "text-gray-400 hover:text-blue-600"
+                                : "text-gray-400 hover:text-red-800 dark:hover:text-amber-400"
                                 }`}
                             onClick={() => !product.isLoading && handleUpdateClick(product, i)}
                         >
@@ -214,7 +214,7 @@ const PriceManagementTable = ({
                                 id={`update-${product._id}`}
                                 Icon={FiTrello}
                                 title="Update Price"
-                                bgColor="#2563EB"
+                                bgColor="#991b1b"
                             />
                         </div>
                     </TableCell>

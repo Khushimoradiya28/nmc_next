@@ -72,7 +72,7 @@ const Header = () => {
   // Reset img error if adminInfo changes
   useEffect(() => {
     setImgError(false);
-  }, [adminInfo?.image, adminInfo?.profile_img_url, adminInfo?.profile_img]);
+  }, [adminInfo]);
 
   const handleLogOut = () => {
     dispatch({ type: 'USER_LOGOUT' });
