@@ -73,10 +73,6 @@ const MasterUser = () => {
 
   return (
     <>
-      <MainDrawer>
-        <MasterUserDrawer />
-      </MainDrawer>
-
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 my-2">
         {/* Title + Breadcrumb */}
         <div className="flex flex-col text-left w-full sm:w-auto">

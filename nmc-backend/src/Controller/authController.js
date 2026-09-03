@@ -257,20 +257,9 @@ exports.login = async (req, res) => {
       description: `User ${user.email} (${roleName}) logged in successfully`,
     });
 
-    const baseUrl = `${req.protocol}://${req.get("host")}`;
-    let profileImgUrl = null;
-    let profileImgWebpUrl = null;
-
-    if (user.profile_img) {
-      profileImgUrl = user.profile_img.startsWith("http")
-        ? user.profile_img
-        : `${baseUrl}/${user.profile_img.replace(/\\/g, "/")}`;
-    }
-    if (user.profile_img_webp) {
-      profileImgWebpUrl = user.profile_img_webp.startsWith("http")
-        ? user.profile_img_webp
-        : `${baseUrl}/${user.profile_img_webp.replace(/\\/g, "/")}`;
-    }
+    const { resolvePublicMediaUrl } = require("../Utils/imageProcessor");
+    const profileImgUrl = resolvePublicMediaUrl(user.profile_img, req);
+    const profileImgWebpUrl = resolvePublicMediaUrl(user.profile_img_webp, req) || profileImgUrl;
 
     res.status(200).json({
       status: 200,

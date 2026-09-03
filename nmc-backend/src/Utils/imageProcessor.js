@@ -296,8 +296,39 @@ async function copyImage(sourcePathOrKey, destFolder) {
   return { original: relOriginal, webp: relWebp };
 }
 
+/**
+ * Resolve full public URL for any media key/path (S3 bucket or local express server)
+ */
+function resolvePublicMediaUrl(storedKeyOrPath, req) {
+  if (!storedKeyOrPath || typeof storedKeyOrPath !== "string" || storedKeyOrPath.trim() === "") {
+    return null;
+  }
+  if (
+    storedKeyOrPath.startsWith("http://") ||
+    storedKeyOrPath.startsWith("https://") ||
+    storedKeyOrPath.startsWith("blob:")
+  ) {
+    return storedKeyOrPath;
+  }
+
+  const cleanKey = storedKeyOrPath.replace(/\\/g, "/").replace(/^\/+/, "");
+
+  // If S3 is configured, use S3 bucket / CloudFront URL
+  if (isS3Configured()) {
+    const bucket = config.AWS_BUCKET_NAME;
+    const region = config.AWS_REGION || "ap-south-1";
+    const s3Host = config.AWS_CLOUDFRONT_URL || `https://${bucket}.s3.${region}.amazonaws.com`;
+    return `${s3Host.replace(/\/+$/, "")}/${cleanKey}`;
+  }
+
+  // Otherwise fallback to local express host
+  const baseUrl = req ? `${req.protocol}://${req.get("host")}` : (config.APP_URL || "http://localhost:5000");
+  return `${baseUrl.replace(/\/+$/, "")}/${cleanKey}`;
+}
+
 module.exports = {
   isS3Configured,
+  resolvePublicMediaUrl,
   saveLocalAndCreateWebp,
   uploadToS3AndCreateWebp,
   deleteLocalImages,

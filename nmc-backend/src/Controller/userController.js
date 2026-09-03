@@ -9,31 +9,20 @@ const {
   uploadToS3AndCreateWebp,
   deleteLocalImages,
   deleteS3Objects,
+  resolvePublicMediaUrl,
 } = require("../Utils/imageProcessor");
 const { logActivity } = require("../Utils/activityLogger");
 
 const isProduction = () => config.NODE_ENV === "production";
 
 /**
- * Format user output with full URLs and Asia/Kolkata timestamps
+ * Format user output with full URLs (S3 or local) and Asia/Kolkata timestamps
  */
 const formatUser = (user, req) => {
   const doc = user._doc || user;
-  const baseUrl = `${req.protocol}://${req.get("host")}`;
 
-  let profileImgUrl = null;
-  let profileImgWebpUrl = null;
-
-  if (doc.profile_img) {
-    profileImgUrl = doc.profile_img.startsWith("http")
-      ? doc.profile_img
-      : `${baseUrl}/${doc.profile_img.replace(/\\/g, "/")}`;
-  }
-  if (doc.profile_img_webp) {
-    profileImgWebpUrl = doc.profile_img_webp.startsWith("http")
-      ? doc.profile_img_webp
-      : `${baseUrl}/${doc.profile_img_webp.replace(/\\/g, "/")}`;
-  }
+  const profileImgUrl = resolvePublicMediaUrl(doc.profile_img, req);
+  const profileImgWebpUrl = resolvePublicMediaUrl(doc.profile_img_webp, req) || profileImgUrl;
 
   let roleInfo = null;
   if (doc.role && typeof doc.role === "object") {
@@ -434,8 +423,8 @@ exports.updateUser = async (req, res, next) => {
 
     if (body.password !== undefined && body.password.toString().trim()) {
       const pass = body.password.toString().trim();
-      if (pass.length < 8) {
-        errors.push("Password must be at least 8 characters long.");
+      if (pass.length < 6) {
+        errors.push("Password must be at least 6 characters long.");
       } else {
         existingUser.password = pass; // will be hashed via pre-save hook
       }
